@@ -22,3 +22,5 @@ License.config
 [Pp]ackages/
 
 .idea/
+
+node_modules/
