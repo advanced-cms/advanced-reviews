@@ -19,7 +19,8 @@ export default class ReviewLocationCollection extends React.Component<ReviewLoca
       <div>
         {reviewLocations.map(location => (
           <div key={location.id} 
-          style={location.style} 
+          style={location.style}
+          title={location.firstComment.text} 
           className={classNames("reviewLocation", { done: location.isDone })}
           onClick={() => showDialog(location)}>{location.id}</div>
         ))}
