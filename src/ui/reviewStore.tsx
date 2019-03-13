@@ -4,7 +4,7 @@ import { action, computed, observable } from 'mobx';
 class ReviewLocation {
     id: string;
     propertyName: string;
-    isDone: boolean;
+    @observable isDone: boolean;
     positionX: number;
     positionY: number;
 
@@ -76,7 +76,7 @@ class ReviewComponentStore implements IReviewComponentStore {
         this.currentEditLocation = location;
         this.isDialogOpen = true;
     }
-    
+
     @action.bound
     closeDialog(action: string): void {
         this.isDialogOpen = false;
