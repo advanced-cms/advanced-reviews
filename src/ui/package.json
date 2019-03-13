@@ -30,6 +30,7 @@
     "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
+    "@material/react-button": "^0.10.0",
     "@material/react-checkbox": "^0.10.0",
     "@material/react-dialog": "^0.10.0",
     "@material/react-text-field": "^0.10.0",
