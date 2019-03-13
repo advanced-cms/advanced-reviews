@@ -36,6 +36,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
             onChange={(e) => dialog.isDoneChecked = e.target.checked} />
         </DialogTitle>
         <DialogContent>
+            <div>
+              <strong>{currentEditLocation.firstComment.text}</strong>
+            </div>
             {currentEditLocation.comments.map((comment, idx) => (
               <div key={idx}>{comment.text}</div>
             ))}

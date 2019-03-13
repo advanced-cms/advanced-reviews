@@ -13,6 +13,7 @@ class Comment {
         const instance = new Comment();
         instance.author = author;
         instance.text = text;
+        instance.date = new Date();
         return instance;
     }
 }
@@ -24,6 +25,10 @@ class ReviewLocation {
     positionX: number;
     positionY: number;
     @observable comments: Comment[] = [];
+    /**
+     * FirstComment is a main comment added when saving review location for the first time
+     */
+    @observable firstComment: Comment = new Comment();
 
     constructor(point: any) {
         Object.keys(point).forEach((key) => this[key] = point[key]);
@@ -106,7 +111,12 @@ class ReviewComponentStore implements IReviewComponentStore {
         }
         this.currentEditLocation.isDone = this.dialog.isDoneChecked;
         //TODO: pass current user from store - John
-        this.currentEditLocation.comments.push(Comment.create("John", this.dialog.currentComment));
+        const comment = Comment.create("John", this.dialog.currentComment);
+        if (this.currentEditLocation.firstComment.date) {
+            this.currentEditLocation.comments.push(comment);
+        } else {
+            this.currentEditLocation.firstComment = comment;
+        }
         this.currentEditLocation = new ReviewLocation({});
     }
 }
