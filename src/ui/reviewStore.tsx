@@ -40,10 +40,12 @@ class ReviewLocation {
 
 interface IDialogState {
     currentComment: string;
+    isDoneChecked: boolean;
 }
 
 class DialogState implements IDialogState {
     @observable currentComment = "";
+    @observable isDoneChecked = false;
 }
 
 export interface IReviewComponentStore {
@@ -91,6 +93,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action.bound
     showDialog(location: ReviewLocation): void {
         this.dialog.currentComment = "";
+        this.dialog.isDoneChecked = location.isDone;
         this.currentEditLocation = location;
         this.isDialogOpen = true;
     }
@@ -101,6 +104,7 @@ class ReviewComponentStore implements IReviewComponentStore {
         if (action !== "save") {
             return;
         }
+        this.currentEditLocation.isDone = this.dialog.isDoneChecked;
         //TODO: pass current user from store - John
         this.currentEditLocation.comments.push(Comment.create("John", this.dialog.currentComment));
         this.currentEditLocation = new ReviewLocation({});
