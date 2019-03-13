@@ -12,6 +12,7 @@ import TextField, { Input } from '@material/react-text-field';
 import '@material/react-dialog/index.scss';
 import '@material/react-text-field/index.scss';
 import '@material/react-checkbox/index.scss';
+import '@material/react-button/index.scss';
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore
@@ -49,8 +50,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
           </div>
         </DialogContent>
         <DialogFooter>
-          <DialogButton action='dismiss'>Dismiss</DialogButton>
-          <DialogButton action='accept' isDefault>Accept</DialogButton>
+          <DialogButton dense action='dismiss'>close</DialogButton>
+          <DialogButton raised dense action='accept' isDefault>Save</DialogButton>
         </DialogFooter>
       </Dialog>
     );
