@@ -32,8 +32,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
       <Dialog open={isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
         <DialogTitle>
           {currentEditLocation.propertyName}
-          <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={currentEditLocation.isDone}
-            onChange={(e) => currentEditLocation.isDone = e.target.checked} />
+          <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.isDoneChecked}
+            onChange={(e) => dialog.isDoneChecked = e.target.checked} />
         </DialogTitle>
         <DialogContent>
             {currentEditLocation.comments.map((comment, idx) => (
