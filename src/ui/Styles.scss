@@ -25,9 +25,9 @@
     -moz-box-sizing: border-box;
     font-size: 10px;
     cursor: pointer;
-}
+    user-select: none;
 
-
-.red {
-   background-color: red;	
+    &.done {
+        background-color: gray;
+    }
 }
