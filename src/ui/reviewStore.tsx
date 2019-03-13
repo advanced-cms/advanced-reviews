@@ -1,12 +1,29 @@
 import {CSSProperties} from "react";
 import { action, computed, observable } from 'mobx';
 
+/**
+ * Represents a comment added by user
+ */
+class Comment {
+    author: string;
+    text: string;
+    date: Date;
+
+    static create(author: string, text: string): Comment {
+        const instance = new Comment();
+        instance.author = author;
+        instance.text = text;
+        return instance;
+    }
+}
+
 class ReviewLocation {
     id: string;
     propertyName: string;
     @observable isDone: boolean;
     positionX: number;
     positionY: number;
+    @observable comments: Comment[] = [];
 
     constructor(point: any) {
         Object.keys(point).forEach((key) => this[key] = point[key]);
@@ -73,6 +90,7 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     @action.bound
     showDialog(location: ReviewLocation): void {
+        this.dialog.currentComment = "";
         this.currentEditLocation = location;
         this.isDialogOpen = true;
     }
@@ -80,8 +98,12 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action.bound
     closeDialog(action: string): void {
         this.isDialogOpen = false;
+        if (action !== "save") {
+            return;
+        }
+        //TODO: pass current user from store - John
+        this.currentEditLocation.comments.push(Comment.create("John", this.dialog.currentComment));
         this.currentEditLocation = new ReviewLocation({});
-        alert(action);
     }
 }
 

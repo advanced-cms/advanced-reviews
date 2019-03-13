@@ -21,14 +21,8 @@ interface ReviewDialogProps {
 @inject('reviewStore')
 @observer
 export default class ReviewDialog extends React.Component<ReviewDialogProps, any> {
-
-  constructor(props: ReviewDialogProps) {
-    super(props);
-    this.state = { value: 'Woof' };
-  }
-
   render() {
-    const { closeDialog, isDialogOpen, currentEditLocation } = this.props.reviewStore!;
+    const { closeDialog, isDialogOpen, currentEditLocation, dialog } = this.props.reviewStore!;
 
     const customAttribute = {
       title: currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
@@ -42,16 +36,16 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
             onChange={(e) => currentEditLocation.isDone = e.target.checked} />
         </DialogTitle>
         <DialogContent>
-          <div>
-            <TextField label='Comment...' textarea={true}><Input value={this.state.value}
-              onChange={(e) => this.setState({ value: e.currentTarget.value })} />
+            {currentEditLocation.comments.map((comment, idx) => (
+              <div key={idx}>{comment.text}</div>
+            ))}
+            <TextField label='Add comment...' dense textarea><Input value={dialog.currentComment}
+              onChange={(e) => dialog.currentComment = e.currentTarget.value } />
             </TextField>
-
-          </div>
         </DialogContent>
         <DialogFooter>
-          <DialogButton dense action='dismiss'>close</DialogButton>
-          <DialogButton raised dense action='accept' isDefault>Save</DialogButton>
+          <DialogButton dense action='cancel'>close</DialogButton>
+          <DialogButton raised dense action='save' isDefault>Save</DialogButton>
         </DialogFooter>
       </Dialog>
     );
