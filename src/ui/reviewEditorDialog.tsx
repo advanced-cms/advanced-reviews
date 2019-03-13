@@ -7,9 +7,11 @@ import Dialog, {
   DialogFooter,
   DialogButton,
 } from '@material/react-dialog';
+import Checkbox from '@material/react-checkbox';
 import TextField, { Input } from '@material/react-text-field';
 import '@material/react-dialog/index.scss';
 import '@material/react-text-field/index.scss';
+import '@material/react-checkbox/index.scss';
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore
@@ -31,7 +33,11 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
 
     return (
       <Dialog open={isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
-        <DialogTitle>{currentEditLocation.propertyName}</DialogTitle>
+        <DialogTitle>
+          {currentEditLocation.propertyName}
+          <Checkbox nativeControlId='my-checkbox' checked={currentEditLocation.isDone} onChange={(e) => currentEditLocation.isDone = e.target.checked }
+          />
+        </DialogTitle>
         <DialogContent>
           <div>
             <TextField
