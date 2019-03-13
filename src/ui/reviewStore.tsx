@@ -58,6 +58,12 @@ export interface IReviewComponentStore {
 
     readonly dialog: IDialogState;
 
+    /**
+     * Currently logged user. 
+     * Field is used when saving comment author
+     */
+    currentUser: string;
+
     //TODO: move to dialogState
     isDialogOpen: boolean;
     currentEditLocation?: ReviewLocation;
@@ -72,6 +78,9 @@ class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations = [];
     @observable currentEditLocation? = new ReviewLocation({});
     @observable dialog = new DialogState();
+
+    //TODO: read user from identity
+    currentUser = "John";
 
     @action.bound
     load(): void {
@@ -110,8 +119,7 @@ class ReviewComponentStore implements IReviewComponentStore {
             return;
         }
         this.currentEditLocation.isDone = this.dialog.isDoneChecked;
-        //TODO: pass current user from store - John
-        const comment = Comment.create("John", this.dialog.currentComment);
+        const comment = Comment.create(this.currentUser, this.dialog.currentComment);
         if (this.currentEditLocation.firstComment.date) {
             this.currentEditLocation.comments.push(comment);
         } else {
