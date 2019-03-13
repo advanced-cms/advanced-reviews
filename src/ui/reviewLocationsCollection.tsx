@@ -1,40 +1,29 @@
 import React from "react";
+import { observer, inject } from 'mobx-react';
 import style from "./Styles.css";
-import '@material/react-dialog/index.scss';
+import { IReviewComponentStore } from './reviewStore';
 import ReviewEditorDialog from "./reviewEditorDialog";
 
-export default class Index extends React.Component<any, any> {
-  constructor(props) {
-    super(props);
+interface ReviewLocationCollectionProps {
+  reviewStore?: IReviewComponentStore
+}
 
-    this.state = {
-      dialogSettings: {
-        isOpen: false,
-      }
-    }
-  }
-
-  onDialogSave(action: String) {
-    alert(action);
-    this.setState({action, isOpen: false});
-  }
-
-  onLocationClick() {
-    this.setState({
-      "dialogSettings": {
-        isOpen: true
-      }
-    });
-  };
-
+@inject('reviewStore')
+@observer
+export default class ReviewLocationCollection extends React.Component<ReviewLocationCollectionProps, any> {
   render() {
+    const {reviewLocations, showDialog} = this.props.reviewStore!;
+
     return (
       <div>
-        <div style={{
-          top: "100px",
-          left: "50px"
-        }} className={style.reviewLocation} onClick={this.onLocationClick.bind(this)}>32</div>
-        <ReviewEditorDialog isOpen={this.state.dialogSettings.isOpen} />
+        {reviewLocations.map(location => (
+          <div key={location.id} 
+          style={location.style} 
+          className={style.reviewLocation} 
+          onClick={() => showDialog(location)}>{location.id}</div>
+        ))}
+
+        <ReviewEditorDialog />
       </div>)
   };
 }
