@@ -1,6 +1,7 @@
 import React from "react";
 import { observer, inject } from 'mobx-react';
-import style from "./Styles.css";
+import "./Styles.scss";
+import classNames from "classnames";
 import { IReviewComponentStore } from './reviewStore';
 import ReviewEditorDialog from "./reviewEditorDialog";
 
@@ -19,7 +20,7 @@ export default class ReviewLocationCollection extends React.Component<ReviewLoca
         {reviewLocations.map(location => (
           <div key={location.id} 
           style={location.style} 
-          className={style.reviewLocation} 
+          className={classNames("reviewLocation", { done: location.isDone })}
           onClick={() => showDialog(location)}>{location.id}</div>
         ))}
 
