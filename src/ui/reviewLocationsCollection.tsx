@@ -13,7 +13,7 @@ interface ReviewLocationCollectionProps {
 @observer
 export default class ReviewLocationCollection extends React.Component<ReviewLocationCollectionProps, any> {
   render() {
-    const {reviewLocations, showDialog} = this.props.reviewStore!;
+    const {reviewLocations, dialog} = this.props.reviewStore!;
 
     return (
       <div>
@@ -22,7 +22,7 @@ export default class ReviewLocationCollection extends React.Component<ReviewLoca
           style={location.style}
           title={location.firstComment.text} 
           className={classNames("reviewLocation", { done: location.isDone })}
-          onClick={() => showDialog(location)}>{location.id}</div>
+          onClick={() => dialog.showDialog(location)}>{location.id}</div>
         ))}
 
         <ReviewEditorDialog />

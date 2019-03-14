@@ -22,33 +22,33 @@ interface ReviewDialogProps {
 @observer
 export default class ReviewDialog extends React.Component<ReviewDialogProps, any> {
   render() {
-    const { closeDialog, isDialogOpen, currentEditLocation, dialog } = this.props.reviewStore!;
+    const { closeDialog, dialog } = this.props.reviewStore!;
 
     const customAttribute = {
-      title: currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
+      title: dialog.currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
     };
 
     return (
-      <Dialog open={isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
+      <Dialog open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
         <DialogTitle>
-          {currentEditLocation.propertyName}
-          <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.isDoneChecked}
-            onChange={(e) => dialog.isDoneChecked = e.target.checked} />
+          {dialog.currentEditLocation.propertyName}
+          <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
+            onChange={(e) => dialog.currentIsDone = e.target.checked} />
         </DialogTitle>
         <DialogContent>
             <div>
-              <strong>{currentEditLocation.firstComment.text}</strong>
+              <strong>{dialog.currentEditLocation.firstComment.text}</strong>
             </div>
-            {currentEditLocation.comments.map((comment, idx) => (
+            {dialog.currentEditLocation.comments.map((comment, idx) => (
               <div key={idx}>{comment.text}</div>
             ))}
-            <TextField label='Add comment...' dense textarea><Input value={dialog.currentComment}
-              onChange={(e) => dialog.currentComment = e.currentTarget.value } />
+            <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
+              onChange={(e) => dialog.currentCommentText = e.currentTarget.value } />
             </TextField>
         </DialogContent>
         <DialogFooter>
           <DialogButton dense action='cancel'>close</DialogButton>
-          <DialogButton raised dense action='save' isDefault>Save</DialogButton>
+          <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton>
         </DialogFooter>
       </Dialog>
     );
