@@ -1,4 +1,4 @@
-import {CSSProperties} from "react";
+import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
 
 /**
@@ -43,14 +43,56 @@ class ReviewLocation {
     }
 }
 
+/**
+ * State of the edit review location dialog 
+ */
 interface IDialogState {
-    currentComment: string;
-    isDoneChecked: boolean;
+    /**
+     * New comment textarea value
+     */
+    currentCommentText: string;
+    
+    /**
+     * Currently edited `isDone` state
+     */
+    currentIsDone: boolean;
+    isDialogOpen: boolean;
+    
+    /**
+     * Currently edited location
+     */
+    currentEditLocation?: ReviewLocation;
+    
+    /**
+     * Check if `currentCommentText` or `currentIsDone` changed
+     */
+    canSave: boolean;
+    showDialog(location: ReviewLocation): void;
 }
 
 class DialogState implements IDialogState {
-    @observable currentComment = "";
-    @observable isDoneChecked = false;
+    @observable isDialogOpen = false;
+    @observable currentEditLocation?= new ReviewLocation({});
+    @observable currentCommentText = "";
+    @observable currentIsDone = false;
+    
+    @observable private initialDoneChecked = false;
+
+    @computed
+    get canSave(): boolean {
+        return this.currentCommentText.trim() !== "" || this.currentIsDone !== this.initialDoneChecked;
+    }
+
+    @action.bound
+    showDialog(location: ReviewLocation): void {
+        this.currentCommentText = "";
+
+        this.currentIsDone = location.isDone;
+        this.initialDoneChecked = location.isDone;
+
+        this.currentEditLocation = location;
+        this.isDialogOpen = true;
+    }
 }
 
 export interface IReviewComponentStore {
@@ -64,19 +106,13 @@ export interface IReviewComponentStore {
      */
     currentUser: string;
 
-    //TODO: move to dialogState
-    isDialogOpen: boolean;
-    currentEditLocation?: ReviewLocation;
-    showDialog(location: ReviewLocation): void;
     closeDialog(action: string): void;
 
     load(): void;
 }
 
 class ReviewComponentStore implements IReviewComponentStore {
-    @observable isDialogOpen = false;
     @observable reviewLocations = [];
-    @observable currentEditLocation? = new ReviewLocation({});
     @observable dialog = new DialogState();
 
     //TODO: read user from identity
@@ -85,7 +121,6 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action.bound
     load(): void {
         //TODO: load from episerver store
-        this.isDialogOpen = false;
         this.reviewLocations = [
             new ReviewLocation({
                 id: "1",
@@ -105,27 +140,23 @@ class ReviewComponentStore implements IReviewComponentStore {
     }
 
     @action.bound
-    showDialog(location: ReviewLocation): void {
-        this.dialog.currentComment = "";
-        this.dialog.isDoneChecked = location.isDone;
-        this.currentEditLocation = location;
-        this.isDialogOpen = true;
-    }
-
-    @action.bound
     closeDialog(action: string): void {
-        this.isDialogOpen = false;
         if (action !== "save") {
+            this.dialog.isDialogOpen = false;
             return;
         }
-        this.currentEditLocation.isDone = this.dialog.isDoneChecked;
-        const comment = Comment.create(this.currentUser, this.dialog.currentComment);
-        if (this.currentEditLocation.firstComment.date) {
-            this.currentEditLocation.comments.push(comment);
+
+        const editedReview = this.dialog.currentEditLocation;
+
+        this.dialog.isDialogOpen = false;
+        editedReview.isDone = this.dialog.currentIsDone;
+        const comment = Comment.create(this.currentUser, this.dialog.currentCommentText);
+        if (editedReview.firstComment.date) {
+            editedReview.comments.push(comment);
         } else {
-            this.currentEditLocation.firstComment = comment;
+            editedReview.firstComment = comment;
         }
-        this.currentEditLocation = new ReviewLocation({});
+        this.dialog.currentEditLocation = new ReviewLocation({});
     }
 }
 
