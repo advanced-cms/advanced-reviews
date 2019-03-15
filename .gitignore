@@ -22,5 +22,6 @@ License.config
 [Pp]ackages/
 
 .idea/
+.vscode
 
 node_modules/
