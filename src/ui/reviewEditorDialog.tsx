@@ -1,6 +1,6 @@
 import React from "react";
 import { observer, inject } from 'mobx-react';
-import { IReviewComponentStore } from './reviewStore';
+import { IReviewComponentStore, Priority } from './reviewStore';
 import Dialog, {
   DialogTitle,
   DialogContent,
@@ -8,11 +8,13 @@ import Dialog, {
   DialogButton,
 } from '@material/react-dialog';
 import Checkbox from '@material/react-checkbox';
+import Select from '@material/react-select';
 import TextField, { Input } from '@material/react-text-field';
 import '@material/react-dialog/index.scss';
 import '@material/react-text-field/index.scss';
 import '@material/react-checkbox/index.scss';
 import '@material/react-button/index.scss';
+import '@material/react-select/index.scss';
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore
@@ -28,6 +30,13 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
       title: dialog.currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
     };
 
+    const options = Object.keys(Priority).map(priority => {
+      return {
+        value: priority,
+        label: Priority[priority]
+      };
+    });
+
     return (
       <Dialog open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
         <DialogTitle>
@@ -36,6 +45,11 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
             onChange={(e) => dialog.currentIsDone = e.target.checked} />
         </DialogTitle>
         <DialogContent>
+            <Select
+                value={Priority[dialog.currentPriority]}
+                label='Priority'
+                onChange={(e) => dialog.currentPriority = Priority[e.currentTarget.value] }
+                options={options} />
             <div>
               <strong>{dialog.currentEditLocation.firstComment.text}</strong>
             </div>
