@@ -25,3 +25,5 @@ License.config
 .vscode
 
 node_modules/
+
+reviewComponent.bundle.js
