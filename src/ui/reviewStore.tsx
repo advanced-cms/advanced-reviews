@@ -24,6 +24,7 @@ class ReviewLocation {
     @observable isDone: boolean;
     positionX: number;
     positionY: number;
+    @observable priority: Priority = Priority.Minor;
     @observable comments: Comment[] = [];
     /**
      * FirstComment is a main comment added when saving review location for the first time
@@ -43,28 +44,37 @@ class ReviewLocation {
     }
 }
 
+export enum Priority {
+    Blocker = "Blocker",
+    Critical = "Critical",
+    Major = "Major",
+    Minor = "Minor",
+    Trivial = "Trivial"
+}
+
 /**
- * State of the edit review location dialog 
+ * State of the edit review location dialog
  */
 interface IDialogState {
     /**
      * New comment textarea value
      */
     currentCommentText: string;
-    
+
     /**
      * Currently edited `isDone` state
      */
     currentIsDone: boolean;
+    currentPriority: Priority;
     isDialogOpen: boolean;
-    
+
     /**
      * Currently edited location
      */
     currentEditLocation?: ReviewLocation;
-    
+
     /**
-     * Check if `currentCommentText` or `currentIsDone` changed
+     * Check if the form is dirty
      */
     canSave: boolean;
     showDialog(location: ReviewLocation): void;
@@ -75,20 +85,25 @@ class DialogState implements IDialogState {
     @observable currentEditLocation?= new ReviewLocation({});
     @observable currentCommentText = "";
     @observable currentIsDone = false;
-    
+    @observable currentPriority = Priority.Minor;
+
     @observable private initialDoneChecked = false;
+    @observable private initialPriority = Priority.Minor;
 
     @computed
     get canSave(): boolean {
-        return this.currentCommentText.trim() !== "" || this.currentIsDone !== this.initialDoneChecked;
+        return this.currentCommentText.trim() !== "" ||
+            this.currentIsDone !== this.initialDoneChecked ||
+            this.currentPriority !== this.initialPriority;
     }
 
     @action.bound
     showDialog(location: ReviewLocation): void {
         this.currentCommentText = "";
-
         this.currentIsDone = location.isDone;
+        this.currentPriority = location.priority;
         this.initialDoneChecked = location.isDone;
+        this.initialPriority = location.priority;
 
         this.currentEditLocation = location;
         this.isDialogOpen = true;
@@ -101,7 +116,7 @@ export interface IReviewComponentStore {
     readonly dialog: IDialogState;
 
     /**
-     * Currently logged user. 
+     * Currently logged user.
      * Field is used when saving comment author
      */
     currentUser: string;
@@ -150,6 +165,7 @@ class ReviewComponentStore implements IReviewComponentStore {
 
         this.dialog.isDialogOpen = false;
         editedReview.isDone = this.dialog.currentIsDone;
+        editedReview.priority = this.dialog.currentPriority;
         const comment = Comment.create(this.currentUser, this.dialog.currentCommentText);
         if (editedReview.firstComment.date) {
             editedReview.comments.push(comment);
