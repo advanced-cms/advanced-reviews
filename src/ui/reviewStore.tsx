@@ -24,7 +24,7 @@ class ReviewLocation {
     @observable isDone: boolean;
     positionX: number;
     positionY: number;
-    @observable priority: Priority = Priority.Minor;
+    @observable priority: Priority = Priority.Normal;
     @observable comments: Comment[] = [];
     /**
      * FirstComment is a main comment added when saving review location for the first time
@@ -45,10 +45,8 @@ class ReviewLocation {
 }
 
 export enum Priority {
-    Blocker = "Blocker",
-    Critical = "Critical",
-    Major = "Major",
-    Minor = "Minor",
+    Important = "Important",
+    Normal = "Normal",
     Trivial = "Trivial"
 }
 
@@ -85,10 +83,10 @@ class DialogState implements IDialogState {
     @observable currentEditLocation?= new ReviewLocation({});
     @observable currentCommentText = "";
     @observable currentIsDone = false;
-    @observable currentPriority = Priority.Minor;
+    @observable currentPriority = Priority.Normal;
 
     @observable private initialDoneChecked = false;
-    @observable private initialPriority = Priority.Minor;
+    @observable private initialPriority = Priority.Normal;
 
     @computed
     get canSave(): boolean {

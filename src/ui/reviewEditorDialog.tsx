@@ -1,6 +1,9 @@
 import React from "react";
 import { observer, inject } from 'mobx-react';
 import { IReviewComponentStore, Priority } from './reviewStore';
+
+import { ContextMenu } from "./context-menu";
+
 import Dialog, {
   DialogTitle,
   DialogContent,
@@ -8,13 +11,19 @@ import Dialog, {
   DialogButton,
 } from '@material/react-dialog';
 import Checkbox from '@material/react-checkbox';
-import Select from '@material/react-select';
 import TextField, { Input } from '@material/react-text-field';
+
+import '@material/react-material-icon/index.scss';
 import '@material/react-dialog/index.scss';
 import '@material/react-text-field/index.scss';
 import '@material/react-checkbox/index.scss';
 import '@material/react-button/index.scss';
-import '@material/react-select/index.scss';
+import "@material/react-list/index.scss";
+import "@material/react-menu-surface/index.scss";
+import '@material/react-icon-button/index.scss';
+
+
+
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore
@@ -30,10 +39,18 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
       title: dialog.currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
     };
 
+    const icons = {};
+    icons[Priority.Important] = "error_outline";
+    icons[Priority.Normal] = "assignment";
+    icons[Priority.Trivial] = "low_priority";
+
     const options = Object.keys(Priority).map(priority => {
       return {
-        value: priority,
-        label: Priority[priority]
+        name: priority,
+        icon: icons[priority],
+        onSelected: () => {
+            dialog.currentPriority = Priority[priority]
+        }
       };
     });
 
@@ -43,13 +60,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
           {dialog.currentEditLocation.propertyName}
           <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
             onChange={(e) => dialog.currentIsDone = e.target.checked} />
+          <ContextMenu icon={icons[dialog.currentPriority]} menuItems={options} />
         </DialogTitle>
         <DialogContent>
-            <Select
-                value={Priority[dialog.currentPriority]}
-                label='Priority'
-                onChange={(e) => dialog.currentPriority = Priority[e.currentTarget.value] }
-                options={options} />
             <div>
               <strong>{dialog.currentEditLocation.firstComment.text}</strong>
             </div>
