@@ -22,5 +22,8 @@ License.config
 [Pp]ackages/
 
 .idea/
+.vscode
 
 node_modules/
+
+reviewComponent.bundle.js
