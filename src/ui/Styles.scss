@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
 .review-overlay {
 	position: absolute;
 	top: 0;
@@ -30,4 +32,22 @@
     &.done {
         background-color: gray;
     }
+}
+
+.mdc-menu-surface {
+    //TODO: menu-surface overlapped when in dialog
+    z-index: 100 !important;
+
+    .mdc-list {
+        width: 50px;
+
+        .mdc-list-item {
+            cursor: pointer;
+        }
+    }
+}
+
+//TODO: menu-surface float?
+.mdc-menu-surface--anchor {
+    display: inline-block;
 }
