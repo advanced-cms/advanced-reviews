@@ -14,7 +14,7 @@ class Comment {
         if (!this.date) {
             return "";
         }
-        return moment(this.date).format("MMM Do YY");
+        return moment(this.date).format("MMM Do YYYY");
     }
 
     @computed get userFriendlyDate() {
@@ -233,7 +233,12 @@ class ReviewComponentStore implements IReviewComponentStore {
                 isDone: false,
                 firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")),
                 comments: [
-                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-01"))
+                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02")),
+                    Comment.create("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
+                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04")),
+                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18")),
+                    Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
+                    Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
                 ]
             }),
             new ReviewLocation(this, {
