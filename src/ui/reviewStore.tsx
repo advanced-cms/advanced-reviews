@@ -9,11 +9,11 @@ class Comment {
     text: string;
     date: Date;
 
-    static create(author: string, text: string): Comment {
+    static create(author: string, text: string, date?: Date): Comment {
         const instance = new Comment();
         instance.author = author;
         instance.text = text;
-        instance.date = new Date();
+        instance.date = date || new Date();
         return instance;
     }
 }
@@ -129,7 +129,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     @observable dialog = new DialogState();
 
     //TODO: read user from identity
-    currentUser = "John";
+    currentUser = "Lina";
 
     @action.bound
     load(): void {
@@ -138,14 +138,32 @@ class ReviewComponentStore implements IReviewComponentStore {
             new ReviewLocation({
                 id: "1",
                 positionX: 10,
-                positionY: 10,
+                positionY: 80,
                 propertyName: "Page name",
-                isDone: false
+                isDone: false,
+                firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")), 
+                comments: [
+                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-01"))
+                ]
             }),
             new ReviewLocation({
                 id: "2",
                 positionX: 100,
                 positionY: 150,
+                propertyName: "Page body",
+                isDone: false
+            }),
+            new ReviewLocation({
+                id: "3",
+                positionX: 250,
+                positionY: 200,
+                propertyName: "Page body",
+                isDone: false
+            }),
+            new ReviewLocation({
+                id: "4",
+                positionX: 125,
+                positionY: 330,
                 propertyName: "Page body",
                 isDone: false
             })
