@@ -36,7 +36,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
     const { closeDialog, dialog } = this.props.reviewStore!;
 
     const customAttribute = {
-      title: dialog.currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
+      title: dialog.currentIsDone ? "Uncheck to reopen the task" : "Mark task as done"
     };
 
     const icons = {};
