@@ -1,0 +1,20 @@
+.review-dialog {
+    .comment {
+        .author {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 5px;
+        }
+
+        .date {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        p {
+            padding: 0;
+            margin: 0 0 10px 0;
+        }
+    }
+}
