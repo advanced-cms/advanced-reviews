@@ -32,6 +32,15 @@
     &.done {
         background-color: gray;
     }
+
+    &.new-comment:after {
+        content: "new";
+        display: block;
+        position: absolute;
+        right: -25px;
+        top: 0;
+        background-color: yellow;
+    }
 }
 
 .mdc-menu-surface {
