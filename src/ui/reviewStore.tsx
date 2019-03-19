@@ -1,5 +1,6 @@
 import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
+import moment from "moment";
 
 /**
  * Represents a comment added by user
@@ -8,6 +9,20 @@ class Comment {
     author: string;
     text: string;
     date: Date;
+
+    @computed get formattedDate() {
+        if (!this.date) {
+            return "";
+        }
+        return moment(this.date).format("MMM Do YY");
+    }
+
+    @computed get userFriendlyDate() {
+        if (!this.date) {
+            return "";
+        }
+        return moment(this.date).fromNow();
+    }
 
     static create(author: string, text: string, date?: Date): Comment {
         const instance = new Comment();
@@ -34,6 +49,15 @@ class ReviewLocation {
      * FirstComment is a main comment added when saving review location for the first time
      */
     @observable firstComment: Comment = new Comment();
+
+    @computed get formattedFirstComment() {
+        if (!this.firstComment.date) {
+            return "";
+        }
+        const comment = this.firstComment;
+
+        return `${comment.author}: ${comment.text}, ${comment.userFriendlyDate}`;
+    }
 
     /**
      * List of users and date when they last saw the review. 
