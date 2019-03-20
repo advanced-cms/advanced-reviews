@@ -1,11 +1,13 @@
 define([
     "dojo/on",
     "epi-cms/contentediting/OnPageEditing",
-    "alloy-review/pointBuilder"
+    "alloy-review/pointBuilder",
+    "alloy-review/ReviewWidget"
 ], function (
     on,
     OnPageEditing,
-    pointBuilder) {
+    pointBuilder,
+    ReviewWidget) {
     
     function initialize() {
         //
@@ -64,9 +66,21 @@ define([
             this._reviewOverlay = document.createElement("div");
             this._reviewOverlay.classList.add("review-overlay", "dijitHidden");
 
+
+
             this._reviewOverlayDocumentArea = document.createElement("div");
             this._reviewOverlayDocumentArea.classList.add("review-overlay-document-area");
             this._reviewOverlay.appendChild(this._reviewOverlayDocumentArea);
+
+            /*
+ *
+ *   TEMPORARY CODE
+ *
+ */
+            var widet = new ReviewWidget();
+            widet.placeAt(this._reviewOverlay);
+            
+
 
             this.editLayoutContainer.domNode.appendChild(this._reviewOverlay);
 

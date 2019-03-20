@@ -1,18 +1,4 @@
-var path = require("path");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-
-const htmlPlugin = new HtmlWebPackPlugin({
-  template: "./src/index.html",
-  filename: "./index.html"
-});
-
 module.exports = {
-  entry: "./reviewComponent.tsx",
-  output: {
-    path: path.resolve(__dirname, ".\\dist"),
-    filename: "reviewComponent.bundle.js"
-  },
-  devtool: "eval-source-map",
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
     extensions: [".ts", ".tsx", ".js"]
@@ -61,6 +47,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  plugins: [htmlPlugin]
+  }
 };
