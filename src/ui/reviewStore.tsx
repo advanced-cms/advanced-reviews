@@ -1,5 +1,6 @@
 import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
+import moment from "moment";
 
 /**
  * Represents a comment added by user
@@ -9,13 +10,31 @@ class Comment {
     text: string;
     date: Date;
 
-    static create(author: string, text: string): Comment {
+    @computed get formattedDate() {
+        if (!this.date) {
+            return "";
+        }
+        return moment(this.date).format("MMM Do YYYY");
+    }
+
+    @computed get userFriendlyDate() {
+        if (!this.date) {
+            return "";
+        }
+        return moment(this.date).fromNow();
+    }
+
+    static create(author: string, text: string, date?: Date): Comment {
         const instance = new Comment();
         instance.author = author;
         instance.text = text;
-        instance.date = new Date();
+        instance.date = date || new Date();
         return instance;
     }
+}
+
+interface UsersLastReadHashmap {
+    [userName: string]: Date;
 }
 
 class ReviewLocation {
@@ -31,7 +50,24 @@ class ReviewLocation {
      */
     @observable firstComment: Comment = new Comment();
 
-    constructor(point: any) {
+    @computed get formattedFirstComment() {
+        if (!this.firstComment.date) {
+            return "";
+        }
+        const comment = this.firstComment;
+
+        return `${comment.author}: ${comment.text}, ${comment.userFriendlyDate}`;
+    }
+
+    /**
+     * List of users and date when they last saw the review. 
+     */
+    usersLastRead: UsersLastReadHashmap = {};
+
+    private _rootStore: IReviewComponentStore;
+
+    constructor(rootStore: IReviewComponentStore, point: any) {
+        this._rootStore = rootStore;
         Object.keys(point).forEach((key) => this[key] = point[key]);
     }
 
@@ -41,6 +77,58 @@ class ReviewLocation {
             top: this.positionY + "px",
             left: this.positionX + "px"
         }
+    }
+
+    @action updateCurrentUserLastRead(): void {
+        if (!this._rootStore) {
+            return;
+        }
+        this.usersLastRead[this._rootStore.currentUser] = new Date();
+    }
+
+    @action clearLastUsersRead(): void {
+        this.usersLastRead = {};
+    }
+
+    @computed get isUpdatedReview() {
+        if (!this._rootStore) {
+            return false;
+        }
+
+        const currentUser = this._rootStore.currentUser;
+
+        let allComments = this.comments.slice();
+        if (this.firstComment.date) {
+            allComments.push(this.firstComment);
+        }
+        if (allComments.length === 0) {
+            return false;
+        }
+
+        let otherUserComments = allComments.filter(x => x.author !== currentUser).map(x => x.date).sort();
+        const lastOtherUserComment = otherUserComments.length > 0 ? otherUserComments.pop() : null;
+        if (!lastOtherUserComment) {
+            // there are no comments added by other users
+            return false;
+        }
+
+        let currentUserComments = allComments.filter(x => x.author === currentUser).map(x => x.date).sort();
+        const lastCurrentUserComment = currentUserComments.length > 0 ? currentUserComments.pop() : null;
+        if (lastCurrentUserComment !== null && lastCurrentUserComment > lastOtherUserComment) {
+            // current user has the last comment
+            return false;
+        }
+
+        const lastCurrentUserReadDate = this.usersLastRead[this._rootStore.currentUser];
+        if (!lastCurrentUserReadDate) {
+            // current user hsa no comments
+            return true;
+        }
+        if (lastCurrentUserReadDate > lastOtherUserComment) {
+            return false;
+        }
+
+        return true;
     }
 }
 
@@ -80,7 +168,7 @@ interface IDialogState {
 
 class DialogState implements IDialogState {
     @observable isDialogOpen = false;
-    @observable currentEditLocation?= new ReviewLocation({});
+    @observable currentEditLocation?= new ReviewLocation(null, {});
     @observable currentCommentText = "";
     @observable currentIsDone = false;
     @observable currentPriority = Priority.Normal;
@@ -102,6 +190,8 @@ class DialogState implements IDialogState {
         this.currentPriority = location.priority;
         this.initialDoneChecked = location.isDone;
         this.initialPriority = location.priority;
+
+        location.updateCurrentUserLastRead();
 
         this.currentEditLocation = location;
         this.isDialogOpen = true;
@@ -129,23 +219,46 @@ class ReviewComponentStore implements IReviewComponentStore {
     @observable dialog = new DialogState();
 
     //TODO: read user from identity
-    currentUser = "John";
+    currentUser = "Lina";
 
     @action.bound
     load(): void {
         //TODO: load from episerver store
         this.reviewLocations = [
-            new ReviewLocation({
+            new ReviewLocation(this, {
                 id: "1",
                 positionX: 10,
-                positionY: 10,
+                positionY: 80,
                 propertyName: "Page name",
-                isDone: false
+                isDone: false,
+                firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")),
+                comments: [
+                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02")),
+                    Comment.create("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
+                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04")),
+                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18")),
+                    Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
+                    Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
+                ]
             }),
-            new ReviewLocation({
+            new ReviewLocation(this, {
                 id: "2",
                 positionX: 100,
                 positionY: 150,
+                propertyName: "Page body",
+                isDone: false
+            }),
+            new ReviewLocation(this, {
+                id: "3",
+                positionX: 250,
+                positionY: 200,
+                propertyName: "Page body",
+                isDone: false
+            }),
+            new ReviewLocation(this, {
+                id: "4",
+                positionX: 125,
+                positionY: 330,
                 propertyName: "Page body",
                 isDone: false
             })
@@ -164,13 +277,14 @@ class ReviewComponentStore implements IReviewComponentStore {
         this.dialog.isDialogOpen = false;
         editedReview.isDone = this.dialog.currentIsDone;
         editedReview.priority = this.dialog.currentPriority;
+        editedReview.clearLastUsersRead();
         const comment = Comment.create(this.currentUser, this.dialog.currentCommentText);
         if (editedReview.firstComment.date) {
             editedReview.comments.push(comment);
         } else {
             editedReview.firstComment = comment;
         }
-        this.dialog.currentEditLocation = new ReviewLocation({});
+        this.dialog.currentEditLocation = new ReviewLocation(this, {});
     }
 }
 

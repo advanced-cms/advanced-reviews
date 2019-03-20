@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReviewLocationsCollection from "./reviewLocationsCollection";
 import { stores } from "./reviewStore";
-import {Provider} from 'mobx-react';
+import { Provider } from 'mobx-react';
+import TextField, { Input } from '@material/react-text-field';
 
 //TODO: async
 stores.reviewStore.load();
 
+function Component() {
+    const [text, setText] = useState("Lina");
+
+    useEffect(() => {
+        stores.reviewStore.currentUser = text;
+      });
+
+    return (
+        <div>
+            <div>
+                <TextField label='Current user' dense><Input value={text}
+                    onChange={(e) => setText(e.currentTarget.value)} />
+                </TextField>
+            </div>
+            <ReviewLocationsCollection />
+        </div>
+    );
+}
+
 ReactDOM.render(<Provider {...stores}>
-    <ReviewLocationsCollection />
+    <Component />
 </Provider>, document.getElementById("index"));
 
 
