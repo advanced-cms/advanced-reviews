@@ -15,6 +15,7 @@ interface menuItemProps {
 }
 
 interface ContextMenuProps {
+    title: string;
     icon: string;
     menuItems?: menuItemProps[];
 }
@@ -22,8 +23,17 @@ interface ContextMenuProps {
 export class ContextMenu extends React.Component<ContextMenuProps, any> {
     dropDownMenu: DropDownMenu;
 
+    constructor(props: ContextMenuProps) {
+        super(props);
+        this.state = {
+            title: this.props.title
+        }
+    }
+
     onSelected = (index: number) => {
-        this.props.menuItems[index].onSelected();
+        const menuItem = this.props.menuItems[index];
+        menuItem.onSelected();
+        this.setState({ title: menuItem.name });
         this.dropDownMenu.closeMenu();
     };
 
@@ -31,7 +41,8 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
         const list = <List singleSelection handleSelect={this.onSelected}>
             {this.props.menuItems.map(item =>
                 <ListItem key={item.name}>
-                    {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon}/>} /> : <ListItemText primaryText={item.name}/>}
+                    {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon}/>} /> : null}
+                    <ListItemText primaryText={item.name}/>
                 </ListItem>
             )}
         </List>;
@@ -42,6 +53,7 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
                     this.dropDownMenu = instance;
                 }}
                 icon={this.props.icon}
+                title={this.state.title}
             >
                 {list}
             </DropDownMenu>
