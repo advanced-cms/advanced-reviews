@@ -21,7 +21,7 @@ import '@material/react-button/index.scss';
 import "@material/react-list/index.scss";
 import "@material/react-menu-surface/index.scss";
 import '@material/react-icon-button/index.scss';
-
+import "./reviewEditorDialog.scss"
 
 
 
@@ -36,7 +36,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
     const { closeDialog, dialog } = this.props.reviewStore!;
 
     const customAttribute = {
-      title: dialog.currentEditLocation.isDone ? "Uncheck to reopen the task" : "Mark task as done"
+      title: dialog.currentIsDone ? "Uncheck to reopen the task" : "Mark task as done"
     };
 
     const icons = {};
@@ -55,7 +55,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
     });
 
     return (
-      <Dialog open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
+      <Dialog className="review-dialog" open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
         <DialogTitle>
           {dialog.currentEditLocation.propertyName}
           <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
@@ -67,7 +67,13 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
               <strong>{dialog.currentEditLocation.firstComment.text}</strong>
             </div>
             {dialog.currentEditLocation.comments.map((comment, idx) => (
-              <div key={idx}>{comment.text}</div>
+              <div className="comment" key={idx}>
+                <div>
+                  <span className="author">{comment.author}</span>
+                  <span className="date" title={comment.formattedDate}>{comment.userFriendlyDate}</span>
+                </div>
+                <p>{comment.text}</p>
+              </div>
             ))}
             <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
               onChange={(e) => dialog.currentCommentText = e.currentTarget.value } />
