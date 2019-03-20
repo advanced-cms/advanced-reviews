@@ -3,9 +3,10 @@
   "version": "",
   "description": "",
   "scripts": {
-    "build": "webpack --config webpack.config.js --mode production",
-    "build:debug": "webpack --config webpack.config.js --mode development",
-    "start": "webpack-dev-server --mode development --hot --open chrome"
+    "build": "webpack --config webpack.test.config.js --mode production",
+    "build:debug": "webpack --config webpack.test..config.js --mode development",
+    "start": "webpack-dev-server --config webpack.test.config.js --mode development --hot --open chrome",
+    "build:widget": "webpack --config webpack.widget.config.js --mode development"
   },
   "author": "Episerver AB",
   "license": "ISC",
