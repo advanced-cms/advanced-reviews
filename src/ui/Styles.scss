@@ -48,10 +48,12 @@
     z-index: 100 !important;
 
     .mdc-list {
-        width: 50px;
-
         .mdc-list-item {
             cursor: pointer;
+
+            .mdc-list-item__graphic {
+                margin-right: 10px;
+            }
         }
     }
 }
