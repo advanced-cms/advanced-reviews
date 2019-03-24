@@ -1,4 +1,23 @@
 .review-dialog {
+    .mdc-layout-grid {
+        padding: 0;
+    }
+
+.menu-button.mdc-icon-button {
+    padding: 8px 4px 4px 4px;
+    width: 40px;
+    height: 40px;
+}
+
+.review-actions {
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
     .comment {
         .author {
             font-weight: bold;
