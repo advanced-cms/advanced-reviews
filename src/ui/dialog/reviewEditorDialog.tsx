@@ -25,8 +25,8 @@ import "@material/react-list/index.scss";
 import "@material/react-menu-surface/index.scss";
 import '@material/react-text-field/index.scss';
 import "./reviewEditorDialog.scss"
-import ScreenshotPicker from "./screenshotPicker";
-import {DropDownMenu} from "./drop-down-menu";
+import ScreenshotPicker from "./../screenshotPicker";
+import { DropDownMenu } from "./../drop-down-menu";
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore,
@@ -106,66 +106,63 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
         onOpen={() => this.onDialogOpen()}
         onClose={this.props.onCloseDialog} >
         <DialogTitle>{!dialog.isScreenshotMode && (
-            <>
-                {dialog.currentEditLocation.propertyName}
-                <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
-                          onChange={(e) => dialog.currentIsDone = e.target.checked} />
-                <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
-            </>
+          <>
+            {dialog.currentEditLocation.propertyName}
+          </>
         )}
-            {dialog.isScreenshotMode && (
-                <>Crop the area you want to comment:</>
-            )}</DialogTitle>
+          {dialog.isScreenshotMode && (
+            <>Crop the area you want to comment:</>
+          )}</DialogTitle>
         <DialogContent>
-            {!dialog.isScreenshotMode && (
-          <Grid className="dialog-grid">
-            <Row>
-              <Cell columns={8} className="review-actions left-align">
-<PageNavigator reviewLocation={dialog.currentEditLocation} onPrevClick={this.props.onPrevClick} onNextClick={this.props.onNextClick} />
-              </Cell>
-              <Cell columns={4} className="review-actions">
-                <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
-                  onChange={(e) => dialog.currentIsDone = e.target.checked} />
-                <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
-              </Cell>
-            </Row>
-            <Row>
-              <Cell columns={12}>
-                <strong>{dialog.currentEditLocation.firstComment.text}</strong>
-              {dialog.currentEditLocation.firstComment.screenshot && <DropDownMenu icon="image">
-                        <img src={dialog.currentEditLocation.firstComment.screenshot} />
-                    </DropDownMenu>}</Cell>
-            </Row>
-            <Row>
-              <Cell columns={12} className="comments-list">
-                {dialog.currentEditLocation.comments.map((comment, idx) =>
-                  <Comment key={idx} comment={comment} />
-                )}
-                <div style={{ float: "left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }}>
-                </div>
-              </Cell>
-            </Row>
-            <Row>
-              <Cell columns={12}>
-                <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
-                  onChange={(e) => dialog.currentCommentText = e.currentTarget.value} />
-                </TextField>
-              </Cell>
-            </Row>
-          </Grid>
-            )}
-            <ScreenshotPicker
-                current={dialog.currentScreenshot}
-                iframe={iframe}
-                onImageSelected={(output) => dialog.currentScreenshot = output}
-                toggle={() => dialog.isScreenshotMode = !dialog.isScreenshotMode}
-            />
+          {!dialog.isScreenshotMode && (
+            <Grid className="dialog-grid">
+              <Row>
+                <Cell columns={8} className="review-actions left-align">
+                  <PageNavigator reviewLocation={dialog.currentEditLocation} onPrevClick={this.props.onPrevClick} onNextClick={this.props.onNextClick} />
+                </Cell>
+                <Cell columns={4} className="review-actions">
+                  <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
+                    onChange={(e) => dialog.currentIsDone = e.target.checked} />
+                  <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
+                </Cell>
+              </Row>
+              <Row>
+                <Cell columns={12}>
+                  <strong>{dialog.currentEditLocation.firstComment.text}</strong>
+                  {dialog.currentEditLocation.firstComment.screenshot && <DropDownMenu icon="image">
+                    <img src={dialog.currentEditLocation.firstComment.screenshot} />
+                  </DropDownMenu>}</Cell>
+              </Row>
+              <Row>
+                <Cell columns={12} className="comments-list">
+                  {dialog.currentEditLocation.comments.map((comment, idx) =>
+                    <Comment key={idx} comment={comment} />
+                  )}
+                  <div style={{ float: "left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }}>
+                  </div>
+                </Cell>
+              </Row>
+              <Row>
+                <Cell columns={12}>
+                  <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
+                    onChange={(e) => dialog.currentCommentText = e.currentTarget.value} />
+                  </TextField>
+                </Cell>
+              </Row>
+            </Grid>
+          )}
+                  <ScreenshotPicker
+                    current={dialog.currentScreenshot}
+                    iframe={iframe}
+                    onImageSelected={(output) => dialog.currentScreenshot = output}
+                    toggle={() => dialog.isScreenshotMode = !dialog.isScreenshotMode}
+                  />
         </DialogContent>
         <DialogFooter>
           {!dialog.isScreenshotMode && (
-                  <><DialogButton dense action='cancel'>close</DialogButton>
-          <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton></>
-              )}
+            <><DialogButton dense action='cancel'>close</DialogButton>
+              <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton></>
+          )}
         </DialogFooter>
       </Dialog>
     );
