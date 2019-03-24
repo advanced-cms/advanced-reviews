@@ -258,6 +258,10 @@ class ReviewComponentStore implements IReviewComponentStore {
                     Comment.create("Alfred", defaultAvatarUrl, "I still see old text", new Date("2019-03-18"), screenshots.idylla),
                     Comment.create("Lina", defaultAvatarUrl, "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
                     Comment.create("Alfred", defaultAvatarUrl, "Looks ok.", new Date("2019-03-19")),
+                    Comment.create("Lina", defaultAvatarUrl, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sed nisi in erat posuere luctus.", new Date("2019-03-20")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Vivamus sem est, aliquet eget nunc quis, imperdiet cursus sapien. Mauris ullamcorper dui ut nisl vulputate vestibulum.", new Date("2019-03-21")),
+                    Comment.create("Lina", defaultAvatarUrl, "Sed non nisi in odio facilisis aliquam eget volutpat augue. Phasellus vitae auctor risus, non luctus dolor.", new Date("2019-03-22")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Integer sed libero at odio mattis sodales. Ut dapibus erat cursus porttitor malesuada.", new Date("2019-03-23")),
                 ]
             }),
             new ReviewLocation(this, {
