@@ -27,10 +27,28 @@ export default class PageNavigator extends React.Component<PageNavigatorProps, a
     }
 
     isPrevEnabled(): boolean {
-        const store = this.props.reviewStore!; 
+        const store = this.props.reviewStore!;
         return store.currentItemIndex > 0 && !store.dialog.canSave;
     }
-    
+
+    prevTitle(): string {
+        let result = "prev";
+        if (this.isPrevEnabled()) {
+            const store = this.props.reviewStore!;
+            return result + ": " + store.reviewLocations[store.currentItemIndex - 1].propertyName;
+        }
+        return result;
+    }
+
+    nextTitle(): string {
+        let result = "next";
+        if (this.isNextEnabled()) {
+            const store = this.props.reviewStore!;
+            return result + ": " + store.reviewLocations[store.currentItemIndex + 1].propertyName;
+        }
+        return result;
+    }
+
     render() {
         const { dialog, reviewLocations } = this.props.reviewStore!;
 
@@ -38,11 +56,11 @@ export default class PageNavigator extends React.Component<PageNavigatorProps, a
             <>
                 {reviewLocations.length > 1 &&
                     <>
-                        <IconButton className="next-prev-icon" title="prev" aria-pressed="false" disabled={!this.isPrevEnabled()} >
+                        <IconButton className="next-prev-icon" title={this.prevTitle()} aria-pressed="false" disabled={!this.isPrevEnabled()} >
                             <MaterialIcon icon="chevron_left" onClick={this.props.onPrevClick} />
                         </IconButton>
                         <span>{reviewLocations.indexOf(dialog.currentEditLocation) + 1} / {reviewLocations.length}</span>
-                        <IconButton className="next-prev-icon" title="next" onClick={this.props.onNextClick} disabled={!this.isNextEnabled()}>
+                        <IconButton className="next-prev-icon" title={this.nextTitle()} onClick={this.props.onNextClick} disabled={!this.isNextEnabled()}>
                             <MaterialIcon icon="chevron_right" />
                         </IconButton>
                     </>}
