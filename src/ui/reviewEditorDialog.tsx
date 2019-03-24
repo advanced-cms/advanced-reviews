@@ -10,22 +10,22 @@ import Dialog, {
   DialogFooter,
   DialogButton,
 } from '@material/react-dialog';
+import { Cell, Grid, Row } from '@material/react-layout-grid';
 import Checkbox from '@material/react-checkbox';
 import TextField, { Input } from '@material/react-text-field';
 
-import '@material/react-material-icon/index.scss';
-import '@material/react-dialog/index.scss';
-import '@material/react-text-field/index.scss';
-import '@material/react-checkbox/index.scss';
 import '@material/react-button/index.scss';
-import "@material/react-list/index.scss";
-import "@material/react-menu-surface/index.scss";
+import '@material/react-checkbox/index.scss';
+import '@material/react-dialog/index.scss';
 import '@material/react-icon-button/index.scss';
+import '@material/react-layout-grid/index.scss';
+import "@material/react-list/index.scss";
+import '@material/react-material-icon/index.scss';
+import "@material/react-menu-surface/index.scss";
+import '@material/react-text-field/index.scss';
 import "./reviewEditorDialog.scss"
 import ScreenshotPicker from "./screenshotPicker";
 import {DropDownMenu} from "./drop-down-menu";
-
-
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore
@@ -51,7 +51,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
         name: priority,
         icon: icons[priority],
         onSelected: () => {
-            dialog.currentPriority = Priority[priority]
+          dialog.currentPriority = Priority[priority]
         }
       };
     });
@@ -61,44 +61,62 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
 
     return (
       <Dialog className="review-dialog" open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
-        <DialogTitle>
-            {!dialog.isScreenshotMode && (
+        <DialogTitle>{!dialog.isScreenshotMode && (
             <>
                 {dialog.currentEditLocation.propertyName}
                 <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
-                    onChange={(e) => dialog.currentIsDone = e.target.checked} />
+                          onChange={(e) => dialog.currentIsDone = e.target.checked} />
                 <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
             </>
-            )}
+        )}
             {dialog.isScreenshotMode && (
                 <>Crop the area you want to comment:</>
-            )}
-        </DialogTitle>
+            )}</DialogTitle>
         <DialogContent>
             {!dialog.isScreenshotMode && (
-                <>
-                    <div>
-                        <strong>{dialog.currentEditLocation.firstComment.text}</strong>
-                        {dialog.currentEditLocation.firstComment.screenshot && <DropDownMenu icon="image">
-                            <img src={dialog.currentEditLocation.firstComment.screenshot} />
-                        </DropDownMenu>}
+          <Grid>
+            <Row>
+              <Cell columns={8}>
+
+              </Cell>
+              <Cell columns={4} className="review-actions">
+                <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
+                  onChange={(e) => dialog.currentIsDone = e.target.checked} />
+                <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
+              </Cell>
+              </Row>
+              <Row>
+                <Cell  columns={12}>
+                  <strong>{dialog.currentEditLocation.firstComment.text}</strong>
+                    {dialog.currentEditLocation.firstComment.screenshot && <DropDownMenu icon="image">
+                        <img src={dialog.currentEditLocation.firstComment.screenshot} />
+                    </DropDownMenu>}
+                </Cell>
+              </Row>
+              <Row>
+                <Cell  columns={12}>
+                  {dialog.currentEditLocation.comments.map((comment, idx) => (
+                    <div className="comment" key={idx}>
+                      <div>
+                        <span className="author">{comment.author}</span>
+                        <span className="date" title={comment.formattedDate}>{comment.userFriendlyDate}</span>
+                          {comment.screenshot && <DropDownMenu icon="image">
+                              <img src={comment.screenshot} />
+                          </DropDownMenu>}
+                      </div>
+                      <p>{comment.text}</p>
                     </div>
-                    {dialog.currentEditLocation.comments.map((comment, idx) => (
-                        <div className="comment" key={idx}>
-                            <div>
-                                <span className="author">{comment.author}</span>
-                                <span className="date" title={comment.formattedDate}>{comment.userFriendlyDate}</span>
-                                {comment.screenshot && <DropDownMenu icon="image">
-                                    <img src={comment.screenshot} />
-                                </DropDownMenu>}
-                            </div>
-                            <p>{comment.text}</p>
-                        </div>
-                    ))}
-                    <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
-                                                                            onChange={(e) => dialog.currentCommentText = e.currentTarget.value} />
-                    </TextField>
-            </>
+                  ))}
+                </Cell>
+              </Row>
+              <Row>
+                <Cell columns={12}>
+                  <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
+                    onChange={(e) => dialog.currentCommentText = e.currentTarget.value} />
+                  </TextField>
+                </Cell>
+              </Row>
+          </Grid>
             )}
             <ScreenshotPicker
                 current={dialog.currentScreenshot}
@@ -108,14 +126,12 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
             />
         </DialogContent>
           <DialogFooter>
-              {!dialog.isScreenshotMode && (
-                  <>
-                      <DialogButton dense action='cancel'>close</DialogButton>
-                      <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton>
-                  </>
+            {!dialog.isScreenshotMode && (
+                  <><DialogButton dense action='cancel'>close</DialogButton>
+            <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton></>
               )}
           </DialogFooter>
       </Dialog>
-    );
-  }
-}
+        );
+      }
+    }
