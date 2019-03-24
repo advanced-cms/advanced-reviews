@@ -14,6 +14,7 @@ import { Cell, Grid, Row } from '@material/react-layout-grid';
 import Checkbox from '@material/react-checkbox';
 import TextField, { Input } from '@material/react-text-field';
 import PageNavigator from "./pageNavigator";
+import Comment from "./comment";
 
 import '@material/react-button/index.scss';
 import '@material/react-checkbox/index.scss';
@@ -94,18 +95,10 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                     </DropDownMenu>}</Cell>
             </Row>
             <Row>
-              <Cell columns={12}>
-                {dialog.currentEditLocation.comments.map((comment, idx) => (
-                  <div className="comment" key={idx}>
-                    <div>
-                      <span className="author">{comment.author}</span>
-                      <span className="date" title={comment.formattedDate}>{comment.userFriendlyDate}</span>{comment.screenshot && <DropDownMenu icon="image">
-                              <img src={comment.screenshot} />
-                          </DropDownMenu>}
-                    </div>
-                    <p>{comment.text}</p>
-                  </div>
-                ))}
+              <Cell columns={12} className="comments-list">
+                {dialog.currentEditLocation.comments.map((comment, idx) =>
+                  <Comment key={idx} comment={comment} />
+                )}
               </Cell>
             </Row>
             <Row>
