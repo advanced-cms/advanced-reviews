@@ -159,7 +159,6 @@ interface IDialogState {
     currentIsDone: boolean;
     currentScreenshot: null;
     currentPriority: Priority;
-    isDialogOpen: boolean;
     isScreenshotMode: boolean;
 
     /**
@@ -176,7 +175,6 @@ interface IDialogState {
 }
 
 class DialogState implements IDialogState {
-    @observable isDialogOpen = false;
     @observable isScreenshotMode = false;
     @observable currentEditLocation?= new ReviewLocation(null, {});
     @observable currentScreenshot = null;
@@ -206,7 +204,6 @@ class DialogState implements IDialogState {
         location.updateCurrentUserLastRead();
 
         this.currentEditLocation = location;
-        this.isDialogOpen = true;
     }
 }
 
@@ -223,7 +220,7 @@ export interface IReviewComponentStore {
 
     currentItemIndex: number;
 
-    closeDialog(action: string): void;
+    saveDialog(): void;
 
     load(): void;
 }
@@ -269,7 +266,20 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionX: 100,
                 positionY: 150,
                 propertyName: "Page body",
-                isDone: false
+                isDone: false,
+                firstComment: Comment.create("John", defaultAvatarUrl, "Remove the above text. It's already included in another article.", new Date("2019-01-01")),
+                comments: [
+                    Comment.create("Lina", defaultAvatarUrl, "Etiam viverra ante mauris, eget pretium quam ultrices vel.", new Date("2019-01-02")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Maecenas non lorem et lectus ultrices consequat vel eget magna.", new Date("2019-01-03")),
+                    Comment.create("Lina", defaultAvatarUrl, "Aenean malesuada nibh a ante scelerisque consequat.", new Date("2019-01-04")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Phasellus eu nulla ac tellus semper imperdiet nec eu nulla.", new Date("2019-03-18")),
+                    Comment.create("Lina", defaultAvatarUrl, "Etiam vel tortor gravida, venenatis enim at, finibus dolor.", new Date("2019-03-19")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-19")),
+                    Comment.create("Lina", defaultAvatarUrl, "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-20")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Ut viverra odio ligula, vitae gravida arcu aliquam id.", new Date("2019-03-21")),
+                    Comment.create("Lina", defaultAvatarUrl, "Pellentesque elementum sem quis eleifend gravida.", new Date("2019-03-22")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Quisque tincidunt mi a pretium rutrum.", new Date("2019-03-23")),
+                ]
             }),
             new ReviewLocation(this, {
                 id: "3",
@@ -289,15 +299,9 @@ class ReviewComponentStore implements IReviewComponentStore {
     }
 
     @action.bound
-    closeDialog(action: string): void {
-        if (action !== "save") {
-            this.dialog.isDialogOpen = false;
-            return;
-        }
-
+    saveDialog(): void {
         const editedReview = this.dialog.currentEditLocation;
 
-        this.dialog.isDialogOpen = false;
         editedReview.isDone = this.dialog.currentIsDone;
         editedReview.priority = this.dialog.currentPriority;
         editedReview.clearLastUsersRead();
