@@ -125,8 +125,10 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                             onChange={this.onCropChange}
                             onComplete={this.onCropComplete}
                         />
-                        <Button onClick={this.cancel}>cancel</Button>
-                        <Button onClick={this.save}>Save</Button>
+                        <div>
+                            <Button onClick={this.cancel}>cancel</Button>
+                            <Button onClick={this.save}>Save</Button>
+                        </div>
                     </>
                 )}
             </div>
