@@ -62,10 +62,14 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
     return (
       <Dialog className="review-dialog" open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
         <DialogTitle>
-          {dialog.currentEditLocation.propertyName}
-          <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
-            onChange={(e) => dialog.currentIsDone = e.target.checked} />
-          <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
+            {!dialog.isScreenshotMode && (
+            <>
+                {dialog.currentEditLocation.propertyName}
+                <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
+                    onChange={(e) => dialog.currentIsDone = e.target.checked} />
+                <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
+            </>
+            )}
         </DialogTitle>
         <DialogContent>
             {!dialog.isScreenshotMode && (
