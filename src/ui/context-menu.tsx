@@ -8,7 +8,7 @@ import List, {
 } from "@material/react-list";
 import MaterialIcon from '@material/react-material-icon';
 
-interface menuItemProps {
+interface MenuItem {
     name: string;
     icon?: string;
     onSelected: () => void;
@@ -17,7 +17,7 @@ interface menuItemProps {
 interface ContextMenuProps {
     title: string;
     icon: string;
-    menuItems?: menuItemProps[];
+    menuItems?: MenuItem[];
 }
 
 export class ContextMenu extends React.Component<ContextMenuProps, any> {
