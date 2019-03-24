@@ -41,7 +41,7 @@ interface UsersLastReadHashmap {
     [userName: string]: Date;
 }
 
-class ReviewLocation {
+export class ReviewLocation {
     id: string;
     propertyName: string;
     @observable isDone: boolean;
@@ -169,6 +169,7 @@ interface IDialogState {
      * Check if the form is dirty
      */
     canSave: boolean;
+
     showDialog(location: ReviewLocation): void;
 }
 
@@ -217,6 +218,8 @@ export interface IReviewComponentStore {
      * Field is used when saving comment author
      */
     currentUser: string;
+
+    currentItemIndex: number;
 
     closeDialog(action: string): void;
 
@@ -294,6 +297,10 @@ class ReviewComponentStore implements IReviewComponentStore {
             editedReview.firstComment = comment;
         }
         this.dialog.currentEditLocation = new ReviewLocation(this, {});
+    }
+
+    @computed get currentItemIndex(): number {
+        return this.reviewLocations.indexOf(this.dialog.currentEditLocation);
     }
 }
 
