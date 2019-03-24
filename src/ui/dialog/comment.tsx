@@ -1,21 +1,25 @@
 import React from "react";
-import { observer } from 'mobx-react';
-import { Comment as CommentItem } from './../reviewStore';
+import { observer, inject } from 'mobx-react';
+import { IReviewComponentStore, Comment as CommentItem } from './../reviewStore';
 import { DropDownMenu } from "./../drop-down-menu";
 
 import './comment.scss';
 
 interface CommentProps {
+    reviewStore?: IReviewComponentStore,
     comment: CommentItem
 }
 
+@inject('reviewStore')
 @observer
 export default class PageNavigator extends React.Component<CommentProps, any> {
     render() {
+        const {getUserAvatarUrl} = this.props.reviewStore!;
+
         return (
             <div className="comment">
                 <div className="avatar">
-                    <img src={this.props.comment.authorAvatarUrl} />
+                    <img src={getUserAvatarUrl(this.props.comment.author)} />
                 </div>
                 <div className="message">
                     <div>

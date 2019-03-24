@@ -160,9 +160,13 @@
   <ItemGroup>
     <Compile Include="ApprovalReview.cs" />
     <Compile Include="ApprovalReviewStore.cs" />
+    <Compile Include="AvatarsService\AvatarRouteExtensions.cs" />
+    <Compile Include="AvatarsService\AvatarRouteRouteHandler.cs" />
     <Compile Include="DdsApprovalReviewsRepository.cs" />
     <Compile Include="IApprovalReviewsRepository.cs" />
+    <Compile Include="IdenticonGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AvatarsService\ReviewAvatarController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
