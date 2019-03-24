@@ -1,0 +1,39 @@
+.review-dialog {
+    .mdc-icon-button::before, .mdc-icon-button::after {
+        background-color: bluel ;     
+    }
+
+    .menu-button.mdc-icon-button {
+        padding: 8px 4px 4px 4px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .review-actions {
+        display: flex;
+        position: relative;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .comment {
+        .author {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 5px;
+        }
+
+        .date {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        p {
+            padding: 0;
+            margin: 0 0 10px 0;
+        }
+    }
+}
