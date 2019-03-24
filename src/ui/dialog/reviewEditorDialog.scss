@@ -1,4 +1,8 @@
 .review-dialog {
+    textarea {
+        resize: none;
+    }
+    
     .mdc-icon-button::before, .mdc-icon-button::after {
         background-color: bluel ;     
     }
@@ -28,6 +32,8 @@
     }
 
     .comments-list {
-        padding-top: 10px;
+        margin: 10px 0;
+        max-height: 400px;
+        overflow-y: auto;
     }
 }
