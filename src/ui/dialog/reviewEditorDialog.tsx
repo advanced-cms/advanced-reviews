@@ -77,7 +77,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
             {!dialog.isScreenshotMode && (
           <Grid className="dialog-grid">
             <Row>
-              <Cell columns={8}>
+              <Cell columns={8} className="review-actions left-align">
 <PageNavigator reviewLocation={dialog.currentEditLocation} onPrevClick={this.props.onPrevClick} onNextClick={this.props.onNextClick}/>
               </Cell>
               <Cell columns={4} className="review-actions">
