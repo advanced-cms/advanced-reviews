@@ -22,6 +22,8 @@ import "@material/react-list/index.scss";
 import "@material/react-menu-surface/index.scss";
 import '@material/react-icon-button/index.scss';
 import "./reviewEditorDialog.scss"
+import ScreenshotPicker from "./screenshotPicker";
+import {DropDownMenu} from "./drop-down-menu";
 
 
 
@@ -54,6 +56,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
       };
     });
 
+    //TODO: get iframe from props?
+    const iframe: HTMLIFrameElement = document.getElementById("iframe") as HTMLIFrameElement;
+
     return (
       <Dialog className="review-dialog" open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
         <DialogTitle>
@@ -63,26 +68,46 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
           <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
         </DialogTitle>
         <DialogContent>
-            <div>
-              <strong>{dialog.currentEditLocation.firstComment.text}</strong>
-            </div>
-            {dialog.currentEditLocation.comments.map((comment, idx) => (
-              <div className="comment" key={idx}>
-                <div>
-                  <span className="author">{comment.author}</span>
-                  <span className="date" title={comment.formattedDate}>{comment.userFriendlyDate}</span>
-                </div>
-                <p>{comment.text}</p>
-              </div>
-            ))}
-            <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
-              onChange={(e) => dialog.currentCommentText = e.currentTarget.value } />
-            </TextField>
+            {!dialog.isScreenshotMode && (
+                <>
+                    <div>
+                        <strong>{dialog.currentEditLocation.firstComment.text}</strong>
+                        {dialog.currentEditLocation.firstComment.screenshot && <DropDownMenu icon="image">
+                            <img src={dialog.currentEditLocation.firstComment.screenshot} />
+                        </DropDownMenu>}
+                    </div>
+                    {dialog.currentEditLocation.comments.map((comment, idx) => (
+                        <div className="comment" key={idx}>
+                            <div>
+                                <span className="author">{comment.author}</span>
+                                <span className="date" title={comment.formattedDate}>{comment.userFriendlyDate}</span>
+                                {comment.screenshot && <DropDownMenu icon="image">
+                                    <img src={comment.screenshot} />
+                                </DropDownMenu>}
+                            </div>
+                            <p>{comment.text}</p>
+                        </div>
+                    ))}
+                    <TextField label='Add comment...' dense textarea><Input value={dialog.currentCommentText}
+                                                                            onChange={(e) => dialog.currentCommentText = e.currentTarget.value} />
+                    </TextField>
+            </>
+            )}
+            <ScreenshotPicker
+                current={dialog.currentScreenshot}
+                iframe={iframe}
+                onImageSelected={(output) => dialog.currentScreenshot = output}
+                toggle={() => dialog.isScreenshotMode = !dialog.isScreenshotMode}
+            />
         </DialogContent>
-        <DialogFooter>
-          <DialogButton dense action='cancel'>close</DialogButton>
-          <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton>
-        </DialogFooter>
+          <DialogFooter>
+              {!dialog.isScreenshotMode && (
+                  <>
+                      <DialogButton dense action='cancel'>close</DialogButton>
+                      <DialogButton raised dense action='save' isDefault disabled={!dialog.canSave}>Save</DialogButton>
+                  </>
+              )}
+          </DialogFooter>
       </Dialog>
     );
   }
