@@ -5,9 +5,8 @@ import IconButton from '@material/react-icon-button';
 import MaterialIcon from '@material/react-material-icon';
 
 interface DropDownMenuProps {
-    title: string;
+    title?: string;
     icon: string;
-    onMenuClick?: () => void;
 }
 
 export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
@@ -18,14 +17,6 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
             anchorElement: null
         };
     }
-
-    private _openMenu = () => {
-        if (this.props.onMenuClick) {
-            this.props.onMenuClick();
-        } else {
-            this.openMenu();
-        }
-    };
 
     openMenu = () => {
         this.setState({ isMenuOpen: true });
@@ -48,7 +39,7 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
                 className="mdc-menu-surface--anchor"
                 ref={this.setAnchorElement}
             >
-                <IconButton onClick={this._openMenu} title={this.props.title} > 
+                <IconButton onClick={this.openMenu} title={this.props.title} >
                     <MaterialIcon icon={this.props.icon} />
                 </IconButton>
                 <MenuSurface className="epi-context-menu"
