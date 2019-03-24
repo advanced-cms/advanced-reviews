@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from 'mobx-react';
 import { Comment as CommentItem } from './../reviewStore';
-import {DropDownMenu} from "./../drop-down-menu";
+import { DropDownMenu } from "./../drop-down-menu";
 
 import './comment.scss';
 
@@ -21,10 +21,9 @@ export default class PageNavigator extends React.Component<CommentProps, any> {
                     <div>
                         <span className="author">{this.props.comment.author}</span>
                         <span className="date" title={this.props.comment.formattedDate}>{this.props.comment.userFriendlyDate}</span>
-                        {comment.screenshot && <DropDownMenu icon="image">
-                            <img src={comment.screenshot} />
+                        {this.props.comment.screenshot && <DropDownMenu icon="image">
+                            <img src={this.props.comment.screenshot} />
                         </DropDownMenu>}
-                    </div>
                     </div>
                     <p>{this.props.comment.text}</p>
                 </div>
