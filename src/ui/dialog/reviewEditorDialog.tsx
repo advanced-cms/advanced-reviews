@@ -1,4 +1,5 @@
 import React from "react";
+import { reaction, IReactionDisposer } from "mobx";
 import { observer, inject } from 'mobx-react';
 import { IReviewComponentStore, Priority } from './../reviewStore';
 
@@ -29,15 +30,51 @@ import {DropDownMenu} from "./drop-down-menu";
 
 interface ReviewDialogProps {
   reviewStore?: IReviewComponentStore,
+  isDialogOpen: boolean,
   onPrevClick(): void,
-  onNextClick() : void
+  onNextClick(): void,
+  onCloseDialog(action: string): void
 }
 
 @inject('reviewStore')
 @observer
 export default class ReviewDialog extends React.Component<ReviewDialogProps, any> {
+
+  commentsChangedReaction: IReactionDisposer;
+
+  constructor(props: ReviewDialogProps) {
+    super(props);
+    this.commentsChangedReaction = reaction(() => {
+      //uncomment the below code to see the trigger message
+      //return state.messages.map((a) => a)
+      return this.props.reviewStore!.dialog.currentEditLocation.comments.slice();
+    }, () => {
+      this.scrollToBottom();
+    });
+  }
+
+  componentWillUnmount() {
+    this.commentsChangedReaction();
+  }
+
+  static defaultProps = {
+    isDialogOpen: false
+  }
+
+  messagesEnd: HTMLDivElement;
+
+  scrollToBottom = () => {
+    setTimeout(() => {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }, 0);
+  }
+
+  onDialogOpen(): void {
+    this.scrollToBottom();
+  }
+
   render() {
-    const { closeDialog, dialog, reviewLocations } = this.props.reviewStore!;
+    const { dialog } = this.props.reviewStore!;
 
     const customAttribute = {
       title: dialog.currentIsDone ? "Uncheck to reopen the task" : "Mark task as done"
@@ -62,7 +99,12 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
     const iframe: HTMLIFrameElement = document.getElementById("iframe") as HTMLIFrameElement;
 
     return (
-      <Dialog className="review-dialog" open={dialog.isDialogOpen} scrimClickAction="" escapeKeyAction="" onClose={closeDialog} >
+      <Dialog className="review-dialog"
+        open={this.props.isDialogOpen}
+        scrimClickAction=""
+        escapeKeyAction=""
+        onOpen={() => this.onDialogOpen()}
+        onClose={this.props.onCloseDialog} >
         <DialogTitle>{!dialog.isScreenshotMode && (
             <>
                 {dialog.currentEditLocation.propertyName}
@@ -79,7 +121,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
           <Grid className="dialog-grid">
             <Row>
               <Cell columns={8} className="review-actions left-align">
-<PageNavigator reviewLocation={dialog.currentEditLocation} onPrevClick={this.props.onPrevClick} onNextClick={this.props.onNextClick}/>
+<PageNavigator reviewLocation={dialog.currentEditLocation} onPrevClick={this.props.onPrevClick} onNextClick={this.props.onNextClick} />
               </Cell>
               <Cell columns={4} className="review-actions">
                 <Checkbox nativeControlId='my-checkbox' {...customAttribute} checked={dialog.currentIsDone}
@@ -99,6 +141,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                 {dialog.currentEditLocation.comments.map((comment, idx) =>
                   <Comment key={idx} comment={comment} />
                 )}
+                <div style={{ float: "left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }}>
+                </div>
               </Cell>
             </Row>
             <Row>
