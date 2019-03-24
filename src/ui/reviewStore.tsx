@@ -9,7 +9,6 @@ import screenshots from "./screenshots.json";
  */
 export class Comment {
     author: string;
-    authorAvatarUrl: string;
     text: string;
     date: Date;
     screenshot: string;
@@ -28,10 +27,9 @@ export class Comment {
         return moment(this.date).fromNow();
     }
 
-    static create(author: string, avatarUrl: string, text: string, date?: Date, screenshot?: string): Comment {
+    static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
         const instance = new Comment();
         instance.author = author;
-        instance.authorAvatarUrl = avatarUrl;
         instance.text = text;
         instance.date = date || new Date();
         instance.screenshot = screenshot;
@@ -223,11 +221,9 @@ export interface IReviewComponentStore {
     saveDialog(): void;
 
     load(): void;
+
+    getUserAvatarUrl(userName: string): string;
 }
-
-
-//TODO: remove
-const defaultAvatarUrl = "sample_avatar.png";
 
 class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations = [];
@@ -247,18 +243,18 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionY: 80,
                 propertyName: "Page name",
                 isDone: false,
-                firstComment: Comment.create("Alfred", defaultAvatarUrl, "Rephrase it. ", new Date("2019-01-01")),
+                firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")),
                 comments: [
-                    Comment.create("Lina", defaultAvatarUrl, "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
-                    Comment.create("Alfred", defaultAvatarUrl, "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
-                    Comment.create("Lina", defaultAvatarUrl, "Ok, done.", new Date("2019-01-04"), screenshots.idylla),
-                    Comment.create("Alfred", defaultAvatarUrl, "I still see old text", new Date("2019-03-18"), screenshots.idylla),
-                    Comment.create("Lina", defaultAvatarUrl, "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Looks ok.", new Date("2019-03-19")),
-                    Comment.create("Lina", defaultAvatarUrl, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sed nisi in erat posuere luctus.", new Date("2019-03-20")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Vivamus sem est, aliquet eget nunc quis, imperdiet cursus sapien. Mauris ullamcorper dui ut nisl vulputate vestibulum.", new Date("2019-03-21")),
-                    Comment.create("Lina", defaultAvatarUrl, "Sed non nisi in odio facilisis aliquam eget volutpat augue. Phasellus vitae auctor risus, non luctus dolor.", new Date("2019-03-22")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Integer sed libero at odio mattis sodales. Ut dapibus erat cursus porttitor malesuada.", new Date("2019-03-23")),
+                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
+                    Comment.create("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
+                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04"), screenshots.idylla),
+                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18"), screenshots.idylla),
+                    Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
+                    Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
+                    Comment.create("Lina", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sed nisi in erat posuere luctus.", new Date("2019-03-20")),
+                    Comment.create("Alfred", "Vivamus sem est, aliquet eget nunc quis, imperdiet cursus sapien. Mauris ullamcorper dui ut nisl vulputate vestibulum.", new Date("2019-03-21")),
+                    Comment.create("Lina", "Sed non nisi in odio facilisis aliquam eget volutpat augue. Phasellus vitae auctor risus, non luctus dolor.", new Date("2019-03-22")),
+                    Comment.create("Alfred", "Integer sed libero at odio mattis sodales. Ut dapibus erat cursus porttitor malesuada.", new Date("2019-03-23")),
                 ]
             }),
             new ReviewLocation(this, {
@@ -267,18 +263,18 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionY: 150,
                 propertyName: "Page body",
                 isDone: false,
-                firstComment: Comment.create("John", defaultAvatarUrl, "Remove the above text. It's already included in another article.", new Date("2019-01-01")),
+                firstComment: Comment.create("John", "Remove the above text. It's already included in another article.", new Date("2019-01-01")),
                 comments: [
-                    Comment.create("Lina", defaultAvatarUrl, "Etiam viverra ante mauris, eget pretium quam ultrices vel.", new Date("2019-01-02")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Maecenas non lorem et lectus ultrices consequat vel eget magna.", new Date("2019-01-03")),
-                    Comment.create("Lina", defaultAvatarUrl, "Aenean malesuada nibh a ante scelerisque consequat.", new Date("2019-01-04")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Phasellus eu nulla ac tellus semper imperdiet nec eu nulla.", new Date("2019-03-18")),
-                    Comment.create("Lina", defaultAvatarUrl, "Etiam vel tortor gravida, venenatis enim at, finibus dolor.", new Date("2019-03-19")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-19")),
-                    Comment.create("Lina", defaultAvatarUrl, "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-20")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Ut viverra odio ligula, vitae gravida arcu aliquam id.", new Date("2019-03-21")),
-                    Comment.create("Lina", defaultAvatarUrl, "Pellentesque elementum sem quis eleifend gravida.", new Date("2019-03-22")),
-                    Comment.create("Alfred", defaultAvatarUrl, "Quisque tincidunt mi a pretium rutrum.", new Date("2019-03-23")),
+                    Comment.create("Lina", "Etiam viverra ante mauris, eget pretium quam ultrices vel.", new Date("2019-01-02")),
+                    Comment.create("Alfred", "Maecenas non lorem et lectus ultrices consequat vel eget magna.", new Date("2019-01-03")),
+                    Comment.create("Lina", "Aenean malesuada nibh a ante scelerisque consequat.", new Date("2019-01-04")),
+                    Comment.create("Alfred", "Phasellus eu nulla ac tellus semper imperdiet nec eu nulla.", new Date("2019-03-18")),
+                    Comment.create("Lina", "Etiam vel tortor gravida, venenatis enim at, finibus dolor.", new Date("2019-03-19")),
+                    Comment.create("Alfred", "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-19")),
+                    Comment.create("Lina", "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-20")),
+                    Comment.create("Alfred", "Ut viverra odio ligula, vitae gravida arcu aliquam id.", new Date("2019-03-21")),
+                    Comment.create("Lina", "Pellentesque elementum sem quis eleifend gravida.", new Date("2019-03-22")),
+                    Comment.create("Alfred", "Quisque tincidunt mi a pretium rutrum.", new Date("2019-03-23")),
                 ]
             }),
             new ReviewLocation(this, {
@@ -305,8 +301,7 @@ class ReviewComponentStore implements IReviewComponentStore {
         editedReview.isDone = this.dialog.currentIsDone;
         editedReview.priority = this.dialog.currentPriority;
         editedReview.clearLastUsersRead();
-        //TODO: avatar resolver
-        const comment = Comment.create(this.currentUser, defaultAvatarUrl, this.dialog.currentCommentText, null, this.dialog.currentScreenshot);
+        const comment = Comment.create(this.currentUser, this.dialog.currentCommentText, null, this.dialog.currentScreenshot);
         if (editedReview.firstComment.date) {
             editedReview.comments.push(comment);
         } else {
@@ -317,6 +312,10 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     @computed get currentItemIndex(): number {
         return this.reviewLocations.indexOf(this.dialog.currentEditLocation);
+    }
+
+    @action getUserAvatarUrl(userName: string): string {
+        return `reviewavatars/${userName}.jpg`;
     }
 }
 
