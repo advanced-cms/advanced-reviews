@@ -16,6 +16,10 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: flex-end;
+
+        &.left-align {
+            justify-content: flex-start;
+        }
     }
 
     .dialog-grid {
