@@ -7,6 +7,7 @@ import html2canvas from "html2canvas";
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import "@material/react-icon-button/index.scss";
+import "./screenshotPicker.scss"
 
 interface ScreenshotPickerProps {
     current: string;
@@ -104,7 +105,7 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
 
     render() {
         return (
-            <div>
+            <div className="screenshot-picker">
                 {!this.state.input && this.props.current && (
                     <>
                         <img alt="" style={{ maxWidth: "100%" }} src={this.props.current} />
@@ -118,16 +119,16 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                 )}
                 {this.state.input && (
                     <>
-                        <ReactCrop
+                        <ReactCrop className="screenshot-cropper"
                             crop={this.state.crop}
                             onImageLoaded={this.onImageLoaded}
                             src={this.state.input}
                             onChange={this.onCropChange}
                             onComplete={this.onCropComplete}
                         />
-                        <div>
+                        <div className="mdc-dialog__actions">
                             <Button onClick={this.cancel}>cancel</Button>
-                            <Button onClick={this.save}>Save</Button>
+                            <Button onClick={this.save} disabled={!this.state.crop.width}>Save</Button>
                         </div>
                     </>
                 )}

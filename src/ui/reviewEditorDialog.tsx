@@ -70,6 +70,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                 <ContextMenu icon={icons[dialog.currentPriority]} title={dialog.currentPriority} menuItems={options} />
             </>
             )}
+            {dialog.isScreenshotMode && (
+                <>Crop the area you want to comment:</>
+            )}
         </DialogTitle>
         <DialogContent>
             {!dialog.isScreenshotMode && (
