@@ -2,6 +2,8 @@ import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
 import moment from "moment";
 
+import screenshots from "./screenshots.json";
+
 /**
  * Represents a comment added by user
  */
@@ -9,6 +11,7 @@ class Comment {
     author: string;
     text: string;
     date: Date;
+    screenshot: string;
 
     @computed get formattedDate() {
         if (!this.date) {
@@ -24,11 +27,12 @@ class Comment {
         return moment(this.date).fromNow();
     }
 
-    static create(author: string, text: string, date?: Date): Comment {
+    static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
         const instance = new Comment();
         instance.author = author;
         instance.text = text;
         instance.date = date || new Date();
+        instance.screenshot = screenshot;
         return instance;
     }
 }
@@ -60,7 +64,7 @@ class ReviewLocation {
     }
 
     /**
-     * List of users and date when they last saw the review. 
+     * List of users and date when they last saw the review.
      */
     usersLastRead: UsersLastReadHashmap = {};
 
@@ -151,8 +155,10 @@ interface IDialogState {
      * Currently edited `isDone` state
      */
     currentIsDone: boolean;
+    currentScreenshot: null;
     currentPriority: Priority;
     isDialogOpen: boolean;
+    isScreenshotMode: boolean;
 
     /**
      * Currently edited location
@@ -168,7 +174,9 @@ interface IDialogState {
 
 class DialogState implements IDialogState {
     @observable isDialogOpen = false;
+    @observable isScreenshotMode = false;
     @observable currentEditLocation?= new ReviewLocation(null, {});
+    @observable currentScreenshot = null;
     @observable currentCommentText = "";
     @observable currentIsDone = false;
     @observable currentPriority = Priority.Normal;
@@ -186,6 +194,7 @@ class DialogState implements IDialogState {
     @action.bound
     showDialog(location: ReviewLocation): void {
         this.currentCommentText = "";
+        this.currentScreenshot = null;
         this.currentIsDone = location.isDone;
         this.currentPriority = location.priority;
         this.initialDoneChecked = location.isDone;
@@ -233,10 +242,10 @@ class ReviewComponentStore implements IReviewComponentStore {
                 isDone: false,
                 firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")),
                 comments: [
-                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02")),
+                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
                     Comment.create("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
-                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04")),
-                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18")),
+                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04"), screenshots.idylla),
+                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18"), screenshots.idylla),
                     Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
                     Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
                 ]
@@ -278,7 +287,7 @@ class ReviewComponentStore implements IReviewComponentStore {
         editedReview.isDone = this.dialog.currentIsDone;
         editedReview.priority = this.dialog.currentPriority;
         editedReview.clearLastUsersRead();
-        const comment = Comment.create(this.currentUser, this.dialog.currentCommentText);
+        const comment = Comment.create(this.currentUser, this.dialog.currentCommentText, null, this.dialog.currentScreenshot);
         if (editedReview.firstComment.date) {
             editedReview.comments.push(comment);
         } else {
