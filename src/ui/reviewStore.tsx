@@ -7,8 +7,9 @@ import screenshots from "./screenshots.json";
 /**
  * Represents a comment added by user
  */
-class Comment {
+export class Comment {
     author: string;
+    authorAvatarUrl: string;
     text: string;
     date: Date;
     screenshot: string;
@@ -27,9 +28,10 @@ class Comment {
         return moment(this.date).fromNow();
     }
 
-    static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
+    static create(author: string, avatarUrl: string, text: string, date?: Date, screenshot?: string): Comment {
         const instance = new Comment();
         instance.author = author;
+        instance.authorAvatarUrl = avatarUrl;
         instance.text = text;
         instance.date = date || new Date();
         instance.screenshot = screenshot;
@@ -226,6 +228,10 @@ export interface IReviewComponentStore {
     load(): void;
 }
 
+
+//TODO: remove
+const defaultAvatarUrl = "sample_avatar.png";
+
 class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations = [];
     @observable dialog = new DialogState();
@@ -236,6 +242,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action.bound
     load(): void {
         //TODO: load from episerver store
+
         this.reviewLocations = [
             new ReviewLocation(this, {
                 id: "1",
@@ -243,14 +250,14 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionY: 80,
                 propertyName: "Page name",
                 isDone: false,
-                firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")),
+                firstComment: Comment.create("Alfred", defaultAvatarUrl, "Rephrase it. ", new Date("2019-01-01")),
                 comments: [
-                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
-                    Comment.create("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
-                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04"), screenshots.idylla),
-                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18"), screenshots.idylla),
-                    Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
-                    Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
+                    Comment.create("Lina", defaultAvatarUrl, "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
+                    Comment.create("Alfred", defaultAvatarUrl, "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
+                    Comment.create("Lina", defaultAvatarUrl, "Ok, done.", new Date("2019-01-04"), screenshots.idylla),
+                    Comment.create("Alfred", defaultAvatarUrl, "I still see old text", new Date("2019-03-18"), screenshots.idylla),
+                    Comment.create("Lina", defaultAvatarUrl, "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
+                    Comment.create("Alfred", defaultAvatarUrl, "Looks ok.", new Date("2019-03-19")),
                 ]
             }),
             new ReviewLocation(this, {
@@ -264,14 +271,14 @@ class ReviewComponentStore implements IReviewComponentStore {
                 id: "3",
                 positionX: 250,
                 positionY: 200,
-                propertyName: "Page body",
+                propertyName: "Main ContentArea",
                 isDone: false
             }),
             new ReviewLocation(this, {
                 id: "4",
                 positionX: 125,
                 positionY: 330,
-                propertyName: "Page body",
+                propertyName: "Description",
                 isDone: false
             })
         ];
@@ -290,7 +297,8 @@ class ReviewComponentStore implements IReviewComponentStore {
         editedReview.isDone = this.dialog.currentIsDone;
         editedReview.priority = this.dialog.currentPriority;
         editedReview.clearLastUsersRead();
-        const comment = Comment.create(this.currentUser, this.dialog.currentCommentText, null, this.dialog.currentScreenshot);
+        //TODO: avatar resolver
+        const comment = Comment.create(this.currentUser, defaultAvatarUrl, this.dialog.currentCommentText, null, this.dialog.currentScreenshot);
         if (editedReview.firstComment.date) {
             editedReview.comments.push(comment);
         } else {
