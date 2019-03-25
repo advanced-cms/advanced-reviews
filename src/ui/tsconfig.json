@@ -4,6 +4,7 @@
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "jsx": "react",
-      "target": "es5"
+      "target": "es5",
+      "sourceMap": true
     }
   }
