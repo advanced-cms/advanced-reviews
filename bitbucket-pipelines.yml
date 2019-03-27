@@ -11,5 +11,6 @@ pipelines:
         caches:
           - node
         script: # Modify the commands below to build your repository.
+          - cd react-components
           - npm install
           - npm run build
