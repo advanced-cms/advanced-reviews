@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
 import moment from "moment";
 
-import screenshots from "./screenshots.json";
+import screenshots from "./screenshots/screenshots.json";
 
 /**
  * Represents a comment added by user
