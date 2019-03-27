@@ -1,0 +1,39 @@
+.review-dialog {
+    textarea {
+        resize: none;
+    }
+    
+    .mdc-icon-button::before, .mdc-icon-button::after {
+        background-color: bluel ;     
+    }
+
+    .menu-button.mdc-icon-button {
+        padding: 8px 4px 4px 4px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .review-actions {
+        display: flex;
+        position: relative;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+
+        &.left-align {
+            justify-content: flex-start;
+        }
+    }
+
+    .dialog-grid {
+        width: 500px;
+        height: 600px;
+    }
+
+    .comments-list {
+        margin: 10px 0;
+        max-height: 390px;
+        overflow-y: auto;
+    }
+}
