@@ -1,7 +1,7 @@
 import React from "react";
 import { observer, inject } from 'mobx-react';
 import { IReviewComponentStore, Comment as CommentItem } from './../reviewStore';
-import { DropDownMenu } from "./../drop-down-menu";
+import { DropDownMenu } from "../common/drop-down-menu";
 
 import './comment.scss';
 
