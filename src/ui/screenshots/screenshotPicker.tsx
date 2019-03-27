@@ -1,13 +1,15 @@
 import React from "react";
+import { computed } from "mobx";
 import Button from "@material/react-button";
 import IconButton from "@material/react-icon-button";
 import MaterialIcon from "@material/react-material-icon";
 import html2canvas from "html2canvas";
+import DrawablePreview from "./drawablePreview";
 
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import "@material/react-icon-button/index.scss";
-import "./screenshotPicker.scss"
+import "./screenshotPicker.scss";
 
 interface ScreenshotPickerProps {
     current: string;
@@ -20,6 +22,14 @@ interface ScreenshotPickerState {
     crop: Crop;
     pixelCrop: PixelCrop;
     input: string;
+    drawerInput: string;
+}
+
+enum Mode {
+    Default,
+    Crop,
+    Highlight,
+    Preview
 }
 
 export default class ScreenshotPicker extends React.Component<ScreenshotPickerProps, ScreenshotPickerState> {
@@ -36,8 +46,23 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
         this.state = {
             crop: this.defaultCrop,
             pixelCrop: null,
-            input: null
+            input: null,
+            drawerInput: null
         };
+    }
+
+    @computed get mode() {
+        if (this.state.input) {
+            return Mode.Crop;
+        }
+        if (this.state.drawerInput) {
+            return Mode.Highlight;
+        }
+        if (this.props.current) {
+            return Mode.Preview;
+        }
+
+        return Mode.Default;
     }
 
     onCropChange = crop => {
@@ -54,19 +79,17 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
     };
 
     cancel = () => {
-        this.setState({ crop: this.defaultCrop, input: null });
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
         this.props.toggle();
     };
 
-    save = () => {
+    crop = () => {
         if (!this.state.pixelCrop) {
             return;
         }
 
-        let croppedImg = this.getCroppedImg(this.imageRef, this.state.pixelCrop);
-        this.props.onImageSelected(croppedImg);
-        this.setState({ crop: this.defaultCrop, input: null });
-        this.props.toggle();
+        const croppedImg = this.getCroppedImg(this.imageRef, this.state.pixelCrop);
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: croppedImg });
     };
 
     getCroppedImg(image, pixelCrop) {
@@ -90,8 +113,9 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
         return canvas.toDataURL();
     }
 
-    onImageLoaded = image => {
+    onImageLoaded = (image, pixelCrop) => {
         this.imageRef = image;
+        this.setState({ pixelCrop });
     };
 
     onCropComplete = (crop, pixelCrop) => {
@@ -100,13 +124,19 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
 
     remove = () => {
         this.props.onImageSelected(null);
-        this.setState({ crop: this.defaultCrop, input: null });
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
+    };
+
+    onApplyDrawing = img => {
+        this.props.onImageSelected(img);
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
+        this.props.toggle();
     };
 
     render() {
         return (
             <div className="screenshot-picker">
-                {!this.state.input && this.props.current && (
+                {this.mode === Mode.Preview && (
                     <>
                         <img alt="" style={{ maxWidth: "100%" }} src={this.props.current} />
                         <IconButton onClick={this.remove} title="Remove screenshot">
@@ -114,12 +144,11 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                         </IconButton>
                     </>
                 )}
-                {!this.state.input && !this.props.current && (
-                    <Button onClick={this.takeScreenshot}>Attach screenshot</Button>
-                )}
-                {this.state.input && (
+                {this.mode === Mode.Default && <Button onClick={this.takeScreenshot}>Attach screenshot</Button>}
+                {this.mode === Mode.Crop && (
                     <>
-                        <ReactCrop className="screenshot-cropper"
+                        <ReactCrop
+                            className="screenshot-cropper"
                             crop={this.state.crop}
                             onImageLoaded={this.onImageLoaded}
                             src={this.state.input}
@@ -128,9 +157,19 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                         />
                         <div className="mdc-dialog__actions">
                             <Button onClick={this.cancel}>cancel</Button>
-                            <Button onClick={this.save} disabled={!this.state.crop.width}>Save</Button>
+                            <Button onClick={this.crop} disabled={!this.state.crop.width}>
+                                Crop
+                            </Button>
                         </div>
                     </>
+                )}
+                {this.mode === Mode.Highlight && (
+                    <DrawablePreview
+                        src={this.state.drawerInput}
+                        width={400}
+                        height={400}
+                        onApplyDrawing={this.onApplyDrawing}
+                    />
                 )}
             </div>
         );
