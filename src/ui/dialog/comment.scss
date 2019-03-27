@@ -1,5 +1,27 @@
-.review-dialog {
-    .comment {
+.comment {
+    &:after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .avatar, 
+    .message {
+        float: left;
+    } 
+
+    .avatar {
+        padding-right: 10px;
+
+        img {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    .message {
+        max-width: 430px;
+
         .author {
             font-weight: bold;
             font-size: 0.9rem;

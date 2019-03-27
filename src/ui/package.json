@@ -36,6 +36,7 @@
     "@material/react-checkbox": "^0.10.0",
     "@material/react-dialog": "^0.10.0",
     "@material/react-icon-button": "^0.10.0",
+    "@material/react-layout-grid": "^0.11.0",
     "@material/react-list": "^0.10.0",
     "@material/react-material-icon": "^0.10.0",
     "@material/react-menu-surface": "^0.8.0",

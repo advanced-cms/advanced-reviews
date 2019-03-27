@@ -39,7 +39,7 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
                 className="mdc-menu-surface--anchor"
                 ref={this.setAnchorElement}
             >
-                <IconButton onClick={this.openMenu} title={this.props.title} >
+                <IconButton className="menu-button" onClick={this.openMenu} title={this.props.title} >
                     <MaterialIcon icon={this.props.icon} />
                 </IconButton>
                 <MenuSurface className="epi-context-menu"

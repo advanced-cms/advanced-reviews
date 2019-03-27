@@ -7,7 +7,7 @@ import screenshots from "./screenshots.json";
 /**
  * Represents a comment added by user
  */
-class Comment {
+export class Comment {
     author: string;
     text: string;
     date: Date;
@@ -41,7 +41,7 @@ interface UsersLastReadHashmap {
     [userName: string]: Date;
 }
 
-class ReviewLocation {
+export class ReviewLocation {
     id: string;
     propertyName: string;
     @observable isDone: boolean;
@@ -157,7 +157,6 @@ interface IDialogState {
     currentIsDone: boolean;
     currentScreenshot: null;
     currentPriority: Priority;
-    isDialogOpen: boolean;
     isScreenshotMode: boolean;
 
     /**
@@ -169,11 +168,11 @@ interface IDialogState {
      * Check if the form is dirty
      */
     canSave: boolean;
+
     showDialog(location: ReviewLocation): void;
 }
 
 class DialogState implements IDialogState {
-    @observable isDialogOpen = false;
     @observable isScreenshotMode = false;
     @observable currentEditLocation?= new ReviewLocation(null, {});
     @observable currentScreenshot = null;
@@ -203,7 +202,6 @@ class DialogState implements IDialogState {
         location.updateCurrentUserLastRead();
 
         this.currentEditLocation = location;
-        this.isDialogOpen = true;
     }
 }
 
@@ -218,9 +216,13 @@ export interface IReviewComponentStore {
      */
     currentUser: string;
 
-    closeDialog(action: string): void;
+    currentItemIndex: number;
+
+    saveDialog(): void;
 
     load(): void;
+
+    getUserAvatarUrl(userName: string): string;
 }
 
 class ReviewComponentStore implements IReviewComponentStore {
@@ -233,6 +235,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action.bound
     load(): void {
         //TODO: load from episerver store
+
         this.reviewLocations = [
             new ReviewLocation(this, {
                 id: "1",
@@ -248,6 +251,10 @@ class ReviewComponentStore implements IReviewComponentStore {
                     Comment.create("Alfred", "I still see old text", new Date("2019-03-18"), screenshots.idylla),
                     Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
                     Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
+                    Comment.create("Lina", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sed nisi in erat posuere luctus.", new Date("2019-03-20")),
+                    Comment.create("Alfred", "Vivamus sem est, aliquet eget nunc quis, imperdiet cursus sapien. Mauris ullamcorper dui ut nisl vulputate vestibulum.", new Date("2019-03-21")),
+                    Comment.create("Lina", "Sed non nisi in odio facilisis aliquam eget volutpat augue. Phasellus vitae auctor risus, non luctus dolor.", new Date("2019-03-22")),
+                    Comment.create("Alfred", "Integer sed libero at odio mattis sodales. Ut dapibus erat cursus porttitor malesuada.", new Date("2019-03-23")),
                 ]
             }),
             new ReviewLocation(this, {
@@ -255,35 +262,42 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionX: 100,
                 positionY: 150,
                 propertyName: "Page body",
-                isDone: false
+                isDone: false,
+                firstComment: Comment.create("John", "Remove the above text. It's already included in another article.", new Date("2019-01-01")),
+                comments: [
+                    Comment.create("Lina", "Etiam viverra ante mauris, eget pretium quam ultrices vel.", new Date("2019-01-02")),
+                    Comment.create("Alfred", "Maecenas non lorem et lectus ultrices consequat vel eget magna.", new Date("2019-01-03")),
+                    Comment.create("Lina", "Aenean malesuada nibh a ante scelerisque consequat.", new Date("2019-01-04")),
+                    Comment.create("Alfred", "Phasellus eu nulla ac tellus semper imperdiet nec eu nulla.", new Date("2019-03-18")),
+                    Comment.create("Lina", "Etiam vel tortor gravida, venenatis enim at, finibus dolor.", new Date("2019-03-19")),
+                    Comment.create("Alfred", "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-19")),
+                    Comment.create("Lina", "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-20")),
+                    Comment.create("Alfred", "Ut viverra odio ligula, vitae gravida arcu aliquam id.", new Date("2019-03-21")),
+                    Comment.create("Lina", "Pellentesque elementum sem quis eleifend gravida.", new Date("2019-03-22")),
+                    Comment.create("Alfred", "Quisque tincidunt mi a pretium rutrum.", new Date("2019-03-23")),
+                ]
             }),
             new ReviewLocation(this, {
                 id: "3",
                 positionX: 250,
                 positionY: 200,
-                propertyName: "Page body",
+                propertyName: "Main ContentArea",
                 isDone: false
             }),
             new ReviewLocation(this, {
                 id: "4",
                 positionX: 125,
                 positionY: 330,
-                propertyName: "Page body",
+                propertyName: "Description",
                 isDone: false
             })
         ];
     }
 
     @action.bound
-    closeDialog(action: string): void {
-        if (action !== "save") {
-            this.dialog.isDialogOpen = false;
-            return;
-        }
-
+    saveDialog(): void {
         const editedReview = this.dialog.currentEditLocation;
 
-        this.dialog.isDialogOpen = false;
         editedReview.isDone = this.dialog.currentIsDone;
         editedReview.priority = this.dialog.currentPriority;
         editedReview.clearLastUsersRead();
@@ -294,6 +308,14 @@ class ReviewComponentStore implements IReviewComponentStore {
             editedReview.firstComment = comment;
         }
         this.dialog.currentEditLocation = new ReviewLocation(this, {});
+    }
+
+    @computed get currentItemIndex(): number {
+        return this.reviewLocations.indexOf(this.dialog.currentEditLocation);
+    }
+
+    @action getUserAvatarUrl(userName: string): string {
+        return `reviewavatars/${userName}.jpg`;
     }
 }
 
