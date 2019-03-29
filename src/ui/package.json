@@ -6,7 +6,9 @@
     "build": "webpack --config webpack.test.config.js --mode production",
     "build:debug": "webpack --config webpack.test..config.js --mode development",
     "start": "webpack-dev-server --config webpack.test.config.js --mode development --hot --open chrome",
-    "build:widget": "webpack --config webpack.widget.config.js --mode development"
+    "build:widget": "webpack --config webpack.widget.config.js --mode development",
+    "storybook": "start-storybook -s ./ -p 6006",
+    "build-storybook": "build-storybook"
   },
   "author": "Episerver AB",
   "license": "ISC",
@@ -29,7 +31,11 @@
     "typescript": "^3.3.3333",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.2.1"
+    "webpack-dev-server": "^3.2.1",
+    "@storybook/react": "^5.0.5",
+    "@storybook/addon-actions": "^5.0.5",
+    "@storybook/addon-links": "^5.0.5",
+    "@storybook/addons": "^5.0.5"
   },
   "dependencies": {
     "@material/react-button": "^0.10.0",
