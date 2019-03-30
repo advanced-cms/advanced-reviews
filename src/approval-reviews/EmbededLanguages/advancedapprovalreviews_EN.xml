@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="English" id="en">
+    <reviewcomponent>
+      <dialog>
+        <save>Save</save>
+        <close>close</close>
+        <taskdone>Uncheck to reopen the task</taskdone>
+        <tasknotdone>Mark task as done</tasknotdone>
+        <addscreenshot>Add screenshot</addscreenshot>
+      </dialog>
+    </reviewcomponent>
+  </language>
+</languages>
