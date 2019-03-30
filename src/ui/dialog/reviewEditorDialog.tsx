@@ -25,6 +25,7 @@ import { DropDownMenu } from "../common/drop-down-menu";
 
 interface ReviewDialogProps {
     reviewStore?: IReviewComponentStore;
+    resources?: ReviewResorces;
     isDialogOpen: boolean;
     onPrevClick(): void;
     onNextClick(): void;
@@ -32,6 +33,7 @@ interface ReviewDialogProps {
 }
 
 @inject("reviewStore")
+@inject("resources")
 @observer
 export default class ReviewDialog extends React.Component<ReviewDialogProps, any> {
     commentsChangedReaction: IReactionDisposer;
@@ -72,9 +74,10 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
 
     render() {
         const { dialog } = this.props.reviewStore!;
+        const res = this.props.resources!;
 
         const customAttribute = {
-            title: dialog.currentIsDone ? "Uncheck to reopen the task" : "Mark task as done"
+            title: dialog.currentIsDone ? res.dialog.taskdone: res.dialog.tasknotdone
         };
 
         const icons = {};
@@ -179,10 +182,10 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                     {!dialog.isScreenshotMode && (
                         <>
                             <DialogButton dense action="cancel">
-                                close
+                                {res.dialog.close}
                             </DialogButton>
                             <DialogButton raised dense action="save" isDefault disabled={!dialog.canSave}>
-                                Save
+                                {res.dialog.save}
                             </DialogButton>
                         </>
                     )}
