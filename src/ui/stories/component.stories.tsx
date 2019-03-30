@@ -3,9 +3,11 @@ import TextField, { Input } from '@material/react-text-field';
 import { storiesOf } from '@storybook/react';
 import { Provider } from 'mobx-react';
 import { stores } from "../reviewStore";
+import resources from './resources.json';
 import ReviewLocationsCollection from "../reviewLocationsCollection";
 
 stores.reviewStore.load();
+stores.resources = resources;
 
 function Component() {
   const [text, setText] = useState("Lina");
