@@ -1,0 +1,9 @@
+{
+  "dialog": {
+    "save": "Save",
+    "close": "close",
+    "taskdone": "Uncheck to reopen the task",
+    "tasknotdone": "Mark task as done",
+    "addscreenshot": "Add screenshot"
+  }
+}
