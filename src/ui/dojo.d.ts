@@ -8,6 +8,11 @@ declare module "dijit/_WidgetBase" {
     export = _WidgetBase;
 }
 
+declare module "dojo/topic" {
+    let _topic: any;
+    export = _topic;
+}
+
 declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
     let res: any;
     export = res;
