@@ -1,10 +1,12 @@
 .review-dialog {
+    z-index: 750;
+
     textarea {
         resize: none;
     }
-    
+
     .mdc-icon-button::before, .mdc-icon-button::after {
-        background-color: bluel ;     
+        background-color: blue;
     }
 
     .menu-button.mdc-icon-button {

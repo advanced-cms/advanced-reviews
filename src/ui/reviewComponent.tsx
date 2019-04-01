@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReviewLocationsCollection from "./reviewLocationsCollection";
+import IframeOverlay from "./iframeOverlay";
 import { stores } from "./reviewStore";
 import resources from './stories/resources.json';
-import { Provider } from 'mobx-react';
-import TextField, { Input } from '@material/react-text-field';
+import { Provider } from "mobx-react";
+import TextField, { Input } from "@material/react-text-field";
 
 //TODO: async
 stores.reviewStore.load();
@@ -15,24 +16,30 @@ function Component() {
 
     useEffect(() => {
         stores.reviewStore.currentUser = text;
-      });
+    });
+
+    const iframe = document.getElementById("iframe") as HTMLIFrameElement;
 
     return (
         <div>
-            <div>
-                <TextField label='Current user' dense><Input value={text}
-                    onChange={(e) => setText(e.currentTarget.value)} />
+            <IframeOverlay iframe={iframe}>
+                <ReviewLocationsCollection iframe={iframe} />
+            </IframeOverlay>
+            <div className="user-picker">
+                <TextField label="Current user" dense>
+                    <Input value={text} onChange={e => setText(e.currentTarget.value)} />
                 </TextField>
             </div>
-            <ReviewLocationsCollection />
         </div>
     );
 }
 
-ReactDOM.render(<Provider {...stores}>
-    <Component />
-</Provider>, document.getElementById("index"));
-
+ReactDOM.render(
+    <Provider {...stores}>
+        <Component />
+    </Provider>,
+    document.getElementById("index")
+);
 
 //TODO: remove
 //https://medium.com/teachable/getting-started-with-react-typescript-mobx-and-webpack-4-8c680517c030
