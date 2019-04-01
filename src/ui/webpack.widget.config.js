@@ -12,7 +12,8 @@ webpackCommon.output = {
 
 webpackCommon.externals = [
     "dojo/_base/declare",
-    "dijit/_WidgetBase"
+    "dijit/_WidgetBase",
+    "epi/i18n!epi/cms/nls/reviewcomponent"
 ];
 
 module.exports = webpackCommon;
