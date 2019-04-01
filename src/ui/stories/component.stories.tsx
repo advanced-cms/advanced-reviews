@@ -18,13 +18,13 @@ function Component() {
 
   return (
       <div>
-          <div>
-              <TextField label='Current user' dense><Input value={text}
-                  onChange={(e) => setText(e.currentTarget.value)} />
-              </TextField>
-          </div>
           <ReviewLocationsCollection />
           <iframe id="iframe" style={{"width": "800px", "height": "800px" }} src="stories/fake_OPE.html"></iframe>
+          <div className="user-picker">
+              <TextField label='Current user' dense>
+                  <Input value={text} onChange={(e) => setText(e.currentTarget.value)} />
+              </TextField>
+          </div>
       </div>
   );
 }
