@@ -320,5 +320,6 @@ class ReviewComponentStore implements IReviewComponentStore {
 }
 
 export const stores = {
-    reviewStore: new ReviewComponentStore()
+    reviewStore: new ReviewComponentStore(),
+    resources: {}
 }
