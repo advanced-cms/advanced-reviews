@@ -169,6 +169,9 @@
     <Compile Include="AvatarsService\ReviewAvatarController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EmbededLanguages\advancedapprovalreviews_EN.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
