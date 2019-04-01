@@ -26,6 +26,12 @@
     }
 }
 
+.user-picker {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 //TODO: menu-surface float?
 .mdc-menu-surface--anchor {
     display: inline-block;
