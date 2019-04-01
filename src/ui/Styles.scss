@@ -13,7 +13,7 @@
 
 .mdc-menu-surface {
     //TODO: menu-surface overlapped when in dialog
-    z-index: 100 !important;
+    z-index: 800 !important;
 
     .mdc-list {
         .mdc-list-item {
@@ -24,6 +24,12 @@
             }
         }
     }
+}
+
+.user-picker {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 //TODO: menu-surface float?

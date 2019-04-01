@@ -14,7 +14,7 @@ import "./screenshotPicker.scss";
 interface ScreenshotPickerProps {
     current: string;
     iframe: HTMLIFrameElement;
-    onImageSelected: (string) => void;
+    onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
 }
 
@@ -70,7 +70,7 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
     };
 
     takeScreenshot = () => {
-        const body = this.props.iframe.contentWindow.document.body;
+        const body = this.props.iframe.contentDocument.body;
 
         html2canvas(body).then(canvas => {
             this.setState({ input: canvas.toDataURL() });
@@ -128,7 +128,7 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
     };
 
     onApplyDrawing = img => {
-        this.props.onImageSelected(img);
+        this.props.onImageSelected(img, this.state.pixelCrop);
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
         this.props.toggle();
     };
@@ -166,8 +166,8 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                 {this.mode === Mode.Highlight && (
                     <DrawablePreview
                         src={this.state.drawerInput}
-                        width={400}
-                        height={400}
+                        width={this.state.pixelCrop.width}
+                        height={this.state.pixelCrop.height}
                         onApplyDrawing={this.onApplyDrawing}
                     />
                 )}
