@@ -40,13 +40,16 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
     };
 
     render() {
+        let canvasWidth = this.props.width;
+        let canvasHeight = this.props.height;
+
         return (
             <>
                 <CanvasDraw
                     ref={this.setCanvas}
                     hideGrid={true}
-                    canvasWidth={this.props.width}
-                    canvasHeight={this.props.height}
+                    canvasWidth={canvasWidth}
+                    canvasHeight={canvasHeight}
                     imgSrc={this.props.src}
                     brushRadius={2}
                     brushColor="#f00"
