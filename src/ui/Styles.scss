@@ -11,38 +11,6 @@
     overflow-y: auto;
 }
 
-.reviewLocation {
-    position: absolute;
-    line-height: 21px;
-    vertical-align: middle;
-    color: black;
-    text-align: center;
-    background-color: #c0c0c0;
-    box-sizing: border-box;
-    border: 2px solid red;
-    border-radius: 25px;
-    width: 25px;
-    height: 25px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    font-size: 10px;
-    cursor: pointer;
-    user-select: none;
-
-    &.done {
-        background-color: gray;
-    }
-
-    &.new-comment:after {
-        content: "new";
-        display: block;
-        position: absolute;
-        right: -25px;
-        top: 0;
-        background-color: yellow;
-    }
-}
-
 .mdc-menu-surface {
     //TODO: menu-surface overlapped when in dialog
     z-index: 100 !important;
