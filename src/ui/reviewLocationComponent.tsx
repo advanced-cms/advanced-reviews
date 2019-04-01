@@ -6,7 +6,7 @@ import "./reviewLocationComponent.scss";
 
 interface ReviewLocationComponentProps {
     location: ReviewLocation,
-    showDialog(): void
+    showDialog(e: any): void
 }
 
 const ReviewLocationComponent: FunctionComponent<ReviewLocationComponentProps> = (props: ReviewLocationComponentProps) =>

@@ -24,6 +24,7 @@ import ScreenshotPicker from "../screenshots/screenshotPicker";
 import { DropDownMenu } from "../common/drop-down-menu";
 
 interface ReviewDialogProps {
+    iframe?: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
     resources?: ReviewResorces;
     isDialogOpen: boolean;
@@ -91,9 +92,6 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                 }
             };
         });
-
-        //TODO: get iframe from props?
-        const iframe: HTMLIFrameElement = document.getElementById("iframe") as HTMLIFrameElement;
 
         return (
             <Dialog
@@ -170,7 +168,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                     )}
                     <ScreenshotPicker
                         current={dialog.currentScreenshot}
-                        iframe={iframe}
+                        iframe={this.props.iframe}
                         onImageSelected={output => (dialog.currentScreenshot = output)}
                         toggle={() => (dialog.isScreenshotMode = !dialog.isScreenshotMode)}
                     />
