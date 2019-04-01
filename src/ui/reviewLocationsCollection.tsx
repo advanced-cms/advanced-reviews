@@ -1,9 +1,9 @@
 import React from "react";
 import { observer, inject } from 'mobx-react';
 import "./Styles.scss";
-import classNames from "classnames";
 import { IReviewComponentStore, ReviewLocation } from './reviewStore';
 import ReviewEditorDialog from "./dialog/reviewEditorDialog";
+import ReviewLocationComponent from './reviewLocationComponent';
 
 interface ReviewLocationCollectionProps {
   reviewStore?: IReviewComponentStore
@@ -43,39 +43,34 @@ export default class ReviewLocationCollection extends React.Component<ReviewLoca
     });
   }
 
-onCloseDialog(action: string) : void {
-  if (action !== "save") {
+  onCloseDialog(action: string): void {
+    if (action !== "save") {
+      this.setState({
+        isDialogOpen: false
+      });
+      return;
+    }
+
+    const { saveDialog } = this.props.reviewStore!;
+    saveDialog();
     this.setState({
       isDialogOpen: false
     });
-    return;
-}
+  }
 
-  const { saveDialog } = this.props.reviewStore!;
-  saveDialog();
-  this.setState({
-    isDialogOpen: false
-  });
-}
-  
   render() {
     const { reviewLocations } = this.props.reviewStore!;
 
     return (
       <div>
-        {reviewLocations.map(location => (
-          <div key={location.id}
-            style={location.style}
-            title={location.formattedFirstComment}
-            className={classNames("reviewLocation", { done: location.isDone, "new-comment": location.isUpdatedReview })}
-            onClick={() => this.showDialog(location)}>{location.id}</div>
-        ))}
-
+        {reviewLocations.map(location => 
+          <ReviewLocationComponent key={location.id} location={location} showDialog={()=>this.showDialog(location)} />
+        )}
         <ReviewEditorDialog
           isDialogOpen={this.state.isDialogOpen}
           onPrevClick={() => this.showReview(-1)}
           onNextClick={() => this.showReview(1)}
-          onCloseDialog={(action)=> this.onCloseDialog(action)}
+          onCloseDialog={(action) => this.onCloseDialog(action)}
         />
       </div>)
   };

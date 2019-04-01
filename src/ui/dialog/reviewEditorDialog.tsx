@@ -2,7 +2,7 @@ import React from "react";
 import { reaction, IReactionDisposer } from "mobx";
 import { observer, inject } from "mobx-react";
 import { IReviewComponentStore, Priority } from "../reviewStore";
-
+import priorityIconMappings from '../priorityIconMappings';
 import { ContextMenu } from "../common/context-menu";
 
 import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
@@ -64,7 +64,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
 
     scrollToBottom = () => {
         setTimeout(() => {
-            this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+            if (this.messagesEnd !== null) {
+                this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+            }
         }, 0);
     };
 
@@ -79,16 +81,11 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
         const customAttribute = {
             title: dialog.currentIsDone ? res.dialog.taskdone: res.dialog.tasknotdone
         };
-
-        const icons = {};
-        icons[Priority.Important] = "error_outline";
-        icons[Priority.Normal] = "assignment";
-        icons[Priority.Trivial] = "low_priority";
-
+        
         const options = Object.keys(Priority).map(priority => {
             return {
                 name: priority,
-                icon: icons[priority],
+                icon: priorityIconMappings[priority],
                 onSelected: () => {
                     dialog.currentPriority = Priority[priority];
                 }
@@ -130,7 +127,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                                         onChange={e => (dialog.currentIsDone = e.target.checked)}
                                     />
                                     <ContextMenu
-                                        icon={icons[dialog.currentPriority]}
+                                        icon={priorityIconMappings[dialog.currentPriority]}
                                         title={dialog.currentPriority}
                                         menuItems={options}
                                     />
