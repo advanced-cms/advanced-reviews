@@ -78,6 +78,7 @@ export class ReviewLocation {
     @computed
     get style(): CSSProperties {
         return {
+            zIndex: 700,
             top: this.positionY + "px",
             left: this.positionX + "px"
         }
@@ -158,6 +159,7 @@ interface IDialogState {
     currentScreenshot: null;
     currentPriority: Priority;
     isScreenshotMode: boolean;
+    // isDialogOpen: boolean;
 
     /**
      * Currently edited location
@@ -179,6 +181,7 @@ class DialogState implements IDialogState {
     @observable currentCommentText = "";
     @observable currentIsDone = false;
     @observable currentPriority = Priority.Normal;
+    // @observable isDialogOpen = false;
 
     @observable private initialDoneChecked = false;
     @observable private initialPriority = Priority.Normal;
@@ -192,6 +195,7 @@ class DialogState implements IDialogState {
 
     @action.bound
     showDialog(location: ReviewLocation): void {
+        // this.isDialogOpen = true;
         this.currentCommentText = "";
         this.currentScreenshot = null;
         this.currentIsDone = location.isDone;
