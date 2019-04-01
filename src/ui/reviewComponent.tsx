@@ -15,16 +15,16 @@ function Component() {
 
     useEffect(() => {
         stores.reviewStore.currentUser = text;
-      });
+    });
 
     return (
         <div>
-            <div>
-                <TextField label='Current user' dense><Input value={text}
-                    onChange={(e) => setText(e.currentTarget.value)} />
+            <ReviewLocationsCollection />
+            <div className="user-picker">
+                <TextField label='Current user' dense>
+                    <Input value={text} onChange={(e) => setText(e.currentTarget.value)} />
                 </TextField>
             </div>
-            <ReviewLocationsCollection />
         </div>
     );
 }
