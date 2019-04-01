@@ -3,11 +3,13 @@ import TextField, { Input } from '@material/react-text-field';
 import { storiesOf } from '@storybook/react';
 import { Provider } from 'mobx-react';
 import { stores, ReviewLocation, Comment } from "../reviewStore";
+import resources from './resources.json';
 import ReviewDialog from "../dialog/reviewEditorDialog";
 import { decorate } from '@storybook/addon-actions';
 import screenshots from "./../screenshots/screenshots.json";
 
 stores.reviewStore.load();
+stores.resources = resources;
 
 const reviewLocation1 = new ReviewLocation(this, {
   id: "1",

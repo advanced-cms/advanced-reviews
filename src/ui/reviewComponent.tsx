@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReviewLocationsCollection from "./reviewLocationsCollection";
 import { stores } from "./reviewStore";
+import resources from './stories/resources.json';
 import { Provider } from 'mobx-react';
 import TextField, { Input } from '@material/react-text-field';
 
 //TODO: async
 stores.reviewStore.load();
+stores.resources = resources;
 
 function Component() {
     const [text, setText] = useState("Lina");

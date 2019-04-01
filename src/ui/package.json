@@ -8,7 +8,9 @@
     "start": "webpack-dev-server --config webpack.test.config.js --mode development --hot --open chrome",
     "build:widget": "webpack --config webpack.widget.config.js --mode development",
     "storybook": "start-storybook -s ./ -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "generate-resource-definitions": "node ./tools/resourceGenerator.js",
+    "generate-resource-definitions-debug": "node --nolazy --inspect-brk=9229 ./tools/resourceGenerator.js"
   },
   "author": "Episerver AB",
   "license": "ISC",
@@ -18,11 +20,16 @@
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@storybook/addon-actions": "^5.0.5",
+    "@storybook/addon-links": "^5.0.5",
+    "@storybook/addons": "^5.0.5",
+    "@storybook/react": "^5.0.5",
     "@types/react": "^16.8.7",
     "@types/react-dom": "^16.8.2",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
     "html-webpack-plugin": "^3.2.0",
+    "jsdom": "^14.0.0",
     "node-sass": "^4.11.0",
     "prettier": "1.16.1",
     "sass-loader": "^7.1.0",
@@ -31,11 +38,7 @@
     "typescript": "^3.3.3333",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.2.1",
-    "@storybook/react": "^5.0.5",
-    "@storybook/addon-actions": "^5.0.5",
-    "@storybook/addon-links": "^5.0.5",
-    "@storybook/addons": "^5.0.5"
+    "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
     "@material/react-button": "^0.10.0",
