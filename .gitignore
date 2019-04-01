@@ -28,3 +28,4 @@ node_modules/
 
 reviewComponent.bundle.js
 src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/1.0.0/Scripts/ReviewWidget.js
+dist/
