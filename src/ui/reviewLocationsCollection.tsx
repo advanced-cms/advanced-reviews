@@ -6,6 +6,7 @@ import ReviewEditorDialog from "./dialog/reviewEditorDialog";
 import ReviewLocationComponent from './reviewLocationComponent';
 
 interface ReviewLocationCollectionProps {
+  iframe?: HTMLIFrameElement;
   reviewStore?: IReviewComponentStore
 }
 
@@ -15,7 +16,7 @@ interface ReviewLocationCollectionState {
 
 @inject('reviewStore')
 @observer
-export default class ReviewLocationCollection extends React.Component<ReviewLocationCollectionProps, ReviewLocationCollectionState> {
+export default class ReviewLocationsCollection extends React.Component<ReviewLocationCollectionProps, ReviewLocationCollectionState> {
 
   constructor(props: ReviewLocationCollectionProps) {
     super(props);
@@ -51,22 +52,27 @@ export default class ReviewLocationCollection extends React.Component<ReviewLoca
       return;
     }
 
-    const { saveDialog } = this.props.reviewStore!;
-    saveDialog();
-    this.setState({
-      isDialogOpen: false
-    });
-  }
+  const { saveDialog } = this.props.reviewStore!;
+  saveDialog();
+  this.setState({
+    isDialogOpen: false
+  });
+}
 
+onLocationClick = (e, location) => {
+    e.stopPropagation();
+    this.showDialog(location);
+};
   render() {
     const { reviewLocations } = this.props.reviewStore!;
 
     return (
       <div>
-        {reviewLocations.map(location => 
-          <ReviewLocationComponent key={location.id} location={location} showDialog={()=>this.showDialog(location)} />
+        {reviewLocations.map(location =>
+          <ReviewLocationComponent key={location.id} location={location} showDialog={(e)=>this.onLocationClick(e, location)} />
         )}
         <ReviewEditorDialog
+          iframe={this.props.iframe}
           isDialogOpen={this.state.isDialogOpen}
           onPrevClick={() => this.showReview(-1)}
           onNextClick={() => this.showReview(1)}
