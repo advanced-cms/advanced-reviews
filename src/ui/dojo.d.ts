@@ -14,6 +14,16 @@ declare module "dojo/topic" {
 }
 
 declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
-    let res: any;
+    let res: ReviewResorces;
     export = res;
+}
+
+declare module "alloy-review/advancedReviewService" {
+    let advancedReviewService: any;
+    export = advancedReviewService;
+}
+
+interface AdvancedReviewService {
+    add(id: string, data: any): Promise<any>;
+    load(): Promise<any[]>;
 }

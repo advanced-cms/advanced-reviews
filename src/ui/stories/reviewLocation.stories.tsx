@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, boolean,select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
+import resources from './resources.json';
 import ReviewLoacationComponent from "./../reviewLocationComponent";
-import { Comment, Priority, ReviewLocation, stores } from "./../reviewStore";
+import { Comment, Priority, ReviewLocation, createStores } from "./../reviewStore";
+import FakeAdvancedReviewService from './FakeAdvancedReviewService';
 
 const stories = storiesOf('Review location', module);
 stories.addDecorator(withKnobs);
 
+const stores = createStores(new FakeAdvancedReviewService(), resources);
 stores.reviewStore.load();
 
 const priorityOptions = {};
