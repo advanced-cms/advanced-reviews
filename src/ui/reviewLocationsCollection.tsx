@@ -52,24 +52,28 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
       return;
     }
 
-  const { saveDialog } = this.props.reviewStore!;
-  saveDialog();
-  this.setState({
-    isDialogOpen: false
-  });
-}
+    const { saveDialog } = this.props.reviewStore!;
+    saveDialog().then(() => {
+      this.setState({
+        isDialogOpen: false
+      });
+    }).catch(e => {
+      //TODO: handle server exceptions
+      alert(e.message);
+    });
+  }
 
-onLocationClick = (e, location) => {
+  onLocationClick = (e, location) => {
     e.stopPropagation();
     this.showDialog(location);
-};
+  };
   render() {
     const { reviewLocations } = this.props.reviewStore!;
 
     return (
       <div>
         {reviewLocations.map(location =>
-          <ReviewLocationComponent key={location.id} location={location} showDialog={(e)=>this.onLocationClick(e, location)} />
+          <ReviewLocationComponent key={location.id} location={location} showDialog={(e) => this.onLocationClick(e, location)} />
         )}
         <ReviewEditorDialog
           iframe={this.props.iframe}
