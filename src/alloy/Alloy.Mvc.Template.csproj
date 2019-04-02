@@ -392,6 +392,7 @@
     <Content Include="libman.json" />
     <None Include="Models\Blocks\_ReadMe.txt" />
     <None Include="Models\Pages\_ReadMe.txt" />
+    <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\advancedReviewService.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\commandsProvider.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\initializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\onPageEditingInitializer.js" />
