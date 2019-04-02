@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
-import moment from "moment";
+import { distanceInWordsToNow, format } from "date-fns";
 
 import screenshots from "./screenshots/screenshots.json";
 
@@ -17,14 +17,14 @@ export class Comment {
         if (!this.date) {
             return "";
         }
-        return moment(this.date).format("MMM Do YYYY");
+        return format(this.date, "MMM Do YYYY");
     }
 
     @computed get userFriendlyDate() {
         if (!this.date) {
             return "";
         }
-        return moment(this.date).fromNow();
+        return distanceInWordsToNow(this.date, { addSuffix: true });
     }
 
     static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
