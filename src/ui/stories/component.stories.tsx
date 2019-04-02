@@ -13,18 +13,22 @@ stores.reviewStore.load();
 
 function Component() {
     const [text, setText] = useState("Lina");
+    const [anchorElement, setAnchorElement] = useState(null);
 
     useEffect(() => {
         stores.reviewStore.currentUser = text;
     });
 
-    const iframe = document.getElementById("iframe") as HTMLIFrameElement;
-
     return (
         <div>
-            <IframeOverlay iframe={iframe}>
-                <ReviewLocationsCollection iframe={iframe} />
-            </IframeOverlay>
+            <div id="iframeWrapper" style={{"width": "800px", "height": "800px", "position": "absolute", "top": "0", "overflow-y": "scroll", "overflow-x": "auto"}}>
+                <iframe id="iframe" ref={setAnchorElement} style={{ "width": "779px", "height": "985px" }} src="./stories/fake_OPE.html"></iframe>
+            </div>
+            {!!anchorElement &&
+                <IframeOverlay iframe={anchorElement}>
+                    <ReviewLocationsCollection iframe={anchorElement} />
+                </IframeOverlay>
+            }
             <div className="user-picker">
                 <TextField label="Current user" dense>
                     <Input value={text} onChange={e => setText(e.currentTarget.value)} />
@@ -35,10 +39,7 @@ function Component() {
 }
 
 storiesOf("Dojo component", module).add("default", () => (
-    <>
-        <iframe id="iframe" style={{"width": "800px", "height": "800px" }} src="stories/fake_OPE.html"></iframe>
-        <Provider {...stores}>
-            <Component />
-        </Provider>
-    </>
+    <Provider {...stores}>
+        <Component />
+    </Provider>
 ));
