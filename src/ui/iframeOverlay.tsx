@@ -70,7 +70,6 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         const propertyElement = getClosest(clickedElement, "[data-epi-property-name]");
 
         let reviewLocation = new ReviewLocation(this.props.reviewStore, {
-            id: this.props.reviewStore.reviewLocations.length + 1,
             positionX: e.offsetX - 12,
             positionY: e.offsetY - 12,
             propertyName: propertyElement ? propertyElement.dataset.epiPropertyName : null,

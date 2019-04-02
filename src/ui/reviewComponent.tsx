@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReviewLocationsCollection from "./reviewLocationsCollection";
 import IframeOverlay from "./iframeOverlay";
-import { stores } from "./reviewStore";
+import { createStores } from "./reviewStore";
 import resources from './stories/resources.json';
 import { Provider } from "mobx-react";
 import TextField, { Input } from "@material/react-text-field";
+import FakeAdvancedReviewService from "./stories/FakeAdvancedReviewService";
 
 //TODO: async
+const stores = createStores(new FakeAdvancedReviewService(), resources);
 stores.reviewStore.load();
 stores.resources = resources;
 
