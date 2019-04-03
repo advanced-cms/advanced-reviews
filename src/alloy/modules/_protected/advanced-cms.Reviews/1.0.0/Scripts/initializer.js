@@ -1,12 +1,18 @@
 define([
     "dojo/_base/declare",
     "epi/dependency",
+    "epi/routes",
+    "epi/shell/store/JsonRest",
+    "epi/shell/store/Throttle",
     "epi/_Module",
     "alloy-review/commandsProvider",
     "alloy-review/onPageEditingInitializer"
 ], function (
     declare,
     dependency,
+    routes,
+    JsonRest,
+    Throttle,
     _Module,
     CommandsProvider,
     onPageEditingInitializer
@@ -17,16 +23,16 @@ define([
             this.inherited(arguments);
 
             var registry = this.resolveDependency("epi.storeregistry");
-/*
+
             //Register store
-            registry.add("alloy.favouriteContentStore",
+            registry.add("approvaladvancedreview",
                 new Throttle(
                     new JsonRest({
-                        target: this._getRestPath("favouriteContentStore"),
-                        idProperty: "contentLink"
+                        target: this._getRestPath("approvaladvancedreview")//,
+                        //idProperty: "contentLink"
                     })
                 )
-            );*/
+            );
 
             var commandsProvider = new CommandsProvider();
 
@@ -38,7 +44,7 @@ define([
         },
 
         _getRestPath: function (name) {
-            return routes.getRestPath({ moduleArea: "App", storeName: name });
+            return routes.getRestPath({ moduleArea: "alloy.reviews", storeName: name });
         }
     });
 });
