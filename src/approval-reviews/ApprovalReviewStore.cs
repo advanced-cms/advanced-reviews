@@ -6,9 +6,10 @@ using EPiServer.Shell.Services.Rest;
 namespace AdvancedApprovalReviews
 {
     [RestStore("approvaladvancedreview")]
-    public class ApprovalReviewStore: RestControllerBase
+    public class ApprovalReviewStore : RestControllerBase
     {
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
+        private readonly object _lock = new object();
 
         public ApprovalReviewStore(IApprovalReviewsRepository approvalReviewsRepository)
         {
@@ -24,20 +25,26 @@ namespace AdvancedApprovalReviews
         [HttpPost]
         public ActionResult Post(PostReviewModel reviewModel)
         {
-            if (reviewModel == null)
+            if (reviewModel == null || reviewModel.ContentLink == null || reviewModel.ReviewLocation == null)
             {
                 return new RestStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _approvalReviewsRepository.Save(reviewModel.ContentLink, reviewModel.SerializedReview);
-            return new RestStatusCodeResult(HttpStatusCode.OK);
+            try
+            {
+                var result = _approvalReviewsRepository.Update(reviewModel.ContentLink, reviewModel.ReviewLocation);
+                return Rest(result);
+            }
+            catch (ReviewLocationNotFoundException)
+            {
+                return new RestStatusCodeResult(HttpStatusCode.NotFound);
+            }
         }
     }
 
     public class PostReviewModel
     {
         public ContentReference ContentLink { get; set; }
-
-        public string SerializedReview { get; set; }
+        public ReviewLocation ReviewLocation { get; set; }
     }
 }

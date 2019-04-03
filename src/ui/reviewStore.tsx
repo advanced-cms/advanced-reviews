@@ -2,8 +2,6 @@ import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
 import { distanceInWordsToNow, format } from "date-fns";
 
-import screenshots from "./screenshots/screenshots.json";
-
 /**
  * Represents a comment added by user
  */
@@ -222,7 +220,7 @@ export interface IReviewComponentStore {
 
     currentItemIndex: number;
 
-    saveDialog(): void;
+    saveDialog(): Promise<ReviewLocation>;
 
     load(): void;
 
@@ -236,70 +234,55 @@ class ReviewComponentStore implements IReviewComponentStore {
     //TODO: read user from identity
     currentUser = "Lina";
 
-    @action.bound
-    load(): void {
-        //TODO: load from episerver store
+    _advancedReviewService: any;
 
-        this.reviewLocations = [
-            new ReviewLocation(this, {
-                id: "1",
-                positionX: 10,
-                positionY: 80,
-                propertyName: "Page name",
-                isDone: false,
-                firstComment: Comment.create("Alfred", "Rephrase it. ", new Date("2019-01-01")),
-                comments: [
-                    Comment.create("Lina", "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
-                    Comment.create("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),
-                    Comment.create("Lina", "Ok, done.", new Date("2019-01-04"), screenshots.idylla),
-                    Comment.create("Alfred", "I still see old text", new Date("2019-03-18"), screenshots.idylla),
-                    Comment.create("Lina", "Probably something with the CMS. Now it should be ok", new Date("2019-03-19")),
-                    Comment.create("Alfred", "Looks ok.", new Date("2019-03-19")),
-                    Comment.create("Lina", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sed nisi in erat posuere luctus.", new Date("2019-03-20")),
-                    Comment.create("Alfred", "Vivamus sem est, aliquet eget nunc quis, imperdiet cursus sapien. Mauris ullamcorper dui ut nisl vulputate vestibulum.", new Date("2019-03-21")),
-                    Comment.create("Lina", "Sed non nisi in odio facilisis aliquam eget volutpat augue. Phasellus vitae auctor risus, non luctus dolor.", new Date("2019-03-22")),
-                    Comment.create("Alfred", "Integer sed libero at odio mattis sodales. Ut dapibus erat cursus porttitor malesuada.", new Date("2019-03-23")),
-                ]
-            }),
-            new ReviewLocation(this, {
-                id: "2",
-                positionX: 100,
-                positionY: 150,
-                propertyName: "Page body",
-                isDone: false,
-                firstComment: Comment.create("John", "Remove the above text. It's already included in another article.", new Date("2019-01-01")),
-                comments: [
-                    Comment.create("Lina", "Etiam viverra ante mauris, eget pretium quam ultrices vel.", new Date("2019-01-02")),
-                    Comment.create("Alfred", "Maecenas non lorem et lectus ultrices consequat vel eget magna.", new Date("2019-01-03")),
-                    Comment.create("Lina", "Aenean malesuada nibh a ante scelerisque consequat.", new Date("2019-01-04")),
-                    Comment.create("Alfred", "Phasellus eu nulla ac tellus semper imperdiet nec eu nulla.", new Date("2019-03-18")),
-                    Comment.create("Lina", "Etiam vel tortor gravida, venenatis enim at, finibus dolor.", new Date("2019-03-19")),
-                    Comment.create("Alfred", "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-19")),
-                    Comment.create("Lina", "Nunc ultricies tortor semper leo efficitur, vitae viverra ligula semper.", new Date("2019-03-20")),
-                    Comment.create("Alfred", "Ut viverra odio ligula, vitae gravida arcu aliquam id.", new Date("2019-03-21")),
-                    Comment.create("Lina", "Pellentesque elementum sem quis eleifend gravida.", new Date("2019-03-22")),
-                    Comment.create("Alfred", "Quisque tincidunt mi a pretium rutrum.", new Date("2019-03-23")),
-                ]
-            }),
-            new ReviewLocation(this, {
-                id: "3",
-                positionX: 250,
-                positionY: 200,
-                propertyName: "Main ContentArea",
-                isDone: false
-            }),
-            new ReviewLocation(this, {
-                id: "4",
-                positionX: 125,
-                positionY: 330,
-                propertyName: "Description",
-                isDone: false
-            })
-        ];
+    constructor(advancedReviewService: AdvancedReviewService) {
+        this._advancedReviewService = advancedReviewService;
     }
 
     @action.bound
-    saveDialog(): void {
+    load(): void {
+        function parseComment(json): Comment {
+            if (!json) {
+                return Comment.create("", "");
+            }
+            return Comment.create(json.author, json.text, json.date, json.screenshot);
+        }
+
+        this._advancedReviewService.load()
+            .then(reviewLocations => {
+                this.reviewLocations = reviewLocations
+                    .map(x => {
+                        let reviewLocation;
+                        try {
+                            reviewLocation = JSON.parse(x.data);
+                        } catch (exception) {
+                            reviewLocation = null;
+                        }
+                        return {
+                            id: x.id,
+                            data: reviewLocation
+                        }
+                    })
+                    .filter(x => !!x.data)
+                    .map(x => {
+
+                        return new ReviewLocation(this, {
+                            id: x.id,
+                            positionX: x.data.positionX,
+                            positionY: x.data.positionY,
+                            propertyName: x.data.propertyName,
+                            isDone: x.data.isDone,
+                            firstComment: parseComment(x.data.firstComment),
+                            comments: (x.data.comments || []).map(parseComment)
+                        })
+                    });
+            });
+    }
+
+    //TODO: convert to async method
+    @action.bound
+    saveDialog(): Promise<ReviewLocation> {
         const editedReview = this.dialog.currentEditLocation;
 
         editedReview.isDone = this.dialog.currentIsDone;
@@ -312,6 +295,7 @@ class ReviewComponentStore implements IReviewComponentStore {
             editedReview.firstComment = comment;
         }
         this.dialog.currentEditLocation = new ReviewLocation(this, {});
+        return this.saveLocation(editedReview);
     }
 
     @computed get currentItemIndex(): number {
@@ -321,9 +305,41 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action getUserAvatarUrl(userName: string): string {
         return `reviewavatars/${userName}.jpg`;
     }
+
+    private saveLocation(reviewLocation: ReviewLocation): Promise<ReviewLocation> {
+        return new Promise((resolve, reject) => {
+            const data = {
+                propertyName: reviewLocation.propertyName,
+                isDone: reviewLocation.isDone,
+                positionX: reviewLocation.positionX,
+                positionY: reviewLocation.positionY,
+                priority: reviewLocation.priority,
+                comments: reviewLocation.comments.map(x => {
+                    x.author,
+                        x.date,
+                        x.screenshot,
+                        x.text
+                }),
+                firstComment: {
+                    author: reviewLocation.firstComment.author,
+                    date: reviewLocation.firstComment.date,
+                    screenshot: reviewLocation.firstComment.screenshot,
+                    text: reviewLocation.firstComment.text
+                }
+            }
+            this._advancedReviewService.add(reviewLocation.id, data).then((result) => {
+                reviewLocation.id = result.id;
+                resolve(reviewLocation);
+            }).otherwise((e) => {
+                reject(e);
+            });
+        });
+    }
 }
 
-export const stores = {
-    reviewStore: new ReviewComponentStore(),
-    resources: {}
+export const createStores = (advancedReviewService: AdvancedReviewService, res: ReviewResorces): any => {
+    return {
+        reviewStore: new ReviewComponentStore(advancedReviewService),
+        resources: res
+    }
 }
