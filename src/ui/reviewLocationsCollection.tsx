@@ -42,6 +42,7 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
     this.setState({
       isDialogOpen: true
     });
+    location.updateCurrentUserLastRead();
   }
 
   onCloseDialog(action: string): void {
