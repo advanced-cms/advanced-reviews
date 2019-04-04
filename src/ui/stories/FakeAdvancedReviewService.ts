@@ -11,9 +11,15 @@ const createComment = (author: string, text: string, date: Date, screenshot: str
 
 export default class FakeAdvancedReviewService implements AdvancedReviewService {
     add(id: string, data: any): Promise<any> {
-        return new Promise(resolve => {
+        let result: any = new Promise(resolve => {
             resolve();
         });
+        result.otherwise = () => {};
+        result.then = (callback) => {
+            callback({ id: new Date().getDate() });
+            return result;
+        }
+        return result;
     }
 
     load(): Promise<any[]> {

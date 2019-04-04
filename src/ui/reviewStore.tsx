@@ -52,13 +52,24 @@ export class ReviewLocation {
      */
     @observable firstComment: Comment = new Comment();
 
-    @computed get formattedFirstComment() {
+    @computed get formattedFirstComment(): string {
         if (!this.firstComment.date) {
             return "";
         }
         const comment = this.firstComment;
 
         return `${comment.author}: ${comment.text}, ${comment.userFriendlyDate}`;
+    }
+
+    @computed get displayName(): string {
+        if (this.propertyName) {
+            return this.propertyName;
+        }
+        if (this.firstComment.date) {
+            this.firstComment.text;
+        }
+        //TODO: resources
+        return '[Unsaved review]';
     }
 
     /**
@@ -225,11 +236,23 @@ export interface IReviewComponentStore {
     load(): void;
 
     getUserAvatarUrl(userName: string): string;
+
+    filteredReviewLocations: ReviewLocation[];
+
+    filter: ReviewCollectionFilter;
+}
+
+class ReviewCollectionFilter {
+    @observable showPoints: boolean = true;
+    @observable showOnlyOpenTasks: boolean = true;
+    @observable showOnlyNewTasks: boolean = true;
 }
 
 class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations = [];
     @observable dialog = new DialogState();
+
+    filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 
     //TODO: read user from identity
     currentUser = "Lina";
@@ -278,6 +301,17 @@ class ReviewComponentStore implements IReviewComponentStore {
                         })
                     });
             });
+    }
+
+    @computed get filteredReviewLocations(): ReviewLocation[] {
+        let result = this.reviewLocations;
+        if (this.filter.showOnlyNewTasks) {
+            result = result.filter(x => x.isUpdatedReview);
+        }
+        if (this.filter.showOnlyOpenTasks) {
+            result = result.filter(x => !x.isDone);
+        }
+        return result;
     }
 
     //TODO: convert to async method
