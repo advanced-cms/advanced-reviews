@@ -20,10 +20,6 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.stores = createStores(this._reviewService, res);
         this.stores.reviewStore.load();
 
-        topic.subscribe("toggle:reviews", () => {
-            this.domNode.style.display = this.domNode.style.display === "none" ? "block" : "none";
-        });
-
         ReactDOM.render(
             <Provider {...this.stores}>
                 <IframeOverlay iframe={this.iframe}>
