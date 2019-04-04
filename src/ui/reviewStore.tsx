@@ -227,6 +227,8 @@ export interface IReviewComponentStore {
 
     getUserAvatarUrl(userName: string): string;
 
+    addUnsavedReviewLocation(ReviewLocation): void;
+
     filteredReviewLocations: ReviewLocation[];
 
     filter: ReviewCollectionFilter;
@@ -252,6 +254,16 @@ class ReviewComponentStore implements IReviewComponentStore {
     constructor(advancedReviewService: AdvancedReviewService) {
         this._advancedReviewService = advancedReviewService;
     }
+
+    _temporaryIdPrefix = "temp";
+
+    _getTemporaryId = () => {
+        return this._temporaryIdPrefix + Math.floor(Math.random() * 100000);
+    };
+
+    _ensureValidId = (id: string) => {
+        return id.startsWith(this._temporaryIdPrefix) ? null : id;
+    };
 
     @action.bound
     load(): void {
@@ -304,6 +316,11 @@ class ReviewComponentStore implements IReviewComponentStore {
         return result;
     }
 
+    addUnsavedReviewLocation(reviewLocation: ReviewLocation): void {
+        reviewLocation.id = this._getTemporaryId();
+        this.reviewLocations.push(reviewLocation)
+    }
+
     //TODO: convert to async method
     @action.bound
     saveDialog(): Promise<ReviewLocation> {
@@ -351,7 +368,7 @@ class ReviewComponentStore implements IReviewComponentStore {
                     text: reviewLocation.firstComment.text
                 }
             }
-            this._advancedReviewService.add(reviewLocation.id, data).then((result) => {
+            this._advancedReviewService.add(this._ensureValidId(reviewLocation.id), data).then((result) => {
                 reviewLocation.id = result.id;
                 resolve(reviewLocation);
             }).otherwise((e) => {
