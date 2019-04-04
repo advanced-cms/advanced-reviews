@@ -1,4 +1,3 @@
-import { CSSProperties } from "react";
 import { action, computed, observable } from 'mobx';
 import { distanceInWordsToNow, format } from "date-fns";
 
@@ -82,15 +81,6 @@ export class ReviewLocation {
     constructor(rootStore: IReviewComponentStore, point: any) {
         this._rootStore = rootStore;
         Object.keys(point).forEach((key) => this[key] = point[key]);
-    }
-
-    @computed
-    get style(): CSSProperties {
-        return {
-            zIndex: 700,
-            top: this.positionY + "px",
-            left: this.positionX + "px"
-        }
     }
 
     @action updateCurrentUserLastRead(): void {
