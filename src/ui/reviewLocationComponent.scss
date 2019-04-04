@@ -7,10 +7,9 @@
     cursor: pointer;
     user-select: none;
 
-    .point:hover {
-        -webkit-filter: drop-shadow( 0px 0px 7px #555);
-        filter: drop-shadow( 0px 0px 7px #555);
-        
+    circle {
+        fill: #F7542B;
+        stroke: #555;
     }
 
     &.done {
@@ -19,24 +18,25 @@
         }
     }
 
-    .updated-flag {
-        position: absolute;
-        right: -2px;
-        bottom: -2px;
+    &.new {
+        circle {
+            fill: green;
+        }
+    }
+
+    .point:hover {
+        -webkit-filter: drop-shadow( 0px 0px 7px #555);
+        filter: drop-shadow( 0px 0px 7px #555);
+        
     }
 
     .priority-icon {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
         color: #c0c0c0;
         position: absolute;
-        right: -22px;
-        top: 2px;
-    }
-
-    &.new-comment {
-        .priority-icon { 
-            top: 8px;
-        }
+        top: 4px;
+        left: 4px;
     }
 }
