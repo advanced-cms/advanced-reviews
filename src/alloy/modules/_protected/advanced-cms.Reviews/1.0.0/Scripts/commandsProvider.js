@@ -13,15 +13,12 @@ define([
         constructor: function () {
             this.inherited(arguments);
 
-            var showReviewCommand = new ShowReviewCommand({
-                //label: "First command"
-            });
+            var showReviewCommand = new ShowReviewCommand({ });
             this.addToLeading(showReviewCommand,
                 {
                     showLabel: false,
                     widget: ToggleButton,
-                    'class': 'favourite-button'
-                    //'epi-disabledDropdownArrow epi-groupedButtonContainer'//'epi-leadingToggleButton epi-disabledDropdownArrow dijitDropDownButton' // dijitChecked
+                    'class': 'epi-mediumButton'
                 });
         }
     });
