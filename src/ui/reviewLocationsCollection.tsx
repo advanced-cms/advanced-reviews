@@ -4,6 +4,7 @@ import "./Styles.scss";
 import { IReviewComponentStore, ReviewLocation } from './reviewStore';
 import ReviewEditorDialog from "./dialog/reviewEditorDialog";
 import ReviewLocationComponent from './reviewLocationComponent';
+import ReviewsSlidingPanel from './reviews-sliding-panel/reviews-sliding-panel' 
 
 interface ReviewLocationCollectionProps {
   iframe?: HTMLIFrameElement;
@@ -64,16 +65,17 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
     });
   }
 
-  onLocationClick = (e, location) => {
+  onLocationClick = (e, location: ReviewLocation) => {
     e.stopPropagation();
     this.showDialog(location);
   };
   render() {
-    const { reviewLocations } = this.props.reviewStore!;
+    const { filteredReviewLocations, filter } = this.props.reviewStore!;
 
     return (
       <div>
-        {reviewLocations.map(location =>
+        {filter.showPoints &&
+         filteredReviewLocations.map(location =>
           <ReviewLocationComponent key={location.id} location={location} showDialog={(e) => this.onLocationClick(e, location)} />
         )}
         <ReviewEditorDialog
@@ -83,6 +85,8 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
           onNextClick={() => this.showReview(1)}
           onCloseDialog={(action) => this.onCloseDialog(action)}
         />
+
+        <ReviewsSlidingPanel onEditClick={(e, location) => this.onLocationClick(e, location)} />
       </div>)
   };
 }
