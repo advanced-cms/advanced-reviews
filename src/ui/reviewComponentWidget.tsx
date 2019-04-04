@@ -6,14 +6,13 @@ import topic from "dojo/topic";
 import WidgetBase from "dijit/_WidgetBase";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import ReviewService from "alloy-review/advancedReviewService";
-import ReviewLocationsCollection from "./reviewLocationsCollection";
+import IframeWithLocations from "./IframeWithLocations";
 import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 
 import { createStores } from "./reviewStore";
-import IframeOverlay from "./iframeOverlay";
 
 export default declare([WidgetBase, _ContentContextMixin], {
-    postCreate: function() {
+    postCreate: function () {
         //TODO: async
         this._reviewService = new ReviewService();
         this.own(this._reviewService);
@@ -22,14 +21,12 @@ export default declare([WidgetBase, _ContentContextMixin], {
 
         ReactDOM.render(
             <Provider {...this.stores}>
-                <IframeOverlay iframe={this.iframe}>
-                    <ReviewLocationsCollection iframe={this.iframe} />
-                </IframeOverlay>
+                <IframeWithLocations iframe={this.iframe} />
             </Provider>,
             this.domNode
         );
     },
-    contextChanged: function () {
+contextChanged: function () {
         this.stores.reviewStore.load();
     },
     destroy: function() {

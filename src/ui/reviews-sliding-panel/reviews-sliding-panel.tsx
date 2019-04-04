@@ -14,7 +14,7 @@ import './reviews-sliding-panel.scss';
 
 interface SlidingPanelProps {
     reviewStore?: IReviewComponentStore,
-    onEditClick(event: any, reviewLocation: ReviewLocation): void
+    onEditClick(reviewLocation: ReviewLocation): void
 }
 
 @inject('reviewStore')
@@ -30,6 +30,11 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
     onSelected(index: number): void {
         //this.props.reviewStore!.reviewLocations[index]
         //TODO: implement scroll into view for point
+    }
+
+    onEditClick(e: any, location: ReviewLocation) {
+        e.stopPropagation();
+        this.props.onEditClick(location);
     }
 
     render() {
@@ -81,7 +86,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                 {reviewLocations.map((location, index) =>
                                     <ListItem key={location.id}>
                                         <ListItemText primaryText={location.displayName} />
-                                        <IconButton className="edit" onClick={(e) => this.props.onEditClick(e, location)} title="Edit" >
+                                        <IconButton className="edit" onClick={(e) => this.onEditClick(e, location)} title="Edit" >
                                             <MaterialIcon icon="edit" />
                                         </IconButton>
                                     </ListItem>
