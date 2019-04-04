@@ -34,6 +34,11 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         const checkTime = 1000;
         this.calculatePositionInterval = window.setInterval(
             function() {
+                //TODO: when changing context very fast, sometimes we get into here before the component is unmounted, maybe can be solved differently?
+                if (!this.props.iframe.contentDocument || !this.props.iframe.contentDocument.body) {
+                    return;
+                }
+
                 const { offsetHeight } = this.props.iframe.contentDocument.body;
                 if (this.state.offsetHeight === offsetHeight) {
                     return;
