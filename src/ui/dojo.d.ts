@@ -13,6 +13,11 @@ declare module "dojo/topic" {
     export = _topic;
 }
 
+declare module "epi-cms/_ContentContextMixin" {
+    let _ContentContextMixin: any;
+    export = _ContentContextMixin;
+}
+
 declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
     let res: ReviewResorces;
     export = res;
