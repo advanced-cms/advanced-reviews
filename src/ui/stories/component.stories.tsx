@@ -4,8 +4,7 @@ import { storiesOf } from "@storybook/react";
 import { Provider } from "mobx-react";
 import { createStores } from "../reviewStore";
 import resources from './resources.json';
-import ReviewLocationsCollection from "../reviewLocationsCollection";
-import IframeOverlay from "../iframeOverlay";
+import IframeWithLocations from "../IframeWithLocations";
 import FakeAdvancedReviewService from "./FakeAdvancedReviewService";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
@@ -25,9 +24,7 @@ function Component() {
                 <iframe id="iframe" ref={setAnchorElement} style={{ "width": "779px", "height": "985px" }} src="./stories/fake_OPE.html"></iframe>
             </div>
             {!!anchorElement &&
-                <IframeOverlay iframe={anchorElement}>
-                    <ReviewLocationsCollection iframe={anchorElement} />
-                </IframeOverlay>
+                <IframeWithLocations iframe={anchorElement} />
             }
             <div className="user-picker">
                 <TextField label="Current user" dense>
