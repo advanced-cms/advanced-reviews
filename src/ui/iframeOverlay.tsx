@@ -80,7 +80,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             propertyName: propertyElement ? propertyElement.dataset.epiPropertyName : null,
             isDone: false
         });
-        this.props.reviewStore.reviewLocations.push(reviewLocation);
+        this.props.reviewStore.addUnsavedReviewLocation(reviewLocation);
         //TODO: show dialog right after adding a review location
         //this.props.reviewStore.dialog.showDialog(reviewLocation);
     }
