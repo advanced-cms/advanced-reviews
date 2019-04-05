@@ -20,8 +20,8 @@ function Component() {
 
     return (
         <div>
-            <div id="iframeWrapper" style={{"width": "800px", "height": "800px", "position": "absolute", "top": "0", "overflow-y": "scroll", "overflow-x": "auto"}}>
-                <iframe id="iframe" ref={setAnchorElement} style={{ "width": "779px", "height": "985px" }} src="./stories/fake_OPE.html"></iframe>
+            <div id="iframeWrapper" style={{width: "800px", height: "800px", position: "absolute", "top": "0", overflowY: "scroll", overflowX: "auto"}}>
+                <iframe id="iframe" ref={setAnchorElement} style={{width: "779px", height: "985px"}} src="./stories/fake_OPE.html"/>
             </div>
             {!!anchorElement &&
                 <IframeWithLocations iframe={anchorElement} />
