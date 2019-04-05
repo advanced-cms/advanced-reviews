@@ -5,6 +5,7 @@ import { IReviewComponentStore, ReviewLocation } from "./reviewStore";
 interface IframeOverlayProps {
     iframe: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
+    reviewLocationCreated(location: ReviewLocation): void;
 }
 
 const getClosest = (element, selector) => {
@@ -61,6 +62,10 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
     }
 
     scroll(e) {
+        if (this.overlayDocumentRef.current !== e.target) {
+            return;
+        }
+
         const previewContainer = this.props.iframe.parentNode as HTMLElement;
         previewContainer.scrollTop = e.srcElement.scrollTop;
     }
@@ -80,9 +85,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             propertyName: propertyElement ? propertyElement.dataset.epiPropertyName : null,
             isDone: false
         });
-        this.props.reviewStore.addUnsavedReviewLocation(reviewLocation);
-        //TODO: show dialog right after adding a review location
-        //this.props.reviewStore.dialog.showDialog(reviewLocation);
+        this.props.reviewLocationCreated(reviewLocation);
     }
 
     render() {

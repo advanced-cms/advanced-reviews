@@ -1,5 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { distanceInWordsToNow, format } from "date-fns";
+import { ReviewDialogState } from "./dialog/reviewEditorDialog";
 
 /**
  * Represents a comment added by user
@@ -142,76 +143,8 @@ export enum Priority {
     Trivial = "Trivial"
 }
 
-/**
- * State of the edit review location dialog
- */
-interface IDialogState {
-    /**
-     * New comment textarea value
-     */
-    currentCommentText: string;
-
-    /**
-     * Currently edited `isDone` state
-     */
-    currentIsDone: boolean;
-    currentScreenshot: null;
-    currentPriority: Priority;
-    isScreenshotMode: boolean;
-    // isDialogOpen: boolean;
-
-    /**
-     * Currently edited location
-     */
-    currentEditLocation?: ReviewLocation;
-
-    /**
-     * Check if the form is dirty
-     */
-    canSave: boolean;
-
-    showDialog(location: ReviewLocation): void;
-}
-
-class DialogState implements IDialogState {
-    @observable isScreenshotMode = false;
-    @observable currentEditLocation?= new ReviewLocation(null, {});
-    @observable currentScreenshot = null;
-    @observable currentCommentText = "";
-    @observable currentIsDone = false;
-    @observable currentPriority = Priority.Normal;
-    // @observable isDialogOpen = false;
-
-    @observable private initialDoneChecked = false;
-    @observable private initialPriority = Priority.Normal;
-
-    @computed
-    get canSave(): boolean {
-        return this.currentCommentText.trim() !== "" ||
-            this.currentIsDone !== this.initialDoneChecked ||
-            this.currentPriority !== this.initialPriority;
-    }
-
-    @action.bound
-    showDialog(location: ReviewLocation): void {
-        // this.isDialogOpen = true;
-        this.currentCommentText = "";
-        this.currentScreenshot = null;
-        this.currentIsDone = location.isDone;
-        this.currentPriority = location.priority;
-        this.initialDoneChecked = location.isDone;
-        this.initialPriority = location.priority;
-
-        location.updateCurrentUserLastRead();
-
-        this.currentEditLocation = location;
-    }
-}
-
 export interface IReviewComponentStore {
     reviewLocations: ReviewLocation[];
-
-    readonly dialog: IDialogState;
 
     /**
      * Currently logged user.
@@ -219,15 +152,11 @@ export interface IReviewComponentStore {
      */
     currentUser: string;
 
-    currentItemIndex: number;
-
-    saveDialog(): Promise<ReviewLocation>;
+    save(state: ReviewDialogState, reviewLocation: ReviewLocation): Promise<ReviewLocation>;
 
     load(): void;
 
     getUserAvatarUrl(userName: string): string;
-
-    addUnsavedReviewLocation(ReviewLocation): void;
 
     filteredReviewLocations: ReviewLocation[];
 
@@ -241,8 +170,7 @@ class ReviewCollectionFilter {
 }
 
 class ReviewComponentStore implements IReviewComponentStore {
-    @observable reviewLocations = [];
-    @observable dialog = new DialogState();
+    @observable reviewLocations: ReviewLocation[] = [];
 
     filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 
@@ -254,16 +182,6 @@ class ReviewComponentStore implements IReviewComponentStore {
     constructor(advancedReviewService: AdvancedReviewService) {
         this._advancedReviewService = advancedReviewService;
     }
-
-    _temporaryIdPrefix = "temp";
-
-    _getTemporaryId = () => {
-        return this._temporaryIdPrefix + Math.floor(Math.random() * 100000);
-    };
-
-    _ensureValidId = (id: string) => {
-        return id.startsWith(this._temporaryIdPrefix) ? null : id;
-    };
 
     @action.bound
     load(): void {
@@ -316,31 +234,19 @@ class ReviewComponentStore implements IReviewComponentStore {
         return result;
     }
 
-    addUnsavedReviewLocation(reviewLocation: ReviewLocation): void {
-        reviewLocation.id = this._getTemporaryId();
-        this.reviewLocations.push(reviewLocation)
-    }
-
     //TODO: convert to async method
     @action.bound
-    saveDialog(): Promise<ReviewLocation> {
-        const editedReview = this.dialog.currentEditLocation;
-
-        editedReview.isDone = this.dialog.currentIsDone;
-        editedReview.priority = this.dialog.currentPriority;
+    save(item: ReviewDialogState, editedReview: ReviewLocation): Promise<ReviewLocation> {
+        editedReview.isDone = item.currentIsDone;
+        editedReview.priority = item.currentPriority;
         editedReview.clearLastUsersRead();
-        const comment = Comment.create(this.currentUser, this.dialog.currentCommentText, null, this.dialog.currentScreenshot);
+        const comment = Comment.create(this.currentUser, item.currentCommentText, null, item.currentScreenshot);
         if (editedReview.firstComment.date) {
             editedReview.comments.push(comment);
         } else {
             editedReview.firstComment = comment;
         }
-        this.dialog.currentEditLocation = new ReviewLocation(this, {});
         return this.saveLocation(editedReview);
-    }
-
-    @computed get currentItemIndex(): number {
-        return this.reviewLocations.indexOf(this.dialog.currentEditLocation);
     }
 
     @action getUserAvatarUrl(userName: string): string {
@@ -367,9 +273,10 @@ class ReviewComponentStore implements IReviewComponentStore {
                     screenshot: reviewLocation.firstComment.screenshot,
                     text: reviewLocation.firstComment.text
                 }
-            }
-            this._advancedReviewService.add(this._ensureValidId(reviewLocation.id), data).then((result) => {
+            };
+            this._advancedReviewService.add(reviewLocation.id, data).then((result) => {
                 reviewLocation.id = result.id;
+                this.reviewLocations.push(reviewLocation);
                 resolve(reviewLocation);
             }).otherwise((e) => {
                 reject(e);
