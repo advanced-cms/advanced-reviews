@@ -1,7 +1,7 @@
 import React from "react";
 import { reaction, IReactionDisposer } from "mobx";
 import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, Priority } from "../reviewStore";
+import { IReviewComponentStore, Priority, ReviewLocation } from "../reviewStore";
 import priorityIconMappings from '../priorityIconMappings';
 import { ContextMenu } from "../common/context-menu";
 
@@ -27,25 +27,42 @@ interface ReviewDialogProps {
     iframe?: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
     resources?: ReviewResorces;
-    isDialogOpen: boolean;
+    currentEditLocation: ReviewLocation;
+
     onPrevClick(): void;
     onNextClick(): void;
-    onCloseDialog(action: string): void;
+    onCloseDialog(action: string, state: ReviewDialogState): void;
+}
+
+export interface ReviewDialogState {
+    currentCommentText: string;
+    currentIsDone: boolean;
+    currentScreenshot: null;
+    currentPriority: Priority;
+    isScreenshotMode: boolean;
 }
 
 @inject("reviewStore")
 @inject("resources")
 @observer
-export default class ReviewDialog extends React.Component<ReviewDialogProps, any> {
+export default class ReviewDialog extends React.Component<ReviewDialogProps, ReviewDialogState> {
     commentsChangedReaction: IReactionDisposer;
 
     constructor(props: ReviewDialogProps) {
         super(props);
+        this.state = {
+            currentIsDone: this.props.currentEditLocation.isDone,
+            currentPriority: this.props.currentEditLocation.priority,
+            currentCommentText: "",
+            currentScreenshot: null,
+            isScreenshotMode: false
+        };
+
         this.commentsChangedReaction = reaction(
             () => {
                 //uncomment the below code to see the trigger message
                 //return state.messages.map((a) => a)
-                return this.props.reviewStore!.dialog.currentEditLocation.comments.slice();
+                return this.props.currentEditLocation.comments.slice();
             },
             () => {
                 this.scrollToBottom();
@@ -57,16 +74,12 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
         this.commentsChangedReaction();
     }
 
-    static defaultProps = {
-        isDialogOpen: false
-    };
-
     messagesEnd: HTMLDivElement;
 
     scrollToBottom = () => {
         setTimeout(() => {
             if (this.messagesEnd !== null) {
-                this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+                this.messagesEnd.scrollIntoView({behavior: "smooth"});
             }
         }, 0);
     };
@@ -76,75 +89,85 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
     }
 
     render() {
-        const { dialog } = this.props.reviewStore!;
+        this.props.currentEditLocation.updateCurrentUserLastRead();
+        const {reviewLocations} = this.props.reviewStore!;
         const res = this.props.resources!;
 
         const customAttribute = {
-            title: dialog.currentIsDone ? res.dialog.taskdone: res.dialog.tasknotdone
+            title: this.state.currentIsDone ? res.dialog.taskdone : res.dialog.tasknotdone
         };
-        
+
         const options = Object.keys(Priority).map(priority => {
             return {
                 name: priority,
                 icon: priorityIconMappings[priority],
                 onSelected: () => {
-                    dialog.currentPriority = Priority[priority];
+                    this.setState({currentPriority: Priority[priority]});
                 }
             };
         });
 
+        const canSave =
+            this.state.currentCommentText.trim() !== "" ||
+            this.state.currentIsDone !== this.props.currentEditLocation.isDone ||
+            this.state.currentPriority !== this.props.currentEditLocation.priority;
+
         return (
             <Dialog
                 className="review-dialog"
-                open={this.props.isDialogOpen}
+                open={true}
                 scrimClickAction=""
                 escapeKeyAction=""
                 onOpen={() => this.onDialogOpen()}
-                onClose={this.props.onCloseDialog}
+                onClose={(action) => this.props.onCloseDialog(action, this.state)}
             >
                 <DialogTitle>
-                    {!dialog.isScreenshotMode && <>{dialog.currentEditLocation.propertyName}</>}
-                    {dialog.isScreenshotMode && <>Crop and highlight the area you want to comment:</>}
+                    {!this.state.isScreenshotMode && <>{this.props.currentEditLocation.propertyName}</>}
+                    {this.state.isScreenshotMode && <>Crop and highlight the area you want to comment:</>}
                 </DialogTitle>
                 <DialogContent>
-                    {!dialog.isScreenshotMode && (
+                    {!this.state.isScreenshotMode && (
                         <Grid className="dialog-grid">
                             <Row>
                                 <Cell columns={8} className="review-actions left-align">
-                                    <PageNavigator
-                                        reviewLocation={dialog.currentEditLocation}
-                                        onPrevClick={this.props.onPrevClick}
-                                        onNextClick={this.props.onNextClick}
-                                    />
+                                    {reviewLocations.indexOf(this.props.currentEditLocation) !== -1 &&
+                                        <PageNavigator
+                                            canSave={canSave}
+                                            currentItemIndex={reviewLocations.indexOf(this.props.currentEditLocation)}
+                                            reviewLocation={this.props.currentEditLocation}
+                                            onPrevClick={this.props.onPrevClick}
+                                            onNextClick={this.props.onNextClick}
+                                        />
+                                    }
                                 </Cell>
                                 <Cell columns={4} className="review-actions">
                                     <Checkbox
                                         nativeControlId="my-checkbox"
                                         {...customAttribute}
-                                        checked={dialog.currentIsDone}
-                                        onChange={e => (dialog.currentIsDone = e.target.checked)}
+                                        checked={this.state.currentIsDone}
+                                        onChange={e => (this.setState({currentIsDone: e.target.checked}))}
                                     />
                                     <ContextMenu
-                                        icon={priorityIconMappings[dialog.currentPriority]}
-                                        title={dialog.currentPriority}
+                                        icon={priorityIconMappings[this.state.currentPriority]}
+                                        title={this.state.currentPriority}
                                         menuItems={options}
                                     />
                                 </Cell>
                             </Row>
                             <Row>
                                 <Cell columns={12}>
-                                    <strong>{dialog.currentEditLocation.firstComment.text}</strong>
-                                    {dialog.currentEditLocation.firstComment.screenshot && (
+                                    <strong>{this.props.currentEditLocation.firstComment.text}</strong>
+                                    {this.props.currentEditLocation.firstComment.screenshot && (
                                         <DropDownMenu icon="image">
-                                            <img src={dialog.currentEditLocation.firstComment.screenshot} />
+                                            <img src={this.props.currentEditLocation.firstComment.screenshot}/>
                                         </DropDownMenu>
                                     )}
                                 </Cell>
                             </Row>
                             <Row>
                                 <Cell columns={12} className="comments-list">
-                                    {dialog.currentEditLocation.comments.map((comment, idx) => (
-                                        <Comment key={idx} comment={comment} />
+                                    {this.props.currentEditLocation.comments.map((comment, idx) => (
+                                        <Comment key={idx} comment={comment}/>
                                     ))}
                                     <div
                                         style={{ float: "left", clear: "both" }}
@@ -158,8 +181,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                                 <Cell columns={12}>
                                     <TextField label="Add comment..." dense textarea>
                                         <Input
-                                            value={dialog.currentCommentText}
-                                            onChange={e => (dialog.currentCommentText = e.currentTarget.value)}
+                                            value={this.state.currentCommentText}
+                                            onChange={e => (this.setState({currentCommentText: e.currentTarget.value}))}
                                         />
                                     </TextField>
                                 </Cell>
@@ -167,19 +190,19 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, any
                         </Grid>
                     )}
                     <ScreenshotPicker
-                        current={dialog.currentScreenshot}
+                        current={this.state.currentScreenshot}
                         iframe={this.props.iframe}
-                        onImageSelected={output => (dialog.currentScreenshot = output)}
-                        toggle={() => (dialog.isScreenshotMode = !dialog.isScreenshotMode)}
+                        onImageSelected={output => (this.setState({currentScreenshot: output}))}
+                        toggle={() => (this.setState({isScreenshotMode: !this.state.isScreenshotMode}))}
                     />
                 </DialogContent>
                 <DialogFooter>
-                    {!dialog.isScreenshotMode && (
+                    {!this.state.isScreenshotMode && (
                         <>
                             <DialogButton dense action="cancel">
                                 {res.dialog.close}
                             </DialogButton>
-                            <DialogButton raised dense action="save" isDefault disabled={!dialog.canSave}>
+                            <DialogButton raised dense action="save" isDefault disabled={!canSave}>
                                 {res.dialog.save}
                             </DialogButton>
                         </>
