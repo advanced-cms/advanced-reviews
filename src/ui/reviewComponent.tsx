@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import ReviewLocationsCollection from "./reviewLocationsCollection";
-import IframeOverlay from "./iframeOverlay";
+import IframeWithLocations from "./IframeWithLocations";
 import { createStores } from "./reviewStore";
 import resources from './stories/resources.json';
 import { Provider } from "mobx-react";
@@ -15,6 +14,7 @@ stores.resources = resources;
 
 function Component() {
     const [text, setText] = useState("Lina");
+    const [currentLocation, setCurrentLocation] = useState(null);
 
     useEffect(() => {
         stores.reviewStore.currentUser = text;
@@ -24,9 +24,7 @@ function Component() {
 
     return (
         <div>
-            <IframeOverlay iframe={iframe}>
-                <ReviewLocationsCollection iframe={iframe} />
-            </IframeOverlay>
+            <IframeWithLocations iframe={iframe} />
             <div className="user-picker">
                 <TextField label="Current user" dense>
                     <Input value={text} onChange={e => setText(e.currentTarget.value)} />

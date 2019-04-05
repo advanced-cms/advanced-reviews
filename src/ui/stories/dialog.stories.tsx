@@ -58,39 +58,34 @@ function createEmptyLocation(): ReviewLocation {
 stores.reviewStore.reviewLocations = [
   reviewLocation1
 ];
-stores.reviewStore.dialog.currentEditLocation = reviewLocation1;
 
 const firstArg = decorate([args => args.slice(0, 1)]);
 
 storiesOf('Dialog', module)
   .add('default', () => {
     stores.reviewStore.reviewLocations = [reviewLocation1];
-    stores.reviewStore.dialog.currentEditLocation = reviewLocation1;
     return <Provider {...stores}>
-      <ReviewDialog isDialogOpen onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <ReviewDialog currentEditLocation={reviewLocation1} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   })
   .add('with two comments', () => {
     stores.reviewStore.reviewLocations = [reviewLocation1, reviewLocation2];
-    stores.reviewStore.dialog.currentEditLocation = reviewLocation1;
     return <Provider {...stores}>
-      <ReviewDialog isDialogOpen onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <ReviewDialog currentEditLocation={reviewLocation1} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   })
   .add('with empty comment', () => {
     const location = createEmptyLocation();
     stores.reviewStore.reviewLocations = [location];
-    stores.reviewStore.dialog.currentEditLocation = location;
     return <Provider {...stores}>
-      <ReviewDialog isDialogOpen onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <ReviewDialog currentEditLocation={location} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   })
   .add('with long property name', () => {
     const location = createEmptyLocation();
     location.propertyName = "veryyyy long propertyyyyyyyyy nameeeeeeeeeeeeeeeeeeeeee";
     stores.reviewStore.reviewLocations = [location];
-    stores.reviewStore.dialog.currentEditLocation = location;
     return <Provider {...stores}>
-      <ReviewDialog isDialogOpen onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <ReviewDialog currentEditLocation={location} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   });
