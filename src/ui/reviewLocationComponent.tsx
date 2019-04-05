@@ -24,7 +24,7 @@ const ReviewLocationComponent: FunctionComponent<ReviewLocationComponentProps> =
     return <div style={style}
         onClick={props.showDialog}
         className={classNames("review-location", { "done": props.location.isDone, "new": props.location.isUpdatedReview })}>
-        <svg height="28" width="28" className="point">
+        <svg height="28" width="28">
             <title>{props.location.formattedFirstComment}</title>
             <circle cx="14" cy="14" r={circleSize} strokeWidth="2" fill="#c0c0c0" />
             <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontWeight="bold" fill="black"></text>

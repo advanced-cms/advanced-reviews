@@ -6,6 +6,11 @@
     font-size: 11px;
     cursor: pointer;
     user-select: none;
+    
+    &:hover {
+        -webkit-filter: drop-shadow( 0px 0px 7px #555);
+        filter: drop-shadow( 0px 0px 7px #555);       
+    }
 
     circle {
         fill: #F7542B;
@@ -22,12 +27,6 @@
         circle {
             fill: green;
         }
-    }
-
-    .point:hover {
-        -webkit-filter: drop-shadow( 0px 0px 7px #555);
-        filter: drop-shadow( 0px 0px 7px #555);
-        
     }
 
     .priority-icon {
