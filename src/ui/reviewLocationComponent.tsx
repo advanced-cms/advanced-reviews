@@ -23,17 +23,12 @@ const ReviewLocationComponent: FunctionComponent<ReviewLocationComponentProps> =
 
     return <div style={style}
         onClick={props.showDialog}
-        className={classNames("reviewLocation", { "done": props.location.isDone, "new": props.location.isUpdatedReview })}>
-        <svg height="28" width="28" className="point">
+        className={classNames("review-location", { "done": props.location.isDone, "new": props.location.isUpdatedReview })}>
+        <svg height="28" width="28">
             <title>{props.location.formattedFirstComment}</title>
             <circle cx="14" cy="14" r={circleSize} strokeWidth="2" fill="#c0c0c0" />
-            <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontWeight="bold" fill="black">{props.location.id}</text>
+            <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontWeight="bold" fill="black"></text>
         </svg>
-        {props.location.isUpdatedReview &&
-            <svg height="14" width="14" className="updated-flag">
-                <circle cx="7" cy="7" r="7" fill="#F7542B" />
-            </svg>
-        }
         {props.location.priority !== Priority.Normal &&
             <MaterialIcon className="priority-icon" icon={priorityIconMappings[location.priority]} title={location.priority} />
         }
