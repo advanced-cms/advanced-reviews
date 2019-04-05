@@ -85,7 +85,6 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             propertyName: propertyElement ? propertyElement.dataset.epiPropertyName : null,
             isDone: false
         });
-        this.props.reviewStore.addUnsavedReviewLocation(reviewLocation);
         this.props.reviewLocationCreated(reviewLocation);
     }
 
