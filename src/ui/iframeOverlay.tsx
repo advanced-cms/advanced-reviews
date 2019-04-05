@@ -62,6 +62,10 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
     }
 
     scroll(e) {
+        if (this.overlayDocumentRef.current !== e.target) {
+            return;
+        }
+
         const previewContainer = this.props.iframe.parentNode as HTMLElement;
         previewContainer.scrollTop = e.srcElement.scrollTop;
     }
