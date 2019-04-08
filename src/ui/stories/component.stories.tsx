@@ -8,7 +8,6 @@ import IframeWithLocations from "../IframeWithLocations";
 import FakeAdvancedReviewService from "./FakeAdvancedReviewService";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
-stores.reviewStore.load();
 
 function Component() {
     const [text, setText] = useState("Lina");
@@ -20,8 +19,8 @@ function Component() {
 
     return (
         <div>
-            <div id="iframeWrapper" style={{width: "800px", height: "800px", position: "absolute", "top": "0", overflowY: "scroll", overflowX: "auto"}}>
-                <iframe id="iframe" ref={setAnchorElement} style={{width: "779px", height: "985px"}} src="./stories/fake_OPE.html"/>
+            <div id="iframeWrapper" style={{width: "100%", height: "800px", position: "absolute", "top": "0", overflowY: "scroll", overflowX: "auto"}}>
+                <iframe id="iframe" ref={setAnchorElement} style={{width: "100%", height: "985px"}} src="./stories/fake_OPE.html"/>
             </div>
             {!!anchorElement &&
                 <IframeWithLocations iframe={anchorElement} />
@@ -35,8 +34,14 @@ function Component() {
     );
 }
 
-storiesOf("Dojo component", module).add("default", () => (
-    <Provider {...stores}>
+storiesOf("Dojo component", module).add("default", () => {
+    stores.reviewStore.load();
+    return <Provider {...stores}>
         <Component />
     </Provider>
-));
+}).add("Empty list", () => {
+    stores.reviewStore.reviewLocations = [];
+    return (<Provider {...stores}>
+        <Component />
+    </Provider>)
+});
