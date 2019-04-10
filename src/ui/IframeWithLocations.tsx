@@ -77,7 +77,7 @@ export default class IFrameWithLocations extends React.Component<IframeWithLocat
 
     render() {
         return (<IframeOverlay iframe={this.props.iframe} reviewLocationCreated={(location) => this.setState({ currentLocation: location })}>
-            <ReviewLocationsCollection onLocationClick={this.showDialog.bind(this)} />
+            <ReviewLocationsCollection currentLocation={this.state.currentLocation} onLocationClick={this.showDialog.bind(this)} />
             {this.props.reviewStore!.reviewLocations.length === 0 &&
                 <Snackbar
                     timeoutMs={10000}

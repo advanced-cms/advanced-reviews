@@ -6,7 +6,8 @@ import ReviewLocationComponent from './reviewLocationComponent';
 
 interface ReviewLocationCollectionProps {
   onLocationClick(reviewLocation: ReviewLocation): void;
-  reviewStore?: IReviewComponentStore
+  reviewStore?: IReviewComponentStore;
+  currentLocation: ReviewLocation;
 }
 
 @inject('reviewStore')
@@ -20,11 +21,16 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
 
   render() {
     const { filteredReviewLocations, filter } = this.props.reviewStore!;
+    const locations = [...filteredReviewLocations];
+
+    if (this.props.currentLocation && !locations.some(location => location === this.props.currentLocation)) {
+        locations.push(this.props.currentLocation);
+    }
 
     return (
       <div>
         {filter.showPoints &&
-         filteredReviewLocations.map(location =>
+         locations.map(location =>
           <ReviewLocationComponent key={location.id} location={location} showDialog={(e) => this.onLocationClick(e, location)} />
         )}
       </div>)
