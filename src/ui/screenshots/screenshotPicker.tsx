@@ -16,13 +16,15 @@ interface ScreenshotPickerProps {
     iframe: HTMLIFrameElement;
     onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
+    maxWidth: number;
+    maxHeight: number;
 }
 
 interface ScreenshotPickerState {
     crop: Crop;
     pixelCrop: PixelCrop;
     input: string;
-    drawerInput: string;
+    drawerInput: ResizeResult;
 }
 
 enum Mode {
@@ -30,6 +32,45 @@ enum Mode {
     Crop,
     Highlight,
     Preview
+}
+
+interface ResizeResult {
+    image: string;
+    width: number;
+    height: number;
+}
+
+function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise<ResizeResult> {
+    return new Promise(resolve => {
+        var img = new Image();
+        img.src = base64Str;
+        img.onload = function() {
+            var canvas = document.createElement("canvas");
+            var width = img.width;
+            var height = img.height;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve({
+                image: canvas.toDataURL(),
+                width: width,
+                height: height
+            });
+        };
+    });
 }
 
 export default class ScreenshotPicker extends React.Component<ScreenshotPickerProps, ScreenshotPickerState> {
@@ -83,13 +124,14 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
         this.props.toggle();
     };
 
-    crop = () => {
+    crop = async () => {
         if (!this.state.pixelCrop) {
             return;
         }
 
         const croppedImg = this.getCroppedImg(this.imageRef, this.state.pixelCrop);
-        this.setState({ crop: this.defaultCrop, input: null, drawerInput: croppedImg });
+        const resizedImage = await resize(croppedImg, this.props.maxWidth, this.props.maxHeight);
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: resizedImage });
     };
 
     getCroppedImg(image, pixelCrop) {
@@ -165,9 +207,9 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                 )}
                 {this.mode === Mode.Highlight && (
                     <DrawablePreview
-                        src={this.state.drawerInput}
-                        width={this.state.pixelCrop.width}
-                        height={this.state.pixelCrop.height}
+                        src={this.state.drawerInput.image}
+                        width={this.state.drawerInput.width}
+                        height={this.state.drawerInput.height}
                         onApplyDrawing={this.onApplyDrawing}
                     />
                 )}
