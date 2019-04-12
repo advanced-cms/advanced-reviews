@@ -190,6 +190,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                         </Grid>
                     )}
                     <ScreenshotPicker
+                        maxWidth={500}
+                        maxHeight={300}
                         current={this.state.currentScreenshot}
                         iframe={this.props.iframe}
                         onImageSelected={output => (this.setState({currentScreenshot: output}))}
