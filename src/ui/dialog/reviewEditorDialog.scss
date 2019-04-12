@@ -38,4 +38,10 @@
         max-height: 390px;
         overflow-y: auto;
     }
+
+    &.new {
+        .dialog-grid {
+            height: 200px;
+        }   
+    }
 }
