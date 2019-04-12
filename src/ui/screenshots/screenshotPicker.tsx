@@ -10,6 +10,7 @@ import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import "@material/react-icon-button/index.scss";
 import "./screenshotPicker.scss";
+import { DropDownMenu } from "../common/drop-down-menu";
 
 interface ScreenshotPickerProps {
     current: string;
@@ -180,13 +181,17 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
             <div className="screenshot-picker">
                 {this.mode === Mode.Preview && (
                     <>
-                        <img alt="" style={{ maxWidth: "100%" }} src={this.props.current} />
+                        {this.props.current && (
+                            <DropDownMenu icon="image">
+                                <img src={this.props.current} />
+                            </DropDownMenu>
+                        )}
                         <IconButton onClick={this.remove} title="Remove screenshot">
                             <MaterialIcon icon="remove" />
                         </IconButton>
                     </>
                 )}
-                {this.mode === Mode.Default && <Button onClick={this.takeScreenshot}>Attach screenshot</Button>}
+                {this.mode === Mode.Default && <IconButton onClick={this.takeScreenshot}><MaterialIcon icon="image" /></IconButton>}
                 {this.mode === Mode.Crop && (
                     <>
                         <ReactCrop
