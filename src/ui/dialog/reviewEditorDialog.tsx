@@ -1,6 +1,7 @@
 import React from "react";
 import { reaction, IReactionDisposer } from "mobx";
 import { observer, inject } from "mobx-react";
+import classNames from "classnames";
 import { IReviewComponentStore, Priority, ReviewLocation } from "../reviewStore";
 import priorityIconMappings from '../priorityIconMappings';
 import { ContextMenu } from "../common/context-menu";
@@ -48,6 +49,8 @@ export interface ReviewDialogState {
 export default class ReviewDialog extends React.Component<ReviewDialogProps, ReviewDialogState> {
     commentsChangedReaction: IReactionDisposer;
 
+    commentInput: any;
+
     constructor(props: ReviewDialogProps) {
         super(props);
         this.state = {
@@ -78,8 +81,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
 
     scrollToBottom = () => {
         setTimeout(() => {
+            this.commentInput.inputElement.focus();
             if (this.messagesEnd !== null) {
-                this.messagesEnd.scrollIntoView({behavior: "smooth"});
+                this.messagesEnd.scrollIntoView({ behavior: "smooth" });
             }
         }, 0);
     };
@@ -90,7 +94,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
 
     render() {
         this.props.currentEditLocation.updateCurrentUserLastRead();
-        const {reviewLocations} = this.props.reviewStore!;
+        const { reviewLocations } = this.props.reviewStore!;
         const res = this.props.resources!;
 
         const customAttribute = {
@@ -102,19 +106,23 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                 name: priority,
                 icon: priorityIconMappings[priority],
                 onSelected: () => {
-                    this.setState({currentPriority: Priority[priority]});
+                    this.setState({ currentPriority: Priority[priority] });
                 }
             };
         });
 
-        const canSave =
-            this.state.currentCommentText.trim() !== "" ||
-            this.state.currentIsDone !== this.props.currentEditLocation.isDone ||
-            this.state.currentPriority !== this.props.currentEditLocation.priority;
+        const isNew: boolean = reviewLocations.indexOf(this.props.currentEditLocation) === -1;
+
+        const canSave: boolean =
+            (isNew && this.state.currentCommentText.trim() !== "") ||
+            (!isNew && (
+                this.state.currentCommentText.trim() !== "" ||
+                this.state.currentIsDone !== this.props.currentEditLocation.isDone ||
+                this.state.currentPriority !== this.props.currentEditLocation.priority));
 
         return (
             <Dialog
-                className="review-dialog"
+                className={classNames("review-dialog", { "new": isNew })}
                 open={true}
                 scrimClickAction=""
                 escapeKeyAction=""
@@ -130,7 +138,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                         <Grid className="dialog-grid">
                             <Row>
                                 <Cell columns={8} className="review-actions left-align">
-                                    {reviewLocations.indexOf(this.props.currentEditLocation) !== -1 &&
+                                    {!isNew &&
                                         <PageNavigator
                                             canSave={canSave}
                                             currentItemIndex={reviewLocations.indexOf(this.props.currentEditLocation)}
@@ -141,12 +149,14 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                                     }
                                 </Cell>
                                 <Cell columns={4} className="review-actions">
-                                    <Checkbox
-                                        nativeControlId="my-checkbox"
-                                        {...customAttribute}
-                                        checked={this.state.currentIsDone}
-                                        onChange={e => (this.setState({currentIsDone: e.target.checked}))}
-                                    />
+                                    {!isNew &&
+                                        <Checkbox
+                                            nativeControlId="my-checkbox"
+                                            {...customAttribute}
+                                            checked={this.state.currentIsDone}
+                                            onChange={e => (this.setState({ currentIsDone: e.target.checked }))}
+                                        />
+                                    }
                                     <ContextMenu
                                         icon={priorityIconMappings[this.state.currentPriority]}
                                         title={this.state.currentPriority}
@@ -159,7 +169,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                                     <strong>{this.props.currentEditLocation.firstComment.text}</strong>
                                     {this.props.currentEditLocation.firstComment.screenshot && (
                                         <DropDownMenu icon="image">
-                                            <img src={this.props.currentEditLocation.firstComment.screenshot}/>
+                                            <img src={this.props.currentEditLocation.firstComment.screenshot} />
                                         </DropDownMenu>
                                     )}
                                 </Cell>
@@ -167,7 +177,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                             <Row>
                                 <Cell columns={12} className="comments-list">
                                     {this.props.currentEditLocation.comments.map((comment, idx) => (
-                                        <Comment key={idx} comment={comment}/>
+                                        <Comment key={idx} comment={comment} />
                                     ))}
                                     <div
                                         style={{ float: "left", clear: "both" }}
@@ -179,10 +189,13 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                             </Row>
                             <Row>
                                 <Cell columns={12}>
-                                    <TextField label="Add comment..." dense textarea>
+                                    <TextField 
+                                        label={isNew ? "Describe the issue" : "Add comment..." }
+                                        dense textarea>
                                         <Input
+                                            ref={(input: any) => this.commentInput = input}
                                             value={this.state.currentCommentText}
-                                            onChange={e => (this.setState({currentCommentText: e.currentTarget.value}))}
+                                            onChange={e => (this.setState({ currentCommentText: e.currentTarget.value }))}
                                         />
                                     </TextField>
                                 </Cell>
@@ -194,8 +207,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                         maxHeight={300}
                         current={this.state.currentScreenshot}
                         iframe={this.props.iframe}
-                        onImageSelected={output => (this.setState({currentScreenshot: output}))}
-                        toggle={() => (this.setState({isScreenshotMode: !this.state.isScreenshotMode}))}
+                        onImageSelected={output => (this.setState({ currentScreenshot: output }))}
+                        toggle={() => (this.setState({ isScreenshotMode: !this.state.isScreenshotMode }))}
                     />
                 </DialogContent>
                 <DialogFooter>
