@@ -25,6 +25,8 @@ namespace AdvancedApprovalReviews
         /// <param name="contentLink">Version specific content reference</param>
         /// <returns>Serialized reviews</returns>
         IEnumerable<ReviewLocation> Load(ContentReference contentLink);
+
+        IEnumerable<ApprovalReview> LoadAll();
     }
 
     public class ReviewLocation

@@ -167,6 +167,9 @@
     <Compile Include="IdenticonGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AvatarsService\ReviewAvatarController.cs" />
+    <Compile Include="ReviewLocationsPreview.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbededLanguages\advancedapprovalreviews_EN.xml">
