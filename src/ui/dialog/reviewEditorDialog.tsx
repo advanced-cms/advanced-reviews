@@ -1,6 +1,7 @@
 import React from "react";
 import { reaction, IReactionDisposer } from "mobx";
 import { observer, inject } from "mobx-react";
+import classNames from "classnames";
 import { IReviewComponentStore, Priority, ReviewLocation } from "../reviewStore";
 import priorityIconMappings from '../priorityIconMappings';
 import { ContextMenu } from "../common/context-menu";
@@ -48,6 +49,8 @@ export interface ReviewDialogState {
 export default class ReviewDialog extends React.Component<ReviewDialogProps, ReviewDialogState> {
     commentsChangedReaction: IReactionDisposer;
 
+    commentInput: any;
+
     constructor(props: ReviewDialogProps) {
         super(props);
         this.state = {
@@ -78,6 +81,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
 
     scrollToBottom = () => {
         setTimeout(() => {
+            this.commentInput.inputElement.focus();
             if (this.messagesEnd !== null) {
                 this.messagesEnd.scrollIntoView({ behavior: "smooth" });
             }
@@ -118,7 +122,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
 
         return (
             <Dialog
-                className="review-dialog"
+                className={classNames("review-dialog", { "new": isNew })}
                 open={true}
                 scrimClickAction=""
                 escapeKeyAction=""
@@ -185,8 +189,11 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                             </Row>
                             <Row>
                                 <Cell columns={12}>
-                                    <TextField label="Add comment..." dense textarea>
+                                    <TextField 
+                                        label={isNew ? "Describe the issue" : "Add comment..." }
+                                        dense textarea>
                                         <Input
+                                            ref={(input: any) => this.commentInput = input}
                                             value={this.state.currentCommentText}
                                             onChange={e => (this.setState({ currentCommentText: e.currentTarget.value }))}
                                         />
