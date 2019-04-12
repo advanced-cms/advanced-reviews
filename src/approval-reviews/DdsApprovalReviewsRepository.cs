@@ -59,6 +59,11 @@ namespace AdvancedApprovalReviews
             }
         }
 
+        public IEnumerable<ApprovalReview> LoadAll()
+        {
+            return GetStore().Items<ApprovalReview>();
+        }
+
         public ReviewLocation Update(ContentReference contentLink, ReviewLocation reviewLocation)
         {
             var data = reviewLocation.Data;

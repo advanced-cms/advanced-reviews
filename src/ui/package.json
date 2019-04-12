@@ -10,7 +10,8 @@
     "storybook": "start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
     "generate-resource-definitions": "node ./tools/resourceGenerator.js",
-    "generate-resource-definitions-debug": "node --nolazy --inspect-brk=9229 ./tools/resourceGenerator.js"
+    "generate-resource-definitions-debug": "node --nolazy --inspect-brk=9229 ./tools/resourceGenerator.js",
+    "build-admin-plugin": "webpack --config admin/webpack.admin.config.js --mode development"
   },
   "author": "Episerver AB",
   "license": "ISC",

@@ -28,4 +28,5 @@ node_modules/
 
 reviewComponent.bundle.js
 src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/1.0.0/Scripts/ReviewWidget.js
+src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/Views/admin/adminPlugin.js
 dist/
