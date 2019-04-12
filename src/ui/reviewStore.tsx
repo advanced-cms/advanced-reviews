@@ -11,6 +11,12 @@ export class Comment {
     date: Date;
     screenshot: string;
 
+    store: IReviewComponentStore;
+
+    constructor(store?: IReviewComponentStore) {
+        this.store = store;
+    }
+
     @computed get formattedDate() {
         if (!this.date) {
             return "";
@@ -22,7 +28,13 @@ export class Comment {
         if (!this.date) {
             return "";
         }
-        return distanceInWordsToNow(this.date, { addSuffix: true });
+
+        const options: any = { addSuffix: true };
+        if (this.store && this.store.currentLocale) {
+            options.locale = require(`date-fns/locale/${this.store.currentLocale}/index.js`)
+        }
+
+        return distanceInWordsToNow(this.date, options);
     }
 
     static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
@@ -50,7 +62,7 @@ export class ReviewLocation {
     /**
      * FirstComment is a main comment added when saving review location for the first time
      */
-    @observable firstComment: Comment = new Comment();
+    @observable firstComment: Comment;
 
     @computed get formattedFirstComment(): string {
         if (!this.firstComment.date) {
@@ -81,6 +93,7 @@ export class ReviewLocation {
 
     constructor(rootStore: IReviewComponentStore, point: any) {
         this._rootStore = rootStore;
+        this.firstComment = new Comment(this._rootStore);
         Object.keys(point).forEach((key) => this[key] = point[key]);
     }
 
@@ -152,6 +165,8 @@ export interface IReviewComponentStore {
      */
     currentUser: string;
 
+    currentLocale: any;
+
     save(state: ReviewDialogState, reviewLocation: ReviewLocation): Promise<ReviewLocation>;
 
     load(): void;
@@ -177,21 +192,22 @@ class ReviewComponentStore implements IReviewComponentStore {
     //TODO: read user from identity
     currentUser = "Lina";
 
+    currentLocale = "en";
+
     _advancedReviewService: any;
 
     constructor(advancedReviewService: AdvancedReviewService) {
         this._advancedReviewService = advancedReviewService;
     }
 
+    private parseComment(json: any): Comment {
+        const comment = json ? Comment.create(json.author, json.text, json.date, json.screenshot) : Comment.create("", "");
+        comment.store = this;
+        return comment;
+    }
+
     @action.bound
     load(): void {
-        function parseComment(json): Comment {
-            if (!json) {
-                return Comment.create("", "");
-            }
-            return Comment.create(json.author, json.text, json.date, json.screenshot);
-        }
-
         this._advancedReviewService.load()
             .then(reviewLocations => {
                 this.reviewLocations = reviewLocations
@@ -216,8 +232,8 @@ class ReviewComponentStore implements IReviewComponentStore {
                             positionY: x.data.positionY,
                             propertyName: x.data.propertyName,
                             isDone: x.data.isDone,
-                            firstComment: parseComment(x.data.firstComment),
-                            comments: (x.data.comments || []).map(parseComment)
+                            firstComment: this.parseComment(x.data.firstComment),
+                            comments: (x.data.comments || []).map(x => this.parseComment(x))
                         })
                     });
             });
