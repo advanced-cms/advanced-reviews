@@ -397,6 +397,7 @@
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\initializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\onPageEditingInitializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\ShowReviewCommand.js" />
+    <Content Include="modules\_protected\alloy.Reviews\Views\admin\ReviewLocationPreview.aspx" />
     <Content Include="modules\_protected\EPiServer.Search.Cms\IndexContent.aspx" />
     <Content Include="Resources\LanguageFiles\Display.xml" />
     <Content Include="Resources\LanguageFiles\ContentTypeNames.xml">
