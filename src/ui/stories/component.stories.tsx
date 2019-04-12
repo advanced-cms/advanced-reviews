@@ -9,12 +9,13 @@ import FakeAdvancedReviewService from "./FakeAdvancedReviewService";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
 
-function Component() {
+function Component( {initialLocale = "en"} ) {
     const [text, setText] = useState("Lina");
     const [anchorElement, setAnchorElement] = useState(null);
 
     useEffect(() => {
         stores.reviewStore.currentUser = text;
+        stores.reviewStore.currentLocale = initialLocale;
     });
 
     return (
@@ -43,5 +44,10 @@ storiesOf("Dojo component", module).add("default", () => {
     stores.reviewStore.reviewLocations = [];
     return (<Provider {...stores}>
         <Component />
+    </Provider>)
+}).add("Swedish locale", () => {
+    stores.reviewStore.load();
+    return (<Provider {...stores}>
+        <Component initialLocale="sv" />
     </Provider>)
 });
