@@ -29,6 +29,15 @@
 
         .reviews-list .list > li { margin-bottom: 15px; }
 
+        .reviews-list .delete {
+            display: none;
+            float: right;
+        }
+
+        .reviews-list .list .row:hover .delete {
+            display: inline-block;
+        }
+
         .reviews-list .details {
             padding-left: 10px;
         }
@@ -41,6 +50,13 @@
 
     <script type="text/javascript">
         var allReviewLocations = <%= this.AllReviewLocations %>;
+
+        function onDeleteClick(contentLink) {
+            if (confirm("Delete " + contentLink + "?")) {
+                <%= ClientScript.GetPostBackEventReference(this, string.Empty) %>;
+                __doPostBack("delete_review", contentLink);
+            }
+        }
     </script>
 
     <div id="admin-plugin-container"></div>
