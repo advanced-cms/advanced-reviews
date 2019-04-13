@@ -189,8 +189,7 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 
-    //TODO: read user from identity
-    currentUser = "Lina";
+    currentUser = "";
 
     currentLocale = "en";
 
