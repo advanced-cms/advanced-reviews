@@ -6,7 +6,8 @@ define([
     "epi/shell/store/Throttle",
     "epi/_Module",
     "alloy-review/commandsProvider",
-    "alloy-review/onPageEditingInitializer"
+    "alloy-review/onPageEditingInitializer",
+    "alloy-review/rejectChangesInitializer"
 ], function (
     declare,
     dependency,
@@ -15,8 +16,8 @@ define([
     Throttle,
     _Module,
     CommandsProvider,
-    onPageEditingInitializer
-
+    onPageEditingInitializer,
+    rejectChangesInitializer
 ) {
     return declare([_Module], {
         initialize: function () {
@@ -41,6 +42,7 @@ define([
             commandregistry.registerProvider(area, commandsProvider);
 
             onPageEditingInitializer.initialize();
+            rejectChangesInitializer.initialize();
         },
 
         _getRestPath: function (name) {
