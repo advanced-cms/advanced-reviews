@@ -2,13 +2,11 @@ define([
     "dojo/topic",
     "dojo/dom-class",
     "epi-cms/contentediting/OnPageEditing",
-    "epi-cms/_ContentContextMixin",
     "alloy-review/ReviewWidget"
 ], function (
     topic,
     domClass,
     OnPageEditing,
-    _ContentContextMixin,
     ReviewWidget) {
 
     var reviewWidget = null;
@@ -20,10 +18,6 @@ define([
     }
 
     function initialize() {
-        //
-        // postMixInProperties
-        //
-
         topic.subscribe("toggle:reviews", function (toggle) {
             if (!reviewWidget) {
                 var div = document.createElement("div");
@@ -49,7 +43,6 @@ define([
                 reviewWidget.destroy();
                 reviewWidget = null;
             }
-            reviewsVisible = false;
         };
     }
 
