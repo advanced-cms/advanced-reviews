@@ -18,11 +18,11 @@ define([
     }
 
     function initialize() {
-        topic.subscribe("toggle:reviews", function (toggle) {
+        topic.subscribe("toggle:reviews", function (toggle, language) {
             if (!reviewWidget) {
                 var div = document.createElement("div");
                 var iframe = document.getElementsByName("sitePreview")[0];
-                reviewWidget = new ReviewWidget({ iframe: iframe });
+                reviewWidget = new ReviewWidget({ iframe: iframe, language: language });
                 reviewWidget.placeAt(div);
                 var editLayoutContainer = document.getElementsByClassName("epi-editorViewport")[0];
                 editLayoutContainer.appendChild(div);

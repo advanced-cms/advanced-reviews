@@ -18,6 +18,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.own(this._reviewService);
         this.stores = createStores(this._reviewService, res);
         this.stores.reviewStore.load();
+        this.stores.reviewStore.currentLocale = this.language;
 
         ReactDOM.render(
             <Provider {...this.stores}>
