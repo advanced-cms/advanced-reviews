@@ -1,61 +1,120 @@
 import React from "react";
 import Button from "@material/react-button";
-import CanvasDraw from "react-canvas-draw";
-import mergeImages from "merge-images";
 
 interface DrawablePreviewProps {
     width: number;
     height: number;
-    src: string;
+    src?: string;
     onApplyDrawing: (string) => void;
+    onCancel: () => void;
 }
 
-export default class DrawablePreview extends React.Component<DrawablePreviewProps, any> {
+function drawImageOnCanvas(base64Image, canvas) {
+    if (!base64Image) {
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+    }
+
+    const img = new Image();
+    img.src = base64Image;
+    img.onload = function() {
+        const ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+    };
+}
+
+export default class MyDrawablePreview extends React.Component<DrawablePreviewProps, any> {
+    canvasRef: React.RefObject<HTMLCanvasElement>;
+
     constructor(props: any) {
         super(props);
+        this.canvasRef = React.createRef<HTMLCanvasElement>();
         this.state = {
-            canvas: null
+            isDown: false,
+            previousPointX: 0,
+            previousPointY: 0
         };
     }
 
-    setCanvas = canvasDraw => {
-        if (this.state.canvasDraw) {
+    handleMouseDown = event => {
+        this.setState({
+            isDown: true,
+            previousPointX: event.offsetX,
+            previousPointY: event.offsetY
+        });
+
+        const ctx = this.canvasRef.current.getContext("2d");
+        ctx.moveTo(event.offsetX, event.offsetY);
+    };
+    handleMouseMove = event => {
+        if (!this.state.isDown) {
             return;
         }
-        this.setState({ canvasDraw: canvasDraw });
+
+        const ctx = this.canvasRef.current.getContext("2d");
+        ctx.moveTo(this.state.previousPointX, this.state.previousPointY);
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+
+        this.setState({
+            previousPointX: event.offsetX,
+            previousPointY: event.offsetY
+        });
+    };
+    handleMouseUp = () => {
+        this.setState({
+            isDown: false
+        });
     };
 
-    undo = () => {
-        this.state.canvasDraw.undo();
+    componentDidMount(): void {
+        drawImageOnCanvas(this.props.src, this.canvasRef.current);
+    }
+
+    cancel = () => {
+        this.clear();
+        this.props.onCancel();
     };
 
     clear = () => {
-        this.state.canvasDraw.clear();
+        drawImageOnCanvas(this.props.src, this.canvasRef.current);
     };
 
     done = () => {
-        mergeImages([this.props.src, this.state.canvasDraw.canvas.drawing.toDataURL()]).then(result => {
-            this.props.onApplyDrawing(result);
-        });
+        this.props.onApplyDrawing(this.canvasRef.current.toDataURL());
     };
 
     render() {
         let canvasWidth = this.props.width;
         let canvasHeight = this.props.height;
 
+        const canvasStyle = {
+            cursor: "crosshair"
+        };
+
         return (
             <>
-                <CanvasDraw
-                    ref={this.setCanvas}
-                    hideGrid={true}
-                    canvasWidth={canvasWidth}
-                    canvasHeight={canvasHeight}
-                    imgSrc={this.props.src}
-                    brushRadius={2}
-                    brushColor="#f00"
+                <canvas
+                    ref={this.canvasRef}
+                    style={canvasStyle}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                    onMouseDown={e => {
+                        this.handleMouseDown(e.nativeEvent);
+                    }}
+                    onMouseMove={e => {
+                        this.handleMouseMove(e.nativeEvent);
+                    }}
+                    onMouseUp={this.handleMouseUp}
                 />
                 <div className="mdc-dialog__actions">
-                    <Button onClick={this.undo}>Undo</Button>
+                    <Button onClick={this.cancel}>Cancel</Button>
                     <Button onClick={this.clear}>Clear</Button>
                     <Button onClick={this.done}>Done</Button>
                 </div>
