@@ -199,40 +199,26 @@ class ReviewComponentStore implements IReviewComponentStore {
         this._advancedReviewService = advancedReviewService;
     }
 
-    private parseComment(json: any): Comment {
-        const comment = json ? Comment.create(json.author, json.text, json.date, json.screenshot) : Comment.create("", "");
-        comment.store = this;
-        return comment;
-    }
-
     @action.bound
     load(): void {
+        function parseComment(json: any): Comment {
+            const comment = json ? Comment.create(json.author, json.text, json.date, json.screenshot) : Comment.create("", "");
+            comment.store = this;
+            return comment;
+        }
+
         this._advancedReviewService.load()
             .then(reviewLocations => {
                 this.reviewLocations = reviewLocations
-                    .map(x => {
-                        let reviewLocation;
-                        try {
-                            reviewLocation = JSON.parse(x.data);
-                        } catch (exception) {
-                            reviewLocation = null;
-                        }
-                        return {
-                            id: x.id,
-                            data: reviewLocation
-                        }
-                    })
-                    .filter(x => !!x.data)
-                    .map(x => {
-
+                    .map((x: any) => {
                         return new ReviewLocation(this, {
                             id: x.id,
                             positionX: x.data.positionX,
                             positionY: x.data.positionY,
                             propertyName: x.data.propertyName,
                             isDone: x.data.isDone,
-                            firstComment: this.parseComment(x.data.firstComment),
-                            comments: (x.data.comments || []).map(x => this.parseComment(x))
+                            firstComment: parseComment(x.data.firstComment),
+                            comments: (x.data.comments || []).map((x: any) => parseComment(x))
                         })
                     });
             });
