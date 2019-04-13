@@ -8,11 +8,6 @@ declare module "dijit/_WidgetBase" {
     export = _WidgetBase;
 }
 
-declare module "dojo/topic" {
-    let _topic: any;
-    export = _topic;
-}
-
 declare module "epi-cms/_ContentContextMixin" {
     let _ContentContextMixin: any;
     export = _ContentContextMixin;
