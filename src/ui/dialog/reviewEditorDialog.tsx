@@ -81,7 +81,9 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
 
     scrollToBottom = () => {
         setTimeout(() => {
-            this.commentInput.inputElement.focus();
+            if (this.commentInput) {
+                this.commentInput.inputElement.focus();
+            }
             if (this.messagesEnd !== null) {
                 this.messagesEnd.scrollIntoView({ behavior: "smooth" });
             }
