@@ -290,8 +290,9 @@ class ReviewComponentStore implements IReviewComponentStore {
                 }
             };
             this._advancedReviewService.add(reviewLocation.id, data).then((result) => {
-                reviewLocation.id = result.id;
-                this.reviewLocations.push(reviewLocation);
+                if (reviewLocation.id !== result.id) {
+                    this.reviewLocations.push(reviewLocation);
+                }
                 resolve(reviewLocation);
             }).otherwise((e) => {
                 reject(e);
