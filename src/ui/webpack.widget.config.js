@@ -14,7 +14,7 @@ webpackCommon.externals = [
     "dojo/_base/declare",
     "dijit/_WidgetBase",
     "epi/i18n!epi/cms/nls/reviewcomponent",
-    "dojo/topic",
+    "epi-cms/ApplicationSettings",
     "epi-cms/_ContentContextMixin",
     "alloy-review/advancedReviewService"
 ];

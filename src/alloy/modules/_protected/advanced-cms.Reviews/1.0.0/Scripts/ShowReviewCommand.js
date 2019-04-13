@@ -29,12 +29,12 @@ define([
             this.reviewEnabled = false;
             this.set("active", false);
             this._toggleCanExecute();
-            topic.publish("toggle:reviews", this.reviewEnabled);
+            topic.publish("toggle:reviews", this.reviewEnabled, this._currentContext.language);
         },
 
         _execute: function () {
             this.reviewEnabled = !this.reviewEnabled;
-            topic.publish("toggle:reviews", this.reviewEnabled);
+            topic.publish("toggle:reviews", this.reviewEnabled, this._currentContext.language);
             this.set("active", this.reviewEnabled);
             this.set('label', this.reviewEnabled ? "Turn off Advanced Review" : "Turn on Advanced Review");
         },

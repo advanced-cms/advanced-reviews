@@ -2,13 +2,11 @@ define([
     "dojo/topic",
     "dojo/dom-class",
     "epi-cms/contentediting/OnPageEditing",
-    "epi-cms/_ContentContextMixin",
     "alloy-review/ReviewWidget"
 ], function (
     topic,
     domClass,
     OnPageEditing,
-    _ContentContextMixin,
     ReviewWidget) {
 
     var reviewWidget = null;
@@ -20,15 +18,11 @@ define([
     }
 
     function initialize() {
-        //
-        // postMixInProperties
-        //
-
-        topic.subscribe("toggle:reviews", function (toggle) {
+        topic.subscribe("toggle:reviews", function (toggle, language) {
             if (!reviewWidget) {
                 var div = document.createElement("div");
                 var iframe = document.getElementsByName("sitePreview")[0];
-                reviewWidget = new ReviewWidget({ iframe: iframe });
+                reviewWidget = new ReviewWidget({ iframe: iframe, language: language });
                 reviewWidget.placeAt(div);
                 var editLayoutContainer = document.getElementsByClassName("epi-editorViewport")[0];
                 editLayoutContainer.appendChild(div);
@@ -49,7 +43,6 @@ define([
                 reviewWidget.destroy();
                 reviewWidget = null;
             }
-            reviewsVisible = false;
         };
     }
 
