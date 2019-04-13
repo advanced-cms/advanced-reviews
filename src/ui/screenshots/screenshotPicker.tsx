@@ -170,6 +170,11 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
     };
 
+    onCancel = () => {
+        this.remove();
+        this.props.toggle();
+    };
+
     onApplyDrawing = img => {
         this.props.onImageSelected(img, this.state.pixelCrop);
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
@@ -215,6 +220,7 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
                         src={this.state.drawerInput.image}
                         width={this.state.drawerInput.width}
                         height={this.state.drawerInput.height}
+                        onCancel={this.onCancel}
                         onApplyDrawing={this.onApplyDrawing}
                     />
                 )}
