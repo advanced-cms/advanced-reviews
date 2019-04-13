@@ -10,6 +10,7 @@ import screenshots from "./../screenshots/screenshots.json";
 import FakeAdvancedReviewService from './FakeAdvancedReviewService';
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
+stores.reviewStore.currentUser = "Lina";
 stores.reviewStore.load();
 
 const reviewLocation1 = new ReviewLocation(this, {
