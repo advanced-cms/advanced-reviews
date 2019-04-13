@@ -18,6 +18,11 @@ declare module "epi-cms/_ContentContextMixin" {
     export = _ContentContextMixin;
 }
 
+declare module "epi-cms/ApplicationSettings" {
+    let ApplicationSettings: any;
+    export = ApplicationSettings;
+}
+
 declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
     let res: ReviewResorces;
     export = res;
