@@ -262,12 +262,13 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionX: reviewLocation.positionX,
                 positionY: reviewLocation.positionY,
                 priority: reviewLocation.priority,
-                comments: reviewLocation.comments.map(x => {
-                    x.author,
-                        x.date,
-                        x.screenshot,
-                        x.text
-                }),
+                comments: reviewLocation.comments.map((x: any) => { 
+                    return {
+                        author: x.author,
+                        date: x.date,
+                        screenshot: x.screenshot,
+                        text: x.text
+                }}),
                 firstComment: {
                     author: reviewLocation.firstComment.author,
                     date: reviewLocation.firstComment.date,
