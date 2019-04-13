@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "mobx-react";
 import declare from "dojo/_base/declare";
-import topic from "dojo/topic";
 import WidgetBase from "dijit/_WidgetBase";
 import ApplicationSettings from "epi-cms/ApplicationSettings";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
@@ -29,7 +28,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
             this.domNode
         );
     },
-contextChanged: function () {
+    contextChanged: function () {
         this.stores.reviewStore.load();
     },
     destroy: function() {
