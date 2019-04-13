@@ -14,6 +14,24 @@ define([
 
     _ContentContextMixin
 ) {
+
+    function parseResponse(reviewLocations) {
+        return reviewLocations
+            .map(x => {
+                var reviewLocation;
+                try {
+                    reviewLocation = JSON.parse(x.data);
+                } catch (exception) {
+                    reviewLocation = null;
+                }
+                return {
+                    id: x.id,
+                    data: reviewLocation
+                };
+            })
+            .filter(x => !!x.data);
+    }
+
     return declare([Stateful, _ContentContextMixin], {
         postscript: function () {
             this.inherited(arguments);
@@ -29,14 +47,14 @@ define([
                     reviewLocation: {
                         id: id,
                         data: JSON.stringify(reviewLocation)
-            }
+                    }
                 });
             }.bind(this));
         },
 
         load: function () {
             return this._handleContentAction(function (contentLink) {
-                return this.reviewStore.get(contentLink);
+                return this.reviewStore.get(contentLink).then(parseResponse);
             }.bind(this));
         },
 
