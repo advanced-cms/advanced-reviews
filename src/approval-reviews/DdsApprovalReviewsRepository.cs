@@ -64,6 +64,16 @@ namespace AdvancedApprovalReviews
             return GetStore().Items<ApprovalReview>();
         }
 
+        public void Delete(ContentReference contentLink)
+        {
+            var review = GetStore().Items<ApprovalReview>().FirstOrDefault(x => x.ContentLink == contentLink);
+            if (review == null)
+            {
+                throw new ArgumentOutOfRangeException($"Can't find review location for: {contentLink}");
+            }
+            GetStore().Delete(review.Id);
+        }
+
         public ReviewLocation Update(ContentReference contentLink, ReviewLocation reviewLocation)
         {
             var data = reviewLocation.Data;
