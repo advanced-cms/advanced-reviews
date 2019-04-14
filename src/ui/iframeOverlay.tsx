@@ -62,7 +62,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
     }
 
     scroll(e) {
-        if (this.overlayDocumentRef.current !== e.target) {
+        if (this.overlayRef.current !== e.target) {
             return;
         }
 
