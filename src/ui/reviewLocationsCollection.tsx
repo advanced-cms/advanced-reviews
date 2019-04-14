@@ -31,7 +31,7 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
       <div>
         {filter.showPoints &&
          locations.map(location =>
-          <ReviewLocationComponent key={location.id} location={location} showDialog={(e) => this.onLocationClick(e, location)} />
+          <ReviewLocationComponent key={location.id || "unsaved"} location={location} showDialog={(e) => this.onLocationClick(e, location)} />
         )}
       </div>)
   };

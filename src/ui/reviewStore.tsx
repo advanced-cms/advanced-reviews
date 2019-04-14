@@ -262,7 +262,7 @@ class ReviewComponentStore implements IReviewComponentStore {
                 positionX: reviewLocation.positionX,
                 positionY: reviewLocation.positionY,
                 priority: reviewLocation.priority,
-                comments: reviewLocation.comments.map((x: any) => { 
+                comments: reviewLocation.comments.map((x: any) => {
                     return {
                         author: x.author,
                         date: x.date,
@@ -278,6 +278,7 @@ class ReviewComponentStore implements IReviewComponentStore {
             };
             this._advancedReviewService.add(reviewLocation.id, data).then((result) => {
                 if (reviewLocation.id !== result.id) {
+                    reviewLocation.id = result.id;
                     this.reviewLocations.push(reviewLocation);
                 }
                 resolve(reviewLocation);
