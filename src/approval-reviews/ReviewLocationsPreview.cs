@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
+using EPiServer.DataAccess.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
@@ -24,19 +25,32 @@ namespace AdvancedApprovalReviews
         {
             base.OnLoad(e);
 
+            var targetCtrl = Page.Request.Params.Get("__EVENTTARGET");
+            if (targetCtrl == "delete_review")
+            {
+                var contentLink = Page.Request.Params.Get("__EVENTARGUMENT");
+                DeleteReviewLocation(
+                    string.IsNullOrWhiteSpace(contentLink) ? null: ContentReference.Parse(contentLink));
+            }
+
             SystemMessageContainer.Heading = "Review locations";
             SystemMessageContainer.Description = "List of all review locations";
             DataBind();
+        }
+
+        private void DeleteReviewLocation(ContentReference contentLink)
+        {
+            _repository.Service.Delete(contentLink);
         }
 
         protected string AllReviewLocations
         {
             get
             {
-                var result = _repository.Service.LoadAll().GroupBy(x=>x.ContentLink.ToReferenceWithoutVersion()).Select(x => new
+                var result = _repository.Service.LoadAll().GroupBy(x => x.ContentLink.ToReferenceWithoutVersion()).Select(x => new
                 {
                     Id = x.Key,
-                    ContentLinks = x.Select( c=> new { c.ContentLink, c.SerializedReview } )
+                    ContentLinks = x.Select(c => new { c.ContentLink, c.SerializedReview })
                 });
 
                 return _serializerFactory.Service.GetSerializer(KnownContentTypes.Json).Serialize(result);

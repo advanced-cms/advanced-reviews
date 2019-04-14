@@ -27,6 +27,8 @@ namespace AdvancedApprovalReviews
         IEnumerable<ReviewLocation> Load(ContentReference contentLink);
 
         IEnumerable<ApprovalReview> LoadAll();
+
+        void Delete(ContentReference contentLink);
     }
 
     public class ReviewLocation
