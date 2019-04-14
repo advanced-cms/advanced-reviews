@@ -132,7 +132,7 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                 onClose={(action) => this.props.onCloseDialog(action, this.state)}
             >
                 <DialogTitle>
-                    {!this.state.isScreenshotMode && <>{this.props.currentEditLocation.propertyName}</>}
+                    {!this.state.isScreenshotMode && <>{this.props.currentEditLocation.propertyName || "Review edit"}</>}
                     {this.state.isScreenshotMode && <>Crop and highlight the area you want to comment:</>}
                 </DialogTitle>
                 <DialogContent>
