@@ -1,8 +1,16 @@
 .review-dialog {
     z-index: 750;
 
+    .mdc-dialog__title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 1.25rem;
+        line-height: 1rem;
+    }
+
     textarea {
         resize: none;
+        min-height: auto;
     }
 
     .mdc-icon-button::before, .mdc-icon-button::after {
