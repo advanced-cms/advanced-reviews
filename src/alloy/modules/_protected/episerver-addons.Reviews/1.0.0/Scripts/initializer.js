@@ -7,6 +7,7 @@ define([
     "epi/_Module",
     "alloy-review/commandsProvider",
     "alloy-review/onPageEditingInitializer",
+    "alloy-review/approveChangesInitializer",
     "alloy-review/rejectChangesInitializer"
 ], function (
     declare,
@@ -17,6 +18,7 @@ define([
     _Module,
     CommandsProvider,
     onPageEditingInitializer,
+    approveChangesInitializer,
     rejectChangesInitializer
 ) {
     return declare([_Module], {
@@ -42,6 +44,7 @@ define([
             commandregistry.registerProvider(area, commandsProvider);
 
             onPageEditingInitializer.initialize();
+            approveChangesInitializer.initialize();
             rejectChangesInitializer.initialize();
         },
 
