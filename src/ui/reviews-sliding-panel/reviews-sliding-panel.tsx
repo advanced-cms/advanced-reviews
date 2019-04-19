@@ -23,7 +23,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
     constructor(props: SlidingPanelProps) {
         super(props);
         this.state = {
-            panelVisible: false,
+            panelVisible: true,
         }
     }
 
