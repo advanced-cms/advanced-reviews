@@ -102,7 +102,7 @@ export default class FakeAdvancedReviewService implements AdvancedReviewService 
         const convertedResult = reviewLocations.map(x => {
             return {
                 id: x.id,
-                data: JSON.stringify(x.data)
+                data: x.data
             }
         });
 
