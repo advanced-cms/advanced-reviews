@@ -396,6 +396,7 @@
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\commandsProvider.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\initializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\onPageEditingInitializer.js" />
+    <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\approveChangesInitializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\rejectChangesInitializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\ShowReviewCommand.js" />
     <Content Include="modules\_protected\alloy.Reviews\Views\admin\ReviewLocationPreview.aspx" />
