@@ -74,14 +74,8 @@ export class ReviewLocation {
     }
 
     @computed get displayName(): string {
-        if (this.propertyName) {
-            return this.propertyName;
-        }
-        if (this.firstComment.date) {
-            this.firstComment.text;
-        }
-        //TODO: resources
-        return '[Unsaved review]';
+        return this.propertyName || this.firstComment.text;
+
     }
 
     /**
