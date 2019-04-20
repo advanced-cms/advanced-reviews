@@ -6,6 +6,15 @@
         margin-bottom: 0;
         font-size: 1.25rem;
         line-height: 1rem;
+        padding: 0 12px;
+
+        &:before {
+            height: inherit;
+        }
+    }
+
+    .mdc-dialog__content {
+        padding: 0 12px;
     }
 
     textarea {
@@ -43,13 +52,12 @@
 
     .comments-list {
         margin: 10px 0;
-        max-height: 390px;
+        max-height: 450px;
+        height: 450px;
         overflow-y: auto;
     }
 
-    &.new {
-        .dialog-grid {
-            height: 200px;
-        }   
+    .first-comment {
+        border-bottom: 1px solid #ddd;
     }
 }

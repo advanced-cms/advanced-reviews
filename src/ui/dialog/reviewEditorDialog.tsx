@@ -132,25 +132,13 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                 onClose={(action) => this.props.onCloseDialog(action, this.state)}
             >
                 <DialogTitle>
-                    {!this.state.isScreenshotMode && <>{this.props.currentEditLocation.propertyName || "Review edit"}</>}
-                    {this.state.isScreenshotMode && <>Crop and highlight the area you want to comment:</>}
-                </DialogTitle>
-                <DialogContent>
-                    {!this.state.isScreenshotMode && (
-                        <Grid className="dialog-grid">
+                    {!this.state.isScreenshotMode && <div className="header">
+                        <Grid>
                             <Row>
-                                <Cell columns={8} className="review-actions left-align">
-                                    {!isNew &&
-                                        <PageNavigator
-                                            canSave={canSave}
-                                            currentItemIndex={reviewLocations.indexOf(this.props.currentEditLocation)}
-                                            reviewLocation={this.props.currentEditLocation}
-                                            onPrevClick={this.props.onPrevClick}
-                                            onNextClick={this.props.onNextClick}
-                                        />
-                                    }
+                                <Cell columns={6} className="review-actions left-align">
+                                    {this.props.currentEditLocation.propertyName || "Review edit"}
                                 </Cell>
-                                <Cell columns={4} className="review-actions">
+                                <Cell columns={6} className="review-actions">
                                     {!isNew &&
                                         <Checkbox
                                             nativeControlId="my-checkbox"
@@ -164,9 +152,26 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                                         title={this.state.currentPriority}
                                         menuItems={options}
                                     />
+                                    {!isNew &&
+                                        <PageNavigator
+                                            canSave={canSave}
+                                            currentItemIndex={reviewLocations.indexOf(this.props.currentEditLocation)}
+                                            reviewLocation={this.props.currentEditLocation}
+                                            onPrevClick={this.props.onPrevClick}
+                                            onNextClick={this.props.onNextClick}
+                                        />
+                                    }
                                 </Cell>
                             </Row>
-                            <Row>
+                        </Grid>
+                    </div>
+                    }
+                    {this.state.isScreenshotMode && <>Crop and highlight the area you want to comment:</>}
+                </DialogTitle>
+                <DialogContent>
+                    {!this.state.isScreenshotMode && (
+                        <Grid className="dialog-grid">
+                            <Row className="first-comment">
                                 <Cell columns={12}>
                                     <strong>{this.props.currentEditLocation.firstComment.text}</strong>
                                     {this.props.currentEditLocation.firstComment.screenshot && (
@@ -191,8 +196,8 @@ export default class ReviewDialog extends React.Component<ReviewDialogProps, Rev
                             </Row>
                             <Row>
                                 <Cell columns={12}>
-                                    <TextField 
-                                        label={isNew ? "Describe the issue" : "Add comment..." }
+                                    <TextField
+                                        label={isNew ? "Describe the issue" : "Add comment..."}
                                         dense textarea>
                                         <Input
                                             ref={(input: any) => this.commentInput = input}
