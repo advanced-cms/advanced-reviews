@@ -60,7 +60,7 @@ export default class PageNavigator extends React.Component<PageNavigatorProps, a
                         <IconButton className="next-prev-icon" title={this.prevTitle()} aria-pressed="false" disabled={!this.isPrevEnabled()} >
                             <MaterialIcon icon="chevron_left" onClick={this.props.onPrevClick} />
                         </IconButton>
-                        <span>{this.props.currentItemIndex + 1} / {reviewLocations.length}</span>
+                        <span className="pager">{this.props.currentItemIndex + 1} / {reviewLocations.length}</span>
                         <IconButton className="next-prev-icon" title={this.nextTitle()} onClick={this.props.onNextClick} disabled={!this.isNextEnabled()}>
                             <MaterialIcon icon="chevron_right" />
                         </IconButton>
