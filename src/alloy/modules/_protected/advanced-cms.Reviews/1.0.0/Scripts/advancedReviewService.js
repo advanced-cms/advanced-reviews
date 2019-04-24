@@ -2,6 +2,7 @@ define([
     "dojo/_base/declare",
     "dojo/Deferred",
     "dojo/Stateful",
+    "dojo/topic",
     "dojo/when",
     "epi/dependency",
     "epi-cms/_ContentContextMixin"
@@ -9,6 +10,7 @@ define([
     declare,
     Deferred,
     Stateful,
+    topic,
     when,
     dependency,
 
@@ -68,6 +70,10 @@ define([
 
                 return action(content.contentLink);
             }.bind(this));
+        },
+
+        setReviewContext: function () {
+            topic.publish("toggle:reviews", true, this._currentContext.language);
         }
     });
 });

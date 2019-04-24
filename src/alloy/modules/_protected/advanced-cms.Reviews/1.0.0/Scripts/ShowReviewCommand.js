@@ -23,6 +23,11 @@ define([
 
         constructor: function () {
             this._toggleCanExecute();
+
+            this.own(topic.subscribe("toggle:reviews", function (reviewEnabled) {
+                this.set("active", reviewEnabled);
+                this.set('label', reviewEnabled ? "Turn off Advanced Review" : "Turn on Advanced Review");
+            }.bind(this)));
         },
 
         contentContextChanged: function () {
@@ -35,8 +40,6 @@ define([
         _execute: function () {
             this.reviewEnabled = !this.reviewEnabled;
             topic.publish("toggle:reviews", this.reviewEnabled, this._currentContext.language);
-            this.set("active", this.reviewEnabled);
-            this.set('label', this.reviewEnabled ? "Turn off Advanced Review" : "Turn on Advanced Review");
         },
 
         _toggleCanExecute: function () {
