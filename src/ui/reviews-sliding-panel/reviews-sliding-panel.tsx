@@ -48,8 +48,8 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                             <div className="filter main-filter">
                                 <Switch
                                     nativeControlId="modeSwitcher"
-                                    checked={filter.showPoints}
-                                    onChange={() => (filter.showPoints = !filter.showPoints)}
+                                    checked={filter.reviewMode}
+                                    onChange={() => (filter.reviewMode = !filter.reviewMode)}
                                 />
                                 <label htmlFor="modeSwitcher">Display Review Overlay</label>
 
@@ -60,7 +60,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     <MaterialIcon icon="close" />
                                 </IconButton>
                             </div>
-                            {filter.showPoints && (
+                            {filter.reviewMode && (
                                 <div className="type-filters">
                                     <div className="filter unread">
                                         <Switch
