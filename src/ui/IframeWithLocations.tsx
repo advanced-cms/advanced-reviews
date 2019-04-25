@@ -76,19 +76,26 @@ export default class IFrameWithLocations extends React.Component<IframeWithLocat
     }
 
     render() {
-        return (<IframeOverlay iframe={this.props.iframe} reviewLocationCreated={(location) => this.setState({ currentLocation: location })}>
-            <ReviewLocationsCollection currentLocation={this.state.currentLocation} onLocationClick={this.showDialog.bind(this)} />
-            {this.props.reviewStore!.reviewLocations.length === 0 &&
-                <Snackbar
-                    timeoutMs={10000}
-                    onClose={this.onIntroClose}
-                    message="You are now in content review mode. Click on text to create new review entry."
-                    actionText="Do not show this again"
-                    stacked={true}
-                />
-            }
-            <ReviewsSlidingPanel onEditClick={this.showDialog.bind(this)} />
-            {this.state.currentLocation &&
+        return (
+            <>
+                {this.props.reviewStore!.filter.reviewMode &&
+                <IframeOverlay iframe={this.props.iframe}
+                               reviewLocationCreated={(location) => this.setState({currentLocation: location})}>
+                    <ReviewLocationsCollection currentLocation={this.state.currentLocation}
+                                               onLocationClick={this.showDialog.bind(this)}/>
+                    {this.props.reviewStore!.reviewLocations.length === 0 &&
+                    <Snackbar
+                        timeoutMs={10000}
+                        onClose={this.onIntroClose}
+                        message="You are now in content review mode. Click on text to create new review entry."
+                        actionText="Do not show this again"
+                        stacked={true}
+                    />
+                    }
+                </IframeOverlay>
+                }
+                <ReviewsSlidingPanel onEditClick={this.showDialog.bind(this)} />
+                {this.state.currentLocation &&
                 <ReviewEditorDialog
                     currentEditLocation={this.state.currentLocation}
                     iframe={this.props.iframe}
@@ -96,8 +103,9 @@ export default class IFrameWithLocations extends React.Component<IframeWithLocat
                     onNextClick={() => this.showReview(1)}
                     onCloseDialog={(action, state) => this.onCloseDialog(action, state)}
                 />
-            }
-        </IframeOverlay>);
+                }
+            </>
+        );
     }
 };
 
