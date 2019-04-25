@@ -174,8 +174,9 @@ export interface IReviewComponentStore {
 
 class ReviewCollectionFilter {
     @observable showPoints: boolean = true;
-    @observable showOnlyOpenTasks: boolean = true;
-    @observable showOnlyNewTasks: boolean = true;
+    @observable showUnread: boolean = true;
+    @observable showActive: boolean = true;
+    @observable showResolved: boolean = true;
 }
 
 class ReviewComponentStore implements IReviewComponentStore {
@@ -219,14 +220,11 @@ class ReviewComponentStore implements IReviewComponentStore {
     }
 
     @computed get filteredReviewLocations(): ReviewLocation[] {
-        let result = this.reviewLocations;
-        if (this.filter.showOnlyNewTasks) {
-            result = result.filter(x => x.isUpdatedReview);
-        }
-        if (this.filter.showOnlyOpenTasks) {
-            result = result.filter(x => !x.isDone);
-        }
-        return result;
+        return this.reviewLocations.filter(location => {
+           return this.filter.showResolved && location.isDone ||
+               this.filter.showActive && !location.isDone && !location.isUpdatedReview ||
+               this.filter.showUnread && location.isUpdatedReview;
+        });
     }
 
     //TODO: convert to async method

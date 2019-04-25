@@ -1,8 +1,9 @@
+@import "@material/switch/mixins";
 
 .panel-toggle {
-  position: absolute;
-  right: 2px;
-  top: 2px; 
+    position: absolute;
+    right: 2px;
+    top: 2px;
 }
 
 .panel-container {
@@ -13,30 +14,74 @@
     background: white;
     min-width: 350px;
     border-left: 1px solid #c0c0c0;
-  
-    .filters-container {
-      border-bottom: 1px solid #c0c0c0;
 
-      .filter {
-      >span {
-        line-height: 40px;
-      } 
-      }
+    .filter {
+        margin: 10px;
+
+        label {
+            margin-left: 10px;
+        }
+    }
+
+    .main-filter, .type-filters {
+        border-bottom: 1px solid #c0c0c0;
+
+        .unread {
+            .mdc-switch {
+                --mdc-theme-secondary: green;
+            }
+
+            label {
+                color: green;
+            }
+        }
+
+        .active {
+            .mdc-switch {
+                --mdc-theme-secondary: red;
+            }
+
+            label {
+                color: red;
+            }
+        }
+
+        .resolved {
+            .mdc-switch {
+                --mdc-theme-secondary: gray;
+            }
+
+            label {
+                color: gray;
+            }
+        }
+    }
+
+    .type-filter {
+        div {
+            display: table;
+
+            span {
+                padding-left: 10px;
+                display: table-cell;
+                vertical-align: middle;
+            }
+        }
     }
 
     .close-panel {
-      float: right;
+        float: right;
     }
-    
-    .locations {
-      .edit {
-        display: none;
-        position: absolute;
-        right: 2px;
-      }
 
-      li:hover .edit {
-        display: block;
-      }
+    .locations {
+        .edit {
+            display: none;
+            position: absolute;
+            right: 2px;
+        }
+
+        li:hover .edit {
+            display: block;
+        }
     }
-  }
+}
