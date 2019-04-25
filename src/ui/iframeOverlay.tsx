@@ -98,7 +98,8 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             top: top,
             height: height,
             maxHeight: height,
-            width: width
+            width: width,
+            cursor: "crosshair"
         };
 
         let documentStyles: CSSProperties = {
