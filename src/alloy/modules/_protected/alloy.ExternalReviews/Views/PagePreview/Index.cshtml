@@ -1,0 +1,8 @@
+﻿@inherits System.Web.Mvc.WebViewPage<EPiServer.Core.PageData>
+
+@{
+    Layout = null;
+}
+
+This is page review for @(Model.ContentLink)
+<iframe src="/en/externalPageReview/@(Model.ContentLink)" width="100%" height="100%"></iframe>
