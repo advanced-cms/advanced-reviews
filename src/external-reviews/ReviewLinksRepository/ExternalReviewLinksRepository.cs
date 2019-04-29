@@ -30,7 +30,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink)
         {
             return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink).ToList().Select(x =>
-                ExternalReviewLink.FromExternalReview(x, _externalReviewOptions.ReviewsUrl));
+                ExternalReviewLink.FromExternalReview(x, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl));
         }
 
         public ExternalReviewLink GetContentByToken(string token)
@@ -47,7 +47,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             {
                 return null;
             }
-            return ExternalReviewLink.FromExternalReview(externalReviewLinkDds, _externalReviewOptions.ReviewsUrl);
+            return ExternalReviewLink.FromExternalReview(externalReviewLinkDds, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl);
         }
 
         public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable)
@@ -60,7 +60,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 ValidTo = DateTime.Now.AddDays(5) //TODO: externalReviews configuration
             };
             GetStore().Save(externalReviewLink);
-            return ExternalReviewLink.FromExternalReview(externalReviewLink, _externalReviewOptions.ReviewsUrl);
+            return ExternalReviewLink.FromExternalReview(externalReviewLink, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl);
         }
 
         public void DeleteLink(string token)

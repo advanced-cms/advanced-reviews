@@ -161,9 +161,10 @@
     <Compile Include="ExternalReviewComponent.cs" />
     <Compile Include="ExternalReviewOptions.cs" />
     <Compile Include="GlobalRouteInitialization.cs" />
+    <Compile Include="PagePreviewPartialRouter.cs" />
     <Compile Include="PagePreviewController.cs" />
     <Compile Include="PagePreviewInitialization.cs" />
-    <Compile Include="PagePreviewPartialRouter.cs" />
+    <Compile Include="PageEditPartialRouter.cs" />
     <Compile Include="PreviewPageTemplateDescriptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLink.cs" />

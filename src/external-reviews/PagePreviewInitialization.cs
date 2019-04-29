@@ -1,4 +1,5 @@
 ﻿using System.Web.Routing;
+using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -13,11 +14,21 @@ namespace AdvancedExternalReviews
         public void Initialize(InitializationEngine context)
         {
             var locator = context.Locate.Advanced;
-            var partialRouter = new PagePreviewPartialRouter
+            var editRouter = new PageEditPartialRouter
             (
-                locator.GetInstance<IContentLoader>()
+                locator.GetInstance<IContentLoader>(),
+                locator.GetInstance<IExternalReviewLinksRepository>()
             );
-            RouteTable.Routes.RegisterPartialRouter(partialRouter);
+            RouteTable.Routes.RegisterPartialRouter(editRouter);
+
+            var previewRouter = new PagePreviewPartialRouter
+            (
+                locator.GetInstance<IContentLoader>(),
+                locator.GetInstance<IExternalReviewLinksRepository>(),
+                locator.GetInstance<ExternalReviewOptions>()
+            );
+            RouteTable.Routes.RegisterPartialRouter(previewRouter);
+
         }
 
         void IInitializableModule.Uninitialize(InitializationEngine context) { }
