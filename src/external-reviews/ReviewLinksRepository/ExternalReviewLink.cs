@@ -11,15 +11,17 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         public DateTime ValidTo { get; set; }
         public string LinkUrl { get; set; }
 
-        internal static ExternalReviewLink FromExternalReview(ExternalReviewLinkDds externalReviewLinkDds, string reviereviewsUrl)
+        internal static ExternalReviewLink FromExternalReview(ExternalReviewLinkDds externalReviewLinkDds, string editUrl, string previewUrl)
         {
+            previewUrl = "en/" + previewUrl; //TODO: #externalreview hardcoded
+
             return new ExternalReviewLink
             {
                 ContentLink = externalReviewLinkDds.ContentLink,
                 IsEditable = externalReviewLinkDds.IsEditable,
                 Token = externalReviewLinkDds.Token,
                 ValidTo = externalReviewLinkDds.ValidTo,
-                LinkUrl = "/" + reviereviewsUrl + "/" + externalReviewLinkDds.Token //TODO: externalReviews URL
+                LinkUrl = "/" +  (externalReviewLinkDds.IsEditable ? editUrl: previewUrl) + "/" + externalReviewLinkDds.Token //TODO: externalReviews URL
             };
         }
     }
