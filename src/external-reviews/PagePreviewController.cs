@@ -23,9 +23,7 @@ namespace AdvancedExternalReviews
         public ActionResult Index(string token)
         {
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
-            if (externalReviewLink == null ||
-                externalReviewLink.IsExpired() ||
-                !externalReviewLink.IsEditable)
+            if (!externalReviewLink.IsEditableLink())
             {
                 return new HttpNotFoundResult("Content not found");
             }
@@ -36,16 +34,26 @@ namespace AdvancedExternalReviews
                 return new RestStatusCodeResult(HttpStatusCode.Forbidden, "Access denied");
             }
 
-
             const string url = "Views/PagePreview/Index.cshtml";
 
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
                 out var resolvedPath))
             {
-                return View(resolvedPath, content); //"~/Views/PagePreview.cshtml"
+                var pagePreviewModel = new ContentPreviewModel
+                {
+                    Token = token,
+                    Name = content.Name
+                };
+                return View(resolvedPath, pagePreviewModel);
             }
 
             return new HttpNotFoundResult("Content not found");
         }
+    }
+
+    public class ContentPreviewModel
+    {
+        public string Token { get; set; }
+        public string Name { get; set; }
     }
 }
