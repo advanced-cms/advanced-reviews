@@ -392,6 +392,8 @@
     <Content Include="libman.json" />
     <None Include="Models\Blocks\_ReadMe.txt" />
     <None Include="Models\Pages\_ReadMe.txt" />
+    <Content Include="modules\_protected\alloy.ExternalReviews\1.0.0\Scripts\external-review-service.js" />
+    <Content Include="modules\_protected\alloy.ExternalReviews\1.0.0\Scripts\initializer.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\advancedReviewService.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\commandsProvider.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\initializer.js" />
@@ -452,7 +454,9 @@
     <Content Include="Static\jwplayer\preview.jpg" />
     <Content Include="Static\jwplayer\video.mp4" />
     <Content Include="Views\Shared\DisplayTemplates\_ReadMe.txt" />
-    <Content Include="Views\web.config" />
+    <Content Include="Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="Views\VideoFile\Index.cshtml" />
     <Content Include="Views\Shared\TemplateError.cshtml" />
@@ -474,6 +478,14 @@
     <Content Include="modules\_protected\Shell\Shell.zip" />
     <Content Include="modules\_protected\CMS\web.config" />
     <Content Include="modules\_protected\CMS\CMS.zip" />
+    <Content Include="modules\_protected\alloy.ExternalReviews\Views\PagePreview\Index.cshtml" />
+    <Content Include="modules\_protected\alloy.ExternalReviews\module.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="modules\_protected\alloy.ExternalReviews\web.config" />
+    <Content Include="modules\_protected\alloy.ExternalReviews\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Views\_ReadMe.txt" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -535,6 +547,7 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Business\PagePreview\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
@@ -565,6 +578,10 @@
     <ProjectReference Include="..\..\AdvancedApprovalReviews\AdvancedApprovalReviews.csproj">
       <Project>{7d3cb0b4-bf55-4577-abf2-d83f8ea5d49f}</Project>
       <Name>AdvancedApprovalReviews</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AdvancedExternalReviews\AdvancedExternalReviews.csproj">
+      <Project>{90d5e808-1575-4ba9-8237-7323db1b446f}</Project>
+      <Name>AdvancedExternalReviews</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
