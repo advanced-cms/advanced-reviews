@@ -20,7 +20,7 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
   };
 
   render() {
-    const { filteredReviewLocations, filter } = this.props.reviewStore!;
+    const { filteredReviewLocations } = this.props.reviewStore!;
     const locations = [...filteredReviewLocations];
 
     if (this.props.currentLocation && !locations.some(location => location === this.props.currentLocation)) {
@@ -29,7 +29,7 @@ export default class ReviewLocationsCollection extends React.Component<ReviewLoc
 
     return (
       <div>
-        {filter.showPoints &&
+        {
          locations.map(location =>
           <ReviewLocationComponent key={location.id || "unsaved"} location={location} showDialog={(e) => this.onLocationClick(e, location)} />
         )}
