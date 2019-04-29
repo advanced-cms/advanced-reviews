@@ -32,3 +32,14 @@ interface AdvancedReviewService {
     add(id: string, data: any): Promise<any>;
     load(): Promise<any[]>;
 }
+
+declare module "alloy-external-review/external-review-service" {
+    let externalReviewService: any;
+    export = externalReviewService;
+}
+
+interface ExternalReviewService {
+    add(isEditable: boolean): Promise<any>;
+    load(): Promise<any[]>;
+    delete(token: string): Promise<any>;
+}
