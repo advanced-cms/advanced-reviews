@@ -173,7 +173,7 @@ export interface IReviewComponentStore {
 }
 
 class ReviewCollectionFilter {
-    @observable showPoints: boolean = true;
+    @observable reviewMode: boolean = true;
     @observable showUnread: boolean = true;
     @observable showActive: boolean = true;
     @observable showResolved: boolean = true;
