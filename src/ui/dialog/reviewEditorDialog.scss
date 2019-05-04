@@ -1,63 +1,65 @@
-.review-dialog {
-    z-index: 750;
+.mdc-dialog {
+    &.review-dialog {
+        z-index: 750;
 
-    .mdc-dialog__title {
-        margin-top: 0;
-        margin-bottom: 0;
-        font-size: 1.25rem;
-        line-height: 1rem;
-        padding: 0 12px;
+        .mdc-dialog__title {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 1.25rem;
+            line-height: 1rem;
+            padding: 0 12px;
 
-        &:before {
-            height: inherit;
+            &:before {
+                height: inherit;
+            }
         }
-    }
 
-    .mdc-dialog__content {
-        padding: 0 12px;
-    }
-
-    textarea {
-        resize: none;
-        min-height: auto;
-    }
-
-    .mdc-icon-button::before, .mdc-icon-button::after {
-        background-color: blue;
-    }
-
-    .menu-button.mdc-icon-button {
-        padding: 8px 4px 4px 4px;
-        width: 40px;
-        height: 40px;
-    }
-
-    .review-actions {
-        display: flex;
-        position: relative;
-        flex-shrink: 0;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: flex-end;
-
-        &.left-align {
-            justify-content: flex-start;
+        .mdc-dialog__content {
+            padding: 0 12px;
         }
-    }
 
-    .dialog-grid {
-        width: 500px;
-        height: 600px;
-    }
+        textarea {
+            resize: none;
+            min-height: auto;
+        }
 
-    .comments-list {
-        margin: 10px 0;
-        max-height: 450px;
-        height: 450px;
-        overflow-y: auto;
-    }
+        .mdc-icon-button::before, .mdc-icon-button::after {
+            background-color: blue;
+        }
 
-    .first-comment {
-        border-bottom: 1px solid #ddd;
+        .menu-button.mdc-icon-button {
+            padding: 8px 4px 4px 4px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .review-actions {
+            display: flex;
+            position: relative;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+
+            &.left-align {
+                justify-content: flex-start;
+            }
+        }
+
+        .dialog-grid {
+            width: 500px;
+            height: 600px;
+        }
+
+        .comments-list {
+            margin: 10px 0;
+            max-height: 450px;
+            height: 450px;
+            overflow-y: auto;
+        }
+
+        .first-comment {
+            border-bottom: 1px solid #ddd;
+        }
     }
 }
