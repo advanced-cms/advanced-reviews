@@ -1,0 +1,55 @@
+.external-reviews-list {
+    height: calc(100% - 70px);
+    overflow-y: scroll;
+
+    .list-item {
+        padding: 0 8px;
+        font-size: 0.75rem;
+        height: 55px;
+
+        .mdc-list-item__secondary-text {
+            font-size: 0.7rem;
+        }
+
+        .mdc-list-item__graphic {
+            margin-right: 8px;
+        }
+
+        .item-inactive {
+            color: #555;
+            font-style: italic;
+        }
+
+        a {
+            color: #6200ee;
+            cursor: pointer;
+        }
+
+        .item-action {
+            display: none;
+        }
+
+        &:hover .item-action {
+            display: inline-block;
+        }
+    }
+}
+
+.empty-list {
+    font-style: italic;
+    color: #555;
+    height: calc(100% - 50px);
+
+    > span {
+        display: block;
+        text-align: center;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}

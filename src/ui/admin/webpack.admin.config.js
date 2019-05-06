@@ -1,7 +1,7 @@
 var path = require("path");
 var webpackCommon = require("../webpack.config.common");
 
-webpackCommon.entry = "./admin/adminPlugin.tsx";
+webpackCommon.entry = "./admin/admin-plugin.tsx";
 
 webpackCommon.output = {
     filename: "adminPlugin.js",
@@ -13,4 +13,3 @@ webpackCommon.output = {
 webpackCommon.devtool = "eval-source-map";
 
 module.exports = webpackCommon;
-
