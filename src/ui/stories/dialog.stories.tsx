@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import TextField, { Input } from '@material/react-text-field';
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Provider } from 'mobx-react';
 import { createStores, ReviewLocation, Comment } from "../reviewStore";
 import resources from './resources.json';
-import ReviewDialog from "../dialog/reviewEditorDialog";
+import NewReviewDialog from "../new-review-dialog/new-review-dialog";
 import { decorate } from '@storybook/addon-actions';
 import screenshots from "./../screenshots/screenshots.json";
 import FakeAdvancedReviewService from './FakeAdvancedReviewService';
@@ -66,20 +65,20 @@ storiesOf('Dialog', module)
   .add('default', () => {
     stores.reviewStore.reviewLocations = [reviewLocation1];
     return <Provider {...stores}>
-      <ReviewDialog currentEditLocation={reviewLocation1} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <NewReviewDialog currentEditLocation={reviewLocation1} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   })
   .add('with two comments', () => {
     stores.reviewStore.reviewLocations = [reviewLocation1, reviewLocation2];
     return <Provider {...stores}>
-      <ReviewDialog currentEditLocation={reviewLocation1} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <NewReviewDialog currentEditLocation={reviewLocation1} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   })
   .add('with empty comment', () => {
     const location = createEmptyLocation();
     stores.reviewStore.reviewLocations = [location];
     return <Provider {...stores}>
-      <ReviewDialog currentEditLocation={location} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <NewReviewDialog currentEditLocation={location} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   })
   .add('with long property name', () => {
@@ -87,6 +86,6 @@ storiesOf('Dialog', module)
     location.propertyName = "veryyyy long propertyyyyyyyyy nameeeeeeeeeeeeeeeeeeeeee";
     stores.reviewStore.reviewLocations = [location];
     return <Provider {...stores}>
-      <ReviewDialog currentEditLocation={location} onPrevClick={() => { }} onNextClick={() => { }} onCloseDialog={firstArg.action('test1')} />
+      <NewReviewDialog currentEditLocation={location} onCloseDialog={firstArg.action('test1')} />
     </Provider>
   });

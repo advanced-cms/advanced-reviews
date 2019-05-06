@@ -1,20 +1,19 @@
 import React from "react";
 import { computed } from "mobx";
 import Button from "@material/react-button";
-import IconButton from "@material/react-icon-button";
-import MaterialIcon from "@material/react-material-icon";
 import html2canvas from "html2canvas";
-import DrawablePreview from "./drawablePreview";
+import DrawablePreview from "./drawable-preview";
 
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import "@material/react-icon-button/index.scss";
-import "./screenshotPicker.scss";
-import { DropDownMenu } from "../common/drop-down-menu";
+import "./screenshot-dialog.scss";
+
+import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
+import {observer} from "mobx-react";
 
 interface ScreenshotPickerProps {
-    current: string;
-    iframe: HTMLIFrameElement;
+    iframe: HTMLIFrameElement | string;
     onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
     maxWidth: number;
@@ -31,8 +30,7 @@ interface ScreenshotPickerState {
 enum Mode {
     Default,
     Crop,
-    Highlight,
-    Preview
+    Highlight
 }
 
 interface ResizeResult {
@@ -74,7 +72,8 @@ function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise
     });
 }
 
-export default class ScreenshotPicker extends React.Component<ScreenshotPickerProps, ScreenshotPickerState> {
+@observer
+export default class ScreenshotDialog extends React.Component<ScreenshotPickerProps, ScreenshotPickerState> {
     defaultCrop = {
         width: 50,
         height: 50,
@@ -100,9 +99,6 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
         if (this.state.drawerInput) {
             return Mode.Highlight;
         }
-        if (this.props.current) {
-            return Mode.Preview;
-        }
 
         return Mode.Default;
     }
@@ -111,14 +107,26 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
         this.setState({ crop });
     };
 
-    takeScreenshot = () => {
-        const body = this.props.iframe.contentDocument.body;
+    componentDidMount(): void {
+        const iframe = this.props.iframe as string ? document.getElementById("iframe") as HTMLIFrameElement : this.props.iframe as HTMLIFrameElement;
+        if (!iframe) {
+            return;
+        }
 
-        html2canvas(body).then(canvas => {
-            this.setState({ input: canvas.toDataURL() });
-            this.props.toggle();
-        });
-    };
+        const loadIframe = () => {
+            html2canvas(iframe.contentDocument.body).then(canvas => {
+                this.setState({ input: canvas.toDataURL() });
+            });
+        };
+
+        if (iframe.contentDocument && iframe.contentDocument.body) {
+            loadIframe();
+        } else {
+            iframe.onload = () => {
+                loadIframe();
+            };
+        }
+    }
 
     cancel = () => {
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
@@ -183,48 +191,49 @@ export default class ScreenshotPicker extends React.Component<ScreenshotPickerPr
 
     render() {
         return (
-            <div className="screenshot-picker">
-                {this.mode === Mode.Preview && (
-                    <>
-                        {this.props.current && (
-                            <DropDownMenu icon="image">
-                                <img src={this.props.current} />
-                            </DropDownMenu>
+            <Dialog
+                className="screenshot-picker-dialog"
+                open={this.mode !== Mode.Default}
+                scrimClickAction=""
+                escapeKeyAction=""
+            >
+                <DialogTitle>
+                    <div className="header">
+                        Crop and highlight the area you want to comment
+                    </div>
+                </DialogTitle>
+                <DialogContent>
+                    <div className="screenshot-picker">
+                        {this.mode === Mode.Crop && (
+                            <>
+                                <ReactCrop
+                                    className="screenshot-cropper"
+                                    crop={this.state.crop}
+                                    onImageLoaded={this.onImageLoaded}
+                                    src={this.state.input}
+                                    onChange={this.onCropChange}
+                                    onComplete={this.onCropComplete}
+                                />
+                                <div className="mdc-dialog__actions">
+                                    <Button onClick={this.cancel}>cancel</Button>
+                                    <Button onClick={this.crop} disabled={!this.state.crop.width}>
+                                        Crop
+                                    </Button>
+                                </div>
+                            </>
                         )}
-                        <IconButton onClick={this.remove} title="Remove screenshot">
-                            <MaterialIcon icon="remove" />
-                        </IconButton>
-                    </>
-                )}
-                {this.mode === Mode.Default && <IconButton onClick={this.takeScreenshot}><MaterialIcon icon="image" /></IconButton>}
-                {this.mode === Mode.Crop && (
-                    <>
-                        <ReactCrop
-                            className="screenshot-cropper"
-                            crop={this.state.crop}
-                            onImageLoaded={this.onImageLoaded}
-                            src={this.state.input}
-                            onChange={this.onCropChange}
-                            onComplete={this.onCropComplete}
-                        />
-                        <div className="mdc-dialog__actions">
-                            <Button onClick={this.cancel}>cancel</Button>
-                            <Button onClick={this.crop} disabled={!this.state.crop.width}>
-                                Crop
-                            </Button>
-                        </div>
-                    </>
-                )}
-                {this.mode === Mode.Highlight && (
-                    <DrawablePreview
-                        src={this.state.drawerInput.image}
-                        width={this.state.drawerInput.width}
-                        height={this.state.drawerInput.height}
-                        onCancel={this.onCancel}
-                        onApplyDrawing={this.onApplyDrawing}
-                    />
-                )}
-            </div>
+                        {this.mode === Mode.Highlight && (
+                            <DrawablePreview
+                                src={this.state.drawerInput.image}
+                                width={this.state.drawerInput.width}
+                                height={this.state.drawerInput.height}
+                                onCancel={this.onCancel}
+                                onApplyDrawing={this.onApplyDrawing}
+                            />
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
         );
     }
 }
