@@ -1,1 +1,6 @@
 dist/
+.storybook/
+storybook-static/
+.idea
+.vscode
+node_modules

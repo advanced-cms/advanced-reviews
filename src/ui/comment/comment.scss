@@ -1,0 +1,42 @@
+.comment {
+    &:after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .avatar,
+    .message {
+        float: left;
+    }
+
+    .avatar {
+        padding-right: 10px;
+
+        img {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    .message {
+        max-width: 430px;
+
+        .author {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 5px;
+        }
+
+        .date {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        p {
+            padding: 0;
+            margin: 0 0 10px 0;
+        }
+    }
+}
