@@ -1,9 +1,15 @@
 {
   "dialog": {
-    "save": "Save",
-    "close": "close",
-    "taskdone": "Uncheck to reopen the task",
-    "tasknotdone": "Mark task as done",
-    "addscreenshot": "Add screenshot"
+    "addcomment": "Add comment",
+    "close": "cancel",
+    "describe": "Describe the issue",
+    "reviewedit": "Review edit",
+    "save": "Save"
+  },
+  "panel": {
+    "clicktoedit": "Click to edit",
+    "addscreenshot": "Add screenshot",
+    "taskdone": "Task resolved. Click to reopen.",
+    "tasknotdone": "Click to resolve."
   }
 }

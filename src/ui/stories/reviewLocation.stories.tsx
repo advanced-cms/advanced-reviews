@@ -36,10 +36,10 @@ const getReviewLocation = (isDone: boolean = false, priority: Priority = Priorit
 stories
     .add('default', () => {
         const location = getReviewLocation(boolean('Is done', false), select('Priority', priorityOptions, Priority.Normal), boolean('Is new', false));
-        return <ReviewLoacationComponent location={location} showDialog={action('showDialog')} />
+        return <ReviewLoacationComponent location={location} showDialog={action('selectLocation')} />
     }
     )
-    .add('done', () => <ReviewLoacationComponent location={getReviewLocation(true)} showDialog={action('showDialog')} />)
-    .add('high priority', () => <ReviewLoacationComponent location={getReviewLocation(false, Priority.Important)} showDialog={action('showDialog')} />)
-    .add('low priority', () => <ReviewLoacationComponent location={getReviewLocation(false, Priority.Trivial)} showDialog={action('showDialog')} />)
-    .add('updated', () => <ReviewLoacationComponent location={getReviewLocation(false, Priority.Normal, true)} showDialog={action('showDialog')} />);
+    .add('done', () => <ReviewLoacationComponent location={getReviewLocation(true)} showDialog={action('selectLocation')} />)
+    .add('high priority', () => <ReviewLoacationComponent location={getReviewLocation(false, Priority.Important)} showDialog={action('selectLocation')} />)
+    .add('low priority', () => <ReviewLoacationComponent location={getReviewLocation(false, Priority.Trivial)} showDialog={action('selectLocation')} />)
+    .add('updated', () => <ReviewLoacationComponent location={getReviewLocation(false, Priority.Normal, true)} showDialog={action('selectLocation')} />);
