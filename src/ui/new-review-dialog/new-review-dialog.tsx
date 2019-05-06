@@ -1,11 +1,12 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
-import { Priority, ReviewLocation, NewReview, IReviewComponentStore } from "../reviewStore";
-import priorityIconMappings from "../priorityIconMappings";
+import { Priority, PinLocation, NewPinDto, IReviewComponentStore } from "../store/review-store";
+import priorityIconMappings from "../store/priority-icon-mappings";
 import { ContextMenu } from "../common/context-menu";
-
 import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
 import { Cell, Grid, Row } from "@material/react-layout-grid";
+import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
+import LocationComment from "../location-comment/location-comment";
 
 import "@material/react-button/index.scss";
 import "@material/react-dialog/index.scss";
@@ -13,22 +14,20 @@ import "@material/react-layout-grid/index.scss";
 import "@material/react-menu-surface/index.scss";
 import "@material/react-text-field/index.scss";
 import "./new-review-dialog.scss";
-import ScreenshotDialog from "../screenshots/screenshot-dialog";
-import LocationComment from "../location-comment/location-comment";
 
 interface NewReviewDialogProps {
     iframe?: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
-    resources?: ReviewResorces;
-    currentEditLocation: ReviewLocation;
+    resources?: ReviewResources;
+    currentEditLocation: PinLocation;
 
-    onCloseDialog(action: string, state: NewReview): void;
+    onCloseDialog(action: string, state: NewPinDto): void;
 }
 
 @inject("reviewStore")
 @inject("resources")
 @observer
-export default class NewReviewDialog extends React.Component<NewReviewDialogProps, NewReview> {
+export default class NewReviewDialog extends React.Component<NewReviewDialogProps, NewPinDto> {
     constructor(props: NewReviewDialogProps) {
         super(props);
         this.state = {
@@ -91,9 +90,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                                 <Cell columns={12}>
                                     <LocationComment
                                         currentScreenshot={this.state.currentScreenshot}
-                                        onToggle={() =>
-                                            this.setState({ screenshotMode: !this.state.screenshotMode })
-                                        }
+                                        onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
                                         onChange={(comment, screenshot) => {
                                             this.updateComment(comment, screenshot);
                                         }}
