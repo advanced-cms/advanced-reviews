@@ -1,6 +1,6 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import DrawablePreview from "../screenshots/drawablePreview";
+import DrawablePreview from "../screenshots/drawable-preview";
 import screenshots from "../screenshots/screenshots.json";
 
 storiesOf("Drawable preview", module)

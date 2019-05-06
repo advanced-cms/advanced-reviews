@@ -1,0 +1,13 @@
+.mdc-dialog {
+    //TODO: increase the size of this dialog?
+
+    &.screenshot-picker-dialog {
+        z-index: 800;
+
+        .screenshot-picker {
+            .screenshot-cropper {
+                width: 560px;
+            }
+        }
+    }
+}
