@@ -1,111 +1,93 @@
-import React from 'react';
-import { observer, inject } from 'mobx-react';
-import { IReviewComponentStore, ReviewLocation } from './reviewStore';
-import ReviewEditorDialog, { ReviewDialogState } from "./dialog/reviewEditorDialog";
+import React from "react";
+import { observer, inject } from "mobx-react";
+import { IReviewComponentStore, ReviewLocation, NewReview } from "./reviewStore";
+import NewReviewDialog from "./new-review-dialog/new-review-dialog";
 import IframeOverlay from "./iframeOverlay";
 import ReviewLocationsCollection from "./reviewLocationsCollection";
-import ReviewsSlidingPanel from './reviews-sliding-panel/reviews-sliding-panel'
-import { Snackbar } from '@material/react-snackbar';
-import '@material/react-snackbar/index.scss';
+import ReviewsSlidingPanel from "./reviews-sliding-panel/reviews-sliding-panel";
+import { Snackbar } from "@material/react-snackbar";
+import "@material/react-snackbar/index.scss";
 
 interface IframeState {
-    currentLocation: ReviewLocation;
+    newLocation: ReviewLocation;
 }
 
 interface IframeWithLocationsProps {
     iframe: HTMLIFrameElement;
-    reviewStore?: IReviewComponentStore
+    reviewStore?: IReviewComponentStore;
 }
 
-
-@inject('reviewStore')
+@inject("reviewStore")
 @observer
 export default class IFrameWithLocations extends React.Component<IframeWithLocationsProps, IframeState> {
     constructor(props: IframeWithLocationsProps) {
         super(props);
 
         this.state = {
-            currentLocation: null
-        }
+            newLocation: null
+        };
     }
 
-    showReview(incrementBy: number): void {
-        const { reviewLocations } = this.props.reviewStore!;
-        let reviewIndex = reviewLocations.indexOf(this.state.currentLocation) + incrementBy;
-        if (reviewIndex >= reviewLocations.length) {
-            reviewIndex = 0;
-        } else if (reviewIndex < 0) {
-            reviewIndex = reviewLocations.length - 1;
-        }
-        this.setState({
-            currentLocation: reviewLocations[reviewIndex]
-        });
-    }
-
-    showDialog(location: ReviewLocation): void {
-        this.setState({
-            currentLocation: location
-        });
-    }
-
-    onCloseDialog(action: string, state: ReviewDialogState): void {
+    onCloseDialog(action: string, state: NewReview): void {
         if (action !== "save") {
             this.setState({
-                currentLocation: null
+                newLocation: null
             });
             return;
         }
 
         const { save } = this.props.reviewStore!;
-        save(state, this.state.currentLocation).then(() => {
-            this.setState({
-                currentLocation: null
+        save(state, this.state.newLocation)
+            .then(() => {
+                this.setState({
+                    newLocation: null
+                });
+            })
+            .catch(e => {
+                //TODO: handle server exceptions
+                alert(e.message);
             });
-        }).catch(e => {
-            //TODO: handle server exceptions
-            alert(e.message);
-        });
+
+        //TODO: show screenshot after save this.setState({ isScreenshotMode: true });
     }
 
     onIntroClose = (reason): void => {
-        if (reason !== 'action') {
+        if (reason !== "action") {
             return;
         }
         //TODO: Set profile value
-        alert('Save profile value');
-    }
+        alert("Save profile value");
+    };
 
     render() {
         return (
             <>
-                {this.props.reviewStore!.filter.reviewMode &&
-                <IframeOverlay iframe={this.props.iframe}
-                               reviewLocationCreated={(location) => this.setState({currentLocation: location})}>
-                    <ReviewLocationsCollection currentLocation={this.state.currentLocation}
-                                               onLocationClick={this.showDialog.bind(this)}/>
-                    {this.props.reviewStore!.reviewLocations.length === 0 &&
-                    <Snackbar
-                        timeoutMs={10000}
-                        onClose={this.onIntroClose}
-                        message="You are now in content review mode. Click on text to create new review entry."
-                        actionText="Do not show this again"
-                        stacked={true}
+                {this.props.reviewStore.filter.reviewMode && (
+                    <IframeOverlay
+                        iframe={this.props.iframe}
+                        reviewLocationCreated={location => this.setState({ newLocation: location })}
+                    >
+                        <ReviewLocationsCollection newLocation={this.state.newLocation} />
+                        {this.props.reviewStore.reviewLocations.length === 0 && (
+                            <Snackbar
+                                timeoutMs={10000}
+                                onClose={this.onIntroClose}
+                                message="You are now in content review mode. Click on text to create new review entry."
+                                actionText="Do not show this again"
+                                stacked={true}
+                            />
+                        )}
+                    </IframeOverlay>
+                )}
+                <ReviewsSlidingPanel iframe={this.props.iframe} />
+                {this.state.newLocation && (
+                    <NewReviewDialog
+                        currentEditLocation={this.state.newLocation}
+                        iframe={this.props.iframe}
+                        onCloseDialog={(action, state) => this.onCloseDialog(action, state)}
                     />
-                    }
-                </IframeOverlay>
-                }
-                <ReviewsSlidingPanel onEditClick={this.showDialog.bind(this)} />
-                {this.state.currentLocation &&
-                <ReviewEditorDialog
-                    currentEditLocation={this.state.currentLocation}
-                    iframe={this.props.iframe}
-                    onPrevClick={() => this.showReview(-1)}
-                    onNextClick={() => this.showReview(1)}
-                    onCloseDialog={(action, state) => this.onCloseDialog(action, state)}
-                />
-                }
+                )}
             </>
         );
     }
-};
-
+}
