@@ -7,6 +7,7 @@ import "./reviewLocationComponent.scss";
 
 interface ReviewLocationComponentProps {
     location: ReviewLocation,
+    highlighted?: boolean,
     showDialog(e: any): void
 }
 
@@ -23,7 +24,7 @@ const ReviewLocationComponent: FunctionComponent<ReviewLocationComponentProps> =
 
     return <div style={style}
         onClick={props.showDialog}
-        className={classNames("review-location", { "done": props.location.isDone, "new": props.location.isUpdatedReview })}>
+        className={classNames("review-location", { "done": props.location.isDone, "new": props.location.isUpdatedReview, "highlighted": props.highlighted })}>
         <svg height="28" width="28">
             <title>{props.location.formattedFirstComment}</title>
             <circle cx="14" cy="14" r={circleSize} strokeWidth="2" fill="#c0c0c0" />
