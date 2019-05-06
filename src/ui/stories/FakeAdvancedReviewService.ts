@@ -17,7 +17,7 @@ const reviewLocations = [
             positionY: 80,
             propertyName: "Page name",
             isDone: false,
-            firstComment: createComment("Alfred", "Rephrase it. ", new Date("2019-01-01")),
+            firstComment: createComment("Alfred", "Rephrase it. ", new Date("2019-01-01"), screenshots.idylla),
             comments: [
                 createComment("Lina", "Could you describe it better?", new Date("2019-01-02"), screenshots.idylla),
                 createComment("Alfred", "Remove last sentence and include more information in first paragraph.", new Date("2019-01-03")),

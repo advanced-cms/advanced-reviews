@@ -1,6 +1,5 @@
-import { action, computed, observable } from 'mobx';
-import { distanceInWordsToNow, format } from "date-fns";
-import { ReviewDialogState } from "./dialog/reviewEditorDialog";
+import {action, computed, observable} from "mobx";
+import {distanceInWordsToNow, format} from "date-fns";
 
 /**
  * Represents a comment added by user
@@ -31,7 +30,7 @@ export class Comment {
 
         const options: any = { addSuffix: true };
         if (this.store && this.store.currentLocale) {
-            options.locale = require(`date-fns/locale/${this.store.currentLocale}/index.js`)
+            options.locale = require(`date-fns/locale/${this.store.currentLocale}/index.js`);
         }
 
         return distanceInWordsToNow(this.date, options);
@@ -49,6 +48,13 @@ export class Comment {
 
 interface UsersLastReadHashmap {
     [userName: string]: Date;
+}
+
+export interface NewReview {
+    currentCommentText: string;
+    currentPriority: Priority;
+    currentScreenshot: string;
+    screenshotMode: boolean;
 }
 
 export class ReviewLocation {
@@ -75,7 +81,6 @@ export class ReviewLocation {
 
     @computed get displayName(): string {
         return this.propertyName || this.firstComment.text;
-
     }
 
     /**
@@ -88,7 +93,7 @@ export class ReviewLocation {
     constructor(rootStore: IReviewComponentStore, point: any) {
         this._rootStore = rootStore;
         this.firstComment = new Comment(this._rootStore);
-        Object.keys(point).forEach((key) => this[key] = point[key]);
+        Object.keys(point).forEach(key => (this[key] = point[key]));
     }
 
     @action updateCurrentUserLastRead(): void {
@@ -117,14 +122,20 @@ export class ReviewLocation {
             return false;
         }
 
-        let otherUserComments = allComments.filter(x => x.author !== currentUser).map(x => x.date).sort();
+        let otherUserComments = allComments
+            .filter(x => x.author !== currentUser)
+            .map(x => x.date)
+            .sort();
         const lastOtherUserComment = otherUserComments.length > 0 ? otherUserComments.pop() : null;
         if (!lastOtherUserComment) {
             // there are no comments added by other users
             return false;
         }
 
-        let currentUserComments = allComments.filter(x => x.author === currentUser).map(x => x.date).sort();
+        let currentUserComments = allComments
+            .filter(x => x.author === currentUser)
+            .map(x => x.date)
+            .sort();
         const lastCurrentUserComment = currentUserComments.length > 0 ? currentUserComments.pop() : null;
         if (lastCurrentUserComment !== null && lastCurrentUserComment > lastOtherUserComment) {
             // current user has the last comment
@@ -161,7 +172,13 @@ export interface IReviewComponentStore {
 
     currentLocale: any;
 
-    save(state: ReviewDialogState, reviewLocation: ReviewLocation): Promise<ReviewLocation>;
+    currentLocation: ReviewLocation;
+
+    toggleResolve(): Promise<ReviewLocation>;
+
+    addComment(commentText: string, screenshot?: string);
+
+    save(state: NewReview, reviewLocation: ReviewLocation): Promise<ReviewLocation>;
 
     load(): void;
 
@@ -181,6 +198,7 @@ class ReviewCollectionFilter {
 
 class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations: ReviewLocation[] = [];
+    @observable currentLocation: ReviewLocation;
 
     filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 
@@ -197,48 +215,57 @@ class ReviewComponentStore implements IReviewComponentStore {
     @action.bound
     load(): void {
         function parseComment(json: any): Comment {
-            const comment = json ? Comment.create(json.author, json.text, json.date, json.screenshot) : Comment.create("", "");
+            const comment = json
+                ? Comment.create(json.author, json.text, json.date, json.screenshot)
+                : Comment.create("", "");
             comment.store = this;
             return comment;
         }
 
-        this._advancedReviewService.load()
-            .then(reviewLocations => {
-                this.reviewLocations = reviewLocations
-                    .map((x: any) => {
-                        return new ReviewLocation(this, {
-                            id: x.id,
-                            positionX: x.data.positionX,
-                            positionY: x.data.positionY,
-                            propertyName: x.data.propertyName,
-                            isDone: x.data.isDone,
-                            firstComment: parseComment(x.data.firstComment),
-                            comments: (x.data.comments || []).map((x: any) => parseComment(x))
-                        })
-                    });
+        this._advancedReviewService.load().then(reviewLocations => {
+            this.reviewLocations = reviewLocations.map((x: any) => {
+                return new ReviewLocation(this, {
+                    id: x.id,
+                    positionX: x.data.positionX,
+                    positionY: x.data.positionY,
+                    propertyName: x.data.propertyName,
+                    isDone: x.data.isDone,
+                    firstComment: parseComment(x.data.firstComment),
+                    comments: (x.data.comments || []).map((x: any) => parseComment(x))
+                });
             });
+        });
     }
 
     @computed get filteredReviewLocations(): ReviewLocation[] {
         return this.reviewLocations.filter(location => {
-           return this.filter.showResolved && location.isDone ||
-               this.filter.showActive && !location.isDone && !location.isUpdatedReview ||
-               this.filter.showUnread && location.isUpdatedReview;
+            return (
+                (this.filter.showResolved && location.isDone) ||
+                (this.filter.showActive && !location.isDone && !location.isUpdatedReview) ||
+                (this.filter.showUnread && location.isUpdatedReview)
+            );
         });
+    }
+
+    @action.bound
+    toggleResolve(): Promise<ReviewLocation> {
+        this.currentLocation.isDone = !this.currentLocation.isDone;
+        return this.saveLocation(this.currentLocation);
+    }
+
+    @action.bound
+    addComment(commentText: string, screenshot?: string): Promise<ReviewLocation> {
+        const comment = Comment.create(this.currentUser, commentText, null, screenshot);
+        this.currentLocation.comments.push(comment);
+        this.currentLocation.clearLastUsersRead();
+        return this.saveLocation(this.currentLocation);
     }
 
     //TODO: convert to async method
     @action.bound
-    save(item: ReviewDialogState, editedReview: ReviewLocation): Promise<ReviewLocation> {
-        editedReview.isDone = item.currentIsDone;
+    save(item: NewReview, editedReview: ReviewLocation): Promise<ReviewLocation> {
         editedReview.priority = item.currentPriority;
-        editedReview.clearLastUsersRead();
-        const comment = Comment.create(this.currentUser, item.currentCommentText, null, item.currentScreenshot);
-        if (editedReview.firstComment.date) {
-            editedReview.comments.push(comment);
-        } else {
-            editedReview.firstComment = comment;
-        }
+        editedReview.firstComment = Comment.create(this.currentUser, item.currentCommentText, null, item.currentScreenshot);
         return this.saveLocation(editedReview);
     }
 
@@ -260,7 +287,8 @@ class ReviewComponentStore implements IReviewComponentStore {
                         date: x.date,
                         screenshot: x.screenshot,
                         text: x.text
-                }}),
+                    };
+                }),
                 firstComment: {
                     author: reviewLocation.firstComment.author,
                     date: reviewLocation.firstComment.date,
@@ -268,15 +296,18 @@ class ReviewComponentStore implements IReviewComponentStore {
                     text: reviewLocation.firstComment.text
                 }
             };
-            this._advancedReviewService.add(reviewLocation.id, data).then((result) => {
-                if (reviewLocation.id !== result.id) {
-                    reviewLocation.id = result.id;
-                    this.reviewLocations.push(reviewLocation);
-                }
-                resolve(reviewLocation);
-            }).otherwise((e) => {
-                reject(e);
-            });
+            this._advancedReviewService
+                .add(reviewLocation.id, data)
+                .then(result => {
+                    if (reviewLocation.id !== result.id) {
+                        reviewLocation.id = result.id;
+                        this.reviewLocations.push(reviewLocation);
+                    }
+                    resolve(reviewLocation);
+                })
+                .otherwise(e => {
+                    reject(e);
+                });
         });
     }
 }
@@ -285,5 +316,5 @@ export const createStores = (advancedReviewService: AdvancedReviewService, res: 
     return {
         reviewStore: new ReviewComponentStore(advancedReviewService),
         resources: res
-    }
-}
+    };
+};
