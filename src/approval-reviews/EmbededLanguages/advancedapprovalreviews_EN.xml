@@ -3,12 +3,18 @@
   <language name="English" id="en">
     <reviewcomponent>
       <dialog>
-        <save>Save</save>
+        <addcomment>Add comment</addcomment>        
         <close>cancel</close>
-        <taskdone>Uncheck to reopen the task</taskdone>
-        <tasknotdone>Mark task as done</tasknotdone>
-        <addscreenshot>Add screenshot</addscreenshot>
+        <describe>Describe the issue</describe>
+        <reviewedit>Review edit</reviewedit>        
+        <save>Save</save>        
       </dialog>
+      <panel>
+        <clicktoedit>Click to edit</clicktoedit>
+        <addscreenshot>Add screenshot</addscreenshot>
+        <taskdone>Task resolved. Click to reopen.</taskdone>
+        <tasknotdone>Active. Click to resolve.</tasknotdone>
+      </panel>
     </reviewcomponent>
   </language>
 </languages>
