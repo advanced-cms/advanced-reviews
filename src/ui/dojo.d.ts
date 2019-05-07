@@ -19,7 +19,7 @@ declare module "epi-cms/ApplicationSettings" {
 }
 
 declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
-    let res: ReviewResorces;
+    let res: ReviewResources;
     export = res;
 }
 

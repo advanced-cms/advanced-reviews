@@ -1,8 +1,8 @@
-import React, { HTMLProps, ReactElement } from "react";
+import React from "react";
 
-import MenuSurface, {Corner} from '@material/react-menu-surface';
-import IconButton from '@material/react-icon-button';
-import MaterialIcon from '@material/react-material-icon';
+import MenuSurface, { Corner } from "@material/react-menu-surface";
+import IconButton from "@material/react-icon-button";
+import MaterialIcon from "@material/react-material-icon";
 
 interface DropDownMenuProps {
     title?: string;
@@ -26,7 +26,7 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
         this.setState({ isMenuOpen: false });
     };
 
-    setAnchorElement = (element) => {
+    setAnchorElement = element => {
         if (this.state.anchorElement) {
             return;
         }
@@ -35,14 +35,12 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
 
     render() {
         return (
-            <div
-                className="mdc-menu-surface--anchor"
-                ref={this.setAnchorElement}
-            >
-                <IconButton className="menu-button" onClick={this.openMenu} title={this.props.title} >
+            <div className="mdc-menu-surface--anchor" ref={this.setAnchorElement}>
+                <IconButton className="menu-button" onClick={this.openMenu} title={this.props.title}>
                     <MaterialIcon icon={this.props.icon} />
                 </IconButton>
-                <MenuSurface className="epi-context-menu"
+                <MenuSurface
+                    className="epi-context-menu"
                     open={this.state.isMenuOpen}
                     anchorCorner={Corner.BOTTOM_LEFT}
                     onClose={this.closeMenu}

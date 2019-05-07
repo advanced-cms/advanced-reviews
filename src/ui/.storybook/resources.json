@@ -1,0 +1,15 @@
+{
+  "dialog": {
+    "addcomment": "Add comment",
+    "close": "cancel",
+    "describe": "Describe the issue",
+    "reviewedit": "Review edit",
+    "save": "Save"
+  },
+  "panel": {
+    "clicktoedit": "Click to edit",
+    "addscreenshot": "Add screenshot",
+    "taskdone": "Task resolved. Click to reopen.",
+    "tasknotdone": "Active. Click to resolve."
+  }
+}

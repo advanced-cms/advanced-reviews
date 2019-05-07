@@ -1,12 +1,8 @@
-import React, { HTMLProps, ReactElement } from "react";
+import React from "react";
 import { DropDownMenu } from "./drop-down-menu";
 
-import List, {
-    ListItem,
-    ListItemGraphic,
-    ListItemText,
-} from "@material/react-list";
-import MaterialIcon from '@material/react-material-icon';
+import List, { ListItem, ListItemGraphic, ListItemText } from "@material/react-list";
+import MaterialIcon from "@material/react-material-icon";
 
 interface MenuItem {
     name: string;
@@ -27,7 +23,7 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
         super(props);
         this.state = {
             title: this.props.title
-        }
+        };
     }
 
     onSelected = (index: number) => {
@@ -38,14 +34,16 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
     };
 
     render() {
-        const list = <List singleSelection handleSelect={this.onSelected}>
-            {this.props.menuItems.map(item =>
-                <ListItem key={item.name}>
-                    {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon}/>} /> : null}
-                    <ListItemText primaryText={item.name}/>
-                </ListItem>
-            )}
-        </List>;
+        const list = (
+            <List singleSelection handleSelect={this.onSelected}>
+                {this.props.menuItems.map(item => (
+                    <ListItem key={item.name}>
+                        {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon} />} /> : null}
+                        <ListItemText primaryText={item.name} />
+                    </ListItem>
+                ))}
+            </List>
+        );
 
         return (
             <DropDownMenu
