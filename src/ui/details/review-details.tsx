@@ -1,31 +1,29 @@
 import React from "react";
-import { IReviewComponentStore, NewReview, ReviewLocation } from "../reviewStore";
+import { IReviewComponentStore, NewPinDto, PinLocation } from "../store/review-store";
 import { inject, observer } from "mobx-react";
-
 import Button from "@material/react-button";
 import { IReactionDisposer, reaction } from "mobx";
 import { Cell, Grid, Row } from "@material/react-layout-grid";
 import { DropDownMenu } from "../common/drop-down-menu";
-import Comment from "./comment";
+import Comment from "../comment/comment";
+import Switch from "@material/react-switch";
+import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
+import LocationComment from "../location-comment/location-comment";
 
 import "@material/react-switch/index.scss";
-import Switch from "@material/react-switch";
-
 import "./review-details.scss";
-import ScreenshotDialog from "../screenshots/screenshot-dialog";
-import LocationComment from "../location-comment/location-comment";
 
 interface ReviewDetailsProps {
     iframe?: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
-    resources?: ReviewResorces;
-    currentEditLocation: ReviewLocation;
+    resources?: ReviewResources;
+    currentEditLocation: PinLocation;
 }
 
 @inject("reviewStore")
 @inject("resources")
 @observer
-export class ReviewDetails extends React.Component<ReviewDetailsProps, NewReview> {
+export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto> {
     commentInput: any;
     commentsChangedReaction: IReactionDisposer;
 
@@ -137,9 +135,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewReview
                             <Cell columns={12}>
                                 <LocationComment
                                     currentScreenshot={this.state.currentScreenshot}
-                                    onToggle={() =>
-                                        this.setState({ screenshotMode: !this.state.screenshotMode })
-                                    }
+                                    onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
                                     onChange={(comment, screenshot) => {
                                         this.updateComment(comment, screenshot);
                                     }}
