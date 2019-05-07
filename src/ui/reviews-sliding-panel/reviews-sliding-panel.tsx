@@ -1,6 +1,6 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, ReviewLocation } from "../reviewStore";
+import { IReviewComponentStore, PinLocation } from "../store/review-store";
 import MaterialIcon from "@material/react-material-icon";
 import IconButton from "@material/react-icon-button";
 import Switch from "@material/react-switch";
@@ -9,13 +9,13 @@ import List, { ListItem, ListItemText } from "@material/react-list";
 import "@material/react-switch/index.scss";
 import "./reviews-sliding-panel.scss";
 import { ReviewDetails } from "../details/review-details";
-import PageNavigator from "../details/page-navigator";
+import PinNavigator from "../pin-navigator/pin-navigator";
 import { IReactionDisposer, reaction } from "mobx";
 
 interface SlidingPanelProps {
     iframe?: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
-    resources?: ReviewResorces;
+    resources?: ReviewResources;
 }
 
 const PinTypeFilters = ({ filter }) => {
@@ -102,7 +102,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         this.setState({ panelVisible: false });
     };
 
-    onEditClick(e: any, location: ReviewLocation) {
+    onEditClick(e: any, location: PinLocation) {
         e.stopPropagation();
         this.props.reviewStore.currentLocation = location;
     }
@@ -131,7 +131,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                             <IconButton className="close-panel" onClick={this.hidePanel}>
                                 <MaterialIcon icon="close" />
                             </IconButton>
-                            <PageNavigator />
+                            <PinNavigator />
                         </h3>
                         {!currentLocation && (
                             <>
@@ -155,7 +155,10 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                             </>
                         )}
                         {currentLocation && (
-                            <ReviewDetails iframe={this.props.iframe} currentEditLocation={this.props.reviewStore.currentLocation} />
+                            <ReviewDetails
+                                iframe={this.props.iframe}
+                                currentEditLocation={this.props.reviewStore.currentLocation}
+                            />
                         )}
                     </div>
                 )}

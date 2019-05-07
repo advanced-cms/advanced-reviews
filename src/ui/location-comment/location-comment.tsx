@@ -7,7 +7,7 @@ import { inject } from "mobx-react";
 
 interface LocationCommentProps {
     currentScreenshot: string;
-    resources?: ReviewResorces;
+    resources?: ReviewResources;
     onToggle: () => void;
     onChange: (comment: string, screenshot: string) => void;
 }
@@ -67,10 +67,7 @@ export default class LocationComment extends React.Component<LocationCommentProp
                         <DropDownMenu icon="image">
                             <img src={this.props.currentScreenshot} />
                         </DropDownMenu>
-                        <IconButton
-                            onClick={() => this.onRemoveScreenshot()}
-                            title="Remove screenshot"
-                        >
+                        <IconButton onClick={() => this.onRemoveScreenshot()} title="Remove screenshot">
                             <MaterialIcon icon="remove" />
                         </IconButton>
                     </>
