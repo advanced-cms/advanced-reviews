@@ -1,7 +1,7 @@
 var path = require("path");
 var webpackCommon = require("./webpack.config.common");
 
-webpackCommon.entry = "./reviewComponentWidget.tsx";
+webpackCommon.entry = "./review-component-widget/review-component-widget.tsx";
 
 webpackCommon.output = {
     filename: "ReviewWidget.js",
@@ -20,4 +20,3 @@ webpackCommon.externals = [
 ];
 
 module.exports = webpackCommon;
-

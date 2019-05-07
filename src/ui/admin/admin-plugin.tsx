@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 interface ReviewLocation {
@@ -13,7 +13,7 @@ interface ReviewGroup {
 
 interface AdminPluginProps {
     data: ReviewGroup[];
-    onDeleteClick(contentLink: string): void
+    onDeleteClick(contentLink: string): void;
 }
 
 function AdminPluginComponent(props: AdminPluginProps) {
@@ -25,11 +25,10 @@ function AdminPluginComponent(props: AdminPluginProps) {
         setCurrentContentLink(reviewLocation.contentLink);
         try {
             var parsed = JSON.parse(reviewLocation.serializedReview);
-            parsed.forEach((reviewLocation) => {
+            parsed.forEach(reviewLocation => {
                 try {
-                reviewLocation.data = JSON.parse(reviewLocation.data); 
-                } catch(ex) {
-                }
+                    reviewLocation.data = JSON.parse(reviewLocation.data);
+                } catch (ex) {}
             });
             parsed = JSON.stringify(parsed, null, 2);
             setCurrentJSON(parsed);
@@ -44,33 +43,38 @@ function AdminPluginComponent(props: AdminPluginProps) {
     return (
         <div className="reviews-list">
             <ul className="list">
-                {props.data.map(x =>
-                    <li key={x.id || '[no ContentLink]'}>
-                        <span className="main-link">{x.id || '[no ContentLink]'}</span>
+                {props.data.map(x => (
+                    <li key={x.id || "[no ContentLink]"}>
+                        <span className="main-link">{x.id || "[no ContentLink]"}</span>
                         <ul>
-                            {x.contentLinks.map(c =>
-                                <li className="row" key={c.contentLink || '[empty]'}>
-                                    <a href="#" onClick={() => changeReviewLocation(c)}>{c.contentLink || '[empty]'}</a>
-                                    <a className="delete" href="#" onClick={() => props.onDeleteClick(c.contentLink)}>Delete</a>
+                            {x.contentLinks.map(c => (
+                                <li className="row" key={c.contentLink || "[empty]"}>
+                                    <a href="#" onClick={() => changeReviewLocation(c)}>
+                                        {c.contentLink || "[empty]"}
+                                    </a>
+                                    <a className="delete" href="#" onClick={() => props.onDeleteClick(c.contentLink)}>
+                                        Delete
+                                    </a>
                                 </li>
-                            )}
+                            ))}
                         </ul>
                     </li>
-                )}
+                ))}
             </ul>
-            {currentJSON &&
+            {currentJSON && (
                 <div className="details">
                     <h3>{currentContentLink}</h3>
-                    {currentException &&
-                        <div>{currentException}</div>
-                    }
-                    <div><pre>{currentJSON}</pre></div>
+                    {currentException && <div>{currentException}</div>}
+                    <div>
+                        <pre>{currentJSON}</pre>
+                    </div>
                 </div>
-            }
+            )}
         </div>
     );
 }
 
 ReactDOM.render(
-    <AdminPluginComponent data={window["allReviewLocations"]} onDeleteClick={window["onDeleteClick"]} />, document.getElementById("admin-plugin-container")
+    <AdminPluginComponent data={window["allReviewLocations"]} onDeleteClick={window["onDeleteClick"]} />,
+    document.getElementById("admin-plugin-container")
 );

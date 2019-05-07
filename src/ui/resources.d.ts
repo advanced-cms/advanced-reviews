@@ -1,4 +1,4 @@
-interface ReviewResorces_Dialog {
+interface ReviewResources_Dialog {
     /** Add comment */
     addcomment: string;
     /** cancel */
@@ -11,19 +11,18 @@ interface ReviewResorces_Dialog {
     save: string;
 }
 
-interface ReviewResorces_Panel {
+interface ReviewResources_Panel {
     /** Click to edit */
     clicktoedit: string;
     /** Add screenshot */
     addscreenshot: string;
     /** Task resolved. Click to reopen. */
     taskdone: string;
-    /** Click to resolve. */
+    /** Active. Click to resolve. */
     tasknotdone: string;
 }
 
-interface ReviewResorces {
-    dialog: ReviewResorces_Dialog;
-    panel: ReviewResorces_Panel;
+interface ReviewResources {
+    dialog: ReviewResources_Dialog;
+    panel: ReviewResources_Panel;
 }
-
