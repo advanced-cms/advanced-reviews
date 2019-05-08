@@ -54,8 +54,9 @@ namespace AdvancedExternalReviews
             
             try
             {
-                var page = _contentLoader.Get<PageData>(externalReviewLink.ContentLink);
+                var page = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
                 segmentContext.RemainingPath = nextSegment.Remaining;
+                ExternalReview.IsInExternalReviewContext = true;
 
                 return page;
             }
