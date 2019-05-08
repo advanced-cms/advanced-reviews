@@ -28,7 +28,7 @@ namespace AdvancedExternalReviews
                 return new HttpNotFoundResult("Content not found");
             }
 
-            var content = _contentLoader.Get<PageData>(externalReviewLink.ContentLink);
+            var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
             if (!content.QueryDistinctAccess(AccessLevel.Read))
             {
                 return new RestStatusCodeResult(HttpStatusCode.Forbidden, "Access denied");
