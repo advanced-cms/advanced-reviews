@@ -486,6 +486,7 @@
     <Content Include="modules\_protected\alloy.ExternalReviews\Views\web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="modules\_protected\alloy.ExternalReviews\Views\BlockPreview\Index.cshtml" />
     <None Include="Views\_ReadMe.txt" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
