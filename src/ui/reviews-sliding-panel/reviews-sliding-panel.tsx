@@ -18,7 +18,7 @@ interface SlidingPanelProps {
     resources?: ReviewResources;
 }
 
-const PinTypeFilters = ({ filter }) => {
+const PinTypeFilters = observer(({ filter }) => {
     return (
         <div className="type-filters">
             <div className="filter unread">
@@ -47,9 +47,9 @@ const PinTypeFilters = ({ filter }) => {
             </div>
         </div>
     );
-};
+});
 
-const Filters = ({ filter }) => {
+const Filters = observer(({ filter }) => {
     return (
         <div>
             <div className="filter main-filter">
@@ -63,7 +63,7 @@ const Filters = ({ filter }) => {
             {filter.reviewMode && <PinTypeFilters filter={filter} />}
         </div>
     );
-};
+});
 
 @inject("resources")
 @inject("reviewStore")
@@ -131,7 +131,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                             <IconButton className="close-panel" onClick={this.hidePanel}>
                                 <MaterialIcon icon="close" />
                             </IconButton>
-                            <PinNavigator />
+                            {currentLocation && <PinNavigator />}
                         </h3>
                         {!currentLocation && (
                             <>
