@@ -158,6 +158,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlocksPreview\BlockPreviewController.cs" />
+    <Compile Include="BlocksPreview\BlockPreviewInitialization.cs" />
+    <Compile Include="BlocksPreview\BlockPreviewViewModel.cs" />
+    <Compile Include="BlocksPreview\BlocksTemplateCoordinator.cs" />
+    <Compile Include="ExternalReview.cs" />
     <Compile Include="ExternalReviewComponent.cs" />
     <Compile Include="ExternalReviewOptions.cs" />
     <Compile Include="GlobalRouteInitialization.cs" />
