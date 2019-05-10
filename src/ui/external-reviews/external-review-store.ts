@@ -28,6 +28,8 @@ export interface IExternalReviewStore {
     addLink(isEditable: boolean): void;
 
     delete(item: ReviewLink): void;
+
+    share(item: ReviewLink, email: string, message: string);
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
@@ -59,5 +61,9 @@ export class ExternalReviewStore implements IExternalReviewStore {
         }
         this.links.splice(itemIndex, 1);
         this._externalReviewService.delete(item.token);
+    }
+
+    share(item: ReviewLink, email: string, message: string) {
+        this._externalReviewService.share(item.token, email, message);
     }
 }
