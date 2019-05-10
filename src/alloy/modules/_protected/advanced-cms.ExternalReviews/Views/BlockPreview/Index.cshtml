@@ -1,0 +1,53 @@
+﻿@using AdvancedExternalReviews.BlocksPreview
+
+@using System.Web.Mvc.Html
+@using EPiServer.Shell.Web.Mvc.Html
+
+@inherits System.Web.Mvc.WebViewPage<AdvancedExternalReviews.BlocksPreview.BlockPreviewViewModel>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Content review</title>
+    <meta name="robots" content="noindex">
+
+    <style type="text/css">
+        body {
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .block-display-type-header {
+            width: 100%;
+            padding: 10px 5px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Preview for: @Model.PreviewContent.Name</h1>
+
+    @foreach (BlockPreviewViewModel.PreviewArea area in Model.Areas)
+    {
+        if (area.Supported)
+        {
+            <div class="block-display-type-header">@string.Format(@Html.Translate("/preview/heading"), Model.PreviewContent.Name, @Html.Translate(area.AreaName))</div>
+            <div class="row preview clearfix">
+                @(@Html.DisplayFor(x => area.ContentArea))
+            </div>
+        }
+    }
+
+    @if (!Model.Areas.Any())
+    {
+        @(@Html.Partial("TemplateHint", string.Format(@Html.Translate("/preview/norendereratall"), Model.PreviewContent.Name)))
+    }
+
+</body>
+</html>
