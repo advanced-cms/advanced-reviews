@@ -4,7 +4,7 @@ import ExternalReviewWidgetContent from "../external-reviews/external-review-wid
 import FakeReviewLinksStore from "./fake-review-links-store";
 import { action } from "@storybook/addon-actions";
 
-storiesOf("External review component", module)
+storiesOf("External reviews/Review component", module)
     .add("default", () => {
         const store = new FakeReviewLinksStore();
         return <ExternalReviewWidgetContent store={store} />;
