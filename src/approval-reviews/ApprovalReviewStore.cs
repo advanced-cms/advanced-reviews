@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Web.Mvc;
+using EPiServer;
 using EPiServer.Core;
+using EPiServer.Security;
 using EPiServer.Shell.Services.Rest;
 
 namespace AdvancedApprovalReviews
@@ -8,17 +10,24 @@ namespace AdvancedApprovalReviews
     [RestStore("approvaladvancedreview")]
     public class ApprovalReviewStore : RestControllerBase
     {
+        private readonly IContentLoader _contentLoader;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
-        private readonly object _lock = new object();
 
-        public ApprovalReviewStore(IApprovalReviewsRepository approvalReviewsRepository)
+        public ApprovalReviewStore(IContentLoader contentLoader, IApprovalReviewsRepository approvalReviewsRepository)
         {
+            _contentLoader = contentLoader;
             _approvalReviewsRepository = approvalReviewsRepository;
         }
 
         [HttpGet]
         public ActionResult Get(ContentReference id)
         {
+            var errorResult = ValidateContent(id);
+            if (errorResult != null)
+            {
+                return errorResult;
+            }
+
             return Rest(_approvalReviewsRepository.Load(id));
         }
 
@@ -30,6 +39,12 @@ namespace AdvancedApprovalReviews
                 return new RestStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            var errorResult = ValidateContent(reviewModel.ContentLink);
+            if (errorResult != null)
+            {
+                return errorResult;
+            }
+
             try
             {
                 var result = _approvalReviewsRepository.Update(reviewModel.ContentLink, reviewModel.ReviewLocation);
@@ -39,6 +54,21 @@ namespace AdvancedApprovalReviews
             {
                 return new RestStatusCodeResult(HttpStatusCode.NotFound);
             }
+        }
+
+        private ActionResult ValidateContent(ContentReference id)
+        {
+            if (!_contentLoader.TryGet(id, out IContent content))
+            {
+                return new HttpNotFoundResult("Content not found");
+            }
+
+            if (!content.QueryDistinctAccess(AccessLevel.Edit))
+            {
+                return new RestStatusCodeResult(HttpStatusCode.Forbidden, "Access denied");
+            }
+
+            return null;
         }
     }
 
