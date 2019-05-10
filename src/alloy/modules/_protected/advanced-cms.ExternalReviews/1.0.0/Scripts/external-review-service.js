@@ -41,6 +41,11 @@ define([
             return this.externalReviewStore.remove(token);
         },
 
+        share: function (token, email, message) {
+            this.externalReviewStore.executeMethod("ShareReviewLink", token,
+                { email: email, message: message});
+        },
+
         _handleContentAction: function (action) {
             return when(this.getCurrentContent()).then(function (content) {
                 if (!content) {
