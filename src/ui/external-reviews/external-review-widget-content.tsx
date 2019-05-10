@@ -7,6 +7,8 @@ import IconButton from "@material/react-icon-button";
 import MaterialIcon from "@material/react-material-icon";
 import List, { ListItemGraphic, ListItem, ListItemText } from "@material/react-list";
 import { IExternalReviewStore, ReviewLink } from "./external-review-store";
+import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
+
 import "@material/react-list/index.scss";
 import "./external-review-widget-content.scss";
 
@@ -16,6 +18,7 @@ interface ExternalReviewWidgetContentProps {
 
 const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetContentProps) => {
     const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
+    const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
 
     const onDelete = (action: boolean) => {
         setLinkToDelete(null);
@@ -23,6 +26,14 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
             return;
         }
         store.delete(currentLinkToDelete);
+    };
+
+    const onShareDialogClose = (shareLink: LinkShareResult) => {
+        setLinkToShare(null);
+        if (shareLink === null) {
+            return;
+        }
+        store.share(currentLinkToShare, shareLink.email, shareLink.message);
     };
 
     const options = [
@@ -74,7 +85,7 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
                                     className="item-action"
                                     disabled={!item.isActive}
                                     title="share"
-                                    onClick={() => {}}
+                                    onClick={() => setLinkToShare(item)}
                                 >
                                     <MaterialIcon icon="share" />
                                 </IconButton>
@@ -99,6 +110,8 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
                 open={!!currentLinkToDelete}
                 onCloseDialog={onDelete}
             />
+
+            <ShareDialog open={!!currentLinkToShare} onClose={onShareDialogClose} />
         </>
     );
 });
