@@ -43,4 +43,6 @@ export default class FakeReviewLinksStore extends ExternalReviewStore {
         }
         this.links.splice(itemIndex, 1);
     }
+
+    share(item: ReviewLink, email: string, message: string) {}
 }
