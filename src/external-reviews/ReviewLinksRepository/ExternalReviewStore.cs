@@ -6,12 +6,12 @@ using EPiServer.Shell.Services.Rest;
 namespace AdvancedExternalReviews.ReviewLinksRepository
 {
     [RestStore("externalreviewstore")]
-    public class ApprovalReviewStore : RestControllerBase
+    public class ExternalReviewStore : RestControllerBase
     {
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly object _lock = new object();
 
-        public ApprovalReviewStore(IExternalReviewLinksRepository externalReviewLinksRepository)
+        public ExternalReviewStore(IExternalReviewLinksRepository externalReviewLinksRepository)
         {
             _externalReviewLinksRepository = externalReviewLinksRepository;
         }
@@ -32,6 +32,24 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
 
             var result = _externalReviewLinksRepository.AddLink(externalLink.ContentLink, externalLink.IsEditable);
             return Rest(result);
+        }
+
+        public ActionResult ShareReviewLink(string id, string email, string message)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
+            if (externalReviewLink == null)
+            {
+                return new HttpNotFoundResult("Token not found");
+            }
+
+            //TODO: externalReviews send email
+
+            return Rest(true);
         }
 
         [HttpDelete]
