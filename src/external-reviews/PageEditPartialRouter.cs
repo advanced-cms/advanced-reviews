@@ -47,11 +47,11 @@ namespace AdvancedExternalReviews
 
             try
             {
-                var page = _contentLoader.Get<PageData>(externalReviewLink.ContentLink);
+                var page = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 segmentContext.ContextMode = ContextMode.Edit;
-                //segmentContext.RouteData.DataTokens[RoutingConstants.ContextModeKey] = ContextMode.Edit;
+                ExternalReview.IsInExternalReviewContext = true;
 
                 return page;
             }
