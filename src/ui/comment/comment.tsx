@@ -12,7 +12,7 @@ interface CommentProps {
 
 @inject("reviewStore")
 @observer
-export default class PageNavigator extends React.Component<CommentProps, any> {
+export default class Comment extends React.Component<CommentProps, any> {
     render() {
         const { getUserAvatarUrl } = this.props.reviewStore!;
 
