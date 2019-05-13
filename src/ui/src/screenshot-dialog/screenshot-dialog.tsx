@@ -9,11 +9,11 @@ import "react-image-crop/lib/ReactCrop.scss";
 import "@material/react-icon-button/index.scss";
 import "./screenshot-dialog.scss";
 
-import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
+import Dialog, { DialogContent, DialogTitle } from "@material/react-dialog";
 import { observer } from "mobx-react";
 
 interface ScreenshotPickerProps {
-    iframe: HTMLIFrameElement | string;
+    iframe: HTMLIFrameElement;
     onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
     maxWidth: number;
@@ -108,26 +108,9 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
     };
 
     componentDidMount(): void {
-        const iframe = (this.props.iframe as string)
-            ? (document.getElementById("iframe") as HTMLIFrameElement)
-            : (this.props.iframe as HTMLIFrameElement);
-        if (!iframe) {
-            return;
-        }
-
-        const loadIframe = () => {
-            html2canvas(iframe.contentDocument.body).then(canvas => {
-                this.setState({ input: canvas.toDataURL() });
-            });
-        };
-
-        if (iframe.contentDocument && iframe.contentDocument.body) {
-            loadIframe();
-        } else {
-            iframe.onload = () => {
-                loadIframe();
-            };
-        }
+        html2canvas(this.props.iframe.contentDocument.body).then(canvas => {
+            this.setState({ input: canvas.toDataURL() });
+        });
     }
 
     cancel = () => {
