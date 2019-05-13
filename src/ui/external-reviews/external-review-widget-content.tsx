@@ -104,14 +104,16 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
             <div>
                 <ContextMenu icon="playlist_add" title="" menuItems={options} />
             </div>
-            <Confirmation
-                title="Remove link"
-                description="Are you sure you want to remove link?"
-                open={!!currentLinkToDelete}
-                onCloseDialog={onDelete}
-            />
+            {!!currentLinkToDelete && (
+                <Confirmation
+                    title="Remove link"
+                    description="Are you sure you want to remove link?"
+                    open={!!currentLinkToDelete}
+                    onCloseDialog={onDelete}
+                />
+            )}
 
-            <ShareDialog open={!!currentLinkToShare} onClose={onShareDialogClose} />
+            {!!currentLinkToShare && <ShareDialog open={!!currentLinkToShare} onClose={onShareDialogClose} />}
         </>
     );
 });
