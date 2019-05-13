@@ -10,6 +10,4 @@ webpackCommon.output = {
     path: path.resolve(__dirname, "../../src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/Views/admin")
 };
 
-webpackCommon.devtool = "eval-source-map";
-
 module.exports = webpackCommon;
