@@ -1,11 +1,8 @@
-const isProd = process.env.NODE_ENV === "production";
-
-module.exports = {
+const config = {
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: [".ts", ".tsx", ".js"]
     },
-    devtool: isProd ? "source-map" : "eval-source-map",
     module: {
         rules: [
             { test: /\.tsx?$/, loader: "ts-loader" },
@@ -55,4 +52,9 @@ module.exports = {
             }
         ]
     }
+};
+
+module.exports = (env, argv) => {
+    config.devtool = argv.mode === "production" ? "source-map" : "eval-source-map";
+    return config;
 };
