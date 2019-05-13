@@ -30,6 +30,7 @@ const ShareDialog = ({ open, onClose }: ShareDialogProps) => {
 
     const onDialogClose = (action: string) => {
         if (action !== "save") {
+            onClose(null);
             return;
         }
 
