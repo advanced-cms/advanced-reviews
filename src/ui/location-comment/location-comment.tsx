@@ -23,7 +23,7 @@ export default class LocationComment extends React.Component<LocationCommentProp
     constructor(props: LocationCommentProps) {
         super(props);
         this.state = {
-            currentCommentText: null
+            currentCommentText: ""
         };
     }
 
