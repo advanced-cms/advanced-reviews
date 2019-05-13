@@ -1,5 +1,6 @@
 var path = require("path");
 var webpackCommon = require("./webpack.config.common");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 webpackCommon.entry = "./review-component-widget/review-component-widget.tsx";
 
@@ -9,6 +10,11 @@ webpackCommon.output = {
     libraryExport: "default",
     path: path.resolve(__dirname, "../src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/1.0.0/Scripts")
 };
+
+if (!webpackCommon.plugins) {
+    webpackCommon.plugins = [];
+    webpackCommon.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "disabled" }));
+}
 
 webpackCommon.externals = [
     "dojo/_base/declare",
