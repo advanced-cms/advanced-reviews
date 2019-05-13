@@ -32,3 +32,4 @@ src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/1.0.0/Scripts/ReviewWidg
 src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/1.0.0/Scripts/report.html
 src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/Views/admin/adminPlugin.js
 src/Alloy.Mvc.Template/modules/_protected/alloy.ExternalReviews/1.0.0/Scripts/external-review-component.js
+src/Alloy.Mvc.Template/modules/_protected/alloy.ExternalReviews/Views/external-review-component.js
