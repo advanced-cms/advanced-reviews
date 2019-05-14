@@ -6,9 +6,11 @@ import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import ExternalReviewService from "alloy-external-review/external-review-service";
 import { ExternalReviewStore } from "./external-review-store";
 import ExternalReviewWidgetContent from "./external-review-widget-content";
-//import ReviewService from "alloy-review/advancedReviewService";
 //import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 
+/**
+ * Edit Mode component that list external links
+ */
 export default declare([WidgetBase, _ContentContextMixin], {
     postCreate: function() {
         this._reviewService = new ExternalReviewService();
