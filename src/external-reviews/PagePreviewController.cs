@@ -42,18 +42,67 @@ namespace AdvancedExternalReviews
                 var pagePreviewModel = new ContentPreviewModel
                 {
                     Token = token,
-                    Name = content.Name
+                    Name = content.Name,
+                    ReviewJsScriptPath = GetJsScriptPath(),
+                    ResetCssPath = GetResetCssPath()
                 };
                 return View(resolvedPath, pagePreviewModel);
             }
 
             return new HttpNotFoundResult("Content not found");
         }
+
+        [HttpPost]
+        public ActionResult AddPin(AddPinModel pinModel)
+        {
+            //TODO: add points
+
+            return new RestResult()
+            {
+                Data = new
+                {
+                    Id = 10
+                }
+            };
+        }
+
+        private string GetJsScriptPath()
+        {
+            const string url = "Views/external-review-component.js";
+            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
+                out var jsScriptPath))
+            {
+                return jsScriptPath;
+            }
+
+            return "";
+        }
+
+        private string GetResetCssPath()
+        {
+            const string url = "Views/reset.css";
+            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
+                out var resetCssPath))
+            {
+                return resetCssPath;
+            }
+
+            return "";
+        }
+    }
+
+    public class AddPinModel
+    {
+        public string Message { get; set; }
+        public string Priority { get; set; }
     }
 
     public class ContentPreviewModel
     {
         public string Token { get; set; }
         public string Name { get; set; }
+
+        public string ReviewJsScriptPath { get; set; }
+        public string ResetCssPath { get; set; }
     }
 }
