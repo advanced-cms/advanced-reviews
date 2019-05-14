@@ -89,6 +89,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                             <Row>
                                 <Cell columns={12}>
                                     <LocationComment
+                                        value={this.state.currentCommentText}
                                         currentScreenshot={this.state.currentScreenshot}
                                         onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
                                         onChange={(comment, screenshot) => {
