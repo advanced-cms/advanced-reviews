@@ -7,7 +7,7 @@ import { DropDownMenu } from "../common/drop-down-menu";
 
 interface LocationCommentProps {
     currentScreenshot: string;
-    defaultComment?: string;
+    value: string;
     resources?: ReviewResources;
     onToggle: () => void;
     onChange: (comment: string, screenshot: string) => void;
@@ -27,7 +27,7 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
             <TextField label={`${props.resources!.dialog.addcomment}...`} dense textarea>
                 <Input
                     ref={(input: any) => setCommentInput(input)}
-                    value={props.defaultComment}
+                    value={props.value}
                     onChange={e => props.onChange(e.currentTarget.value, props.currentScreenshot)}
                 />
             </TextField>
@@ -41,7 +41,7 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
                     <DropDownMenu icon="image">
                         <img src={props.currentScreenshot} />
                     </DropDownMenu>
-                    <IconButton onClick={() => props.onChange(props.defaultComment, null)} title="Remove screenshot">
+                    <IconButton onClick={() => props.onChange(props.value, null)} title="Remove screenshot">
                         <MaterialIcon icon="remove" />
                     </IconButton>
                 </>
