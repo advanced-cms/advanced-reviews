@@ -24,7 +24,6 @@ interface ReviewDetailsProps {
 @inject("resources")
 @observer
 export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto> {
-    commentInput: any;
     commentsChangedReaction: IReactionDisposer;
 
     componentDidMount(): void {
