@@ -37,8 +37,24 @@ namespace AdvancedExternalReviews
             string[] allowedMethods = { "GET" };
             var methodConstraints = new HttpMethodConstraint(allowedMethods);
             route.Constraints = new RouteValueDictionary { { "httpMethod", methodConstraints } };
-
+            
             e.Routes.Add(route);
+
+            RegisterAddPin(e.Routes, externalReviewOptions);
+        }
+
+        private void RegisterAddPin(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions)
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues.Add("controller", "PagePreview");
+            routeValues.Add("action", "AddPin");
+
+            var route = new Route(externalReviewOptions.ReviewsUrl + "/AddPin", routeValues, new MvcRouteHandler());
+            string[] allowedMethods = { "POST" };
+            var methodConstraints = new HttpMethodConstraint(allowedMethods);
+            route.Constraints = new RouteValueDictionary { { "httpMethod", methodConstraints } };
+
+            routeCollection.Add(route);
         }
 
         public void Preload(string[] parameters)

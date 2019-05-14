@@ -394,6 +394,7 @@
     <None Include="Models\Pages\_ReadMe.txt" />
     <Content Include="modules\_protected\alloy.ExternalReviews\1.0.0\Scripts\external-review-service.js" />
     <Content Include="modules\_protected\alloy.ExternalReviews\1.0.0\Scripts\initializer.js" />
+    <Content Include="modules\_protected\alloy.ExternalReviews\Views\reset.css" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\advancedReviewService.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\commandsProvider.js" />
     <Content Include="modules\_protected\alloy.Reviews\1.0.0\Scripts\initializer.js" />
