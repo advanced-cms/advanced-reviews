@@ -176,7 +176,7 @@ export interface IReviewComponentStore {
 
     toggleResolve(): Promise<PinLocation>;
 
-    addComment(commentText: string, screenshot?: string);
+    addComment(commentText: string, screenshot?: string): Promise<PinLocation>;
 
     save(state: NewPinDto, reviewLocation: PinLocation): Promise<PinLocation>;
 
