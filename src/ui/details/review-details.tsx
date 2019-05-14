@@ -24,7 +24,6 @@ interface ReviewDetailsProps {
 @inject("resources")
 @observer
 export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto> {
-    commentInput: any;
     commentsChangedReaction: IReactionDisposer;
 
     componentDidMount(): void {
@@ -134,6 +133,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                         <Row>
                             <Cell columns={12}>
                                 <LocationComment
+                                    value={this.state.currentCommentText}
                                     currentScreenshot={this.state.currentScreenshot}
                                     onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
                                     onChange={(comment, screenshot) => {
