@@ -29,10 +29,10 @@ namespace AdvancedExternalReviews
             }
 
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
-            if (!content.QueryDistinctAccess(AccessLevel.Read))
+            /*if (!content.QueryDistinctAccess(AccessLevel.Read))
             {
                 return new RestStatusCodeResult(HttpStatusCode.Forbidden, "Access denied");
-            }
+            }*/
 
             const string url = "Views/PagePreview/Index.cshtml";
 
