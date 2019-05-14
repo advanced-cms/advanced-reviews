@@ -11,4 +11,6 @@ module.exports = (env, argv) => {
         //libraryExport: "default",
         path: path.resolve(__dirname, "../../src/Alloy.Mvc.Template/modules/_protected/alloy.ExternalReviews/Views")
     };
+
+    return webpackCommon;
 };
