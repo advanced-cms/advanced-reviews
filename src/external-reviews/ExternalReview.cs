@@ -6,6 +6,7 @@ namespace AdvancedExternalReviews
     {
         public static bool IsInExternalReviewContext
         {
+            //TODO: check token
             get
             {
                 var isInExternalReviewMode = HttpContext.Current.Items["IsInExternalRviewMode"];
