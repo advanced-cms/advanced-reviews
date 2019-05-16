@@ -162,6 +162,9 @@
     <Compile Include="BlocksPreview\BlockPreviewInitialization.cs" />
     <Compile Include="BlocksPreview\BlockPreviewViewModel.cs" />
     <Compile Include="BlocksPreview\BlocksTemplateCoordinator.cs" />
+    <Compile Include="DraftContentAreaPreview\DrafContentAreaPreviewInitializerInitializer.cs" />
+    <Compile Include="DraftContentAreaPreview\DraftContentAreaLoader.cs" />
+    <Compile Include="DraftContentAreaPreview\DraftContentAreaRenderer.cs" />
     <Compile Include="ExternalReview.cs" />
     <Compile Include="ExternalReviewComponent.cs" />
     <Compile Include="ExternalReviewOptions.cs" />
