@@ -4,13 +4,11 @@ import { Priority, PinLocation, NewPinDto, IReviewComponentStore } from "../stor
 import priorityIconMappings from "../store/priority-icon-mappings";
 import { ContextMenu } from "../common/context-menu";
 import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import { Cell, Grid, Row } from "@material/react-layout-grid";
 import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
 import LocationComment from "../location-comment/location-comment";
 
 import "@material/react-button/index.scss";
 import "@material/react-dialog/index.scss";
-import "@material/react-layout-grid/index.scss";
 import "@material/react-menu-surface/index.scss";
 import "@material/react-text-field/index.scss";
 import "./new-review-dialog.scss";
@@ -68,37 +66,29 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                 >
                     <DialogTitle>
                         <div className="header">
-                            <Grid>
-                                <Row>
-                                    <Cell columns={9} className="review-actions left-align">
-                                        {this.props.currentEditLocation.propertyName || res.dialog.reviewedit}
-                                    </Cell>
-                                    <Cell columns={3} className="review-actions">
-                                        <ContextMenu
-                                            icon={priorityIconMappings[this.state.currentPriority]}
-                                            title={this.state.currentPriority}
-                                            menuItems={options}
-                                        />
-                                    </Cell>
-                                </Row>
-                            </Grid>
+                            <div className="left-align">
+                                {this.props.currentEditLocation.propertyName || res.dialog.reviewedit}
+                            </div>
+                            <div className="review-actions">
+                                <ContextMenu
+                                    icon={priorityIconMappings[this.state.currentPriority]}
+                                    title={this.state.currentPriority}
+                                    menuItems={options}
+                                />
+                            </div>
                         </div>
                     </DialogTitle>
                     <DialogContent>
-                        <Grid className="dialog-grid">
-                            <Row>
-                                <Cell columns={12}>
-                                    <LocationComment
-                                        value={this.state.currentCommentText}
-                                        currentScreenshot={this.state.currentScreenshot}
-                                        onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
-                                        onChange={(comment, screenshot) => {
-                                            this.updateComment(comment, screenshot);
-                                        }}
-                                    />
-                                </Cell>
-                            </Row>
-                        </Grid>
+                        <div className="dialog-grid">
+                            <LocationComment
+                                value={this.state.currentCommentText}
+                                currentScreenshot={this.state.currentScreenshot}
+                                onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
+                                onChange={(comment, screenshot) => {
+                                    this.updateComment(comment, screenshot);
+                                }}
+                            />
+                        </div>
                     </DialogContent>
                     <DialogFooter>
                         <DialogButton dense action="cancel">
