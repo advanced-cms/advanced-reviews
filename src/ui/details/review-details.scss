@@ -1,6 +1,7 @@
 .comments-list {
     margin: 10px 0;
-    overflow-y: auto;
+    min-height: 100px;
+    max-height: 500px;
 }
 
 .first-comment {
