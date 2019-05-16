@@ -5,6 +5,7 @@ import MaterialIcon from "@material/react-material-icon";
 import IconButton from "@material/react-icon-button";
 import Switch from "@material/react-switch";
 import List, { ListItem, ListItemText } from "@material/react-list";
+import { slide as Menu } from "react-burger-menu";
 
 import "@material/react-switch/index.scss";
 import "./reviews-sliding-panel.scss";
@@ -102,6 +103,14 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         this.setState({ panelVisible: false });
     };
 
+    handleStateChange = state => {
+        if (state.isOpen) {
+            this.showPanel();
+        } else {
+            this.hidePanel();
+        }
+    };
+
     onEditClick(e: any, location: PinLocation) {
         e.stopPropagation();
         this.props.reviewStore.currentLocation = location;
@@ -111,58 +120,93 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         const { currentLocation, filter, reviewLocations } = this.props.reviewStore!;
         const res = this.props.resources!;
 
+        var styles = {
+            bmBurgerButton: {
+                position: "absolute",
+                width: "36px",
+                height: "30px",
+                right: "36px",
+                top: "36px"
+            },
+            bmBurgerBars: {
+                background: "#373a47"
+            },
+            bmCrossButton: {
+                height: "36px",
+                width: "36px"
+            },
+            bmMenuWrap: {
+                position: "fixed",
+                height: "99%"
+            },
+            bmMenu: {
+                background: "white",
+                padding: 20,
+                fontSize: "1.15em",
+                borderLeft: "1px solid #c0c0c0"
+            },
+            bmItemList: {
+                height: "97%"
+            },
+            bmMorphShape: {
+                fill: "#373a47"
+            }
+        };
+
         return (
-            <>
-                <IconButton className="panel-toggle" onClick={this.showPanel}>
-                    <MaterialIcon icon="format_list_bulleted" />
-                </IconButton>
-                {this.state.panelVisible && (
-                    <div className="panel-container">
-                        <h3>
-                            {currentLocation && (
-                                <IconButton
-                                    title="Go back to list"
-                                    onClick={() => (this.props.reviewStore.currentLocation = null)}
-                                >
-                                    <MaterialIcon icon="chevron_left" />
-                                </IconButton>
-                            )}
-                            Review panel
-                            <IconButton className="close-panel" onClick={this.hidePanel}>
-                                <MaterialIcon icon="close" />
-                            </IconButton>
-                            {currentLocation && <PinNavigator />}
-                        </h3>
-                        {!currentLocation && (
-                            <>
-                                <Filters filter={filter} />
-                                <div>
-                                    <List singleSelection handleSelect={this.onSelected} className="locations">
-                                        {reviewLocations.map(location => (
-                                            <ListItem
-                                                title={res.panel.clicktoedit}
-                                                key={location.id}
-                                                onClick={e => this.onEditClick(e, location)}
-                                            >
-                                                <ListItemText primaryText={location.displayName} />
-                                                <IconButton className="edit" title="Open details">
-                                                    <MaterialIcon icon="edit" />
-                                                </IconButton>
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </div>
-                            </>
-                        )}
+            <Menu
+                width={400}
+                className="panel-container"
+                styles={styles}
+                isOpen={this.state.panelVisible}
+                noOverlay
+                disableOverlayClick
+                disableAutoFocus
+                right
+                customCrossIcon={<MaterialIcon icon="close" />}
+                customBurgerIcon={<MaterialIcon icon="format_list_bulleted" />}
+                onStateChange={state => this.handleStateChange(state)}
+            >
+                <div>
+                    <h3>
                         {currentLocation && (
-                            <ReviewDetails
-                                iframe={this.props.iframe}
-                                currentEditLocation={this.props.reviewStore.currentLocation}
-                            />
+                            <IconButton
+                                title="Go back to list"
+                                onClick={() => (this.props.reviewStore.currentLocation = null)}
+                            >
+                                <MaterialIcon icon="chevron_left" />
+                            </IconButton>
                         )}
-                    </div>
-                )}
-            </>
+                        Review panel
+                        {currentLocation && <PinNavigator />}
+                    </h3>
+                    {!currentLocation && (
+                        <>
+                            <Filters filter={filter} />
+                            <List singleSelection handleSelect={this.onSelected} className="locations">
+                                {reviewLocations.map(location => (
+                                    <ListItem title={res.panel.clicktoedit} key={location.id}>
+                                        <ListItemText primaryText={location.displayName} />
+                                        <IconButton
+                                            className="edit"
+                                            title="Open details"
+                                            onClick={e => this.onEditClick(e, location)}
+                                        >
+                                            <MaterialIcon icon="edit" />
+                                        </IconButton>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </>
+                    )}
+                    {currentLocation && (
+                        <ReviewDetails
+                            iframe={this.props.iframe}
+                            currentEditLocation={this.props.reviewStore.currentLocation}
+                        />
+                    )}
+                </div>
+            </Menu>
         );
     }
 }
