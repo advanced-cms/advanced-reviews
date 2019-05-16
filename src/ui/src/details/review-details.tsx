@@ -3,12 +3,12 @@ import { IReviewComponentStore, NewPinDto, PinLocation } from "../store/review-s
 import { inject, observer } from "mobx-react";
 import Button from "@material/react-button";
 import { IReactionDisposer, reaction } from "mobx";
-import { Cell, Grid, Row } from "@material/react-layout-grid";
 import { DropDownMenu } from "../common/drop-down-menu";
 import Comment from "../comment/comment";
 import Switch from "@material/react-switch";
 import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
 import LocationComment from "../location-comment/location-comment";
+import ScrollArea from "react-scrollbar";
 
 import "@material/react-switch/index.scss";
 import "./review-details.scss";
@@ -25,6 +25,7 @@ interface ReviewDetailsProps {
 @observer
 export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto> {
     commentsChangedReaction: IReactionDisposer;
+    private scrollable: any;
 
     componentDidMount(): void {
         this.scrollToBottom();
@@ -57,9 +58,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
 
     scrollToBottom = () => {
         setTimeout(() => {
-            if (this.messagesEnd !== null) {
-                this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-            }
+            this.scrollable.scrollBottom();
         }, 0);
     };
 
@@ -77,8 +76,6 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
         this.setState({ currentScreenshot: screenshot, currentCommentText: comment });
     };
 
-    messagesEnd: HTMLDivElement;
-
     render() {
         this.props.currentEditLocation.updateCurrentUserLastRead();
 
@@ -91,78 +88,62 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
         };
 
         return (
-            <Grid className="dialog-grid">
-                <Row>
-                    <Cell columns={12}>
-                        <div className="filter">
-                            <Switch
-                                nativeControlId="showCustom"
-                                checked={this.props.currentEditLocation.isDone}
-                                onChange={this.resolveTask}
-                            />
-                            <label htmlFor="showCustom">{customAttribute.title}</label>
-                        </div>
-                    </Cell>
-                    <Cell />
-                </Row>
-                <Row className="first-comment">
-                    <Cell columns={12}>
-                        <strong>{this.props.currentEditLocation.firstComment.text}</strong>
-                        {this.props.currentEditLocation.firstComment.screenshot && (
-                            <DropDownMenu icon="image">
-                                <img src={this.props.currentEditLocation.firstComment.screenshot} />
-                            </DropDownMenu>
-                        )}
-                    </Cell>
-                </Row>
-                <Row>
-                    <Cell columns={12} className="comments-list">
-                        {this.props.currentEditLocation.comments.map((comment, idx) => (
-                            <Comment key={idx} comment={comment} />
-                        ))}
-                        <div
-                            style={{ float: "left", clear: "both" }}
-                            ref={el => {
-                                this.messagesEnd = el;
-                            }}
-                        />
-                    </Cell>
-                </Row>
+            <div>
+                <div className="filter">
+                    <Switch
+                        nativeControlId="showCustom"
+                        checked={this.props.currentEditLocation.isDone}
+                        onChange={this.resolveTask}
+                    />
+                    <label htmlFor="showCustom">{customAttribute.title}</label>
+                </div>
+                <div className="first-comment">
+                    <strong>{this.props.currentEditLocation.firstComment.text}</strong>
+                    {this.props.currentEditLocation.firstComment.screenshot && (
+                        <DropDownMenu icon="image">
+                            <img src={this.props.currentEditLocation.firstComment.screenshot} />
+                        </DropDownMenu>
+                    )}
+                </div>
+                <ScrollArea
+                    speed={0.8}
+                    className="comments-list"
+                    horizontal={false}
+                    ref={ref => (this.scrollable = ref)}
+                >
+                    {this.props.currentEditLocation.comments.map((comment, idx) => (
+                        <Comment key={idx} comment={comment} />
+                    ))}
+                </ScrollArea>
                 {!this.props.currentEditLocation.isDone && (
                     <>
-                        <Row>
-                            <Cell columns={12}>
-                                <LocationComment
-                                    value={this.state.currentCommentText}
-                                    currentScreenshot={this.state.currentScreenshot}
-                                    onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
-                                    onChange={(comment, screenshot) => {
-                                        this.updateComment(comment, screenshot);
-                                    }}
-                                />
-                                {this.state.screenshotMode && (
-                                    <ScreenshotDialog
-                                        maxWidth={500}
-                                        maxHeight={300}
-                                        iframe={this.props.iframe}
-                                        onImageSelected={output => {
-                                            this.setState({ currentScreenshot: output });
-                                        }}
-                                        toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
-                                    />
-                                )}
-                            </Cell>
-                        </Row>
-                        <Row>
-                            <Cell columns={12}>
-                                <Button disabled={!canSave} onClick={this.addNewComment}>
-                                    {res.dialog.addcomment}
-                                </Button>
-                            </Cell>
-                        </Row>
+                        <LocationComment
+                            value={this.state.currentCommentText}
+                            currentScreenshot={this.state.currentScreenshot}
+                            onToggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
+                            onChange={(comment, screenshot) => {
+                                this.updateComment(comment, screenshot);
+                            }}
+                        />
+                        {this.state.screenshotMode && (
+                            <ScreenshotDialog
+                                maxWidth={500}
+                                maxHeight={300}
+                                iframe={this.props.iframe}
+                                onImageSelected={output => {
+                                    this.setState({ currentScreenshot: output });
+                                }}
+                                toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
+                            />
+                        )}
+                        <div>
+                            <Button disabled={!canSave} onClick={this.addNewComment}>
+                                {res.dialog.addcomment}
+                            </Button>
+                        </div>
                     </>
                 )}
-            </Grid>
+            </div>
         );
     }
 }
