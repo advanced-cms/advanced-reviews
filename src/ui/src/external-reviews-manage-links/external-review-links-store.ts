@@ -25,6 +25,10 @@ export class ReviewLink {
 export interface IExternalReviewStore {
     links: ReviewLink[];
 
+    initialViewMailMessage: string;
+
+    initialEditMailMessage: string;
+
     addLink(isEditable: boolean): void;
 
     delete(item: ReviewLink): void;
@@ -34,6 +38,10 @@ export interface IExternalReviewStore {
 
 export class ExternalReviewStore implements IExternalReviewStore {
     _externalReviewService: ExternalReviewService;
+
+    initialViewMailMessage: string;
+
+    initialEditMailMessage: string;
 
     @observable links: ReviewLink[] = [];
 

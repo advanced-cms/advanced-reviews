@@ -6,16 +6,19 @@ import Confirmation from "./confirmation";
 import IconButton from "@material/react-icon-button";
 import MaterialIcon from "@material/react-material-icon";
 import List, { ListItemGraphic, ListItem, ListItemText } from "@material/react-list";
-import { IExternalReviewStore, ReviewLink } from "./external-review-store";
+import { IExternalReviewStore, ReviewLink } from "./external-review-links-store";
 import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
 
 import "@material/react-list/index.scss";
-import "./external-review-widget-content.scss";
+import "./external-review-manage-links.scss";
 
 interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
 }
 
+/**
+ * Component used to render list of external review links
+ */
 const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetContentProps) => {
     const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
     const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
@@ -113,7 +116,17 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
                 />
             )}
 
-            {!!currentLinkToShare && <ShareDialog open={!!currentLinkToShare} onClose={onShareDialogClose} />}
+            {!!currentLinkToShare && (
+                <ShareDialog
+                    open={!!currentLinkToShare}
+                    onClose={onShareDialogClose}
+                    initialMessage={
+                        currentLinkToShare && currentLinkToShare.isEditable
+                            ? store.initialEditMailMessage
+                            : store.initialViewMailMessage
+                    }
+                />
+            )}
         </>
     );
 });
