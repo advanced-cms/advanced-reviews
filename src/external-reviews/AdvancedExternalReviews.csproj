@@ -166,7 +166,7 @@
     <Compile Include="DraftContentAreaPreview\DraftContentAreaLoader.cs" />
     <Compile Include="DraftContentAreaPreview\DraftContentAreaRenderer.cs" />
     <Compile Include="ExternalReview.cs" />
-    <Compile Include="ExternalReviewComponent.cs" />
+    <Compile Include="ManageLinks\ExternalReviewLinksManageComponent.cs" />
     <Compile Include="ExternalReviewOptions.cs" />
     <Compile Include="GlobalRouteInitialization.cs" />
     <Compile Include="PagePreviewPartialRouter.cs" />

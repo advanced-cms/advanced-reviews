@@ -19,16 +19,17 @@ export interface LinkShareResult {
 interface ShareDialogProps {
     open: boolean;
     onClose(linkShare: LinkShareResult): void;
+    initialMessage?: string;
 }
 
-const ShareDialog = ({ open, onClose }: ShareDialogProps) => {
+const ShareDialog = ({ open, onClose, initialMessage }: ShareDialogProps) => {
     const [email, setEmail] = useState<string>("");
     const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState<string>(initialMessage);
 
     useEffect(() => {
         setEmail("");
-        setMessage("");
+        setMessage(initialMessage);
     }, [open]);
 
     const onDialogClose = (action: string) => {
