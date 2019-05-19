@@ -1,4 +1,4 @@
-import React, { CSSProperties, FunctionComponent } from "react";
+import React, { CSSProperties, FunctionComponent, useEffect, useRef } from "react";
 import { PinLocation, Priority } from "../store/review-store";
 import classNames from "classnames";
 import MaterialIcon from "@material/react-material-icon";
@@ -12,7 +12,20 @@ interface ReviewLocationComponentProps {
 }
 
 const Pin: FunctionComponent<ReviewLocationComponentProps> = (props: ReviewLocationComponentProps) => {
-    const { location } = props;
+    const { highlighted, location, showDialog } = props;
+
+    const div = useRef(null);
+
+    //TODO: FIX. it works in storybook but not in epi
+    useEffect(() => {
+        if (highlighted) {
+            div.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center"
+            });
+        }
+    });
 
     const circleSize = 12;
 
@@ -25,19 +38,20 @@ const Pin: FunctionComponent<ReviewLocationComponentProps> = (props: ReviewLocat
     return (
         <div
             style={style}
-            onClick={props.showDialog}
+            ref={div}
+            onClick={showDialog}
             className={classNames("review-location", {
-                done: props.location.isDone,
-                new: props.location.isUpdatedReview,
-                highlighted: props.highlighted
+                done: location.isDone,
+                new: location.isUpdatedReview,
+                highlighted: highlighted
             })}
         >
             <svg height="28" width="28">
-                <title>{props.location.formattedFirstComment}</title>
+                <title>{location.formattedFirstComment}</title>
                 <circle cx="14" cy="14" r={circleSize} strokeWidth="2" fill="#c0c0c0" />
                 <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontWeight="bold" fill="black" />
             </svg>
-            {props.location.priority !== Priority.Normal && (
+            {location.priority !== Priority.Normal && (
                 <MaterialIcon
                     className="priority-icon"
                     icon={priorityIconMappings[location.priority]}
