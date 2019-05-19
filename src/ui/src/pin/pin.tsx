@@ -16,11 +16,9 @@ const Pin: FunctionComponent<ReviewLocationComponentProps> = (props: ReviewLocat
 
     const div = useRef(null);
 
-    //TODO: FIX. it works in storybook but not in epi
     useEffect(() => {
         if (highlighted) {
             div.current.scrollIntoView({
-                behavior: "smooth",
                 block: "center",
                 inline: "center"
             });
