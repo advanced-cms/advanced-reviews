@@ -24,7 +24,8 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
         } else if (reviewIndex < 0) {
             reviewIndex = reviewLocations.length - 1;
         }
-        this.props.reviewStore.editedPinLocation = reviewLocations[reviewIndex];
+        this.props.reviewStore.selectedPinLocation = this.props.reviewStore.editedPinLocation =
+            reviewLocations[reviewIndex];
     }
 
     render() {
