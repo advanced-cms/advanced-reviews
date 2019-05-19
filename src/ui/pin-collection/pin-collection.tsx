@@ -14,11 +14,11 @@ interface ReviewLocationCollectionProps {
 export default class PinCollection extends React.Component<ReviewLocationCollectionProps> {
     onLocationClick = (e, location: PinLocation) => {
         e.stopPropagation();
-        this.props.reviewStore.currentLocation = location;
+        this.props.reviewStore.editedPinLocation = location;
     };
 
     render() {
-        const { currentLocation, filteredReviewLocations } = this.props.reviewStore!;
+        const { selectedPinLocation, filteredReviewLocations } = this.props.reviewStore!;
         const locations = [...filteredReviewLocations];
 
         if (this.props.newLocation && !locations.some(location => location === this.props.newLocation)) {
@@ -32,7 +32,7 @@ export default class PinCollection extends React.Component<ReviewLocationCollect
                         key={location.id || "unsaved"}
                         location={location}
                         showDialog={e => this.onLocationClick(e, location)}
-                        highlighted={location === currentLocation}
+                        highlighted={location === selectedPinLocation}
                     />
                 ))}
             </div>

@@ -172,7 +172,11 @@ export interface IReviewComponentStore {
 
     currentLocale: any;
 
-    currentLocation: PinLocation;
+    editedPinLocation: PinLocation;
+
+    selectedPinLocation: PinLocation;
+
+    selectedPinLocationIndex: number;
 
     toggleResolve(): Promise<PinLocation>;
 
@@ -198,7 +202,8 @@ class ReviewCollectionFilter {
 
 class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations: PinLocation[] = [];
-    @observable currentLocation: PinLocation;
+    @observable editedPinLocation: PinLocation;
+    @observable selectedPinLocation: PinLocation;
 
     filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 
@@ -237,6 +242,14 @@ class ReviewComponentStore implements IReviewComponentStore {
         });
     }
 
+    @computed get selectedPinLocationIndex(): number {
+        if (!this.selectedPinLocation) {
+            return -1;
+        }
+
+        return this.reviewLocations.indexOf(this.selectedPinLocation);
+    }
+
     @computed get filteredReviewLocations(): PinLocation[] {
         return this.reviewLocations.filter(location => {
             return (
@@ -249,16 +262,16 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     @action.bound
     toggleResolve(): Promise<PinLocation> {
-        this.currentLocation.isDone = !this.currentLocation.isDone;
-        return this.saveLocation(this.currentLocation);
+        this.editedPinLocation.isDone = !this.editedPinLocation.isDone;
+        return this.saveLocation(this.editedPinLocation);
     }
 
     @action.bound
     addComment(commentText: string, screenshot?: string): Promise<PinLocation> {
         const comment = Comment.create(this.currentUser, commentText, null, screenshot);
-        this.currentLocation.comments.push(comment);
-        this.currentLocation.clearLastUsersRead();
-        return this.saveLocation(this.currentLocation);
+        this.editedPinLocation.comments.push(comment);
+        this.editedPinLocation.clearLastUsersRead();
+        return this.saveLocation(this.editedPinLocation);
     }
 
     //TODO: convert to async method

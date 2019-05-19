@@ -36,12 +36,16 @@ export default class IframeWithPins extends React.Component<IframeWithLocationsP
             return;
         }
 
-        const { save } = this.props.reviewStore!;
-        save(state, this.state.newLocation)
-            .then(() => {
+        this.props.reviewStore
+            .save(state, this.state.newLocation)
+            .then(createdLocation => {
                 this.setState({
                     newLocation: null
                 });
+                // show the pin details only if there's a different pin open currently
+                if (this.props.reviewStore.editedPinLocation) {
+                    this.props.reviewStore.editedPinLocation = createdLocation;
+                }
             })
             .catch(e => {
                 //TODO: handle server exceptions
