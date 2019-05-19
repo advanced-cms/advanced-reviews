@@ -17,20 +17,20 @@ interface PinNavigatorProps {
 @observer
 export default class PinNavigator extends React.Component<PinNavigatorProps, any> {
     showReview(incrementBy: number): void {
-        const { currentLocation, reviewLocations } = this.props.reviewStore!;
-        let reviewIndex = reviewLocations.indexOf(currentLocation) + incrementBy;
+        const { editedPinLocation, reviewLocations } = this.props.reviewStore!;
+        let reviewIndex = reviewLocations.indexOf(editedPinLocation) + incrementBy;
         if (reviewIndex >= reviewLocations.length) {
             reviewIndex = 0;
         } else if (reviewIndex < 0) {
             reviewIndex = reviewLocations.length - 1;
         }
-        this.props.reviewStore.currentLocation = reviewLocations[reviewIndex];
+        this.props.reviewStore.editedPinLocation = reviewLocations[reviewIndex];
     }
 
     render() {
         const { reviewLocations } = this.props.reviewStore!;
 
-        const currentItemIndex = reviewLocations.indexOf(this.props.reviewStore.currentLocation);
+        const currentItemIndex = reviewLocations.indexOf(this.props.reviewStore.editedPinLocation);
 
         const isNextEnabled = currentItemIndex < reviewLocations.length - 1;
         let nextTitle = "next";
