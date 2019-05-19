@@ -80,7 +80,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
 
         this.locationChangedReaction = reaction(
             () => {
-                return this.props.reviewStore.currentLocation;
+                return this.props.reviewStore.editedPinLocation;
             },
             () => {
                 this.setState({ panelVisible: true });
@@ -88,18 +88,20 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         );
     }
 
-    onSelected(index: number): void {
-        //this.props.reviewStore.reviewLocations[index]
+    onSelected = (index: number): void => {
         //TODO: implement scroll into view for point
-    }
+        this.props.reviewStore.selectedPinLocation = this.props.reviewStore.reviewLocations[index];
+    };
 
     showPanel = () => {
-        this.props.reviewStore.currentLocation = null;
+        this.props.reviewStore.selectedPinLocation = null;
+        this.props.reviewStore.editedPinLocation = null;
         this.setState({ panelVisible: true });
     };
 
     hidePanel = () => {
-        this.props.reviewStore.currentLocation = null;
+        this.props.reviewStore.selectedPinLocation = null;
+        this.props.reviewStore.editedPinLocation = null;
         this.setState({ panelVisible: false });
     };
 
@@ -113,11 +115,12 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
 
     onEditClick(e: any, location: PinLocation) {
         e.stopPropagation();
-        this.props.reviewStore.currentLocation = location;
+        this.props.reviewStore.selectedPinLocation = location;
+        this.props.reviewStore.editedPinLocation = location;
     }
 
     render() {
-        const { currentLocation, filter, reviewLocations } = this.props.reviewStore!;
+        const { editedPinLocation, filter, reviewLocations } = this.props.reviewStore!;
         const res = this.props.resources!;
 
         var styles = {
@@ -169,21 +172,26 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
             >
                 <div>
                     <h3>
-                        {currentLocation && (
+                        {editedPinLocation && (
                             <IconButton
                                 title="Go back to list"
-                                onClick={() => (this.props.reviewStore.currentLocation = null)}
+                                onClick={() => (this.props.reviewStore.editedPinLocation = null)}
                             >
                                 <MaterialIcon icon="chevron_left" />
                             </IconButton>
                         )}
                         Review panel
-                        {currentLocation && <PinNavigator />}
+                        {editedPinLocation && <PinNavigator />}
                     </h3>
-                    {!currentLocation && (
+                    {!editedPinLocation && (
                         <>
                             <Filters filter={filter} />
-                            <List singleSelection handleSelect={this.onSelected} className="locations">
+                            <List
+                                singleSelection
+                                selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
+                                handleSelect={activatedIndex => this.onSelected(activatedIndex)}
+                                className="locations"
+                            >
                                 {reviewLocations.map(location => (
                                     <ListItem title={res.panel.clicktoedit} key={location.id}>
                                         <ListItemText primaryText={location.displayName} />
@@ -199,10 +207,10 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                             </List>
                         </>
                     )}
-                    {currentLocation && (
+                    {editedPinLocation && (
                         <ReviewDetails
                             iframe={this.props.iframe}
-                            currentEditLocation={this.props.reviewStore.currentLocation}
+                            currentEditLocation={this.props.reviewStore.editedPinLocation}
                         />
                     )}
                 </div>
