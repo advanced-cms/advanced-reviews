@@ -1,4 +1,4 @@
-import { ReviewLink, ExternalReviewStore } from "./external-review-store";
+import { ReviewLink, ExternalReviewStore } from "./external-review-links-store";
 
 function getDate(days: number) {
     var result = new Date();
