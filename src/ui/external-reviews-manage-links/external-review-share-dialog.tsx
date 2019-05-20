@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import TextField, { Input } from "@material/react-text-field";
+import TextField, { Input, HelperText } from "@material/react-text-field";
 import MaterialIcon from "@material/react-material-icon";
 
 import "@material/react-dialog/index.scss";
 import "@material/react-material-icon/index.scss";
 import "@material/react-text-field/index.scss";
+import "@material/react-floating-label/index.scss";
+
+import "./external-review-share-dialog.scss";
 
 export interface LinkShareResult {
     email: string;
@@ -16,16 +19,17 @@ export interface LinkShareResult {
 interface ShareDialogProps {
     open: boolean;
     onClose(linkShare: LinkShareResult): void;
+    initialMessage?: string;
 }
 
-const ShareDialog = ({ open, onClose }: ShareDialogProps) => {
+const ShareDialog = ({ open, onClose, initialMessage }: ShareDialogProps) => {
     const [email, setEmail] = useState<string>("");
     const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState<string>(initialMessage);
 
     useEffect(() => {
         setEmail("");
-        setMessage("");
+        setMessage(initialMessage);
     }, [open]);
 
     const onDialogClose = (action: string) => {
@@ -54,15 +58,29 @@ const ShareDialog = ({ open, onClose }: ShareDialogProps) => {
     return (
         <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onDialogClose}>
             <DialogTitle>Share link with external editor</DialogTitle>
-            <DialogContent>
-                <TextField label="Email address" autoFocus>
-                    <Input value={email} onChange={onEmailTextChanged} isValid={isValidEmail} />
-                </TextField>
-                <br />
-                <br />
-                <TextField label="Email message" textarea>
-                    <Input value={message} onChange={e => setMessage(e.currentTarget.value)} />
-                </TextField>
+            <DialogContent className="share-dialog-content">
+                <div className="text-field-container">
+                    <TextField
+                        label="Email address"
+                        leadingIcon={<MaterialIcon icon="mail" />}
+                        style={{ width: 350 }}
+                        dense
+                        autoFocus
+                        required
+                    >
+                        <Input value={email} onChange={onEmailTextChanged} isValid={isValidEmail} />
+                    </TextField>
+                </div>
+                <div className="text-field-container">
+                    <TextField
+                        label="Email message"
+                        textarea
+                        required
+                        helperText={<HelperText>Text [#link#] will be replaced with link to content.</HelperText>}
+                    >
+                        <Input rows={15} value={message} onChange={e => setMessage(e.currentTarget.value)} />
+                    </TextField>
+                </div>
             </DialogContent>
             <DialogFooter>
                 <DialogButton dense action="cancel">
