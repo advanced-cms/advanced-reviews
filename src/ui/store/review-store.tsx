@@ -76,7 +76,18 @@ export class PinLocation {
         }
         const comment = this.firstComment;
 
-        return `${comment.author}: ${comment.text}, ${comment.userFriendlyDate}`;
+        let result = "";
+        if (comment.author && comment.author.trim()) {
+            result += comment.author + ":";
+        }
+
+        if (comment.text && comment.text.trim()) {
+            result += comment.text + ",";
+        }
+
+        result += comment.userFriendlyDate;
+
+        return result;
     }
 
     @computed get displayName(): string {
