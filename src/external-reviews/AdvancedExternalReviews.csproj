@@ -184,6 +184,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AdvancedApprovalReviews\AdvancedApprovalReviews.csproj">
+      <Project>{7d3cb0b4-bf55-4577-abf2-d83f8ea5d49f}</Project>
+      <Name>AdvancedApprovalReviews</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
