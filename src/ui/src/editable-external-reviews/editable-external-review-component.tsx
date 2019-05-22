@@ -17,18 +17,21 @@ class ExternalReviewService implements AdvancedReviewService {
         let result = new Promise((resolve, reject) => {
             axios
                 .post(addUrl, {
-                    message: "Fred",
-                    priority: "Flintstone"
+                    id: id,
+                    data: JSON.stringify(data)
                 })
                 .then(function(response) {
-                    resolve(response);
+                    const data = JSON.parse(response.data.substring(4)); //remove {}&&
+                    resolve(data);
                 })
                 .catch(function(error) {
                     reject(error);
                 });
         });
+
+        // make Promise compatibile with dojo
         let r = result as any;
-        r.otherwise = result.catch;
+        r.__proto__.otherwise = r.__proto__.catch;
 
         return result;
     }
