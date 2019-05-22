@@ -4,6 +4,7 @@ using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews
 {
@@ -28,22 +29,26 @@ namespace AdvancedExternalReviews
         {
             var externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
 
+            RegisterEditPageGet(e, externalReviewOptions);
+            RegisterAddPinPost(e.Routes, externalReviewOptions);
+        }
+
+        private static void RegisterEditPageGet(RouteRegistrationEventArgs e, ExternalReviewOptions externalReviewOptions)
+        {
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", "PagePreview");
             routeValues.Add("action", "Index");
             routeValues.Add("token", " UrlParameter.Optional");
 
             var route = new Route(externalReviewOptions.ReviewsUrl + "/{token}", routeValues, new MvcRouteHandler());
-            string[] allowedMethods = { "GET" };
+            string[] allowedMethods = {"GET"};
             var methodConstraints = new HttpMethodConstraint(allowedMethods);
-            route.Constraints = new RouteValueDictionary { { "httpMethod", methodConstraints } };
-            
-            e.Routes.Add(route);
+            route.Constraints = new RouteValueDictionary {{"httpMethod", methodConstraints}};
 
-            RegisterAddPin(e.Routes, externalReviewOptions);
+            e.Routes.Add(route);
         }
 
-        private void RegisterAddPin(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions)
+        private void RegisterAddPinPost(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions)
         {
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", "PagePreview");
