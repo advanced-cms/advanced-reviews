@@ -1,23 +1,31 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Web.Mvc;
+using AdvancedApprovalReviews;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
-using EPiServer.Security;
 using EPiServer.Shell.Services.Rest;
 
 namespace AdvancedExternalReviews
 {
+    /// <summary>
+    /// Controller used to render editable external review page
+    /// </summary>
     public class PagePreviewController: Controller
     {
         private readonly IContentLoader _contentLoader;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
+        private readonly IApprovalReviewsRepository _approvalReviewsRepository;
 
-        public PagePreviewController(IContentLoader contentLoader, IExternalReviewLinksRepository externalReviewLinksRepository)
+        public PagePreviewController(IContentLoader contentLoader,
+            IExternalReviewLinksRepository externalReviewLinksRepository,
+            IApprovalReviewsRepository approvalReviewsRepository)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
+            _approvalReviewsRepository = approvalReviewsRepository;
         }
 
         public ActionResult Index(string token)
@@ -53,20 +61,52 @@ namespace AdvancedExternalReviews
         }
 
         [HttpPost]
-        public ActionResult AddPin(AddPinModel pinModel)
+        public ActionResult AddPin(ReviewLocation reviewLocation)
         {
-            //TODO: add points
-
-            return new RestResult()
+            // get token based on URL segment
+            string GetToken()
             {
-                Data = new
+                var request = System.Web.HttpContext.Current.Request;
+                if (request.UrlReferrer == null)
                 {
-                    Id = 10
+                    return null;
                 }
+
+                var segements = request.UrlReferrer.Segments;
+                if (segements.Length == 0)
+                {
+                    return null;
+                }
+
+                var lastSegment = segements.Last();
+                return lastSegment;
+            }
+
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var reviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            if (reviewLink == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //TODO: verify number of items added with token. There should be max size
+
+            //TODO: security issue - we post whole item and external reviewer can modify this
+
+            var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
+
+            return new RestResult
+            {
+                Data = location
             };
         }
 
-        private string GetJsScriptPath()
+        private static string GetJsScriptPath()
         {
             const string url = "Views/external-review-component.js";
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
@@ -78,7 +118,7 @@ namespace AdvancedExternalReviews
             return "";
         }
 
-        private string GetResetCssPath()
+        private static string GetResetCssPath()
         {
             const string url = "Views/reset.css";
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
@@ -89,12 +129,6 @@ namespace AdvancedExternalReviews
 
             return "";
         }
-    }
-
-    public class AddPinModel
-    {
-        public string Message { get; set; }
-        public string Priority { get; set; }
     }
 
     public class ContentPreviewModel
