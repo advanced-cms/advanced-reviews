@@ -16,27 +16,27 @@
 
         .mdc-dialog__content {
             padding: 0 12px;
-        }
+            position: relative;
 
-        textarea {
-            resize: none;
-            min-height: auto;
-        }
-
-        .menu-button.mdc-icon-button {
-            padding: 8px 4px 4px 4px;
-            width: 40px;
-            height: 40px;
+            .attach-screenshot {
+                right: 10px;
+                bottom: 105px;
+            }
         }
 
         .header {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 10px;
+
+            .review-actions {
+                margin-top: -3px;
+            }
         }
 
         .dialog-grid {
             width: 300px;
-            height: 200px;
+            height: 150px;
         }
     }
 }
