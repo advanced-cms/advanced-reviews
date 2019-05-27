@@ -175,6 +175,11 @@
     <Compile Include="PageEditPartialRouter.cs" />
     <Compile Include="PreviewPageTemplateDescriptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ReviewLinksRepository\ExternalReviewLink.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkDds.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkExtension.cs" />
@@ -189,6 +194,21 @@
       <Project>{7d3cb0b4-bf55-4577-abf2-d83f8ea5d49f}</Project>
       <Name>AdvancedApprovalReviews</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mail_edit.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mail_preview.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
