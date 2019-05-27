@@ -7,9 +7,23 @@
     "save": "Save"
   },
   "panel": {
+    "attachscreenshot": "Attach screenshot",
     "clicktoedit": "Click to edit",
-    "addscreenshot": "Add screenshot",
-    "taskdone": "Task resolved. Click to reopen.",
-    "tasknotdone": "Active. Click to resolve."
+    "collapse": "Collapse review panel",
+    "expand": "Expand review panel",
+    "opendetails": "Open details",
+    "removescreenshot": "Remove screenshot",
+    "resolved": "Resolved",
+    "reviewmode": "Review mode",
+    "showscreenshot": "Show screenshot",
+    "showactive": "Show active",
+    "showresolved": "Show resolved",
+    "showunread": "Show unread"
+  },
+  "screenshot": {
+    "apply": "Apply",
+    "cancel": "cancel",
+    "clear": "Clear",
+    "cropandhighlight": "Crop and highlight the area you want to comment"
   }
 }

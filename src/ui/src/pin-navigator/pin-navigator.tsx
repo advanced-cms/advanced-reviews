@@ -2,10 +2,9 @@ import React from "react";
 import { observer, inject } from "mobx-react";
 import { IReviewComponentStore } from "../store/review-store";
 
-import IconButton from "@material/react-icon-button";
+import Button from "@material/react-button";
 import MaterialIcon from "@material/react-material-icon";
 
-import "@material/react-icon-button/index.scss";
 import "@material/react-material-icon/index.scss";
 import "./pin-navigator.scss";
 
@@ -48,27 +47,27 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
         return (
             <>
                 {reviewLocations.length > 1 && (
-                    <>
-                        <IconButton
+                    <div className="pin-navigator">
+                        <Button
                             className="next-prev-icon"
                             title={prevTitle}
                             aria-pressed="false"
                             disabled={!isPrevEnabled}
                         >
                             <MaterialIcon icon="chevron_left" onClick={() => this.showReview(-1)} />
-                        </IconButton>
+                        </Button>
                         <span className="pager">
                             {currentItemIndex + 1} / {reviewLocations.length}
                         </span>
-                        <IconButton
+                        <Button
                             className="next-prev-icon"
                             title={nextTitle}
                             onClick={() => this.showReview(1)}
                             disabled={!isNextEnabled}
                         >
                             <MaterialIcon icon="chevron_right" />
-                        </IconButton>
-                    </>
+                        </Button>
+                    </div>
                 )}
             </>
         );
