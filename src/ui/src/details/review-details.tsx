@@ -5,12 +5,10 @@ import Button from "@material/react-button";
 import { IReactionDisposer, reaction } from "mobx";
 import { DropDownMenu } from "../common/drop-down-menu";
 import Comment from "../comment/comment";
-import Switch from "@material/react-switch";
 import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
 import LocationComment from "../location-comment/location-comment";
 import ScrollArea from "react-scrollbar";
 
-import "@material/react-switch/index.scss";
 import "./review-details.scss";
 
 interface ReviewDetailsProps {
@@ -18,6 +16,7 @@ interface ReviewDetailsProps {
     reviewStore?: IReviewComponentStore;
     resources?: ReviewResources;
     currentEditLocation: PinLocation;
+    onCancel: () => void;
 }
 
 @inject("reviewStore")
@@ -62,10 +61,6 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
         }, 0);
     };
 
-    resolveTask = () => {
-        this.props.reviewStore.toggleResolve();
-    };
-
     addNewComment = () => {
         this.props.reviewStore.addComment(this.state.currentCommentText, this.state.currentScreenshot).then(() => {
             this.setState({ screenshotMode: false, currentScreenshot: null, currentCommentText: "" });
@@ -83,27 +78,10 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
 
         const res = this.props.resources!;
 
-        const customAttribute = {
-            title: this.props.currentEditLocation.isDone ? res.panel.taskdone : res.panel.tasknotdone
-        };
-
         return (
-            <div>
-                <div className="filter">
-                    <Switch
-                        nativeControlId="showCustom"
-                        checked={this.props.currentEditLocation.isDone}
-                        onChange={this.resolveTask}
-                    />
-                    <label htmlFor="showCustom">{customAttribute.title}</label>
-                </div>
+            <div className="review-details">
                 <div className="first-comment">
-                    <strong>{this.props.currentEditLocation.firstComment.text}</strong>
-                    {this.props.currentEditLocation.firstComment.screenshot && (
-                        <DropDownMenu icon="image">
-                            <img src={this.props.currentEditLocation.firstComment.screenshot} />
-                        </DropDownMenu>
-                    )}
+                    <Comment comment={this.props.currentEditLocation.firstComment} amplify />
                 </div>
                 <ScrollArea
                     speed={0.8}
@@ -136,7 +114,8 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                                 toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
                             />
                         )}
-                        <div>
+                        <div className="actions">
+                            <Button onClick={this.props.onCancel}>{res.dialog.close}</Button>
                             <Button disabled={!canSave} onClick={this.addNewComment}>
                                 {res.dialog.addcomment}
                             </Button>

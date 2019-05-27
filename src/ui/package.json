@@ -67,7 +67,6 @@
         "mobx-react": "^5.4.3",
         "mobx-react-lite": "^1.2.0",
         "react": "^16.8.3",
-        "react-burger-menu": "^2.6.10",
         "react-dom": "^16.8.3",
         "react-image-crop": "^6.0.18",
         "react-scrollbar": "^0.5.6",

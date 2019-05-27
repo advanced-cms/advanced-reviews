@@ -1,17 +1,19 @@
 import React from "react";
+import classNames from "classnames";
 import { observer, inject } from "mobx-react";
 import { IReviewComponentStore, PinLocation } from "../store/review-store";
 import MaterialIcon from "@material/react-material-icon";
 import IconButton from "@material/react-icon-button";
+import CheckBox from "@material/react-checkbox";
 import Switch from "@material/react-switch";
 import List, { ListItem, ListItemText } from "@material/react-list";
-import { slide as Menu } from "react-burger-menu";
+import { ReviewDetails } from "../details/review-details";
+import { IReactionDisposer, reaction } from "mobx";
 
+import "@material/react-checkbox/index.scss";
 import "@material/react-switch/index.scss";
 import "./reviews-sliding-panel.scss";
-import { ReviewDetails } from "../details/review-details";
 import PinNavigator from "../pin-navigator/pin-navigator";
-import { IReactionDisposer, reaction } from "mobx";
 
 interface SlidingPanelProps {
     iframe?: HTMLIFrameElement;
@@ -19,52 +21,90 @@ interface SlidingPanelProps {
     resources?: ReviewResources;
 }
 
-const PinTypeFilters = observer(({ filter }) => {
-    return (
-        <div className="type-filters">
-            <div className="filter unread">
-                <Switch
-                    nativeControlId="showCustom"
-                    checked={filter.showUnread}
-                    onChange={() => (filter.showUnread = !filter.showUnread)}
-                />
-                <label htmlFor="showCustom">Show Unread</label>
+const Legend = inject("resources")(
+    observer(({ resources, filter }) => {
+        return (
+            <div className="type-filters">
+                <div className="filter" title="Show review mode">
+                    <CheckBox checked={filter.reviewMode} onChange={() => (filter.reviewMode = !filter.reviewMode)} />
+                </div>
+                {filter.reviewMode && (
+                    <>
+                        <div className="filter unread" title={resources.panel.showunread}>
+                            <CheckBox
+                                checked={filter.showUnread}
+                                onChange={() => (filter.showUnread = !filter.showUnread)}
+                            />
+                        </div>
+                        <div className="filter active" title={resources.panel.showactive}>
+                            <CheckBox
+                                checked={filter.showActive}
+                                onChange={() => (filter.showActive = !filter.showActive)}
+                            />
+                        </div>
+                        <div className="filter resolved" title={resources.panel.showresolved}>
+                            <CheckBox
+                                checked={filter.showResolved}
+                                onChange={() => (filter.showResolved = !filter.showResolved)}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
-            <div className="filter active">
-                <Switch
-                    nativeControlId="showActive"
-                    checked={filter.showActive}
-                    onChange={() => (filter.showActive = !filter.showActive)}
-                />
-                <label htmlFor="showActive">Show Active</label>
-            </div>
-            <div className="filter resolved">
-                <Switch
-                    nativeControlId="showResolved"
-                    checked={filter.showResolved}
-                    onChange={() => (filter.showResolved = !filter.showResolved)}
-                />
-                <label htmlFor="showResolved">Show Resolved</label>
-            </div>
-        </div>
-    );
-});
+        );
+    })
+);
 
-const Filters = observer(({ filter }) => {
-    return (
-        <div>
-            <div className="filter main-filter">
-                <Switch
-                    nativeControlId="modeSwitcher"
-                    checked={filter.reviewMode}
-                    onChange={() => (filter.reviewMode = !filter.reviewMode)}
-                />
-                <label htmlFor="modeSwitcher">Display Review Overlay</label>
+const PinTypeFilters = inject("resources")(
+    observer(({ resources, filter }) => {
+        return (
+            <div className="type-filters">
+                <div className="filter unread" title={resources.panel.showunread}>
+                    <Switch
+                        nativeControlId="showUnread"
+                        checked={filter.showUnread}
+                        onChange={() => (filter.showUnread = !filter.showUnread)}
+                    />
+                    <label htmlFor="showUnread">{resources.panel.showunread}</label>
+                </div>
+                <div className="filter active" title={resources.panel.showactive}>
+                    <Switch
+                        nativeControlId="showActive"
+                        checked={filter.showActive}
+                        onChange={() => (filter.showActive = !filter.showActive)}
+                    />
+                    <label htmlFor="showActive">{resources.panel.showactive}</label>
+                </div>
+                <div className="filter resolved" title={resources.panel.showresolved}>
+                    <Switch
+                        nativeControlId="showResolved"
+                        checked={filter.showResolved}
+                        onChange={() => (filter.showResolved = !filter.showResolved)}
+                    />
+                    <label htmlFor="showResolved">{resources.panel.showresolved}</label>
+                </div>
             </div>
-            {filter.reviewMode && <PinTypeFilters filter={filter} />}
-        </div>
-    );
-});
+        );
+    })
+);
+
+const Filters = inject("resources")(
+    observer(({ resources, filter }) => {
+        return (
+            <div>
+                <div className="filter" title={resources.panel.reviewmode}>
+                    <Switch
+                        nativeControlId="modeSwitcher"
+                        checked={filter.reviewMode}
+                        onChange={() => (filter.reviewMode = !filter.reviewMode)}
+                    />
+                    <label htmlFor="modeSwitcher">{resources.panel.reviewmode}</label>
+                </div>
+                {filter.reviewMode && <PinTypeFilters filter={filter} />}
+            </div>
+        );
+    })
+);
 
 @inject("resources")
 @inject("reviewStore")
@@ -105,116 +145,81 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         this.setState({ panelVisible: false });
     };
 
-    handleStateChange = state => {
-        if (state.isOpen) {
-            this.showPanel();
-        } else {
-            this.hidePanel();
-        }
-    };
-
     onEditClick(e: any, location: PinLocation) {
         e.stopPropagation();
         this.props.reviewStore.selectedPinLocation = location;
         this.props.reviewStore.editedPinLocation = location;
     }
 
+    resolveTask = () => {
+        this.props.reviewStore.toggleResolve();
+    };
+
     render() {
         const { editedPinLocation, filter, reviewLocations } = this.props.reviewStore!;
         const res = this.props.resources!;
 
-        var styles = {
-            bmBurgerButton: {
-                position: "absolute",
-                width: "36px",
-                height: "30px",
-                right: "36px",
-                top: "36px"
-            },
-            bmBurgerBars: {
-                background: "#373a47"
-            },
-            bmCrossButton: {
-                height: "36px",
-                width: "36px"
-            },
-            bmMenuWrap: {
-                position: "fixed",
-                height: "99%"
-            },
-            bmMenu: {
-                background: "white",
-                padding: 20,
-                fontSize: "1.15em",
-                borderLeft: "1px solid #c0c0c0"
-            },
-            bmItemList: {
-                height: "97%"
-            },
-            bmMorphShape: {
-                fill: "#373a47"
-            }
-        };
-
         return (
-            <Menu
-                width={400}
-                className="panel-container"
-                styles={styles}
-                isOpen={this.state.panelVisible}
-                noOverlay
-                disableOverlayClick
-                disableAutoFocus
-                right
-                customCrossIcon={<MaterialIcon icon="close" />}
-                customBurgerIcon={<MaterialIcon icon="format_list_bulleted" />}
-                onStateChange={state => this.handleStateChange(state)}
-            >
-                <div>
-                    <h3>
+            <>
+                {!this.state.panelVisible && (
+                    <div className={classNames("panel-container narrow", filter.reviewMode ? "review-mode" : "")}>
+                        <IconButton title={res.panel.expand} onClick={this.showPanel}>
+                            <MaterialIcon icon="first_page" />
+                        </IconButton>
+                        <Legend filter={filter} />
+                    </div>
+                )}
+                {this.state.panelVisible && (
+                    <div className="panel-container">
                         {editedPinLocation && (
-                            <IconButton
-                                title="Go back to list"
-                                onClick={() => (this.props.reviewStore.editedPinLocation = null)}
-                            >
-                                <MaterialIcon icon="chevron_left" />
-                            </IconButton>
+                            <div className="panel-header">
+                                <CheckBox
+                                    nativeControlId="resolved"
+                                    checked={this.props.reviewStore.editedPinLocation.isDone}
+                                    onChange={this.resolveTask}
+                                />
+                                <label htmlFor="resolved">{res.panel.resolved}</label>
+                                <PinNavigator />
+                            </div>
                         )}
-                        Review panel
-                        {editedPinLocation && <PinNavigator />}
-                    </h3>
-                    {!editedPinLocation && (
-                        <>
-                            <Filters filter={filter} />
-                            <List
-                                singleSelection
-                                selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
-                                handleSelect={activatedIndex => this.onSelected(activatedIndex)}
-                                className="locations"
-                            >
-                                {reviewLocations.map(location => (
-                                    <ListItem title={res.panel.clicktoedit} key={location.id}>
-                                        <ListItemText primaryText={location.displayName} />
-                                        <IconButton
-                                            className="edit"
-                                            title="Open details"
-                                            onClick={e => this.onEditClick(e, location)}
-                                        >
-                                            <MaterialIcon icon="edit" />
-                                        </IconButton>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </>
-                    )}
-                    {editedPinLocation && (
-                        <ReviewDetails
-                            iframe={this.props.iframe}
-                            currentEditLocation={this.props.reviewStore.editedPinLocation}
-                        />
-                    )}
-                </div>
-            </Menu>
+                        {!editedPinLocation && (
+                            <>
+                                <IconButton className="close-panel" onClick={this.hidePanel} title={res.panel.collapse}>
+                                    <MaterialIcon icon="last_page" />
+                                </IconButton>
+                                <Filters filter={filter} />
+                                <List
+                                    singleSelection
+                                    selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
+                                    handleSelect={activatedIndex => this.onSelected(activatedIndex)}
+                                    className="locations"
+                                >
+                                    {reviewLocations.map(location => (
+                                        <ListItem title={res.panel.clicktoedit} key={location.id}>
+                                            {/*TODO: replace ListItemText with Comment component?*/}
+                                            <ListItemText primaryText={location.displayName} />
+                                            <IconButton
+                                                className="edit"
+                                                title={res.panel.opendetails}
+                                                onClick={e => this.onEditClick(e, location)}
+                                            >
+                                                <MaterialIcon icon="edit" />
+                                            </IconButton>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </>
+                        )}
+                        {editedPinLocation && (
+                            <ReviewDetails
+                                onCancel={() => (this.props.reviewStore.editedPinLocation = null)}
+                                iframe={this.props.iframe}
+                                currentEditLocation={this.props.reviewStore.editedPinLocation}
+                            />
+                        )}
+                    </div>
+                )}
+            </>
         );
     }
 }
