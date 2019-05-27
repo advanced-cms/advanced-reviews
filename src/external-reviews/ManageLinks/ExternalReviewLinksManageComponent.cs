@@ -1,4 +1,5 @@
-﻿using EPiServer.Shell;
+﻿using EPiServer.ServiceLocation;
+using EPiServer.Shell;
 using EPiServer.Shell.ViewComposition;
 
 namespace AdvancedExternalReviews.ManageLinks
@@ -9,9 +10,16 @@ namespace AdvancedExternalReviews.ManageLinks
     [Component]
     public class ExternalReviewLinksManageComponent : ComponentDefinitionBase
     {
-        public ExternalReviewLinksManageComponent()
+        private readonly ExternalReviewOptions _externalReviewOptions;
+
+        public ExternalReviewLinksManageComponent() : this(ServiceLocator.Current.GetInstance<ExternalReviewOptions>())
+        {
+        }
+
+        public ExternalReviewLinksManageComponent(ExternalReviewOptions externalReviewOptions)
             : base("alloy-external-review/external-review-manage-links-component")
         {
+            _externalReviewOptions = externalReviewOptions;
             Description = "Manage list of external review links";
             Title = "External review links";
 
@@ -22,8 +30,8 @@ namespace AdvancedExternalReviews.ManageLinks
                 PlugInArea.Navigation
             };
 
-            Settings.Add(new Setting("initialEditMailMessage", "EDIT"));
-            Settings.Add(new Setting("initialViewMailMessage", "VIEW"));
+            Settings.Add(new Setting("initialEditMailMessage", _externalReviewOptions.EmailEdit));
+            Settings.Add(new Setting("initialViewMailMessage", _externalReviewOptions.EmailView));
         }
     }
 }
