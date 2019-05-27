@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "@material/react-button";
+import { inject } from "mobx-react";
 
 interface DrawablePreviewProps {
     width: number;
@@ -7,6 +8,7 @@ interface DrawablePreviewProps {
     src?: string;
     onApplyDrawing: (string) => void;
     onCancel: () => void;
+    resources?: ReviewResources;
 }
 
 function drawImageOnCanvas(base64Image, canvas) {
@@ -26,7 +28,8 @@ function drawImageOnCanvas(base64Image, canvas) {
     };
 }
 
-export default class MyDrawablePreview extends React.Component<DrawablePreviewProps, any> {
+@inject("resources")
+export default class DrawablePreview extends React.Component<DrawablePreviewProps, any> {
     canvasRef: React.RefObject<HTMLCanvasElement>;
 
     constructor(props: any) {
@@ -91,8 +94,7 @@ export default class MyDrawablePreview extends React.Component<DrawablePreviewPr
     };
 
     render() {
-        let canvasWidth = this.props.width;
-        let canvasHeight = this.props.height;
+        const { height, resources, width } = this.props;
 
         const canvasStyle = {
             cursor: "crosshair"
@@ -103,8 +105,8 @@ export default class MyDrawablePreview extends React.Component<DrawablePreviewPr
                 <canvas
                     ref={this.canvasRef}
                     style={canvasStyle}
-                    width={canvasWidth}
-                    height={canvasHeight}
+                    width={width}
+                    height={height}
                     onMouseDown={e => {
                         this.handleMouseDown(e.nativeEvent);
                     }}
@@ -114,9 +116,9 @@ export default class MyDrawablePreview extends React.Component<DrawablePreviewPr
                     onMouseUp={this.handleMouseUp}
                 />
                 <div className="mdc-dialog__actions">
-                    <Button onClick={this.cancel}>Cancel</Button>
-                    <Button onClick={this.clear}>Clear</Button>
-                    <Button onClick={this.done}>Done</Button>
+                    <Button onClick={this.cancel}>{resources.screenshot.cancel}</Button>
+                    <Button onClick={this.clear}>{resources.screenshot.clear}</Button>
+                    <Button onClick={this.done}>{resources.screenshot.apply}</Button>
                 </div>
             </>
         );

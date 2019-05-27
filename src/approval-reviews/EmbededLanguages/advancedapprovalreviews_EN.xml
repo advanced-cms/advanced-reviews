@@ -10,11 +10,25 @@
         <save>Save</save>        
       </dialog>
       <panel>
+        <attachscreenshot>Attach screenshot</attachscreenshot>
         <clicktoedit>Click to edit</clicktoedit>
-        <addscreenshot>Add screenshot</addscreenshot>
-        <taskdone>Task resolved. Click to reopen.</taskdone>
-        <tasknotdone>Active. Click to resolve.</tasknotdone>
+        <collapse>Collapse review panel</collapse>
+        <expand>Expand review panel</expand>
+        <opendetails>Open details</opendetails>
+        <removescreenshot>Remove screenshot</removescreenshot>        
+        <resolved>Resolved</resolved>       
+        <reviewmode>Review mode</reviewmode>
+        <showscreenshot>Show screenshot</showscreenshot>
+        <showactive>Show active</showactive>
+        <showresolved>Show resolved</showresolved>
+        <showunread>Show unread</showunread>
       </panel>
+      <screenshot>
+        <apply>Apply</apply>
+        <cancel>cancel</cancel>        
+        <clear>Clear</clear>
+        <cropandhighlight>Crop and highlight the area you want to comment</cropandhighlight>
+      </screenshot>
     </reviewcomponent>
   </language>
 </languages>
