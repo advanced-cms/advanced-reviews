@@ -59,11 +59,13 @@ export default class IframeWithPins extends React.Component<IframeWithLocationsP
         if (reason !== "action") {
             return;
         }
-        //TODO: Set profile value
-        alert("Save profile value");
+        localStorage.setItem("reviewIntro", "false");
     };
 
     render() {
+        const showReviewIntro: boolean =
+            this.props.reviewStore.reviewLocations.length === 0 && localStorage.getItem("reviewIntro") !== "false";
+
         return (
             <>
                 {this.props.reviewStore.filter.reviewMode && (
@@ -72,7 +74,7 @@ export default class IframeWithPins extends React.Component<IframeWithLocationsP
                         reviewLocationCreated={location => this.setState({ newLocation: location })}
                     >
                         <PinCollection newLocation={this.state.newLocation} />
-                        {this.props.reviewStore.reviewLocations.length === 0 && (
+                        {showReviewIntro && (
                             <Snackbar
                                 timeoutMs={10000}
                                 onClose={this.onIntroClose}
