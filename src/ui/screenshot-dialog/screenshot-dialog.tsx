@@ -10,10 +10,11 @@ import "@material/react-icon-button/index.scss";
 import "./screenshot-dialog.scss";
 
 import Dialog, { DialogContent, DialogTitle } from "@material/react-dialog";
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 
 interface ScreenshotPickerProps {
     iframe: HTMLIFrameElement;
+    resources?: ReviewResources;
     onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
     maxWidth: number;
@@ -72,6 +73,7 @@ function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise
     });
 }
 
+@inject("resources")
 @observer
 export default class ScreenshotDialog extends React.Component<ScreenshotPickerProps, ScreenshotPickerState> {
     defaultCrop = {
@@ -183,7 +185,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
                 escapeKeyAction=""
             >
                 <DialogTitle>
-                    <div className="header">Crop and highlight the area you want to comment</div>
+                    <div className="header">{this.props.resources.screenshot.cropandhighlight}</div>
                 </DialogTitle>
                 <DialogContent>
                     <div className="screenshot-picker">

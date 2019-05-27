@@ -26,17 +26,30 @@
             font-weight: bold;
             font-size: 0.9rem;
             margin-right: 5px;
+            float: left;
         }
 
         .date {
             font-style: italic;
             font-size: 0.9rem;
             color: #a0a0a0;
+            float: left;
+        }
+
+        .screenshot {
+            margin-top: -3px;
+            display: inline-block;
+            cursor: pointer;
         }
 
         p {
+            clear: both;
             padding: 0;
             margin: 0 0 10px 0;
+
+            &.amplify {
+                font-weight: bolder;
+            }
         }
     }
 }
