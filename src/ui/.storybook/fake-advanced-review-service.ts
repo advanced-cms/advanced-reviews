@@ -60,6 +60,7 @@ const reviewLocations = [
             positionX: 250,
             positionY: 200,
             propertyName: "Main ContentArea",
+            firstComment: createComment("Alfred", "Lorem ipsum dolorum.", new Date("2019-04-04")),
             isDone: false
         }
     },
@@ -69,6 +70,7 @@ const reviewLocations = [
             positionX: 125,
             positionY: 330,
             propertyName: "Description",
+            firstComment: createComment("Lina", "Lorem ipsum dolorum.", new Date("2019-03-03")),
             isDone: false
         }
     }
