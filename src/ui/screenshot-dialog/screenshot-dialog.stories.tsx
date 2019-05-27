@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { storiesOf } from "@storybook/react";
 import ScreenshotDialog from "./screenshot-dialog";
 import { action } from "@storybook/addon-actions";
+import { createStores } from "../store/review-store";
+import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
+import resources from "../.storybook/resources.json";
+import { Provider } from "mobx-react";
+
+const stores = createStores(new FakeAdvancedReviewService(), resources);
 
 function Component() {
     const [anchorElement, setAnchorElement] = useState(null);
@@ -47,5 +53,9 @@ function Component() {
 }
 
 storiesOf("Screenshot picker", module).add("default", () => {
-    return <Component />;
+    return (
+        <Provider {...stores}>
+            <Component />
+        </Provider>
+    );
 });

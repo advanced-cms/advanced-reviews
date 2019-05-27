@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import { observer, inject } from "mobx-react";
 import { IReviewComponentStore, Comment as CommentItem } from "../store/review-store";
 import { DropDownMenu } from "../common/drop-down-menu";
@@ -7,14 +8,19 @@ import "./comment.scss";
 
 interface CommentProps {
     reviewStore?: IReviewComponentStore;
+    resources?: ReviewResources;
     comment: CommentItem;
+    amplify?: Boolean;
 }
 
+@inject("resources")
 @inject("reviewStore")
 @observer
 export default class Comment extends React.Component<CommentProps, any> {
     render() {
         const { getUserAvatarUrl } = this.props.reviewStore!;
+
+        const res = this.props.resources!;
 
         return (
             <div className="comment">
@@ -28,12 +34,14 @@ export default class Comment extends React.Component<CommentProps, any> {
                             {this.props.comment.userFriendlyDate}
                         </span>
                         {this.props.comment.screenshot && (
-                            <DropDownMenu icon="image">
-                                <img src={this.props.comment.screenshot} />
-                            </DropDownMenu>
+                            <div className="screenshot">
+                                <DropDownMenu icon="image" title={res.panel.showscreenshot}>
+                                    <img src={this.props.comment.screenshot} />
+                                </DropDownMenu>
+                            </div>
                         )}
                     </div>
-                    <p>{this.props.comment.text}</p>
+                    <p className={classNames({ amplify: this.props.amplify })}>{this.props.comment.text}</p>
                 </div>
             </div>
         );

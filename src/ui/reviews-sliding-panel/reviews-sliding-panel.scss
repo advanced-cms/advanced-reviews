@@ -1,6 +1,55 @@
 @import "@material/switch/mixins";
 
+$border: 1px solid #c0c0c0;
+
 .panel-container {
+    z-index: 700;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: white;
+    width: 480px;
+    overflow-y: auto;
+    border-left: $border;
+    border-bottom: $border;
+    padding: 10px;
+
+    &.narrow {
+        width: 50px;
+        height: 100px;
+
+        &.review-mode {
+            height: 235px;
+        }
+
+        .filter {
+            margin: 5px;
+        }
+
+        .type-filters {
+            border-bottom: 0;
+        }
+
+        .unread {
+            .mdc-checkbox {
+                --mdc-theme-secondary: green;
+            }
+        }
+
+        .active {
+            .mdc-checkbox {
+                --mdc-theme-secondary: red;
+            }
+        }
+
+        .resolved {
+            .mdc-checkbox {
+                --mdc-theme-secondary: gray;
+            }
+        }
+    }
+
     .filter {
         margin: 10px;
 
@@ -9,10 +58,7 @@
         }
     }
 
-    .main-filter,
     .type-filters {
-        border-bottom: 1px solid #c0c0c0;
-
         .unread {
             .mdc-switch {
                 --mdc-theme-secondary: green;
@@ -57,6 +103,7 @@
     }
 
     .locations {
+        border-top: $border;
         max-height: 600px;
 
         .edit {
@@ -67,6 +114,26 @@
 
         li:hover .edit {
             display: block;
+        }
+    }
+
+    .close-panel {
+        position: absolute;
+        right: 0;
+    }
+
+    .panel-header {
+        height: 40px;
+        border-bottom: $border;
+        display: flex;
+
+        .pin-navigator {
+            margin-top: -3px;
+            margin-left: auto;
+        }
+
+        label {
+            line-height: 40px;
         }
     }
 }

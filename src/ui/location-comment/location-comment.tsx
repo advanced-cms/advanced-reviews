@@ -5,6 +5,8 @@ import IconButton from "@material/react-icon-button";
 import MaterialIcon from "@material/react-material-icon";
 import { DropDownMenu } from "../common/drop-down-menu";
 
+import "./location-comment.scss";
+
 interface LocationCommentProps {
     currentScreenshot: string;
     value: string;
@@ -22,9 +24,11 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
         }
     });
 
+    const resources = props.resources!;
+
     return (
         <>
-            <TextField label={`${props.resources!.dialog.addcomment}...`} dense textarea>
+            <TextField label={`${resources.dialog.addcomment}...`} dense textarea>
                 <Input
                     ref={(input: any) => setCommentInput(input)}
                     value={props.value}
@@ -32,19 +36,26 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
                 />
             </TextField>
             {!props.currentScreenshot && (
-                <IconButton title="Attach screenshot" onClick={() => props.onToggle()}>
+                <IconButton
+                    className="attach-screenshot"
+                    title={resources.panel.attachscreenshot}
+                    onClick={() => props.onToggle()}
+                >
                     <MaterialIcon icon="image" />
                 </IconButton>
             )}
             {props.currentScreenshot && (
-                <>
-                    <DropDownMenu icon="image">
+                <div className="attach-screenshot">
+                    <DropDownMenu icon="image" title={resources.panel.showscreenshot}>
                         <img src={props.currentScreenshot} />
                     </DropDownMenu>
-                    <IconButton onClick={() => props.onChange(props.value, null)} title="Remove screenshot">
+                    <IconButton
+                        onClick={() => props.onChange(props.value, null)}
+                        title={resources.panel.removescreenshot}
+                    >
                         <MaterialIcon icon="remove" />
                     </IconButton>
-                </>
+                </div>
             )}
         </>
     );
