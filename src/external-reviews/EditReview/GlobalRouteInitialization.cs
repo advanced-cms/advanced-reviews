@@ -6,7 +6,7 @@ using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 
-namespace AdvancedExternalReviews
+namespace AdvancedExternalReviews.EditReview
 {
     [InitializableModule]
     public class GlobalRouteInitialization : IConfigurableModule
@@ -29,6 +29,8 @@ namespace AdvancedExternalReviews
         {
             var externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
 
+            GlobalFilters.Filters.Add(new ConvertEditLinksFilter());
+
             RegisterEditPageGet(e, externalReviewOptions);
             RegisterAddPinPost(e.Routes, externalReviewOptions);
         }
@@ -36,7 +38,7 @@ namespace AdvancedExternalReviews
         private static void RegisterEditPageGet(RouteRegistrationEventArgs e, ExternalReviewOptions externalReviewOptions)
         {
             var routeValues = new RouteValueDictionary();
-            routeValues.Add("controller", "PagePreview");
+            routeValues.Add("controller", "PageEdit");
             routeValues.Add("action", "Index");
             routeValues.Add("token", " UrlParameter.Optional");
 
@@ -51,7 +53,7 @@ namespace AdvancedExternalReviews
         private void RegisterAddPinPost(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions)
         {
             var routeValues = new RouteValueDictionary();
-            routeValues.Add("controller", "PagePreview");
+            routeValues.Add("controller", "PageEdit");
             routeValues.Add("action", "AddPin");
 
             var route = new Route(externalReviewOptions.ReviewsUrl + "/AddPin", routeValues, new MvcRouteHandler());
