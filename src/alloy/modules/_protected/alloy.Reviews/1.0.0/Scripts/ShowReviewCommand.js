@@ -5,13 +5,15 @@ define([
     "epi/shell/command/_Command",
     "epi-cms/_ContentContextMixin",
     "epi-cms/contentediting/ContentActionSupport",
+    "alloy-review/editorDisplayLanguageResolver"
 ], function (
     declare,
     topic,
     when,
     _Command,
     _ContentContextMixin,
-    ContentActionSupport
+    ContentActionSupport,
+    editorDisplayLanguageResolver
 ) {
     return declare([_Command, _ContentContextMixin], {
         name: "ContentReferences",
@@ -34,12 +36,18 @@ define([
             this.reviewEnabled = false;
             this.set("active", false);
             this._toggleCanExecute();
-            topic.publish("toggle:reviews", this.reviewEnabled, this._currentContext.language);
+            this._publishTopic();
         },
 
         _execute: function () {
             this.reviewEnabled = !this.reviewEnabled;
-            topic.publish("toggle:reviews", this.reviewEnabled, this._currentContext.language);
+            this._publishTopic();
+        },
+
+        _publishTopic: function () {
+            when(editorDisplayLanguageResolver.resolve()).then(function (language) {
+                topic.publish("toggle:reviews", this.reviewEnabled, language);
+            }.bind(this));
         },
 
         _toggleCanExecute: function () {
