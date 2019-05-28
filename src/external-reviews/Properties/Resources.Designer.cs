@@ -61,14 +61,26 @@ namespace AdvancedExternalReviews.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Review request.
+        /// </summary>
+        internal static string EmailSubject {
+            get {
+                return ResourceManager.GetString("EmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hi,
         ///
-        ///Please review the folowing content:
+        ///Please review the following content:
         ///[#link#]
         ///
         ///This is interactive version of the review. You can click on the page to add your comments.
         ///
-        ///This message contains confidential information and is intended only for the individual named. If you are not the named addressee, you should not disseminate, distribute or copy this email. Please notify the sender immediately by email if you have received this email by mistake and delete this email from your system..
+        ///This message contains confidential information and is intended only for the individual named. If you are not the named addressee, you should not disseminate, distribute or copy this email. Please notify the sender immediately by email if you have received this email by mistake and delete this email from your system.
+        ///
+        ///Best regards
+        ///Alloy team.
         /// </summary>
         internal static string mail_edit {
             get {
@@ -79,10 +91,13 @@ namespace AdvancedExternalReviews.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Hi,
         ///
-        ///Please review the folowing content:
+        ///Please review the following content:
         ///[#link#]
         ///
-        ///This message contains confidential information and is intended only for the individual named. If you are not the named addressee, you should not disseminate, distribute or copy this email. Please notify the sender immediately by email if you have received this email by mistake and delete this email from your system..
+        ///This message contains confidential information and is intended only for the individual named. If you are not the named addressee, you should not disseminate, distribute or copy this email. Please notify the sender immediately by email if you have received this email by mistake and delete this email from your system.
+        ///
+        ///Best regards
+        ///Alloy team.
         /// </summary>
         internal static string mail_preview {
             get {

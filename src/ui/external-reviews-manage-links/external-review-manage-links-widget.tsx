@@ -20,6 +20,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store = new ExternalReviewStore(this._reviewService);
         this.own(this.store);
         this.store.load();
+        this.store.initialMailSubject = this.params.initialMailSubject;
         this.store.initialViewMailMessage = this.params.initialViewMailMessage;
         this.store.initialEditMailMessage = this.params.initialEditMailMessage;
 
