@@ -1,6 +1,4 @@
-﻿using System;
-using System.Web;
-using System.Web.Routing;
+﻿using System.Web.Routing;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
@@ -8,17 +6,19 @@ using EPiServer.Web;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
 
-namespace AdvancedExternalReviews
+namespace AdvancedExternalReviews.EditReview
 {
     public class PageEditPartialRouter : IPartialRouter<PageData, PageData>
     {
         private readonly IContentLoader _contentLoader;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
+        private readonly ExternalReviewOptions _externalReviewOptions;
 
-        public PageEditPartialRouter(IContentLoader contentLoader, IExternalReviewLinksRepository externalReviewLinksRepository)
+        public PageEditPartialRouter(IContentLoader contentLoader, IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
+            _externalReviewOptions = externalReviewOptions;
         }
 
         public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues, RequestContext requestContext)
@@ -29,7 +29,7 @@ namespace AdvancedExternalReviews
         public object RoutePartial(PageData content, SegmentContext segmentContext)
         {
             var nextSegment = segmentContext.GetNextValue(segmentContext.RemainingPath);
-            if (nextSegment.Next != "externalPageReview")
+            if (nextSegment.Next != _externalReviewOptions.ContentIframeEditUrlSegment)
             {
                 return null;
             }
