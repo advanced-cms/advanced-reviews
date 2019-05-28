@@ -27,7 +27,7 @@ export class Comment {
 
     store: IReviewComponentStore;
 
-    constructor(store?: IReviewComponentStore) {
+    constructor(store: IReviewComponentStore) {
         this.store = store;
     }
 
@@ -51,8 +51,14 @@ export class Comment {
         return distanceInWordsToNow(this.date, options);
     }
 
-    static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
-        const instance = new Comment();
+    static create(
+        author: string,
+        text: string,
+        store: IReviewComponentStore,
+        date?: Date,
+        screenshot?: string
+    ): Comment {
+        const instance = new Comment(store);
         instance.author = author;
         instance.text = text;
         instance.date = date || new Date();
@@ -243,16 +249,14 @@ class ReviewComponentStore implements IReviewComponentStore {
         this._advancedReviewService = advancedReviewService;
     }
 
+    private parseComment(json: any): Comment {
+        return json
+            ? Comment.create(json.author, json.text, this, json.date, json.screenshot)
+            : Comment.create("", "", this);
+    }
+
     @action.bound
     load(): void {
-        function parseComment(json: any): Comment {
-            const comment = json
-                ? Comment.create(json.author, json.text, json.date, json.screenshot)
-                : Comment.create("", "");
-            comment.store = this;
-            return comment;
-        }
-
         this._advancedReviewService.load().then(reviewLocations => {
             this.reviewLocations = reviewLocations.map((x: any) => {
                 return new PinLocation(this, {
@@ -261,8 +265,8 @@ class ReviewComponentStore implements IReviewComponentStore {
                     positionY: x.data.positionY,
                     propertyName: x.data.propertyName,
                     isDone: x.data.isDone,
-                    firstComment: parseComment(x.data.firstComment),
-                    comments: (x.data.comments || []).map((x: any) => parseComment(x))
+                    firstComment: this.parseComment(x.data.firstComment),
+                    comments: (x.data.comments || []).map((x: any) => this.parseComment(x))
                 });
             });
         });
@@ -294,7 +298,7 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     @action.bound
     addComment(commentText: string, screenshot?: string): Promise<PinLocation> {
-        const comment = Comment.create(this.currentUser, commentText, null, screenshot);
+        const comment = Comment.create(this.currentUser, commentText, this, null, screenshot);
         this.editedPinLocation.comments.push(comment);
         this.editedPinLocation.clearLastUsersRead();
         return this.saveLocation(this.editedPinLocation);
@@ -307,6 +311,7 @@ class ReviewComponentStore implements IReviewComponentStore {
         editedReview.firstComment = Comment.create(
             this.currentUser,
             item.currentCommentText,
+            this,
             null,
             item.currentScreenshot
         );
