@@ -1,6 +1,21 @@
 import { action, computed, observable } from "mobx";
 import { distanceInWordsToNow, format } from "date-fns";
 
+const locales = {
+    da: require("date-fns/locale/da"),
+    de: require("date-fns/locale/de"),
+    en: require("date-fns/locale/en"),
+    es: require("date-fns/locale/es"),
+    fi: require("date-fns/locale/fi"),
+    fr: require("date-fns/locale/fr"),
+    it: require("date-fns/locale/it"),
+    ja: require("date-fns/locale/ja"),
+    no: require("date-fns/locale/nb"), // date-fns uses bokmål as the default norwegian culture, not nynorsk as in epi
+    nl: require("date-fns/locale/nl"),
+    sv: require("date-fns/locale/sv"),
+    zh_cn: require("date-fns/locale/zh_cn")
+};
+
 /**
  * Represents a comment added by user
  */
@@ -30,7 +45,7 @@ export class Comment {
 
         const options: any = { addSuffix: true };
         if (this.store && this.store.currentLocale) {
-            options.locale = require(`date-fns/locale/${this.store.currentLocale}/index.js`);
+            options.locale = locales[this.store.currentLocale.toLowerCase()];
         }
 
         return distanceInWordsToNow(this.date, options);
@@ -181,7 +196,7 @@ export interface IReviewComponentStore {
      */
     currentUser: string;
 
-    currentLocale: any;
+    currentLocale: string;
 
     editedPinLocation: PinLocation;
 
