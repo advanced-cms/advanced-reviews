@@ -25,6 +25,8 @@ export class ReviewLink {
 export interface IExternalReviewStore {
     links: ReviewLink[];
 
+    initialMailSubject: string;
+
     initialViewMailMessage: string;
 
     initialEditMailMessage: string;
@@ -33,11 +35,13 @@ export interface IExternalReviewStore {
 
     delete(item: ReviewLink): void;
 
-    share(item: ReviewLink, email: string, message: string);
+    share(item: ReviewLink, email: string, subject: string, message: string);
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
     _externalReviewService: ExternalReviewService;
+
+    initialMailSubject: string;
 
     initialViewMailMessage: string;
 
@@ -71,7 +75,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService.delete(item.token);
     }
 
-    share(item: ReviewLink, email: string, message: string) {
-        this._externalReviewService.share(item.token, email, message);
+    share(item: ReviewLink, email: string, subject: string, message: string) {
+        this._externalReviewService.share(item.token, email, subject, message);
     }
 }
