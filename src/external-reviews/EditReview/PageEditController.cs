@@ -8,26 +8,30 @@ using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Shell.Services.Rest;
 
-namespace AdvancedExternalReviews
+namespace AdvancedExternalReviews.EditReview
 {
     /// <summary>
     /// Controller used to render editable external review page
     /// </summary>
-    public class PagePreviewController: Controller
+    public class PageEditController: Controller
     {
         private readonly IContentLoader _contentLoader;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
+        private readonly ExternalReviewOptions _externalReviewOptions;
 
-        public PagePreviewController(IContentLoader contentLoader,
+        public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
-            IApprovalReviewsRepository approvalReviewsRepository)
+            IApprovalReviewsRepository approvalReviewsRepository,
+            ExternalReviewOptions externalReviewOptions)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _approvalReviewsRepository = approvalReviewsRepository;
+            _externalReviewOptions = externalReviewOptions;
         }
 
+        [ConvertEditLinksFilter]
         public ActionResult Index(string token)
         {
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
@@ -44,13 +48,14 @@ namespace AdvancedExternalReviews
 
             const string url = "Views/PagePreview/Index.cshtml";
 
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
+            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resolvedPath))
             {
                 var pagePreviewModel = new ContentPreviewModel
                 {
                     Token = token,
                     Name = content.Name,
+                    EditableContentUrlSegment = $"/en/{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath()
                 };
@@ -109,7 +114,7 @@ namespace AdvancedExternalReviews
         private static string GetJsScriptPath()
         {
             const string url = "Views/external-review-component.js";
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
+            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var jsScriptPath))
             {
                 return jsScriptPath;
@@ -121,7 +126,7 @@ namespace AdvancedExternalReviews
         private static string GetResetCssPath()
         {
             const string url = "Views/reset.css";
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PagePreviewController).Assembly, url,
+            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resetCssPath))
             {
                 return resetCssPath;
@@ -135,6 +140,8 @@ namespace AdvancedExternalReviews
     {
         public string Token { get; set; }
         public string Name { get; set; }
+
+        public string EditableContentUrlSegment { get; set; }
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }
