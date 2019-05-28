@@ -14,6 +14,11 @@ namespace AdvancedExternalReviews
         public string ContentPreviewUrl { get; set; } = "externalContentView";
 
         /// <summary>
+        /// URL to editable content iframe
+        /// </summary>
+        public string ContentIframeEditUrlSegment { get; set; } = "externalPageReview";
+
+        /// <summary>
         /// email template used for editable links
         /// </summary>
         public string EmailEdit { get; set; } = Resources.mail_edit;
