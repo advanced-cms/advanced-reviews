@@ -5,7 +5,8 @@ define([
     "dojo/topic",
     "dojo/when",
     "epi/dependency",
-    "epi-cms/_ContentContextMixin"
+    "epi-cms/_ContentContextMixin",
+    "alloy-review/editorDisplayLanguageResolver"
 ], function (
     declare,
     Deferred,
@@ -13,8 +14,8 @@ define([
     topic,
     when,
     dependency,
-
-    _ContentContextMixin
+    _ContentContextMixin,
+    editorDisplayLanguageResolver
 ) {
 
     function parseResponse(reviewLocations) {
@@ -39,7 +40,7 @@ define([
             this.inherited(arguments);
 
             var registry = dependency.resolve("epi.storeregistry");
-            this.reviewStore = this.contentStore || registry.get("approvaladvancedreview");
+            this.reviewStore = registry.get("approvaladvancedreview");
         },
 
         add: function (id, reviewLocation) {
@@ -73,7 +74,9 @@ define([
         },
 
         setReviewContext: function () {
-            topic.publish("toggle:reviews", true, this._currentContext.language);
+            when(editorDisplayLanguageResolver.resolve()).then(function (language) {
+                topic.publish("toggle:reviews", true, language);
+            });
         }
     });
 });
