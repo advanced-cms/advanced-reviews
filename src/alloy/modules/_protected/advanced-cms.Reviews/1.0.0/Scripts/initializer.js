@@ -36,6 +36,14 @@ define([
                     })
                 )
             );
+            registry.add("approvallanguage",
+                new Throttle(
+                    new JsonRest({
+                        target: this._getRestPath("approvallanguage")//,
+                        //idProperty: "contentLink"
+                    })
+                )
+            );
 
             var commandsProvider = new CommandsProvider();
 
