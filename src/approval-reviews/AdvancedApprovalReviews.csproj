@@ -164,6 +164,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApprovalLanguageStore.cs" />
     <Compile Include="ApprovalReview.cs" />
     <Compile Include="ApprovalReviewStore.cs" />
     <Compile Include="AvatarsService\AvatarRouteExtensions.cs" />
