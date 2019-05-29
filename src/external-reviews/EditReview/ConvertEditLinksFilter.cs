@@ -48,6 +48,12 @@ namespace AdvancedExternalReviews.EditReview
                 return;
             }
 
+            // check if filters are enabled for the request
+            if (filterContext.IsChildAction)
+            {
+                return;
+            }
+
             var originalFilter =
                 filterContext.HttpContext.Response.Filter;
             filterContext.HttpContext.Response.Filter =
