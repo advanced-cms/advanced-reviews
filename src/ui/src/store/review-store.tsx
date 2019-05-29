@@ -1,6 +1,21 @@
 import { action, computed, observable } from "mobx";
 import { distanceInWordsToNow, format } from "date-fns";
 
+const locales = {
+    da: require("date-fns/locale/da"),
+    de: require("date-fns/locale/de"),
+    en: require("date-fns/locale/en"),
+    es: require("date-fns/locale/es"),
+    fi: require("date-fns/locale/fi"),
+    fr: require("date-fns/locale/fr"),
+    it: require("date-fns/locale/it"),
+    ja: require("date-fns/locale/ja"),
+    no: require("date-fns/locale/nb"), // date-fns uses bokmål as the default norwegian culture, not nynorsk as in epi
+    nl: require("date-fns/locale/nl"),
+    sv: require("date-fns/locale/sv"),
+    zh_cn: require("date-fns/locale/zh_cn")
+};
+
 /**
  * Represents a comment added by user
  */
@@ -12,7 +27,7 @@ export class Comment {
 
     store: IReviewComponentStore;
 
-    constructor(store?: IReviewComponentStore) {
+    constructor(store: IReviewComponentStore) {
         this.store = store;
     }
 
@@ -30,14 +45,20 @@ export class Comment {
 
         const options: any = { addSuffix: true };
         if (this.store && this.store.currentLocale) {
-            options.locale = require(`date-fns/locale/${this.store.currentLocale}/index.js`);
+            options.locale = locales[this.store.currentLocale.toLowerCase()];
         }
 
         return distanceInWordsToNow(this.date, options);
     }
 
-    static create(author: string, text: string, date?: Date, screenshot?: string): Comment {
-        const instance = new Comment();
+    static create(
+        author: string,
+        text: string,
+        store: IReviewComponentStore,
+        date?: Date,
+        screenshot?: string
+    ): Comment {
+        const instance = new Comment(store);
         instance.author = author;
         instance.text = text;
         instance.date = date || new Date();
@@ -181,7 +202,7 @@ export interface IReviewComponentStore {
      */
     currentUser: string;
 
-    currentLocale: any;
+    currentLocale: string;
 
     editedPinLocation: PinLocation;
 
@@ -228,16 +249,14 @@ class ReviewComponentStore implements IReviewComponentStore {
         this._advancedReviewService = advancedReviewService;
     }
 
+    private parseComment(json: any): Comment {
+        return json
+            ? Comment.create(json.author, json.text, this, json.date, json.screenshot)
+            : Comment.create("", "", this);
+    }
+
     @action.bound
     load(): void {
-        function parseComment(json: any): Comment {
-            const comment = json
-                ? Comment.create(json.author, json.text, json.date, json.screenshot)
-                : Comment.create("", "");
-            comment.store = this;
-            return comment;
-        }
-
         this._advancedReviewService.load().then(reviewLocations => {
             this.reviewLocations = reviewLocations.map((x: any) => {
                 return new PinLocation(this, {
@@ -246,8 +265,8 @@ class ReviewComponentStore implements IReviewComponentStore {
                     positionY: x.data.positionY,
                     propertyName: x.data.propertyName,
                     isDone: x.data.isDone,
-                    firstComment: parseComment(x.data.firstComment),
-                    comments: (x.data.comments || []).map((x: any) => parseComment(x))
+                    firstComment: this.parseComment(x.data.firstComment),
+                    comments: (x.data.comments || []).map((x: any) => this.parseComment(x))
                 });
             });
         });
@@ -279,7 +298,7 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     @action.bound
     addComment(commentText: string, screenshot?: string): Promise<PinLocation> {
-        const comment = Comment.create(this.currentUser, commentText, null, screenshot);
+        const comment = Comment.create(this.currentUser, commentText, this, null, screenshot);
         this.editedPinLocation.comments.push(comment);
         this.editedPinLocation.clearLastUsersRead();
         return this.saveLocation(this.editedPinLocation);
@@ -292,6 +311,7 @@ class ReviewComponentStore implements IReviewComponentStore {
         editedReview.firstComment = Comment.create(
             this.currentUser,
             item.currentCommentText,
+            this,
             null,
             item.currentScreenshot
         );
