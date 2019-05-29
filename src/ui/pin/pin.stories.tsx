@@ -31,7 +31,7 @@ const getReviewLocation = (
         positionX: 100,
         positionY: 100,
         priority: priority,
-        firstComment: Comment.create(user, "aaaaa aaaaa", new Date("2019-02-03")),
+        firstComment: Comment.create(user, "aaaaa aaaaa", stores.reviewStore, new Date("2019-02-03")),
         comments: []
     });
     return reviewLocation;
