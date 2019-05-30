@@ -9,11 +9,12 @@ import Switch from "@material/react-switch";
 import List, { ListItem, ListItemText } from "@material/react-list";
 import { ReviewDetails } from "../details/review-details";
 import { IReactionDisposer, reaction } from "mobx";
+import PinNavigator from "../pin-navigator/pin-navigator";
 
+import "@material/react-list/index.scss";
 import "@material/react-checkbox/index.scss";
 import "@material/react-switch/index.scss";
 import "./reviews-sliding-panel.scss";
-import PinNavigator from "../pin-navigator/pin-navigator";
 
 interface SlidingPanelProps {
     iframe?: HTMLIFrameElement;
