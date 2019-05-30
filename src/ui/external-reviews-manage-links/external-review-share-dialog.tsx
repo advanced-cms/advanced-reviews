@@ -13,17 +13,20 @@ import "./external-review-share-dialog.scss";
 
 export interface LinkShareResult {
     email: string;
+    subject: string;
     message: string;
 }
 
 interface ShareDialogProps {
     open: boolean;
     onClose(linkShare: LinkShareResult): void;
+    initialSubject?: string;
     initialMessage?: string;
 }
 
-const ShareDialog = ({ open, onClose, initialMessage }: ShareDialogProps) => {
+const ShareDialog = ({ open, onClose, initialSubject, initialMessage }: ShareDialogProps) => {
     const [email, setEmail] = useState<string>("");
+    const [subject, setSubject] = useState<string>(initialSubject);
     const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
     const [message, setMessage] = useState<string>(initialMessage);
 
@@ -40,6 +43,7 @@ const ShareDialog = ({ open, onClose, initialMessage }: ShareDialogProps) => {
 
         onClose({
             email,
+            subject,
             message
         });
     };
@@ -57,7 +61,7 @@ const ShareDialog = ({ open, onClose, initialMessage }: ShareDialogProps) => {
 
     return (
         <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onDialogClose}>
-            <DialogTitle>Share link with external editor</DialogTitle>
+            <DialogTitle>Share link to the content with external editor</DialogTitle>
             <DialogContent className="share-dialog-content">
                 <div className="text-field-container">
                     <TextField
@@ -69,6 +73,11 @@ const ShareDialog = ({ open, onClose, initialMessage }: ShareDialogProps) => {
                         required
                     >
                         <Input value={email} onChange={onEmailTextChanged} isValid={isValidEmail} />
+                    </TextField>
+                </div>
+                <div className="text-field-container">
+                    <TextField label="Email subject" dense autoFocus required style={{ width: "100%" }}>
+                        <Input value={subject} onChange={event => setSubject(event.currentTarget.value)} />
                     </TextField>
                 </div>
                 <div className="text-field-container">

@@ -19,6 +19,11 @@ namespace AdvancedExternalReviews
         public string ContentIframeEditUrlSegment { get; set; } = "externalPageReview";
 
         /// <summary>
+        /// email subject template
+        /// </summary>
+        public string EmailSubject { get; set; } = Resources.EmailSubject;
+
+        /// <summary>
         /// email template used for editable links
         /// </summary>
         public string EmailEdit { get; set; } = Resources.mail_edit;
