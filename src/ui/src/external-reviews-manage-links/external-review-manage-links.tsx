@@ -36,7 +36,7 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
         if (shareLink === null) {
             return;
         }
-        store.share(currentLinkToShare, shareLink.email, shareLink.message);
+        store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
     };
 
     const options = [
@@ -120,6 +120,7 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
                 <ShareDialog
                     open={!!currentLinkToShare}
                     onClose={onShareDialogClose}
+                    initialSubject={store.initialMailSubject}
                     initialMessage={
                         currentLinkToShare && currentLinkToShare.isEditable
                             ? store.initialEditMailMessage
