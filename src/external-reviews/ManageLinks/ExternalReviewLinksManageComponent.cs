@@ -30,6 +30,7 @@ namespace AdvancedExternalReviews.ManageLinks
                 PlugInArea.Navigation
             };
 
+            Settings.Add(new Setting("initialMailSubject", _externalReviewOptions.EmailSubject));
             Settings.Add(new Setting("initialEditMailMessage", _externalReviewOptions.EmailEdit));
             Settings.Add(new Setting("initialViewMailMessage", _externalReviewOptions.EmailView));
         }
