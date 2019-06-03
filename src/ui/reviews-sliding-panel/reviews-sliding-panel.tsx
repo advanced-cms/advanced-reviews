@@ -10,6 +10,7 @@ import List, { ListItem, ListItemText } from "@material/react-list";
 import { ReviewDetails } from "../details/review-details";
 import { IReactionDisposer, reaction } from "mobx";
 import PinNavigator from "../pin-navigator/pin-navigator";
+import Comment from "../comment/comment";
 
 import "@material/react-list/index.scss";
 import "@material/react-checkbox/index.scss";
@@ -26,7 +27,7 @@ const Legend = inject("resources")(
     observer(({ resources, filter }) => {
         return (
             <div className="type-filters">
-                <div className="filter" title="Show review mode">
+                <div className="filter" title={resources.panel.reviewmode}>
                     <CheckBox checked={filter.reviewMode} onChange={() => (filter.reviewMode = !filter.reviewMode)} />
                 </div>
                 {filter.reviewMode && (
@@ -59,32 +60,35 @@ const Legend = inject("resources")(
 const PinTypeFilters = inject("resources")(
     observer(({ resources, filter }) => {
         return (
-            <div className="type-filters">
-                <div className="filter unread" title={resources.panel.showunread}>
-                    <Switch
-                        nativeControlId="showUnread"
-                        checked={filter.showUnread}
-                        onChange={() => (filter.showUnread = !filter.showUnread)}
-                    />
-                    <label htmlFor="showUnread">{resources.panel.showunread}</label>
+            <>
+                <h3>Filters</h3>
+                <div className="type-filters">
+                    <div className="filter unread" title={resources.panel.showunread}>
+                        <Switch
+                            nativeControlId="showUnread"
+                            checked={filter.showUnread}
+                            onChange={() => (filter.showUnread = !filter.showUnread)}
+                        />
+                        <label htmlFor="showUnread">{resources.panel.showunread}</label>
+                    </div>
+                    <div className="filter active" title={resources.panel.showactive}>
+                        <Switch
+                            nativeControlId="showActive"
+                            checked={filter.showActive}
+                            onChange={() => (filter.showActive = !filter.showActive)}
+                        />
+                        <label htmlFor="showActive">{resources.panel.showactive}</label>
+                    </div>
+                    <div className="filter resolved" title={resources.panel.showresolved}>
+                        <Switch
+                            nativeControlId="showResolved"
+                            checked={filter.showResolved}
+                            onChange={() => (filter.showResolved = !filter.showResolved)}
+                        />
+                        <label htmlFor="showResolved">{resources.panel.showresolved}</label>
+                    </div>
                 </div>
-                <div className="filter active" title={resources.panel.showactive}>
-                    <Switch
-                        nativeControlId="showActive"
-                        checked={filter.showActive}
-                        onChange={() => (filter.showActive = !filter.showActive)}
-                    />
-                    <label htmlFor="showActive">{resources.panel.showactive}</label>
-                </div>
-                <div className="filter resolved" title={resources.panel.showresolved}>
-                    <Switch
-                        nativeControlId="showResolved"
-                        checked={filter.showResolved}
-                        onChange={() => (filter.showResolved = !filter.showResolved)}
-                    />
-                    <label htmlFor="showResolved">{resources.panel.showresolved}</label>
-                </div>
-            </div>
+            </>
         );
     })
 );
@@ -189,6 +193,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     <MaterialIcon icon="last_page" />
                                 </IconButton>
                                 <Filters filter={filter} />
+                                <h3>List of Pins</h3>
                                 <List
                                     singleSelection
                                     selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
@@ -198,7 +203,8 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     {reviewLocations.map(location => (
                                         <ListItem title={res.panel.clicktoedit} key={location.id}>
                                             {/*TODO: replace ListItemText with Comment component?*/}
-                                            <ListItemText primaryText={location.displayName} />
+                                            {/*<ListItemText primaryText={location.displayName} />*/}
+                                            <Comment comment={location.firstComment} />
                                             <IconButton
                                                 className="edit"
                                                 title={res.panel.opendetails}
