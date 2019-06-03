@@ -19,7 +19,7 @@ define([
         name: "ContentReferences",
         label: "Advanced Review",
         tooltip: "Toggle advanced review",
-        iconClass: 'epi-icon--medium epi-iconBubble',
+        iconClass: 'epi-icon--medium epi-review-icon',
         canExecute: false,
         reviewEnabled: false,
 
