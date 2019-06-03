@@ -18,7 +18,7 @@ define([
                 {
                     showLabel: false,
                     widget: ToggleButton,
-                    'class': 'epi-mediumButton'
+                    'class': 'epi-mediumButton epi-review-button'
                 });
         }
     });
