@@ -1,0 +1,14 @@
+.Sleek .dijitToolbar .dijitToggleButton.epi-review-button {
+    margin-right: 8px
+}
+
+.epi-review-icon {
+    background: url(content-review.png) 0 0 no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+
+.dijitChecked.epi-mediumButton .epi-review-icon {
+    background: url(content-review.png) -24px 0 no-repeat;
+}
