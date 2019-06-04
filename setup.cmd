@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET AlloyMVC=src\Alloy.Mvc.Template
+SET AlloyMVC=src\alloy
 
 IF EXIST %AlloyMVC%\App_Data (
     ECHO Remove all files from the app data folder
