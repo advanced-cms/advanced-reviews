@@ -574,19 +574,15 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(SolutionDir)\build\Templates.targets" />
+  <Import Project="$(SolutionDir)\build\Templates.targets" />  
   <ItemGroup>
-    <NugetPackage Include="Alloy.Mvc.Template.Search.Sources.nuspec" />
-    <NugetPackage Include="Alloy.Mvc.Template.Sources.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\AdvancedApprovalReviews\AdvancedApprovalReviews.csproj">
+    <ProjectReference Include="..\approval-reviews\AdvancedApprovalReviews.csproj">
       <Project>{7d3cb0b4-bf55-4577-abf2-d83f8ea5d49f}</Project>
-      <Name>AdvancedApprovalReviews</Name>
+      <Name>approval-reviews</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\AdvancedExternalReviews\AdvancedExternalReviews.csproj">
+    <ProjectReference Include="..\external-reviews\AdvancedExternalReviews.csproj">
       <Project>{90d5e808-1575-4ba9-8237-7323db1b446f}</Project>
-      <Name>AdvancedExternalReviews</Name>
+      <Name>external-reviews</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

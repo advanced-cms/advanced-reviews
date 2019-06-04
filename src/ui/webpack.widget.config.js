@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
         filename: "ReviewWidget.js",
         libraryTarget: "amd",
         libraryExport: "default",
-        path: path.resolve(__dirname, "../src/Alloy.Mvc.Template/modules/_protected/alloy.Reviews/1.0.0/Scripts")
+        path: path.resolve(__dirname, "../alloy/modules/_protected/alloy.Reviews/1.0.0/Scripts")
     };
 
     if (!webpackCommon.plugins) {

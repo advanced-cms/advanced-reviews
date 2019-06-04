@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
         filename: "external-review-component.js",
         //libraryTarget: "amd",
         //libraryExport: "default",
-        path: path.resolve(__dirname, "../../src/Alloy.Mvc.Template/modules/_protected/alloy.ExternalReviews/Views")
+        path: path.resolve(__dirname, "../../alloy/modules/_protected/alloy.ExternalReviews/Views")
     };
 
     return webpackCommon;
