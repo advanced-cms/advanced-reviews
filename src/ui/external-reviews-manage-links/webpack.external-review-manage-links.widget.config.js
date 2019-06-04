@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
         libraryExport: "default",
         path: path.resolve(
             __dirname,
-            "../../src/Alloy.Mvc.Template/modules/_protected/alloy.ExternalReviews/1.0.0/Scripts"
+            "../../alloy/modules/_protected/alloy.ExternalReviews/1.0.0/Scripts"
         )
     };
 

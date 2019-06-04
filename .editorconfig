@@ -21,7 +21,7 @@ indent_style = tab
 trim_trailing_whitespace = false
 
 # Ignore these files
-[{LICENSE,build/database/*,src/Alloy.Mvc.Template/App_Data/**,src/Alloy.Mvc.Template/modulesbin/**,src/Alloy.Mvc.Template/obj/**,src/Alloy.Mvc.Template/Static/**}]
+[{LICENSE,build/database/*,src/alloy/App_Data/**,src/alloy/modulesbin/**,src/alloy/obj/**,src/alloy/Static/**}]
 indent_style = unset
 indent_size = unset
 trim_trailing_whitespace = unset
