@@ -70,7 +70,7 @@ It's reading the embeded english version XML file from EPiserver project.
 );
 
 console.log("Reading Episerver XML file");
-fs.readFile("./../AdvancedApprovalReviews/EmbededLanguages/advancedapprovalreviews_EN.xml", "utf-8", (err, data) => {
+fs.readFile("./../approval-reviews/EmbededLanguages/advancedapprovalreviews_EN.xml", "utf-8", (err, data) => {
     if (err) {
         throw err;
     }
