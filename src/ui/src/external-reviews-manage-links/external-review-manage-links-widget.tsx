@@ -3,10 +3,9 @@ import ReactDOM from "react-dom";
 import declare from "dojo/_base/declare";
 import WidgetBase from "dijit/_WidgetBase";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
-import ExternalReviewService from "alloy-external-review/external-review-service";
+import ExternalReviewService from "episerver-addons-external-review/external-review-service";
 import { ExternalReviewStore } from "./external-review-links-store";
 import ManageLinks from "./external-review-manage-links";
-//import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 
 /**
  * Edit Mode component used to list external links

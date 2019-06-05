@@ -26,13 +26,17 @@ License.config
 
 node_modules/
 
+*.nupkg
+episerver-addons.Reviews.zip
+episerver-addons.ExternalReviews.zip
+
 reviewComponent.bundle.js
-src/alloy/modules/_protected/alloy.Reviews/1.0.0/Scripts/ReviewWidget.js
-src/alloy/modules/_protected/alloy.Reviews/1.0.0/Scripts/ReviewWidget.js.map
-src/alloy/modules/_protected/alloy.Reviews/1.0.0/Scripts/report.html
-src/alloy/modules/_protected/alloy.Reviews/Views/admin/adminPlugin.js
-src/alloy/modules/_protected/alloy.Reviews/Views/admin/adminPlugin.js.map
-src/alloy/modules/_protected/alloy.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js
-src/alloy/modules/_protected/alloy.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js.map
-src/alloy/modules/_protected/alloy.ExternalReviews/Views/external-review-component.js
-src/alloy/modules/_protected/alloy.ExternalReviews/Views/external-review-component.js.map
+src/alloy/modules/_protected/episerver-addons.Reviews/1.0.0/Scripts/ReviewWidget.js
+src/alloy/modules/_protected/episerver-addons.Reviews/1.0.0/Scripts/ReviewWidget.js.map
+src/alloy/modules/_protected/episerver-addons.Reviews/1.0.0/Scripts/report.html
+src/alloy/modules/_protected/episerver-addons.Reviews/Views/admin/adminPlugin.js
+src/alloy/modules/_protected/episerver-addons.Reviews/Views/admin/adminPlugin.js.map
+src/alloy/modules/_protected/episerver-addons.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js
+src/alloy/modules/_protected/episerver-addons.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js.map
+src/alloy/modules/_protected/episerver-addons.ExternalReviews/Views/external-review-component.js
+src/alloy/modules/_protected/episerver-addons.ExternalReviews/Views/external-review-component.js.map

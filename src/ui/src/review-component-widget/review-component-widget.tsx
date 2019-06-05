@@ -5,7 +5,7 @@ import declare from "dojo/_base/declare";
 import WidgetBase from "dijit/_WidgetBase";
 import ApplicationSettings from "epi-cms/ApplicationSettings";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
-import ReviewService from "alloy-review/advancedReviewService";
+import ReviewService from "episerver-addons-review/advancedReviewService";
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 
