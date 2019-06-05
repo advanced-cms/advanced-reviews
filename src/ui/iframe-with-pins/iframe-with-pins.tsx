@@ -12,15 +12,15 @@ interface IframeState {
     newLocation: PinLocation;
 }
 
-interface IframeWithLocationsProps {
+interface IframeWithPinsProps {
     iframe: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
 }
 
 @inject("reviewStore")
 @observer
-export default class IframeWithPins extends React.Component<IframeWithLocationsProps, IframeState> {
-    constructor(props: IframeWithLocationsProps) {
+export default class IframeWithPins extends React.Component<IframeWithPinsProps, IframeState> {
+    constructor(props: IframeWithPinsProps) {
         super(props);
 
         this.state = {
