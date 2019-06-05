@@ -2,7 +2,7 @@ define([
     "dojo/topic",
     "dojo/dom-class",
     "epi-cms/contentediting/OnPageEditing",
-    "alloy-review/ReviewWidget"
+    "episerver-addons-review/ReviewWidget"
 ], function (
     topic,
     domClass,

@@ -6,7 +6,7 @@ define([
     "dojo/when",
     "epi/dependency",
     "epi-cms/_ContentContextMixin",
-    "alloy-review/editorDisplayLanguageResolver"
+    "episerver-addons-review/editorDisplayLanguageResolver"
 ], function (
     declare,
     Deferred,

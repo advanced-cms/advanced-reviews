@@ -1,6 +1,6 @@
 define([
     "epi-cms/content-approval/command/RejectChanges",
-    "alloy-review/advancedReviewService"
+    "episerver-addons-review/advancedReviewService"
 ], function (
     RejectChanges,
     AdvancedReviewService) {

@@ -3,7 +3,7 @@ define([
     "dojo/on",
     "epi/shell/widget/dialog/Dialog",
     "epi-cms/content-approval/command/ApproveChanges",
-    "alloy-review/advancedReviewService"
+    "episerver-addons-review/advancedReviewService"
 ], function (
     Deferred,
     on,

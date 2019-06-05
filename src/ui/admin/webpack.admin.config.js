@@ -7,7 +7,7 @@ module.exports = (env, argv) => {
         filename: "adminPlugin.js",
         //libraryTarget: "amd",
         //libraryExport: "default",
-        path: path.resolve(__dirname, "../../alloy/modules/_protected/alloy.Reviews/Views/admin")
+        path: path.resolve(__dirname, "../../alloy/modules/_protected/episerver-addons.Reviews/Views/admin")
     };
     return webpackCommon;
 };
