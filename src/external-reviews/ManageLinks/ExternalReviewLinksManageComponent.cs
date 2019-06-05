@@ -17,7 +17,7 @@ namespace AdvancedExternalReviews.ManageLinks
         }
 
         public ExternalReviewLinksManageComponent(ExternalReviewOptions options)
-            : base("alloy-external-review/external-review-manage-links-component")
+            : base("episerver-addons-external-review/external-review-manage-links-component")
         {
             _options = options;
 

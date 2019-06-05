@@ -5,10 +5,10 @@ define([
     "epi/shell/store/JsonRest",
     "epi/shell/store/Throttle",
     "epi/_Module",
-    "alloy-review/commandsProvider",
-    "alloy-review/onPageEditingInitializer",
-    "alloy-review/approveChangesInitializer",
-    "alloy-review/rejectChangesInitializer"
+    "episerver-addons-review/commandsProvider",
+    "episerver-addons-review/onPageEditingInitializer",
+    "episerver-addons-review/approveChangesInitializer",
+    "episerver-addons-review/rejectChangesInitializer"
 ], function (
     declare,
     dependency,
@@ -57,7 +57,7 @@ define([
         },
 
         _getRestPath: function (name) {
-            return routes.getRestPath({ moduleArea: "alloy.reviews", storeName: name });
+            return routes.getRestPath({ moduleArea: "episerver-addons.reviews", storeName: name });
         }
     });
 });

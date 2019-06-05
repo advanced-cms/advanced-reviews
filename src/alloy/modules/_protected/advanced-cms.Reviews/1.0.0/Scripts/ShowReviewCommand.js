@@ -5,7 +5,7 @@ define([
     "epi/shell/command/_Command",
     "epi-cms/_ContentContextMixin",
     "epi-cms/contentediting/ContentActionSupport",
-    "alloy-review/editorDisplayLanguageResolver"
+    "episerver-addons-review/editorDisplayLanguageResolver"
 ], function (
     declare,
     topic,

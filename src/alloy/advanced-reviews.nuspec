@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>advanced-reviews</id>
+    <version>$version$</version>
+    <title>advanced-reviews</title>
+    <authors>Greg Wiechec and Bart Sekula</authors>
+    <owners>Greg Wiechec and Bart Sekula</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>advanced-reviews</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>review content approval external</tags>
+    <license type="expression">MIT</license>
+    <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="[11.11,12.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.18,12.0)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\AdvancedApprovalReviews.dll" target="lib\net45\" />
+    <file src="bin\AdvancedExternalReviews.dll" target="lib\net45\" />
+    <file src="modules\_protected\episerver-addons.Reviews\episerver-addons.Reviews.zip" target="content\modules\_protected\episerver-addons.Reviews\" />
+    <file src="modules\_protected\episerver-addons.Reviews\web.config" target="content\modules\_protected\episerver-addons.Reviews\" />
+    <file src="modules\_protected\episerver-addons.ExternalReviews\episerver-addons.ExternalReviews.zip" target="content\modules\_protected\episerver-addons.ExternalReviews\" />
+    <file src="modules\_protected\episerver-addons.ExternalReviews\web.config" target="content\modules\_protected\episerver-addons.ExternalReviews\" />
+  </files>
+</package>

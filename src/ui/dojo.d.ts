@@ -23,7 +23,7 @@ declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
     export = res;
 }
 
-declare module "alloy-review/advancedReviewService" {
+declare module "episerver-addons-review/advancedReviewService" {
     let advancedReviewService: any;
     export = advancedReviewService;
 }
@@ -33,7 +33,7 @@ interface AdvancedReviewService {
     load(): Promise<any[]>;
 }
 
-declare module "alloy-external-review/external-review-service" {
+declare module "episerver-addons-external-review/external-review-service" {
     let externalReviewService: any;
     export = externalReviewService;
 }
