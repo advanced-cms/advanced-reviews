@@ -299,6 +299,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
     <Compile Include="Business\AdministratorRegistrationPage.cs" />
+    <Compile Include="Business\AlloyReviews\ExternalReviewOptionsInitialization.cs" />
     <Compile Include="Business\AlloyReviews\AssetsCustomAvatarResolver.cs" />
     <Compile Include="Business\Channels\DisplayResolutionBase.cs" />
     <Compile Include="Business\Channels\DisplayResolutions.cs" />
@@ -574,7 +575,7 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(SolutionDir)\build\Templates.targets" />  
+  <Import Project="$(SolutionDir)\build\Templates.targets" />
   <ItemGroup>
     <ProjectReference Include="..\approval-reviews\AdvancedApprovalReviews.csproj">
       <Project>{7d3cb0b4-bf55-4577-abf2-d83f8ea5d49f}</Project>
