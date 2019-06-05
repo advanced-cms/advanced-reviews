@@ -6,7 +6,7 @@ import axios from "axios";
 import res from "../.storybook/resources.json";
 import { createStores } from "../store/review-store";
 
-import IframeWithLocations from "../iframe-with-pins/iframe-with-pins";
+import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import ConfirmNameDialog from "./confirm-name-dialog";
 
 interface EditableExternalReviewProps {
@@ -93,7 +93,7 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
                 <ConfirmNameDialog open={true} initialUserName={userName} onClose={setUserName} />
             ) : (
                 <Provider {...stores}>
-                    <IframeWithLocations iframe={iframe} />
+                    <IframeWithPins iframe={iframe} />
                 </Provider>
             )}
         </>
