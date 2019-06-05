@@ -6,7 +6,7 @@ import WidgetBase from "dijit/_WidgetBase";
 import ApplicationSettings from "epi-cms/ApplicationSettings";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import ReviewService from "alloy-review/advancedReviewService";
-import IframeWithLocations from "../iframe-with-pins/iframe-with-pins";
+import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 
 import { createStores } from "../store/review-store";
@@ -23,7 +23,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
 
         ReactDOM.render(
             <Provider {...this.stores}>
-                <IframeWithLocations iframe={this.iframe} />
+                <IframeWithPins iframe={this.iframe} />
             </Provider>,
             this.domNode
         );
