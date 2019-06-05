@@ -14,7 +14,7 @@ interface ReviewLocationCollectionProps {
 export default class PinCollection extends React.Component<ReviewLocationCollectionProps> {
     onLocationClick = (e, location: PinLocation) => {
         e.stopPropagation();
-        this.props.reviewStore.editedPinLocation = location;
+        this.props.reviewStore.selectedPinLocation = this.props.reviewStore.editedPinLocation = location;
     };
 
     render() {
