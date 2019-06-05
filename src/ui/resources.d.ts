@@ -20,6 +20,8 @@ interface ReviewResources_Panel {
     collapse: string;
     /** Expand review panel */
     expand: string;
+    /** Go back to list */
+    gobacktolist: string;
     /** Open details */
     opendetails: string;
     /** Remove screenshot */
