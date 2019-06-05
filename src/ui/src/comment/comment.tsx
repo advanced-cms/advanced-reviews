@@ -1,8 +1,9 @@
 import React from "react";
 import classNames from "classnames";
 import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, Comment as CommentItem } from "../store/review-store";
+import { IReviewComponentStore, Comment as CommentItem, Priority } from "../store/review-store";
 import { DropDownMenu } from "../common/drop-down-menu";
+import MaterialIcon from "@material/react-material-icon";
 
 import "./comment.scss";
 
@@ -11,6 +12,7 @@ interface CommentProps {
     resources?: ReviewResources;
     comment: CommentItem;
     amplify?: Boolean;
+    isImportant?: boolean;
 }
 
 @inject("resources")
@@ -29,6 +31,7 @@ export default class Comment extends React.Component<CommentProps, any> {
                 </div>
                 <div className="message">
                     <div>
+                        {this.props.isImportant && <MaterialIcon icon="priority_high" title={res.priority.important} />}
                         <span className="author">{this.props.comment.author}</span>
                         <span className="date" title={this.props.comment.formattedDate}>
                             {this.props.comment.userFriendlyDate}
