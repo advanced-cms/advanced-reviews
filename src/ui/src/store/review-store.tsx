@@ -229,7 +229,7 @@ class ReviewCollectionFilter {
     @observable reviewMode: boolean = true;
     @observable showUnread: boolean = true;
     @observable showActive: boolean = true;
-    @observable showResolved: boolean = true;
+    @observable showResolved: boolean = false;
 }
 
 class ReviewComponentStore implements IReviewComponentStore {
