@@ -4,7 +4,7 @@ import { storiesOf } from "@storybook/react";
 import { Provider } from "mobx-react";
 import { createStores } from "../store/review-store";
 import resources from "../.storybook/resources.json";
-import IframeWithLocations from "./iframe-with-pins";
+import IframeWithPins from "./iframe-with-pins";
 import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
@@ -38,7 +38,7 @@ function Component({ initialLocale = "en" }) {
                     src="../.storybook/fake_OPE.html"
                 />
             </div>
-            {!!anchorElement && <IframeWithLocations iframe={anchorElement} />}
+            {!!anchorElement && <IframeWithPins iframe={anchorElement} />}
             <div className="user-picker">
                 <TextField label="Current user" dense>
                     <Input value={text} onChange={e => setText(e.currentTarget.value)} />
