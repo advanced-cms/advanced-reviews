@@ -19,13 +19,18 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         private readonly NotificationOptions _notificationOptions;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly EmailNotificationProvider _emailNotificationProvider;
+        private readonly ExternalReviewOptions _externalReviewOptions;
 
-        public ExternalReviewStore(IContentLoader contentLoader, NotificationOptions notificationOptions,  IExternalReviewLinksRepository externalReviewLinksRepository, EmailNotificationProvider emailNotificationProvider)
+        public ExternalReviewStore(IContentLoader contentLoader, NotificationOptions notificationOptions,
+            IExternalReviewLinksRepository externalReviewLinksRepository,
+            EmailNotificationProvider emailNotificationProvider,
+            ExternalReviewOptions externalReviewOptions)
         {
             _contentLoader = contentLoader;
             _notificationOptions = notificationOptions;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _emailNotificationProvider = emailNotificationProvider;
+            _externalReviewOptions = externalReviewOptions;
         }
 
         [HttpGet]
@@ -38,6 +43,11 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         public ActionResult Post(PostExternalReviewLinkModel externalLink)
         {
             if (externalLink == null || externalLink.ContentLink == null)
+            {
+                return new RestStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (externalLink.IsEditable && !_externalReviewOptions.EditableLinksEnabled)
             {
                 return new RestStatusCodeResult(HttpStatusCode.BadRequest);
             }
