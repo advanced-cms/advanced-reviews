@@ -11,10 +11,15 @@ storiesOf("External reviews/Review component", module)
             "EDIT: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas rutrum lacus eget dapibus. Aenean eleifend commodo felis vitae convallis.";
         store.initialViewMailMessage =
             "VIEW: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas rutrum lacus eget dapibus. Aenean eleifend commodo felis vitae convallis.";
-        return <ExternalReviewWidgetContent store={store} />;
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} />;
     })
     .add("empty", () => {
         const store = new FakeReviewLinksStore();
         store.links = [];
-        return <ExternalReviewWidgetContent store={store} />;
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} />;
+    })
+    .add("only view links", () => {
+        const store = new FakeReviewLinksStore();
+        store.links = [];
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={false} />;
     });
