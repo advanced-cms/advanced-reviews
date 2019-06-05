@@ -45,7 +45,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
 
         const options = Object.keys(Priority).map(priority => {
             return {
-                name: priority,
+                name: res.priority[priority.toLowerCase()],
                 icon: priorityIconMappings[priority],
                 onSelected: () => {
                     this.setState({ currentPriority: Priority[priority] });
@@ -72,7 +72,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                             <div className="review-actions">
                                 <ContextMenu
                                     icon={priorityIconMappings[this.state.currentPriority]}
-                                    title={this.state.currentPriority}
+                                    title={res.dialog.changepriority}
                                     menuItems={options}
                                 />
                             </div>
