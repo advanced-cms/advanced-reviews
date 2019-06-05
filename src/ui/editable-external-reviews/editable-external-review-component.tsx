@@ -38,9 +38,32 @@ class ExternalReviewService implements AdvancedReviewService {
     }
 
     load(): Promise<any[]> {
-        alert("Load");
+        const parseResponse = reviewLocations => {
+            return reviewLocations
+                .map(x => {
+                    var reviewLocation;
+                    try {
+                        reviewLocation = JSON.parse(x.data);
+                    } catch (exception) {
+                        reviewLocation = null;
+                    }
+                    return {
+                        id: x.id,
+                        data: reviewLocation
+                    };
+                })
+                .filter(x => !!x.data);
+        };
+
+        let pins = [];
+        try {
+            pins = parseResponse(JSON.parse(initialPins));
+        } catch (ex) {
+            console.warn("Couldn't load pins", ex);
+        }
+
         let result = new Promise<any[]>(resolve => {
-            resolve([]);
+            resolve(pins);
         });
         let r = result as any;
         r.otherwise = result.catch;
@@ -60,6 +83,7 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
 
     const setUserName = (newUserName: string) => {
         stores.reviewStore.currentUser = newUserName;
+        stores.reviewStore.load();
         setShowUserNameDialog(false);
     };
 
@@ -79,6 +103,7 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
 const reviewEl = document.getElementById("reviews-editor");
 const addUrl = reviewEl.dataset.url;
 const userName: string = reviewEl.dataset.user;
+const initialPins: string = reviewEl.dataset.pins;
 ReactDOM.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
     reviewEl
