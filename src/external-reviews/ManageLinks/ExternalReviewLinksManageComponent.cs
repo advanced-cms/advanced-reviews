@@ -10,16 +10,17 @@ namespace AdvancedExternalReviews.ManageLinks
     [Component]
     public class ExternalReviewLinksManageComponent : ComponentDefinitionBase
     {
-        private readonly ExternalReviewOptions _externalReviewOptions;
+        private readonly ExternalReviewOptions _options;
 
         public ExternalReviewLinksManageComponent() : this(ServiceLocator.Current.GetInstance<ExternalReviewOptions>())
         {
         }
 
-        public ExternalReviewLinksManageComponent(ExternalReviewOptions externalReviewOptions)
+        public ExternalReviewLinksManageComponent(ExternalReviewOptions options)
             : base("alloy-external-review/external-review-manage-links-component")
         {
-            _externalReviewOptions = externalReviewOptions;
+            _options = options;
+
             Description = "Manage list of external review links";
             Title = "External review links";
 
@@ -29,10 +30,18 @@ namespace AdvancedExternalReviews.ManageLinks
             {
                 PlugInArea.Navigation
             };
+        }
 
-            Settings.Add(new Setting("initialMailSubject", _externalReviewOptions.EmailSubject));
-            Settings.Add(new Setting("initialEditMailMessage", _externalReviewOptions.EmailEdit));
-            Settings.Add(new Setting("initialViewMailMessage", _externalReviewOptions.EmailView));
+        public override ISettingsDictionary Settings {
+            get
+            {
+                base.Settings["initialMailSubject"] = _options.EmailSubject;
+                base.Settings["initialEditMailMessage"] = _options.EmailEdit;
+                base.Settings["initialViewMailMessage"] = _options.EmailView;
+                base.Settings["editableLinksEnabled"] = _options.EditableLinksEnabled;
+
+                return base.Settings;
+            }
         }
     }
 }
