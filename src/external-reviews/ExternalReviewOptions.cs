@@ -32,5 +32,10 @@ namespace AdvancedExternalReviews
         /// email template used for readonly content links
         /// </summary>
         public string EmailView { get; set; } = Resources.mail_preview;
+
+        /// <summary>
+        /// When true then Editor can create editable links
+        /// </summary>
+        public bool EditableLinksEnabled { get; set; } = false;
     }
 }
