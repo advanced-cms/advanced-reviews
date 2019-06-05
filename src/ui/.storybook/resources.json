@@ -1,6 +1,7 @@
 {
   "dialog": {
     "addcomment": "Add comment",
+    "changepriority": "Change priority",
     "close": "cancel",
     "describe": "Describe the issue",
     "reviewedit": "Review edit",
@@ -26,5 +27,10 @@
     "cancel": "cancel",
     "clear": "Clear",
     "cropandhighlight": "Crop and highlight the area you want to comment"
+  },
+  "priority": {
+    "important": "Important",
+    "normal": "Normal",
+    "trivial": "Trivial"
   }
 }

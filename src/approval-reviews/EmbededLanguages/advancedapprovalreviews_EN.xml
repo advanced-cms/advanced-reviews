@@ -3,7 +3,8 @@
   <language name="English" id="en">
     <reviewcomponent>
       <dialog>
-        <addcomment>Add comment</addcomment>        
+        <addcomment>Add comment</addcomment>
+        <changepriority>Change priority</changepriority>
         <close>cancel</close>
         <describe>Describe the issue</describe>
         <reviewedit>Review edit</reviewedit>        
@@ -30,6 +31,11 @@
         <clear>Clear</clear>
         <cropandhighlight>Crop and highlight the area you want to comment</cropandhighlight>
       </screenshot>
+      <priority>
+        <important>Important</important>
+        <normal>Normal</normal>
+        <trivial>Trivial</trivial>
+      </priority>
     </reviewcomponent>
   </language>
 </languages>
