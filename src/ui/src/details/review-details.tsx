@@ -122,6 +122,9 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                         </div>
                     </>
                 )}
+                {this.props.currentEditLocation.isDone && (
+                    <Button onClick={this.props.onCancel}>{res.panel.gobacktolist}</Button>
+                )}
             </div>
         );
     }
