@@ -1,6 +1,8 @@
 interface ReviewResources_Dialog {
     /** Add comment */
     addcomment: string;
+    /** Change priority */
+    changepriority: string;
     /** cancel */
     close: string;
     /** Describe the issue */
@@ -51,8 +53,18 @@ interface ReviewResources_Screenshot {
     cropandhighlight: string;
 }
 
+interface ReviewResources_Priority {
+    /** Important */
+    important: string;
+    /** Normal */
+    normal: string;
+    /** Trivial */
+    trivial: string;
+}
+
 interface ReviewResources {
     dialog: ReviewResources_Dialog;
     panel: ReviewResources_Panel;
     screenshot: ReviewResources_Screenshot;
+    priority: ReviewResources_Priority;
 }

@@ -1,12 +1,12 @@
 import React from "react";
 import classNames from "classnames";
-import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, PinLocation } from "../store/review-store";
+import { inject, observer } from "mobx-react";
+import { IReviewComponentStore, PinLocation, Priority } from "../store/review-store";
 import MaterialIcon from "@material/react-material-icon";
 import IconButton from "@material/react-icon-button";
 import CheckBox from "@material/react-checkbox";
 import Switch from "@material/react-switch";
-import List, { ListItem, ListItemText } from "@material/react-list";
+import List, { ListItem } from "@material/react-list";
 import { ReviewDetails } from "../details/review-details";
 import { IReactionDisposer, reaction } from "mobx";
 import PinNavigator from "../pin-navigator/pin-navigator";
@@ -202,9 +202,10 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                 >
                                     {reviewLocations.map(location => (
                                         <ListItem title={res.panel.clicktoedit} key={location.id}>
-                                            {/*TODO: replace ListItemText with Comment component?*/}
-                                            {/*<ListItemText primaryText={location.displayName} />*/}
-                                            <Comment comment={location.firstComment} />
+                                            <Comment
+                                                comment={location.firstComment}
+                                                isImportant={location.priority === Priority.Important}
+                                            />
                                             <IconButton
                                                 className="edit"
                                                 title={res.panel.opendetails}
