@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
@@ -6,6 +7,7 @@ using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
+using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;
 
 namespace AdvancedExternalReviews.EditReview
@@ -19,16 +21,18 @@ namespace AdvancedExternalReviews.EditReview
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
+        private readonly IObjectSerializerFactory _serializerFactory;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
-            ExternalReviewOptions externalReviewOptions)
+            ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _approvalReviewsRepository = approvalReviewsRepository;
             _externalReviewOptions = externalReviewOptions;
+            _serializerFactory = serializerFactory;
         }
 
         [ConvertEditLinksFilter]
@@ -41,10 +45,6 @@ namespace AdvancedExternalReviews.EditReview
             }
 
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
-            /*if (!content.QueryDistinctAccess(AccessLevel.Read))
-            {
-                return new RestStatusCodeResult(HttpStatusCode.Forbidden, "Access denied");
-            }*/
 
             const string url = "Views/PagePreview/Index.cshtml";
 
@@ -57,7 +57,8 @@ namespace AdvancedExternalReviews.EditReview
                     Name = content.Name,
                     EditableContentUrlSegment = $"/en/{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
                     ReviewJsScriptPath = GetJsScriptPath(),
-                    ResetCssPath = GetResetCssPath()
+                    ResetCssPath = GetResetCssPath(),
+                    ReviewPins = _serializerFactory.GetSerializer(KnownContentTypes.Json).Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink))
                 };
                 return View(resolvedPath, pagePreviewModel);
             }
@@ -145,5 +146,6 @@ namespace AdvancedExternalReviews.EditReview
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }
+        public string ReviewPins { get; set; }
     }
 }
