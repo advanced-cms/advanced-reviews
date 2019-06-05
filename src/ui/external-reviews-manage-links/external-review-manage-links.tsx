@@ -14,12 +14,14 @@ import "./external-review-manage-links.scss";
 
 interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
+
+    editableLinksEnabled: boolean;
 }
 
 /**
  * Component used to render list of external review links
  */
-const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetContentProps) => {
+const ExternalReviewWidgetContent = observer(({ store, editableLinksEnabled }: ExternalReviewWidgetContentProps) => {
     const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
     const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
 
@@ -79,7 +81,7 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
 
                         return (
                             <ListItem key={item.token} className="list-item">
-                                <ListItemGraphic graphic={icon} />
+                                {editableLinksEnabled && <ListItemGraphic graphic={icon} />}
                                 <ListItemText
                                     primaryText={link}
                                     secondaryText={"Valid to: " + format(item.validTo, "MMM Do YYYY HH:mm")}
@@ -105,7 +107,13 @@ const ExternalReviewWidgetContent = observer(({ store }: ExternalReviewWidgetCon
                 </List>
             )}
             <div>
-                <ContextMenu icon="playlist_add" title="" menuItems={options} />
+                {editableLinksEnabled ? (
+                    <ContextMenu icon="playlist_add" title="" menuItems={options} />
+                ) : (
+                    <IconButton title="Add link" onClick={() => store.addLink(false)}>
+                        <MaterialIcon icon="playlist_add" />
+                    </IconButton>
+                )}
             </div>
             {!!currentLinkToDelete && (
                 <Confirmation
