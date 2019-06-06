@@ -83,14 +83,22 @@ export interface Dimensions {
     y: number;
 }
 
-export class PinLocation {
+export interface PinPositioningDetails {
+    documentRelativePosition: Dimensions;
+    documentSize: Dimensions;
+    propertyName?: string;
+    propertyPosition?: Dimensions;
+    propertySize?: Dimensions;
+}
+
+export class PinLocation implements PinPositioningDetails {
     id: string;
     propertyName: string;
     @observable isDone: boolean;
     documentRelativePosition: Dimensions;
     documentSize: Dimensions;
-    propertyPosition: Dimensions;
-    propertySize: Dimensions;
+    propertyPosition?: Dimensions;
+    propertySize?: Dimensions;
     @observable priority: Priority = Priority.Normal;
     @observable comments: Comment[] = [];
     /**
