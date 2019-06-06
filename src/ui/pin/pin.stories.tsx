@@ -7,7 +7,7 @@ import ReviewLoacationComponent from "./pin";
 import { Comment, Priority, PinLocation, createStores } from "../store/review-store";
 import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
 
-const stories = storiesOf("Review location", module);
+const stories = storiesOf("Pin", module);
 stories.addDecorator(withKnobs);
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
