@@ -8,7 +8,7 @@ interface IframeOverlayProps {
     reviewLocationCreated(location: PinLocation): void;
 }
 
-const getClosest = (element, selector) => {
+const getClosest = (element, selector): HTMLElement => {
     for (; element && element !== document; element = element.parentNode) {
         if (typeof element.matches === "function" && element.matches(selector)) return element;
     }
@@ -85,8 +85,8 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
                 y: e.offsetY
             },
             documentSize: {
-                x: this.overlayRef.current.clientWidth,
-                y: this.overlayRef.current.clientHeight
+                x: this.overlayDocumentRef.current.offsetWidth,
+                y: this.overlayDocumentRef.current.offsetHeight
             },
             isDone: false
         });
