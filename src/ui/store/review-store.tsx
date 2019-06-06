@@ -271,6 +271,7 @@ class ReviewComponentStore implements IReviewComponentStore {
                     positionX: x.data.positionX,
                     positionY: x.data.positionY,
                     propertyName: x.data.propertyName,
+                    priority: x.data.priority,
                     isDone: x.data.isDone,
                     firstComment: this.parseComment(x.data.firstComment),
                     comments: (x.data.comments || []).map((x: any) => this.parseComment(x))
