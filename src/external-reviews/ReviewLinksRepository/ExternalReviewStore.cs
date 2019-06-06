@@ -12,6 +12,9 @@ using EPiServer.Web;
 
 namespace AdvancedExternalReviews.ReviewLinksRepository
 {
+    /// <summary>
+    /// Manage external review links
+    /// </summary>
     [RestStore("externalreviewstore")]
     public class ExternalReviewStore : RestControllerBase
     {
@@ -47,12 +50,14 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 return new RestStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            // should not be possible to add editable link when option is not available
             if (externalLink.IsEditable && !_externalReviewOptions.EditableLinksEnabled)
             {
                 return new RestStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var result = _externalReviewLinksRepository.AddLink(externalLink.ContentLink, externalLink.IsEditable);
+            var validTo = externalLink.IsEditable ? _externalReviewOptions.EditLinkValidTo: _externalReviewOptions.ViewLinkValidTo;
+            var result = _externalReviewLinksRepository.AddLink(externalLink.ContentLink, externalLink.IsEditable, validTo);
             return Rest(result);
         }
 
@@ -74,7 +79,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 return new HttpNotFoundResult("Token not found");
             }
             
-            if (!_contentLoader.TryGet<IContent>(externalReviewLink.ContentLink, out IContent content))
+            if (!_contentLoader.TryGet(externalReviewLink.ContentLink, out IContent content))
             {
                 return new HttpNotFoundResult("Content not found");
             }
