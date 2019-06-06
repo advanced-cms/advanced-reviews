@@ -31,9 +31,12 @@ export default class PositionCalculator {
                 const currentOffsetFromPropertyLeft = propertyNode.offsetLeft;
                 const currentOffsetFromPropertyTop = propertyNode.offsetTop;
 
+                const xPropertyFactor = propertyNode.offsetWidth / location.propertySize.x;
+                const yPropertyFactor = propertyNode.offsetHeight / location.propertySize.y;
+
                 return {
-                    x: currentOffsetFromPropertyLeft + originalOffsetFromPropertyLeft,
-                    y: currentOffsetFromPropertyTop + originalOffsetFromPropertyTop
+                    x: currentOffsetFromPropertyLeft + originalOffsetFromPropertyLeft * xPropertyFactor,
+                    y: currentOffsetFromPropertyTop + originalOffsetFromPropertyTop * yPropertyFactor
                 };
             }
         }
