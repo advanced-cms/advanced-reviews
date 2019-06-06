@@ -1,4 +1,5 @@
-﻿using AdvancedExternalReviews.Properties;
+﻿using System;
+using AdvancedExternalReviews.Properties;
 using EPiServer.ServiceLocation;
 
 namespace AdvancedExternalReviews
@@ -37,5 +38,15 @@ namespace AdvancedExternalReviews
         /// When true then Editor can create editable links
         /// </summary>
         public bool EditableLinksEnabled { get; set; } = false;
+
+        /// <summary>
+        /// For how long view link is valid
+        /// </summary>
+        public TimeSpan ViewLinkValidTo { get; set; } = TimeSpan.FromDays(5);
+
+        /// <summary>
+        /// For how long editable link is valid
+        /// </summary>
+        public TimeSpan EditLinkValidTo { get; set; } = TimeSpan.FromDays(5);
     }
 }
