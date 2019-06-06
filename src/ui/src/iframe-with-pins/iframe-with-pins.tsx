@@ -26,7 +26,10 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
     constructor(props: IframeWithPinsProps) {
         super(props);
 
-        this.positionCalculator = new PositionCalculator(this.props.iframe);
+        this.positionCalculator = new PositionCalculator(
+            { x: this.props.iframe.offsetWidth, y: this.props.iframe.offsetHeight },
+            this.props.iframe.contentDocument
+        );
 
         this.state = {
             newLocation: null
