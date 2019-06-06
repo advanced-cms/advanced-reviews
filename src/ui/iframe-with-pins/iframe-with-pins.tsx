@@ -1,6 +1,6 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, PinLocation, NewPinDto } from "../store/review-store";
+import { IReviewComponentStore, PinLocation, NewPinDto, Dimensions } from "../store/review-store";
 import NewReviewDialog from "../new-review-dialog/new-review-dialog";
 import IframeOverlay from "../iframe-overlay/iframe-overlay";
 import PinCollection from "../pin-collection/pin-collection";
@@ -11,6 +11,7 @@ import PositionCalculator from "../position-calculator/position-calculator";
 
 interface IframeState {
     newLocation: PinLocation;
+    documentSize: Dimensions;
 }
 
 interface IframeWithPinsProps {
@@ -21,19 +22,29 @@ interface IframeWithPinsProps {
 @inject("reviewStore")
 @observer
 export default class IframeWithPins extends React.Component<IframeWithPinsProps, IframeState> {
-    private readonly positionCalculator: PositionCalculator;
-
     constructor(props: IframeWithPinsProps) {
         super(props);
 
-        this.positionCalculator = new PositionCalculator(
-            { x: this.props.iframe.offsetWidth, y: this.props.iframe.offsetHeight },
-            this.props.iframe.contentDocument
-        );
-
         this.state = {
-            newLocation: null
+            newLocation: null,
+            documentSize: this.getIframeDimensions()
         };
+    }
+
+    private getIframeDimensions() {
+        return { x: this.props.iframe.offsetWidth, y: this.props.iframe.offsetHeight };
+    }
+
+    private updateDimensions() {
+        this.setState({ documentSize: this.getIframeDimensions() });
+    }
+
+    componentDidMount() {
+        this.props.iframe.contentWindow.addEventListener("resize", this.updateDimensions.bind(this));
+    }
+
+    componentWillUnmount() {
+        this.props.iframe.contentWindow.removeEventListener("resize", this.updateDimensions.bind(this));
     }
 
     onCloseDialog(action: string, state: NewPinDto): void {
@@ -74,6 +85,11 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
         const showReviewIntro: boolean =
             this.props.reviewStore.reviewLocations.length === 0 && localStorage.getItem("reviewIntro") !== "false";
 
+        const positionCalculator = new PositionCalculator(
+            { x: this.props.iframe.offsetWidth, y: this.props.iframe.offsetHeight },
+            this.props.iframe.contentDocument
+        );
+
         return (
             <>
                 {this.props.reviewStore.filter.reviewMode && (
@@ -81,10 +97,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
                         iframe={this.props.iframe}
                         reviewLocationCreated={location => this.setState({ newLocation: location })}
                     >
-                        <PinCollection
-                            newLocation={this.state.newLocation}
-                            positionCalculator={this.positionCalculator}
-                        />
+                        <PinCollection newLocation={this.state.newLocation} positionCalculator={positionCalculator} />
                         {showReviewIntro && (
                             <Snackbar
                                 timeoutMs={10000}
