@@ -13,8 +13,7 @@ const reviewLocations = [
     {
         id: "1",
         data: {
-            positionX: 10,
-            positionY: 80,
+            documentRelativePosition: { x: 10, y: 80 },
             propertyName: "Page name",
             isDone: false,
             firstComment: createComment("Alfred", "Rephrase it. ", new Date("2019-01-01"), screenshots.idylla),
@@ -35,8 +34,7 @@ const reviewLocations = [
     {
         id: "2",
         data: {
-            positionX: 100,
-            positionY: 150,
+            documentRelativePosition: { x: 100, y: 150 },
             propertyName: "Page body",
             isDone: false,
             firstComment: createComment("John", "Remove the above text. It's already included in another article.", new Date("2019-01-01")),
@@ -57,8 +55,7 @@ const reviewLocations = [
     {
         id: "3",
         data: {
-            positionX: 250,
-            positionY: 200,
+            documentRelativePosition: { x: 250, y: 200 },
             propertyName: "Main ContentArea",
             firstComment: createComment("Alfred", "Lorem ipsum dolorum.", new Date("2019-04-04")),
             isDone: false
@@ -67,8 +64,7 @@ const reviewLocations = [
     {
         id: "4",
         data: {
-            positionX: 125,
-            positionY: 330,
+            documentRelativePosition: { x: 125, y: 330 },
             propertyName: "Description",
             firstComment: createComment("Lina", "Lorem ipsum dolorum.", new Date("2019-03-03")),
             isDone: false

@@ -80,11 +80,23 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         const propertyElement = getClosest(clickedElement, "[data-epi-property-name]");
 
         let reviewLocation = new PinLocation(this.props.reviewStore, {
-            positionX: e.offsetX,
-            positionY: e.offsetY,
-            propertyName: propertyElement ? propertyElement.dataset.epiPropertyName : null,
+            documentRelativePosition: {
+                x: e.offsetX,
+                y: e.offsetY
+            },
+            documentSize: {
+                x: this.overlayRef.current.clientWidth,
+                y: this.overlayRef.current.clientHeight
+            },
             isDone: false
         });
+        if (propertyElement) {
+            // if property is found we want to remember its offsets as well
+            reviewLocation.propertyName = propertyElement.dataset.epiPropertyName;
+            reviewLocation.propertyPosition = { x: propertyElement.offsetLeft, y: propertyElement.offsetTop };
+            reviewLocation.propertySize = { x: propertyElement.offsetWidth, y: propertyElement.offsetHeight };
+        }
+
         this.props.reviewLocationCreated(reviewLocation);
     }
 

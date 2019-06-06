@@ -3,11 +3,11 @@ import { storiesOf } from "@storybook/react";
 import { withKnobs, boolean, select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 import resources from "../.storybook/resources.json";
-import ReviewLoacationComponent from "./pin";
+import Pin from "./pin";
 import { Comment, Priority, PinLocation, createStores } from "../store/review-store";
 import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
 
-const stories = storiesOf("Review location", module);
+const stories = storiesOf("Pin", module);
 stories.addDecorator(withKnobs);
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
@@ -28,8 +28,7 @@ const getReviewLocation = (
         id: "25",
         propertyName: "test",
         isDone: isDone,
-        positionX: 100,
-        positionY: 100,
+        documentRelativePosition: { x: 100, y: 100 },
         priority: priority,
         firstComment: Comment.create(user, "aaaaa aaaaa", stores.reviewStore, new Date("2019-02-03")),
         comments: []
@@ -44,26 +43,51 @@ stories
             select("Priority", priorityOptions, Priority.Normal),
             boolean("Is new", false)
         );
-        return <ReviewLoacationComponent location={location} showDialog={action("selectLocation")} />;
+        return (
+            <Pin
+                location={location}
+                showDialog={action("selectLocation")}
+                position={location.documentRelativePosition}
+            />
+        );
     })
-    .add("done", () => (
-        <ReviewLoacationComponent location={getReviewLocation(true)} showDialog={action("selectLocation")} />
-    ))
-    .add("high priority", () => (
-        <ReviewLoacationComponent
-            location={getReviewLocation(false, Priority.Important)}
-            showDialog={action("selectLocation")}
-        />
-    ))
-    .add("low priority", () => (
-        <ReviewLoacationComponent
-            location={getReviewLocation(false, Priority.Trivial)}
-            showDialog={action("selectLocation")}
-        />
-    ))
-    .add("updated", () => (
-        <ReviewLoacationComponent
-            location={getReviewLocation(false, Priority.Normal, true)}
-            showDialog={action("selectLocation")}
-        />
-    ));
+    .add("done", () => {
+        const reviewLocation = getReviewLocation(true);
+        return (
+            <Pin
+                location={reviewLocation}
+                showDialog={action("selectLocation")}
+                position={reviewLocation.documentRelativePosition}
+            />
+        );
+    })
+    .add("high priority", () => {
+        const reviewLocation = getReviewLocation(false, Priority.Important);
+        return (
+            <Pin
+                location={reviewLocation}
+                position={reviewLocation.documentRelativePosition}
+                showDialog={action("selectLocation")}
+            />
+        );
+    })
+    .add("low priority", () => {
+        const reviewLocation = getReviewLocation(false, Priority.Trivial);
+        return (
+            <Pin
+                location={reviewLocation}
+                position={reviewLocation.documentRelativePosition}
+                showDialog={action("selectLocation")}
+            />
+        );
+    })
+    .add("updated", () => {
+        const reviewLocation = getReviewLocation(false, Priority.Normal, true);
+        return (
+            <Pin
+                location={reviewLocation}
+                position={reviewLocation.documentRelativePosition}
+                showDialog={action("selectLocation")}
+            />
+        );
+    });
