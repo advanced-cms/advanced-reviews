@@ -7,6 +7,7 @@ import PinCollection from "../pin-collection/pin-collection";
 import ReviewsSlidingPanel from "../reviews-sliding-panel/reviews-sliding-panel";
 import { Snackbar } from "@material/react-snackbar";
 import "@material/react-snackbar/index.scss";
+import PositionCalculator from "../position-calculator/position-calculator";
 
 interface IframeState {
     newLocation: PinLocation;
@@ -20,8 +21,12 @@ interface IframeWithPinsProps {
 @inject("reviewStore")
 @observer
 export default class IframeWithPins extends React.Component<IframeWithPinsProps, IframeState> {
+    private readonly positionCalculator: PositionCalculator;
+
     constructor(props: IframeWithPinsProps) {
         super(props);
+
+        this.positionCalculator = new PositionCalculator(this.props.iframe);
 
         this.state = {
             newLocation: null
@@ -73,7 +78,10 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
                         iframe={this.props.iframe}
                         reviewLocationCreated={location => this.setState({ newLocation: location })}
                     >
-                        <PinCollection newLocation={this.state.newLocation} />
+                        <PinCollection
+                            newLocation={this.state.newLocation}
+                            positionCalculator={this.positionCalculator}
+                        />
                         {showReviewIntro && (
                             <Snackbar
                                 timeoutMs={10000}

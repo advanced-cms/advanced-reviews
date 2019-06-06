@@ -78,12 +78,19 @@ export interface NewPinDto {
     screenshotMode: boolean;
 }
 
+export interface Dimensions {
+    x: number;
+    y: number;
+}
+
 export class PinLocation {
     id: string;
     propertyName: string;
     @observable isDone: boolean;
-    positionX: number;
-    positionY: number;
+    documentRelativePosition: Dimensions;
+    documentSize: Dimensions;
+    propertyPosition: Dimensions;
+    propertySize: Dimensions;
     @observable priority: Priority = Priority.Normal;
     @observable comments: Comment[] = [];
     /**
@@ -261,8 +268,10 @@ class ReviewComponentStore implements IReviewComponentStore {
             this.reviewLocations = reviewLocations.map((x: any) => {
                 return new PinLocation(this, {
                     id: x.id,
-                    positionX: x.data.positionX,
-                    positionY: x.data.positionY,
+                    documentRelativePosition: x.data.documentRelativePosition,
+                    documentSize: x.data.documentSize,
+                    propertyPosition: x.data.propertyPosition,
+                    propertySize: x.data.propertySize,
                     propertyName: x.data.propertyName,
                     isDone: x.data.isDone,
                     firstComment: this.parseComment(x.data.firstComment),
@@ -327,8 +336,10 @@ class ReviewComponentStore implements IReviewComponentStore {
             const data = {
                 propertyName: reviewLocation.propertyName,
                 isDone: reviewLocation.isDone,
-                positionX: reviewLocation.positionX,
-                positionY: reviewLocation.positionY,
+                documentRelativePosition: reviewLocation.documentRelativePosition,
+                documentSize: reviewLocation.documentSize,
+                propertyPosition: reviewLocation.propertyPosition,
+                propertySize: reviewLocation.propertySize,
                 priority: reviewLocation.priority,
                 comments: reviewLocation.comments.map((x: any) => {
                     return {
