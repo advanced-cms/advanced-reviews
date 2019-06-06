@@ -118,7 +118,7 @@ export class PinLocation {
     /**
      * List of users and date when they last saw the review.
      */
-    usersLastRead: UsersLastReadHashmap = {};
+    @observable usersLastRead: UsersLastReadHashmap = {};
 
     private _rootStore: IReviewComponentStore;
 
@@ -138,6 +138,10 @@ export class PinLocation {
     @action clearLastUsersRead(): void {
         this.usersLastRead = {};
     }
+
+    private ensureDateTimeObject = obj => {
+        return typeof obj === "string" ? new Date(obj) : obj;
+    };
 
     @computed get isUpdatedReview() {
         if (!this._rootStore) {
@@ -169,7 +173,10 @@ export class PinLocation {
             .map(x => x.date)
             .sort();
         const lastCurrentUserComment = currentUserComments.length > 0 ? currentUserComments.pop() : null;
-        if (lastCurrentUserComment !== null && lastCurrentUserComment > lastOtherUserComment) {
+        if (
+            lastCurrentUserComment !== null &&
+            this.ensureDateTimeObject(lastCurrentUserComment) > this.ensureDateTimeObject(lastOtherUserComment)
+        ) {
             // current user has the last comment
             return false;
         }
@@ -179,7 +186,7 @@ export class PinLocation {
             // current user hsa no comments
             return true;
         }
-        if (lastCurrentUserReadDate > lastOtherUserComment) {
+        if (this.ensureDateTimeObject(lastCurrentUserReadDate) > this.ensureDateTimeObject(lastOtherUserComment)) {
             return false;
         }
 
@@ -264,6 +271,7 @@ class ReviewComponentStore implements IReviewComponentStore {
                     positionX: x.data.positionX,
                     positionY: x.data.positionY,
                     propertyName: x.data.propertyName,
+                    priority: x.data.priority,
                     isDone: x.data.isDone,
                     firstComment: this.parseComment(x.data.firstComment),
                     comments: (x.data.comments || []).map((x: any) => this.parseComment(x))
