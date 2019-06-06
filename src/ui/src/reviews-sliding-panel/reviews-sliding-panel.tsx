@@ -129,6 +129,9 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
             },
             () => {
                 this.setState({ panelVisible: true });
+                if (this.props.reviewStore.editedPinLocation) {
+                    this.props.reviewStore.editedPinLocation.updateCurrentUserLastRead();
+                }
             }
         );
     }

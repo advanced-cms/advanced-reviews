@@ -72,8 +72,6 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
     };
 
     render() {
-        this.props.currentEditLocation.updateCurrentUserLastRead();
-
         const canSave: boolean = this.state.currentCommentText.trim() !== "";
 
         const res = this.props.resources!;
