@@ -211,6 +211,11 @@ export interface IReviewComponentStore {
 
     currentLocale: string;
 
+    /**
+     * dictionary with mappings property name to property displayname
+     */
+    propertyNameMapping: object;
+
     editedPinLocation: PinLocation;
 
     selectedPinLocation: PinLocation;
@@ -224,6 +229,17 @@ export interface IReviewComponentStore {
     save(state: NewPinDto, reviewLocation: PinLocation): Promise<PinLocation>;
 
     load(): void;
+
+    /**
+     * @param propertyNameMapping update mapping dictionary
+     */
+    updateDisplayNamesDictionary(propertyNameMapping: object): void;
+
+    /**
+     * return property display name
+     * @param propertyName property name
+     */
+    resolvePropertyDisplayName(propertyName: string): string;
 
     getUserAvatarUrl(userName: string): string;
 
@@ -243,6 +259,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     @observable reviewLocations: PinLocation[] = [];
     @observable editedPinLocation: PinLocation;
     @observable selectedPinLocation: PinLocation;
+    @observable propertyNameMapping: object;
 
     filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 
@@ -296,6 +313,25 @@ class ReviewComponentStore implements IReviewComponentStore {
                 (this.filter.showUnread && location.isUpdatedReview)
             );
         });
+    }
+
+    @action.bound
+    updateDisplayNamesDictionary(propertyNameMapping: object): void {
+        this.propertyNameMapping = propertyNameMapping;
+    }
+
+    @action
+    resolvePropertyDisplayName(propertyName: string): string {
+        if (!this.propertyNameMapping) {
+            return propertyName;
+        }
+
+        if (!propertyName) {
+            return propertyName;
+        }
+
+        const displayName = this.propertyNameMapping[propertyName];
+        return displayName;
     }
 
     @action.bound
