@@ -11,7 +11,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     {
         IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink);
         ExternalReviewLink GetContentByToken(string token);
-        ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable);
+        ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo);
         void DeleteLink(string token);
     }
 
@@ -50,14 +50,14 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return ExternalReviewLink.FromExternalReview(externalReviewLinkDds, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl);
         }
 
-        public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable)
+        public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo)
         {
             var externalReviewLink = new ExternalReviewLinkDds
             {
                 ContentLink = contentLink,
                 IsEditable = isEditable,
                 Token = Guid.NewGuid().ToString(),
-                ValidTo = DateTime.Now.AddDays(5) //TODO: externalReviews configuration
+                ValidTo = DateTime.Now.Add(validTo)
             };
             GetStore().Save(externalReviewLink);
             return ExternalReviewLink.FromExternalReview(externalReviewLink, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl);
