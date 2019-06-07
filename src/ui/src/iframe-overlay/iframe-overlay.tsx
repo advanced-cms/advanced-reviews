@@ -90,10 +90,11 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             isDone: false
         });
 
-        const propertyElement = getClosest(clickedElement, "[data-epi-property-name]");
+        const propertyElement =
+            getClosest(clickedElement, "[data-epi-property-name]") || getClosest(clickedElement, "[data-epi-edit]");
         if (propertyElement) {
             // if property is found we want to remember its offsets as well
-            reviewLocation.propertyName = propertyElement.dataset.epiPropertyName;
+            reviewLocation.propertyName = propertyElement.dataset.epiPropertyName || propertyElement.dataset.epiEdit;
             reviewLocation.propertyPosition = { x: propertyElement.offsetLeft, y: propertyElement.offsetTop };
             reviewLocation.propertySize = { x: propertyElement.offsetWidth, y: propertyElement.offsetHeight };
 
