@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
-      "experimentalDecorators": true,
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "jsx": "react",
-      "target": "es5",
-      "sourceMap": true
-    }
-  }
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "jsx": "react",
+        "target": "es5",
+        "sourceMap": true
+    },
+    "exclude": ["**/*.test.ts"]
+}
