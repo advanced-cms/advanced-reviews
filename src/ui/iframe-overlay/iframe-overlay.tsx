@@ -77,7 +77,6 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         }
 
         const clickedElement = this.props.iframe.contentDocument.elementFromPoint(e.offsetX, e.offsetY) as HTMLElement;
-        const propertyElement = getClosest(clickedElement, "[data-epi-property-name]");
 
         let reviewLocation = new PinLocation(this.props.reviewStore, {
             documentRelativePosition: {
@@ -90,11 +89,21 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             },
             isDone: false
         });
+
+        const propertyElement = getClosest(clickedElement, "[data-epi-property-name]");
         if (propertyElement) {
             // if property is found we want to remember its offsets as well
             reviewLocation.propertyName = propertyElement.dataset.epiPropertyName;
             reviewLocation.propertyPosition = { x: propertyElement.offsetLeft, y: propertyElement.offsetTop };
             reviewLocation.propertySize = { x: propertyElement.offsetWidth, y: propertyElement.offsetHeight };
+
+            const blockElement = getClosest(clickedElement, "[data-epi-block-id]");
+            if (blockElement) {
+                reviewLocation.blockId = blockElement.dataset.epiBlockId;
+                reviewLocation.blockName = blockElement.dataset.epiContentName;
+                reviewLocation.blockPosition = { x: blockElement.offsetLeft, y: blockElement.offsetTop };
+                reviewLocation.blockSize = { x: blockElement.offsetWidth, y: blockElement.offsetHeight };
+            }
         }
 
         this.props.reviewLocationCreated(reviewLocation);

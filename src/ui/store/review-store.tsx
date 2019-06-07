@@ -93,12 +93,16 @@ export interface PinPositioningDetails {
 
 export class PinLocation implements PinPositioningDetails {
     id: string;
-    propertyName: string;
+    propertyName?: string;
     @observable isDone: boolean;
     documentRelativePosition: Dimensions;
     documentSize: Dimensions;
     propertyPosition?: Dimensions;
     propertySize?: Dimensions;
+    blockId?: string;
+    blockName?: string;
+    blockPosition?: Dimensions;
+    blockSize?: Dimensions;
     @observable priority: Priority = Priority.Normal;
     @observable comments: Comment[] = [];
     /**
