@@ -78,12 +78,31 @@ export interface NewPinDto {
     screenshotMode: boolean;
 }
 
-export class PinLocation {
+export interface Dimensions {
+    x: number;
+    y: number;
+}
+
+export interface PinPositioningDetails {
+    documentRelativePosition: Dimensions;
+    documentSize: Dimensions;
+    propertyName?: string;
+    propertyPosition?: Dimensions;
+    propertySize?: Dimensions;
+}
+
+export class PinLocation implements PinPositioningDetails {
     id: string;
-    propertyName: string;
+    propertyName?: string;
     @observable isDone: boolean;
-    positionX: number;
-    positionY: number;
+    documentRelativePosition: Dimensions;
+    documentSize: Dimensions;
+    propertyPosition?: Dimensions;
+    propertySize?: Dimensions;
+    blockId?: string;
+    blockName?: string;
+    blockPosition?: Dimensions;
+    blockSize?: Dimensions;
     @observable priority: Priority = Priority.Normal;
     @observable comments: Comment[] = [];
     /**
@@ -285,8 +304,10 @@ class ReviewComponentStore implements IReviewComponentStore {
             this.reviewLocations = reviewLocations.map((x: any) => {
                 return new PinLocation(this, {
                     id: x.id,
-                    positionX: x.data.positionX,
-                    positionY: x.data.positionY,
+                    documentRelativePosition: x.data.documentRelativePosition,
+                    documentSize: x.data.documentSize,
+                    propertyPosition: x.data.propertyPosition,
+                    propertySize: x.data.propertySize,
                     propertyName: x.data.propertyName,
                     priority: x.data.priority,
                     isDone: x.data.isDone,
@@ -371,8 +392,10 @@ class ReviewComponentStore implements IReviewComponentStore {
             const data = {
                 propertyName: reviewLocation.propertyName,
                 isDone: reviewLocation.isDone,
-                positionX: reviewLocation.positionX,
-                positionY: reviewLocation.positionY,
+                documentRelativePosition: reviewLocation.documentRelativePosition,
+                documentSize: reviewLocation.documentSize,
+                propertyPosition: reviewLocation.propertyPosition,
+                propertySize: reviewLocation.propertySize,
                 priority: reviewLocation.priority,
                 comments: reviewLocation.comments.map((x: any) => {
                     return {

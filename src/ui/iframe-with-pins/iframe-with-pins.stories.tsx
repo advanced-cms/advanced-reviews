@@ -11,11 +11,16 @@ const stores = createStores(new FakeAdvancedReviewService(), resources);
 
 function Component({ initialLocale = "en" }) {
     const [text, setText] = useState("Lina");
+    const [iframeLoaded, setIframeLoaded] = useState(false);
     const [anchorElement, setAnchorElement] = useState(null);
 
     useEffect(() => {
         stores.reviewStore.currentUser = text;
         stores.reviewStore.currentLocale = initialLocale;
+
+        setTimeout(() => {
+            setIframeLoaded(true);
+        }, 1000);
     });
 
     return (
@@ -38,7 +43,7 @@ function Component({ initialLocale = "en" }) {
                     src="../.storybook/fake_OPE.html"
                 />
             </div>
-            {!!anchorElement && <IframeWithPins iframe={anchorElement} />}
+            {!!anchorElement && iframeLoaded && <IframeWithPins iframe={anchorElement} />}
             <div className="user-picker">
                 <TextField label="Current user" dense>
                     <Input value={text} onChange={e => setText(e.currentTarget.value)} />

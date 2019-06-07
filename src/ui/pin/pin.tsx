@@ -1,17 +1,18 @@
 import React, { CSSProperties, FunctionComponent, useEffect, useRef } from "react";
-import { PinLocation, Priority } from "../store/review-store";
+import { Dimensions, PinLocation, Priority } from "../store/review-store";
 import classNames from "classnames";
 import MaterialIcon from "@material/react-material-icon";
 import priorityIconMappings from "../store/priority-icon-mappings";
 import "./pin.scss";
 
-interface ReviewLocationComponentProps {
+interface PinProps {
     location: PinLocation;
     highlighted?: boolean;
     showDialog(e: any): void;
+    position: Dimensions;
 }
 
-const Pin: FunctionComponent<ReviewLocationComponentProps> = (props: ReviewLocationComponentProps) => {
+const Pin: FunctionComponent<PinProps> = (props: PinProps) => {
     const { highlighted, location, showDialog } = props;
 
     const div = useRef(null);
@@ -29,8 +30,8 @@ const Pin: FunctionComponent<ReviewLocationComponentProps> = (props: ReviewLocat
 
     const style: CSSProperties = {
         zIndex: 700,
-        top: location.positionY - circleSize + "px",
-        left: location.positionX - circleSize + "px"
+        left: props.position.x - circleSize + "px",
+        top: props.position.y - circleSize + "px"
     };
 
     return (

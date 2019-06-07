@@ -14,8 +14,7 @@ stores.reviewStore.load();
 
 const reviewLocation1 = new PinLocation(stores.reviewStore, {
     id: "1",
-    positionX: 10,
-    positionY: 80,
+    documentRelativePosition: { x: 10, y: 80 },
     propertyName: "Page name",
     isDone: false,
     firstComment: Comment.create("Alfred", "Rephrase it. ", stores.reviewStore, new Date("2019-01-01")),
@@ -77,8 +76,7 @@ const reviewLocation1 = new PinLocation(stores.reviewStore, {
 
 const reviewLocation2 = new PinLocation(stores.reviewStore, {
     id: "1",
-    positionX: 10,
-    positionY: 80,
+    documentRelativePosition: { x: 10, y: 80 },
     propertyName: "Page name",
     isDone: false,
     firstComment: Comment.create("Alfred", "Rephrase it. ", stores.reviewStore, new Date("2019-01-01")),
@@ -88,8 +86,7 @@ const reviewLocation2 = new PinLocation(stores.reviewStore, {
 function createEmptyLocation(): PinLocation {
     return new PinLocation(this, {
         id: "1",
-        positionX: 10,
-        positionY: 80,
+        documentRelativePosition: { x: 10, y: 80 },
         propertyName: "Content area 1",
         isDone: false,
         firstComment: {},
