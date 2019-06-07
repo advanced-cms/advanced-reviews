@@ -20,6 +20,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.stores.reviewStore.load();
         this.stores.reviewStore.currentUser = ApplicationSettings.userName;
         this.stores.reviewStore.currentLocale = this.language;
+        this.stores.reviewStore.propertyNameMapping = this.propertyNameMapping;
 
         ReactDOM.render(
             <Provider {...this.stores}>
@@ -28,6 +29,15 @@ export default declare([WidgetBase, _ContentContextMixin], {
             this.domNode
         );
     },
+
+    /**
+     *
+     * @param propertyNameMapping dictionary with name and displayname pairs
+     */
+    updateDisplayNamesDictionary: function(propertyNameMapping: object) {
+        this.stores.reviewStore.propertyNameMapping = propertyNameMapping;
+    },
+
     contextChanged: function() {
         this.stores.reviewStore.load();
     },
