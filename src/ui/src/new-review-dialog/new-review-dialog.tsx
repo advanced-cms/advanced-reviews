@@ -42,6 +42,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
 
     render() {
         const res = this.props.resources!;
+        const reviewStore = this.props.reviewStore;
 
         const options = Object.keys(Priority).map(priority => {
             return {
@@ -67,7 +68,8 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                     <DialogTitle>
                         <div className="header">
                             <div className="left-align">
-                                {this.props.currentEditLocation.propertyName || res.dialog.reviewedit}
+                                {reviewStore.resolvePropertyDisplayName(this.props.currentEditLocation.propertyName) ||
+                                    res.dialog.reviewedit}
                             </div>
                             <div className="review-actions">
                                 <ContextMenu
