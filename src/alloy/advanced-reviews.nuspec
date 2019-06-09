@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>advanced-reviews</id>
     <version>$version$</version>
@@ -8,7 +8,7 @@
     <owners>github.com/episerver-addons</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>advanced-reviews</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes/>
     <copyright>Copyright 2019</copyright>
     <tags>review content approval external</tags>
     <license type="expression">MIT</license>
@@ -24,5 +24,6 @@
     <file src="modules\_protected\episerver-addons.Reviews\web.config" target="content\modules\_protected\episerver-addons.Reviews\" />
     <file src="modules\_protected\episerver-addons.ExternalReviews\episerver-addons.ExternalReviews.zip" target="content\modules\_protected\episerver-addons.ExternalReviews\" />
     <file src="modules\_protected\episerver-addons.ExternalReviews\web.config" target="content\modules\_protected\episerver-addons.ExternalReviews\" />
+    <file src="web.config.transform" target="content" />
   </files>
 </package>
