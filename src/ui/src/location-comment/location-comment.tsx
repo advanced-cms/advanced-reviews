@@ -28,7 +28,7 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
 
     return (
         <>
-            <TextField label={`${resources.dialog.addcomment}...`} dense textarea>
+            <TextField className="location-comment-field" label={`${resources.dialog.addcomment}...`} dense textarea>
                 <Input
                     ref={(input: any) => setCommentInput(input)}
                     value={props.value}
