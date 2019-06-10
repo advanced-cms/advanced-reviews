@@ -106,6 +106,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                         maxWidth={500}
                         maxHeight={300}
                         iframe={this.props.iframe}
+                        propertyName={this.props.currentEditLocation.propertyName}
                         onImageSelected={output => {
                             this.setState({ currentScreenshot: output });
                         }}
