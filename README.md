@@ -13,7 +13,7 @@ This is an Open Source add-on. Not officially supported by EPiServer.
 - Visually express issues in reviewed content by highlighting or adding screenshots
 
 ### See it in action:
-[![Advanced Reviews](assets/thumbnail.png)](http://www.youtube.com/watch?v=xb4uS1dXtRE "Advanced Reviews")
+[![Advanced Reviews](assets/thumbnail.png)](https://www.youtube.com/watch?v=00QcfJjbdlA "Advanced Reviews")
 
 ## Install
 
