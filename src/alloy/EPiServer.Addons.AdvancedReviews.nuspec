@@ -12,7 +12,7 @@
     <copyright>Copyright 2019</copyright>
     <tags>review preview content approval external</tags>
     <license type="expression">MIT</license>
-    <iconUrl>https://github.com/episerver-addons/advanced-reviews/assets/logo.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/episerver-addons/advanced-reviews/master/assets/logo.png</iconUrl>
     <projectUrl>https://github.com/episerver-addons/advanced-reviews</projectUrl>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[11.11,12.0)" />
