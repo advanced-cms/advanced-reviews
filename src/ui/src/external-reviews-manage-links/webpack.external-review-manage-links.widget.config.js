@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
         filename: "external-review-manage-links-component.js",
         libraryTarget: "amd",
         libraryExport: "default",
-        path: path.resolve(__dirname, "../../alloy/modules/_protected/episerver-addons.ExternalReviews/1.0.0/Scripts")
+        path: path.resolve(__dirname, "../../alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts")
     };
 
     webpackCommon.externals = [
@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
         //"epi/i18n!epi/cms/nls/reviewcomponent",
         //"epi-cms/ApplicationSettings",
         "epi-cms/_ContentContextMixin",
-        "episerver-addons-external-review/external-review-service"
+        "advanced-cms-external-review/external-review-service"
     ];
 
     return webpackCommon;

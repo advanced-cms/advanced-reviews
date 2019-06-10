@@ -16,13 +16,13 @@ $fullVersion=[System.Reflection.Assembly]::LoadFrom("src\alloy\bin\AdvancedAppro
 $version="$($fullVersion.major).$($fullVersion.minor).$($fullVersion.build)"
 Write-Host "Creating nuget with $version version"
 
-Set-Location src\alloy\modules\_protected\episerver-addons.ExternalReviews
-ZipCurrentModule -moduleName episerver-addons.ExternalReviews
+Set-Location src\alloy\modules\_protected\advanced-cms.ExternalReviews
+ZipCurrentModule -moduleName advanced-cms.ExternalReviews
 
-Set-Location ..\episerver-addons.Reviews
-ZipCurrentModule -moduleName episerver-addons.Reviews
+Set-Location ..\advanced-cms.Reviews
+ZipCurrentModule -moduleName advanced-cms.Reviews
 
 Set-Location ..\..\..\
-nuget pack EPiServer.Addons.AdvancedReviews.nuspec -Version $version
+nuget pack Advanced.CMS.AdvancedReviews.nuspec -Version $version
 Set-Location ..\..\
-Move-Item src\alloy\EPiServer.Addons.AdvancedReviews.$version.nupkg EPiServer.Addons.AdvancedReviews.$version.nupkg -Force
+Move-Item src\alloy\Advanced.CMS.AdvancedReviews.$version.nupkg Advanced.CMS.AdvancedReviews.$version.nupkg -Force

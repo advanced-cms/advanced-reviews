@@ -2,8 +2,8 @@
 <configuration>
     <episerver.shell>
         <protectedModules>
-            <add name="episerver-addons.Reviews" />
-            <add name="episerver-addons.ExternalReviews" />
+            <add name="advanced-cms.Reviews" />
+            <add name="advanced-cms.ExternalReviews" />
         </protectedModules>
     </episerver.shell>
     <location path="reviewavatars">
@@ -22,7 +22,7 @@
             </authorization>
         </system.web>
     </location>
-    <location path="EPiServer/episerver-addons.ExternalReviews">
+    <location path="EPiServer/advanced-cms.ExternalReviews">
         <system.web>
             <authorization>
                 <allow roles="ExternalReviewers, WebEditors, WebAdmins, Administrators"/>

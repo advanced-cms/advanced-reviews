@@ -1,6 +1,6 @@
 define([
     "epi-cms/content-approval/command/RejectChanges",
-    "episerver-addons-review/advancedReviewService"
+    "advanced-cms-review/advancedReviewService"
 ], function (
     RejectChanges,
     AdvancedReviewService) {
