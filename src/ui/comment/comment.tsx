@@ -13,6 +13,7 @@ interface CommentProps {
     comment: CommentItem;
     amplify?: Boolean;
     isImportant?: boolean;
+    isDone?: boolean;
 }
 
 @inject("resources")
@@ -44,7 +45,9 @@ export default class Comment extends React.Component<CommentProps, any> {
                             </div>
                         )}
                     </div>
-                    <p className={classNames({ amplify: this.props.amplify })}>{this.props.comment.text}</p>
+                    <p className={classNames({ amplify: this.props.amplify, done: this.props.isDone })}>
+                        {this.props.comment.text}
+                    </p>
                 </div>
             </div>
         );
