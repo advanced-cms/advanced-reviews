@@ -1,3 +1,4 @@
+![EPiServer Addons](assets/logo.png "EPiServer Addons")
 # Advanced Reviews
 
 ```
