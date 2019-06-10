@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -393,6 +393,7 @@
     <Content Include="favicon.ico" />
     <Content Include="libman.json" />
     <Content Include="advanced-reviews.nuspec" />
+    <Content Include="web.config.transform" />
     <None Include="Models\Blocks\_ReadMe.txt" />
     <None Include="Models\Pages\_ReadMe.txt" />
     <Content Include="modules\_protected\episerver-addons.ExternalReviews\1.0.0\Scripts\external-review-service.js" />
