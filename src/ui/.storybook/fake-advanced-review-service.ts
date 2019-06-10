@@ -58,7 +58,7 @@ const reviewLocations = [
             documentRelativePosition: { x: 250, y: 200 },
             propertyName: "Main ContentArea",
             firstComment: createComment("Alfred", "Lorem ipsum dolorum.", new Date("2019-04-04")),
-            isDone: false
+            isDone: true
         }
     },
     {
