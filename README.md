@@ -35,16 +35,23 @@ Allow to display draft content version without logging to Episerver.
 This is an Edit mode component used to generate external review links.
 There are two types of links:
 * view - external reviewer can preview draft content version 
-* editable - external reviewver can add comments using advanced review widget 
-![External review links component](/assets/documentation/external review list component.png "External review links component")
+* editable - external reviewver can add comments using advanced review widget
+ 
+![External review links component](assets/documentation/external_review_list_component.png "External review links component")
 
 ### Share dialog
 Editor can share external review links using share dialog.
-The [#link#] constant will be replaced with link to content. 
-![External review share dialog](/assets/documentation/external review share dialog.png "External review share dialog")
+The [#link#] constant will be replaced with link to content.
+ 
+![External review share dialog](assets/documentation/external_review_share_dialog.png "External review share dialog")
 
 Below is an email example:
-![External review email example](/assets/documentation/external review email example.png "External review email example")
+
+![External review email example](assets/documentation/external_review_email_example.png "External review email example")
+
+### Security
+*/externalContentReviews* location is only accessible to users who are members of the **ExternalReviewers** role.
+You will have to manually add personal user accounts or a shared user account that could be used by the external reviews.
 
 ### Options
 There are few settings related with external review. They are all set using Options class:
