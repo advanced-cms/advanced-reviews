@@ -9,6 +9,9 @@ function ZipCurrentModule
     Remove-Item $version -Force -Recurse
 }
 
+msbuild /p:Configuration=Release
+npm run build --prefix ./src/ui
+
 $fullVersion=[System.Reflection.Assembly]::LoadFrom("src\alloy\bin\AdvancedApprovalReviews.dll").GetName().Version
 $version="$($fullVersion.major).$($fullVersion.minor).$($fullVersion.build)"
 Write-Host "Creating nuget with $version version"
@@ -20,6 +23,6 @@ Set-Location ..\episerver-addons.Reviews
 ZipCurrentModule -moduleName episerver-addons.Reviews
 
 Set-Location ..\..\..\
-nuget pack advanced-reviews.nuspec -Version $version
+nuget pack EPiServer.Addons.AdvancedReviews.nuspec -Version $version
 Set-Location ..\..\
-Move-Item src\alloy\advanced-reviews.$version.nupkg advanced-reviews.$version.nupkg -Force
+Move-Item src\alloy\EPiServer.Addons.AdvancedReviews.$version.nupkg EPiServer.Addons.AdvancedReviews.$version.nupkg -Force
