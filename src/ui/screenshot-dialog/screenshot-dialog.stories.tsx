@@ -6,10 +6,15 @@ import { createStores } from "../store/review-store";
 import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
 import resources from "../.storybook/resources.json";
 import { Provider } from "mobx-react";
+import { StringLiteral } from "@babel/types";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
 
-function Component() {
+export interface ComponentProps {
+    propertyName?: string;
+}
+
+const Component = ({ propertyName }: ComponentProps) => {
     const [anchorElement, setAnchorElement] = useState(null);
     const [iframeLoaded, setIframeLoaded] = useState(false);
 
@@ -41,6 +46,7 @@ function Component() {
 
             {!!anchorElement && iframeLoaded && (
                 <ScreenshotDialog
+                    propertyName={propertyName}
                     maxWidth={500}
                     maxHeight={300}
                     iframe={anchorElement}
@@ -50,12 +56,20 @@ function Component() {
             )}
         </div>
     );
-}
+};
 
-storiesOf("Screenshot picker", module).add("default", () => {
-    return (
-        <Provider {...stores}>
-            <Component />
-        </Provider>
-    );
-});
+storiesOf("Screenshot picker", module)
+    .add("default", () => {
+        return (
+            <Provider {...stores}>
+                <Component propertyName="" />
+            </Provider>
+        );
+    })
+    .add("with property", () => {
+        return (
+            <Provider {...stores}>
+                <Component propertyName="MetaDescription2" />
+            </Provider>
+        );
+    });
