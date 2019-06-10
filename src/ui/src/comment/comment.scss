@@ -50,6 +50,10 @@
             &.amplify {
                 font-weight: bolder;
             }
+
+            &.done {
+                text-decoration: line-through;
+            }
         }
     }
 }
