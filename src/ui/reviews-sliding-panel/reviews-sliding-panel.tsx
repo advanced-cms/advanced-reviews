@@ -208,6 +208,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                             <Comment
                                                 comment={location.firstComment}
                                                 isImportant={location.priority === Priority.Important}
+                                                isDone={location.isDone}
                                             />
                                             <IconButton
                                                 className="edit"
