@@ -5,10 +5,10 @@ define([
     "epi/shell/store/JsonRest",
     "epi/shell/store/Throttle",
     "epi/_Module",
-    "episerver-addons-review/commandsProvider",
-    "episerver-addons-review/onPageEditingInitializer",
-    "episerver-addons-review/approveChangesInitializer",
-    "episerver-addons-review/rejectChangesInitializer"
+    "advanced-cms-review/commandsProvider",
+    "advanced-cms-review/onPageEditingInitializer",
+    "advanced-cms-review/approveChangesInitializer",
+    "advanced-cms-review/rejectChangesInitializer"
 ], function (
     declare,
     dependency,
@@ -57,7 +57,7 @@ define([
         },
 
         _getRestPath: function (name) {
-            return routes.getRestPath({ moduleArea: "episerver-addons.reviews", storeName: name });
+            return routes.getRestPath({ moduleArea: "advanced-cms.reviews", storeName: name });
         }
     });
 });

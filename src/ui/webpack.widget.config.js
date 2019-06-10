@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
         filename: "ReviewWidget.js",
         libraryTarget: "amd",
         libraryExport: "default",
-        path: path.resolve(__dirname, "../alloy/modules/_protected/episerver-addons.Reviews/1.0.0/Scripts")
+        path: path.resolve(__dirname, "../alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts")
     };
 
     if (!webpackCommon.plugins) {
@@ -24,7 +24,7 @@ module.exports = (env, argv) => {
         "epi/i18n!epi/cms/nls/reviewcomponent",
         "epi-cms/ApplicationSettings",
         "epi-cms/_ContentContextMixin",
-        "episerver-addons-review/advancedReviewService"
+        "advanced-cms-review/advancedReviewService"
     ];
     return webpackCommon;
 };

@@ -1,4 +1,4 @@
-![EPiServer Addons](assets/logo.png "EPiServer Addons")
+![Advanced CMS](assets/logo.png "Advanced CMS")
 # Advanced Reviews
 
 ```
@@ -18,7 +18,7 @@ This is an Open Source add-on. Not officially supported by EPiServer.
 ## Install
 
 ```
-Install-Package EPiServer.Addons.AdvancedReviews
+Install-Package Advanced.CMS.AdvancedReviews
 ```
 
 ## Development (if you would like to help in development)

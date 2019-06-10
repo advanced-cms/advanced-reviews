@@ -29,7 +29,7 @@ define([
         },
 
         _getRestPath: function (name) {
-            return routes.getRestPath({ moduleArea: "episerver-addons.externalreviews", storeName: name });
+            return routes.getRestPath({ moduleArea: "advanced-cms.externalreviews", storeName: name });
         }
     });
 });

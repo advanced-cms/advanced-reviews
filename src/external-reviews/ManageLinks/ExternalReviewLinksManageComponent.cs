@@ -17,7 +17,7 @@ namespace AdvancedExternalReviews.ManageLinks
         }
 
         public ExternalReviewLinksManageComponent(ExternalReviewOptions options)
-            : base("episerver-addons-external-review/external-review-manage-links-component")
+            : base("advanced-cms-external-review/external-review-manage-links-component")
         {
             _options = options;
 

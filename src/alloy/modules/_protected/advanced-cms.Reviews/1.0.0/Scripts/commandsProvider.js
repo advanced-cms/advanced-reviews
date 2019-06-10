@@ -2,7 +2,7 @@ define([
     "dojo/_base/declare",
     "dijit/form/ToggleButton",
     "epi-cms/component/command/_GlobalToolbarCommandProvider",
-    "episerver-addons-review/ShowReviewCommand"
+    "advanced-cms-review/ShowReviewCommand"
 ], function (
     declare,
     ToggleButton,

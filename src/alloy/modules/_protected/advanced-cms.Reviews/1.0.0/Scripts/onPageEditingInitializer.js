@@ -2,7 +2,7 @@ define([
     "dojo/topic",
     "dojo/dom-class",
     "epi-cms/contentediting/OnPageEditing",
-    "episerver-addons-review/ReviewWidget"
+    "advanced-cms-review/ReviewWidget"
 ], function (
     topic,
     domClass,

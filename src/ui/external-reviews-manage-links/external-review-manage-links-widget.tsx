@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import declare from "dojo/_base/declare";
 import WidgetBase from "dijit/_WidgetBase";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
-import ExternalReviewService from "episerver-addons-external-review/external-review-service";
+import ExternalReviewService from "advanced-cms-external-review/external-review-service";
 import { ExternalReviewStore } from "./external-review-links-store";
 import ManageLinks from "./external-review-manage-links";
 
