@@ -14,6 +14,7 @@ import { inject, observer } from "mobx-react";
 
 interface ScreenshotPickerProps {
     iframe: HTMLIFrameElement;
+    propertyName?: string;
     resources?: ReviewResources;
     onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
@@ -87,7 +88,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
     constructor(props) {
         super(props);
         this.state = {
-            crop: this.defaultCrop,
+            crop: this.getDefaultCrop(),
             pixelCrop: null,
             input: null,
             drawerInput: null
@@ -174,6 +175,50 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         this.props.onImageSelected(img, this.state.pixelCrop);
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
         this.props.toggle();
+    };
+
+    getDefaultCrop = () => {
+        function offset(el: HTMLElement) {
+            var rect = el.getBoundingClientRect(),
+                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+                scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+        }
+
+        if (!this.props.propertyName) {
+            return this.defaultCrop;
+        }
+
+        var propertyEl: HTMLElement = this.props.iframe.contentDocument.querySelector(
+            `[data-epi-property-name='${this.props.propertyName}']`
+        );
+        if (!propertyEl) {
+            return this.defaultCrop;
+        }
+
+        const iframeWidth = this.props.iframe.offsetWidth;
+        const iframeHeight = this.props.iframe.offsetHeight;
+
+        if (iframeWidth === 0 || iframeHeight === 0) {
+            return this.defaultCrop;
+        }
+
+        const elWidth = propertyEl.offsetWidth;
+        const elHeight = propertyEl.offsetHeight;
+
+        const percentageWidth = (elWidth * 100) / iframeWidth;
+        const percentageHeight = (elHeight * 100) / iframeHeight;
+
+        const elOffset = offset(propertyEl);
+        const percentX = (elOffset.left * 100) / iframeWidth;
+        const percentY = (elOffset.top * 100) / iframeHeight;
+
+        return {
+            width: percentageWidth,
+            height: percentageHeight,
+            x: percentX,
+            y: percentY
+        };
     };
 
     render() {
