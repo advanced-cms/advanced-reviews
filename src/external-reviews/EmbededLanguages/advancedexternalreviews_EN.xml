@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="English" id="en">
+    <externalreviews>
+      <component>
+        <title>External review links</title>
+        <description>Manage list of external review links</description>
+      </component>
+      <removedialog>
+        <cancel>Cancel</cancel>
+        <description>Are you sure you want to remove link?</description>
+        <ok>Ok</ok>
+        <title>Remove link</title>
+      </removedialog>
+      <list>
+        <deletetitle>delete</deletetitle>
+        <emptylist>There are no external links for this content</emptylist>
+        <itemvalidto>Valid to</itemvalidto>
+        <sharetitle>share</sharetitle>
+        <viewlink>View</viewlink>
+        <editlink>Edit</editlink>
+      </list>
+      <sharedialog>
+        <cancelbutton>Cancel</cancelbutton>
+        <dialogtitle>Share link to the content with external editor</dialogtitle>
+        <emailmessagelabel>Email message</emailmessagelabel>
+        <emailsubjectlabel>Email subject</emailsubjectlabel>
+        <emailaddresslabel>Email address</emailaddresslabel>
+        <messagehint>Text [#link#] will be replaced with link to content.</messagehint>
+        <sendbutton>Send</sendbutton>
+      </sharedialog>
+    </externalreviews>
+  </language>
+</languages>

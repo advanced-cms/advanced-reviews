@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="Swedish" id="sv">
+    <reviewcomponent>
+      <command>
+        <label>Avancerad granskning</label>
+        <tooltip>Växla Avancerad granskningsläge</tooltip>
+        <labelenabled>Avaktivera Avancerad granskning</labelenabled>
+        <labelnotenabled>Aktivera Avancerad granskning</labelnotenabled>
+      </command>
+      <dialog>
+        <addcomment>Lägg till kommentar</addcomment>
+        <changepriority>Ändra prioritet</changepriority>
+        <close>avbryt</close>
+        <describe>Beskriv problemet</describe>
+        <reviewedit>Granska redigeringen</reviewedit>
+        <save>Spara</save>
+      </dialog>
+      <panel>
+        <attachscreenshot>Lägg till skärmbild</attachscreenshot>
+        <clicktoedit>Klicka för att redigera</clicktoedit>
+        <collapse>Fäll in granskningspanel</collapse>
+        <expand>Fäll ut granskningspanel</expand>
+        <gobacktolist>Gĺ tillbaka till listan</gobacktolist>
+        <opendetails>Öppna detaljer</opendetails>
+        <removescreenshot>Ta bort skärmbild</removescreenshot>
+        <resolved>Klar</resolved>
+        <reviewmode>Granskningsläge</reviewmode>
+        <showscreenshot>Visa skärmbild</showscreenshot>
+        <showactive>Visa aktiva</showactive>
+        <showresolved>Visa klara</showresolved>
+        <showunread>Visa olästa</showunread>
+      </panel>
+      <screenshot>
+        <apply>Tillämpa</apply>
+        <cancel>avbryt</cancel>
+        <clear>Rensa</clear>
+        <cropandhighlight>Beskär och markera omrĺdet som du vill kommentera</cropandhighlight>
+      </screenshot>
+      <priority>
+        <important>Viktig</important>
+        <normal>Normal</normal>
+        <trivial>Trivial</trivial>
+      </priority>
+    </reviewcomponent>
+  </language>
+</languages>

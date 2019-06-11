@@ -22,9 +22,10 @@ interface ShareDialogProps {
     onClose(linkShare: LinkShareResult): void;
     initialSubject?: string;
     initialMessage?: string;
+    resources: ExternalReviewResources;
 }
 
-const ShareDialog = ({ open, onClose, initialSubject, initialMessage }: ShareDialogProps) => {
+const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources }: ShareDialogProps) => {
     const [email, setEmail] = useState<string>("");
     const [subject, setSubject] = useState<string>(initialSubject);
     const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
@@ -61,11 +62,11 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage }: ShareDia
 
     return (
         <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onDialogClose}>
-            <DialogTitle>Share link to the content with external editor</DialogTitle>
+            <DialogTitle>{resources.sharedialog.dialogtitle}</DialogTitle>
             <DialogContent className="share-dialog-content">
                 <div className="text-field-container">
                     <TextField
-                        label="Email address"
+                        label={resources.sharedialog.emailaddresslabel}
                         leadingIcon={<MaterialIcon icon="mail" />}
                         style={{ width: 350 }}
                         dense
@@ -76,16 +77,22 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage }: ShareDia
                     </TextField>
                 </div>
                 <div className="text-field-container">
-                    <TextField label="Email subject" dense autoFocus required style={{ width: "100%" }}>
+                    <TextField
+                        label={resources.sharedialog.emailsubjectlabel}
+                        dense
+                        autoFocus
+                        required
+                        style={{ width: "100%" }}
+                    >
                         <Input value={subject} onChange={event => setSubject(event.currentTarget.value)} />
                     </TextField>
                 </div>
                 <div className="text-field-container">
                     <TextField
-                        label="Email message"
+                        label={resources.sharedialog.emailmessagelabel}
                         textarea
                         required
-                        helperText={<HelperText>Text [#link#] will be replaced with link to content.</HelperText>}
+                        helperText={<HelperText>{resources.sharedialog.messagehint}</HelperText>}
                     >
                         <Input rows={15} value={message} onChange={e => setMessage(e.currentTarget.value)} />
                     </TextField>
@@ -93,7 +100,7 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage }: ShareDia
             </DialogContent>
             <DialogFooter>
                 <DialogButton dense action="cancel">
-                    Cancel
+                    {resources.sharedialog.cancelbutton}
                 </DialogButton>
                 <DialogButton
                     raised
@@ -103,7 +110,7 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage }: ShareDia
                     isDefault
                     icon={<MaterialIcon icon="send" />}
                 >
-                    Send
+                    {resources.sharedialog.sendbutton}
                 </DialogButton>
             </DialogFooter>
         </Dialog>
