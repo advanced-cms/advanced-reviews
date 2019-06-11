@@ -2,6 +2,12 @@
 <languages>
   <language name="English" id="en">
     <reviewcomponent>
+      <command>
+        <label>Advanced Review</label>
+        <tooltip>Toggle advanced review</tooltip>
+        <labelenabled>Turn off Advanced Review</labelenabled>
+        <labelnotenabled>Turn on Advanced Review</labelnotenabled>
+      </command>
       <dialog>
         <addcomment>Add comment</addcomment>
         <changepriority>Change priority</changepriority>
