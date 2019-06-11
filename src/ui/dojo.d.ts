@@ -23,6 +23,11 @@ declare module "epi/i18n!epi/cms/nls/reviewcomponent" {
     export = res;
 }
 
+declare module "epi/i18n!epi/cms/nls/externalreviews" {
+    let res: ExternalReviewResources;
+    export = res;
+}
+
 declare module "advanced-cms-review/advancedReviewService" {
     let advancedReviewService: any;
     export = advancedReviewService;

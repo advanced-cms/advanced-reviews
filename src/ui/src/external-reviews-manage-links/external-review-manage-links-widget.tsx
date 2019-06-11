@@ -6,6 +6,7 @@ import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import ExternalReviewService from "advanced-cms-external-review/external-review-service";
 import { ExternalReviewStore } from "./external-review-links-store";
 import ManageLinks from "./external-review-manage-links";
+import res from "epi/i18n!epi/cms/nls/externalreviews";
 
 /**
  * Edit Mode component used to list external links
@@ -24,7 +25,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store.initialEditMailMessage = this.params.initialEditMailMessage;
 
         ReactDOM.render(
-            <ManageLinks store={this.store} editableLinksEnabled={this.params.editableLinksEnabled} />,
+            <ManageLinks store={this.store} editableLinksEnabled={this.params.editableLinksEnabled} resources={res} />,
             this.domNode
         );
     },

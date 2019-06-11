@@ -14,130 +14,139 @@ import "./external-review-manage-links.scss";
 
 interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
-
+    resources: ExternalReviewResources;
     editableLinksEnabled: boolean;
 }
 
 /**
  * Component used to render list of external review links
  */
-const ExternalReviewWidgetContent = observer(({ store, editableLinksEnabled }: ExternalReviewWidgetContentProps) => {
-    const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
-    const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
+const ExternalReviewWidgetContent = observer(
+    ({ store, resources, editableLinksEnabled }: ExternalReviewWidgetContentProps) => {
+        const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
+        const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
 
-    const onDelete = (action: boolean) => {
-        setLinkToDelete(null);
-        if (!action) {
-            return;
-        }
-        store.delete(currentLinkToDelete);
-    };
-
-    const onShareDialogClose = (shareLink: LinkShareResult) => {
-        setLinkToShare(null);
-        if (shareLink === null) {
-            return;
-        }
-        store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
-    };
-
-    const options = [
-        {
-            name: "View",
-            icon: "pageview",
-            onSelected: () => {
-                store.addLink(false);
+        const onDelete = (action: boolean) => {
+            setLinkToDelete(null);
+            if (!action) {
+                return;
             }
-        },
-        {
-            name: "Edit",
-            icon: "rate_review",
-            onSelected: () => {
-                store.addLink(true);
+            store.delete(currentLinkToDelete);
+        };
+
+        const onShareDialogClose = (shareLink: LinkShareResult) => {
+            setLinkToShare(null);
+            if (shareLink === null) {
+                return;
             }
-        }
-    ];
+            store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
+        };
 
-    return (
-        <>
-            {store.links.length === 0 && (
-                <div className="empty-list">
-                    <span>There are no external links for this content</span>
-                </div>
-            )}
+        const options = [
+            {
+                name: resources.list.viewlink,
+                icon: "pageview",
+                onSelected: () => {
+                    store.addLink(false);
+                }
+            },
+            {
+                name: resources.list.editlink,
+                icon: "rate_review",
+                onSelected: () => {
+                    store.addLink(true);
+                }
+            }
+        ];
 
-            {store.links.length > 0 && (
-                <List twoLine className="external-reviews-list">
-                    {store.links.map((item: ReviewLink) => {
-                        const link = item.isActive ? (
-                            <a href={item.linkUrl} target="_blank">
-                                {item.token}
-                            </a>
-                        ) : (
-                            <span className="item-inactive">{item.token}</span>
-                        );
-
-                        const icon = <MaterialIcon icon={item.isEditable ? "rate_review" : "pageview"} />;
-
-                        return (
-                            <ListItem key={item.token} className="list-item">
-                                {editableLinksEnabled && <ListItemGraphic graphic={icon} />}
-                                <ListItemText
-                                    primaryText={link}
-                                    secondaryText={"Valid to: " + format(item.validTo, "MMM Do YYYY HH:mm")}
-                                />
-                                <IconButton
-                                    className="item-action"
-                                    disabled={!item.isActive}
-                                    title="share"
-                                    onClick={() => setLinkToShare(item)}
-                                >
-                                    <MaterialIcon icon="share" />
-                                </IconButton>
-                                <IconButton
-                                    className="item-action"
-                                    title="delete"
-                                    onClick={() => setLinkToDelete(item)}
-                                >
-                                    <MaterialIcon icon="delete_outline" />
-                                </IconButton>
-                            </ListItem>
-                        );
-                    })}
-                </List>
-            )}
-            <div>
-                {editableLinksEnabled ? (
-                    <ContextMenu icon="playlist_add" title="" menuItems={options} />
-                ) : (
-                    <IconButton title="Add link" onClick={() => store.addLink(false)}>
-                        <MaterialIcon icon="playlist_add" />
-                    </IconButton>
+        return (
+            <>
+                {store.links.length === 0 && (
+                    <div className="empty-list">
+                        <span>{resources.list.emptylist}</span>
+                    </div>
                 )}
-            </div>
-            {!!currentLinkToDelete && (
-                <Confirmation
-                    title="Remove link"
-                    description="Are you sure you want to remove link?"
-                    open={!!currentLinkToDelete}
-                    onCloseDialog={onDelete}
-                />
-            )}
 
-            {!!currentLinkToShare && (
-                <ShareDialog
-                    open={!!currentLinkToShare}
-                    onClose={onShareDialogClose}
-                    initialSubject={store.initialMailSubject}
-                    initialMessage={
-                        currentLinkToShare && currentLinkToShare.isEditable
-                            ? store.initialEditMailMessage
-                            : store.initialViewMailMessage
-                    }
-                />
-            )}
-        </>
-    );
-});
+                {store.links.length > 0 && (
+                    <List twoLine className="external-reviews-list">
+                        {store.links.map((item: ReviewLink) => {
+                            const link = item.isActive ? (
+                                <a href={item.linkUrl} target="_blank">
+                                    {item.token}
+                                </a>
+                            ) : (
+                                <span className="item-inactive">{item.token}</span>
+                            );
+
+                            const icon = <MaterialIcon icon={item.isEditable ? "rate_review" : "pageview"} />;
+
+                            return (
+                                <ListItem key={item.token} className="list-item">
+                                    {editableLinksEnabled && <ListItemGraphic graphic={icon} />}
+                                    <ListItemText
+                                        primaryText={link}
+                                        secondaryText={
+                                            resources.list.itemvalidto +
+                                            ": " +
+                                            format(item.validTo, "MMM Do YYYY HH:mm")
+                                        }
+                                    />
+                                    <IconButton
+                                        className="item-action"
+                                        disabled={!item.isActive}
+                                        title={resources.list.sharetitle}
+                                        onClick={() => setLinkToShare(item)}
+                                    >
+                                        <MaterialIcon icon="share" />
+                                    </IconButton>
+                                    <IconButton
+                                        className="item-action"
+                                        title={resources.list.deletetitle}
+                                        onClick={() => setLinkToDelete(item)}
+                                    >
+                                        <MaterialIcon icon="delete_outline" />
+                                    </IconButton>
+                                </ListItem>
+                            );
+                        })}
+                    </List>
+                )}
+                <div>
+                    {editableLinksEnabled ? (
+                        <ContextMenu icon="playlist_add" title="" menuItems={options} />
+                    ) : (
+                        <IconButton title="Add link" onClick={() => store.addLink(false)}>
+                            <MaterialIcon icon="playlist_add" />
+                        </IconButton>
+                    )}
+                </div>
+                {!!currentLinkToDelete && (
+                    <Confirmation
+                        title={resources.removedialog.title}
+                        description={resources.removedialog.description}
+                        okName={resources.removedialog.ok}
+                        cancelName={resources.removedialog.cancel}
+                        open={!!currentLinkToDelete}
+                        onCloseDialog={onDelete}
+                    />
+                )}
+
+                {!!currentLinkToShare && (
+                    <ShareDialog
+                        open={!!currentLinkToShare}
+                        onClose={onShareDialogClose}
+                        initialSubject={store.initialMailSubject}
+                        initialMessage={
+                            currentLinkToShare && currentLinkToShare.isEditable
+                                ? store.initialEditMailMessage
+                                : store.initialViewMailMessage
+                        }
+                        resources={resources}
+                    />
+                )}
+            </>
+        );
+    }
+);
 
 export default ExternalReviewWidgetContent;
