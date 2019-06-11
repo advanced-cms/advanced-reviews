@@ -214,5 +214,15 @@
   <ItemGroup>
     <None Include="Resources\mail_preview.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_EN.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_SV.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

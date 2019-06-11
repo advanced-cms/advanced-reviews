@@ -5,7 +5,8 @@ define([
     "epi/shell/command/_Command",
     "epi-cms/_ContentContextMixin",
     "epi-cms/contentediting/ContentActionSupport",
-    "advanced-cms-review/editorDisplayLanguageResolver"
+    "advanced-cms-review/editorDisplayLanguageResolver",
+    "epi/i18n!epi/cms/nls/reviewcomponent.command"
 ], function (
     declare,
     topic,
@@ -13,12 +14,13 @@ define([
     _Command,
     _ContentContextMixin,
     ContentActionSupport,
-    editorDisplayLanguageResolver
+    editorDisplayLanguageResolver,
+    res
 ) {
     return declare([_Command, _ContentContextMixin], {
         name: "ContentReferences",
-        label: "Advanced Review",
-        tooltip: "Toggle advanced review",
+        label: res.label,
+        tooltip: res.tooltip,
         iconClass: 'epi-icon--medium epi-review-icon',
         canExecute: false,
         reviewEnabled: false,
@@ -28,7 +30,7 @@ define([
 
             this.own(topic.subscribe("toggle:reviews", function (reviewEnabled) {
                 this.set("active", reviewEnabled);
-                this.set('label', reviewEnabled ? "Turn off Advanced Review" : "Turn on Advanced Review");
+                this.set('label', reviewEnabled ? res.labelenabled : res.labelnotenabled);
             }.bind(this)));
         },
 

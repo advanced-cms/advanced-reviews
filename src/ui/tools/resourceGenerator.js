@@ -28,7 +28,7 @@ function parseXml(xml) {
     return dom;
 }
 
-function convertJsonToDefinitions(json) {
+function convertJsonToDefinitions(json, rootInterfaceName) {
     var definitions = [];
 
     function createInterface(json, interfaceName) {
@@ -54,7 +54,7 @@ function convertJsonToDefinitions(json) {
         definition += "}\n\n";
         definitions.push(definition);
     }
-    createInterface(json, "ReviewResources");
+    createInterface(json, rootInterfaceName);
     return definitions;
 }
 
@@ -69,35 +69,54 @@ It's reading the embeded english version XML file from EPiserver project.
 `
 );
 
-console.log("Reading Episerver XML file");
-fs.readFile("./../approval-reviews/EmbededLanguages/advancedapprovalreviews_EN.xml", "utf-8", (err, data) => {
-    if (err) {
-        throw err;
-    }
+function generateResources(inputXmlPath, outputJsonPath, outputDefinitionsPath, interfaceName, jsonRootName) {
+    console.log("Reading Episerver XML file");
+    fs.readFile(inputXmlPath, "utf-8", (err, data) => {
+        if (err) {
+            throw err;
+        }
 
-    console.log("Parsing string to XML");
-    var xml = parseXml(data);
+        console.log("Parsing string to XML");
+        var xml = parseXml(data);
 
-    console.log("Converting XML to JSON string");
-    var jsonStr = converter.xmlConverter(xml, " ");
+        console.log("Converting XML to JSON string");
+        var jsonStr = converter.xmlConverter(xml, " ");
 
-    console.log("Parsing JSON string");
-    var json = JSON.parse(jsonStr);
+        console.log("Parsing JSON string");
+        var json = JSON.parse(jsonStr);
 
-    const jsonRoot = json.languages.language.reviewcomponent;
+        const jsonRoot = json.languages.language[jsonRootName];
 
-    console.log("Saving JSON file");
-    fs.writeFile("./.storybook/resources.json", JSON.stringify(jsonRoot, null, 2), err => {
-        if (err) throw err;
-        console.log("JSON resources generated");
+        console.log("Saving JSON file");
+        fs.writeFile(outputJsonPath, JSON.stringify(jsonRoot, null, 2), err => {
+            if (err) throw err;
+            console.log("JSON resources generated");
+        });
+
+        console.log("Converting JSON to typescript definitions");
+        var definitions = convertJsonToDefinitions(jsonRoot, interfaceName);
+
+        console.log("Saving file");
+        fs.writeFile(outputDefinitionsPath, definitions.join(""), err => {
+            if (err) throw err;
+            console.log("Resources definition file generated");
+        });
     });
+}
 
-    console.log("Converting JSON to typescript definitions");
-    var definitions = convertJsonToDefinitions(jsonRoot);
-
-    console.log("Saving file");
-    fs.writeFile("./resources.d.ts", definitions.join(""), err => {
-        if (err) throw err;
-        console.log("Resources definition file generated");
-    });
-});
+console.log("Generating resources for advanced reviews");
+generateResources(
+    "./../approval-reviews/EmbededLanguages/advancedapprovalreviews_EN.xml",
+    "./.storybook/resources.json",
+    "./resources.d.ts",
+    "ReviewResources",
+    "reviewcomponent"
+);
+console.log("Generating resources for external reviews");
+generateResources(
+    "./../external-reviews/EmbededLanguages/advancedexternalreviews_EN.xml",
+    "./.storybook/externalResources.json",
+    "./externalResources.d.ts",
+    "ExternalReviewResources",
+    "externalreviews"
+);

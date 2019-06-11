@@ -1,0 +1,25 @@
+{
+  "removedialog": {
+    "cancel": "Cancel",
+    "description": "Are you sure you want to remove link?",
+    "ok": "Ok",
+    "title": "Remove link"
+  },
+  "list": {
+    "deletetitle": "delete",
+    "emptylist": "There are no external links for this content",
+    "itemvalidto": "Valid to",
+    "sharetitle": "share",
+    "viewlink": "View",
+    "editlink": "Edit"
+  },
+  "sharedialog": {
+    "cancelbutton": "Cancel",
+    "dialogtitle": "Share link to the content with external editor",
+    "emailmessagelabel": "Email message",
+    "emailsubjectlabel": "Email subject",
+    "emailaddresslabel": "Email address",
+    "messagehint": "Text [#link#] will be replaced with link to content.",
+    "sendbutton": "Send"
+  }
+}

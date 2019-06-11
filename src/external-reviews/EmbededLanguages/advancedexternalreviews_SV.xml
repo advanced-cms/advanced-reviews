@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="Swedish" id="sv">
+    <externalreviews>
+      <component>
+        <title>Lista med externa granskningslänkar</title>
+        <description>Hantera lista med externa granskningslänkar</description>
+      </component>
+      <removedialog>
+        <cancel>Avbryt</cancel>
+        <description>Är du säker pĺ att du vill ta bort länken?</description>
+        <ok>Ok</ok>
+        <title>Ta bort länk</title>
+      </removedialog>
+      <list>
+        <deletetitle>ta bort</deletetitle>
+        <emptylist>Det finns inga externa granskningslänkar för det här innehĺllet</emptylist>
+        <itemvalidto>Gäller till</itemvalidto>
+        <sharetitle>dela</sharetitle>
+        <viewlink>Visa</viewlink>
+        <editlink>Redigera</editlink>
+      </list>
+      <sharedialog>
+        <cancelbutton>Avbryt</cancelbutton>
+        <dialogtitle>Dela länk till innehĺllet med extern granskare</dialogtitle>
+        <emailmessagelabel>E-postmeddelande</emailmessagelabel>
+        <emailsubjectlabel>E-postämne</emailsubjectlabel>
+        <emailaddresslabel>E-postadress</emailaddresslabel>
+        <messagehint>Texten [#link#] kommer att ersättas med en länk till innehĺllet.</messagehint>
+        <sendbutton>Skicka</sendbutton>
+      </sharedialog>
+    </externalreviews>
+  </language>
+</languages>
