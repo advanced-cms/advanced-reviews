@@ -21,8 +21,7 @@ namespace AdvancedExternalReviews.ManageLinks
         {
             _options = options;
 
-            Description = "Manage list of external review links";
-            Title = "External review links";
+            this.LanguagePath = "/externalreviews/component";
 
             Categories = new[] {"content"};
             SortOrder = 1000;
