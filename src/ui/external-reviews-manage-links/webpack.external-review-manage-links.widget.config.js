@@ -15,8 +15,7 @@ module.exports = (env, argv) => {
     webpackCommon.externals = [
         "dojo/_base/declare",
         "dijit/_WidgetBase",
-        //"epi/i18n!epi/cms/nls/reviewcomponent",
-        //"epi-cms/ApplicationSettings",
+        "epi/i18n!epi/cms/nls/externalreviews",
         "epi-cms/_ContentContextMixin",
         "advanced-cms-external-review/external-review-service"
     ];

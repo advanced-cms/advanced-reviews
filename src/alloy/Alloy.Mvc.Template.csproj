@@ -393,6 +393,9 @@
     <Content Include="Advanced.CMS.AdvancedReviews.nuspec" />
     <Content Include="favicon.ico" />
     <Content Include="libman.json" />
+    <Content Include="Resources\LanguageFiles\PropertyNames_sv.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="web.config.transform" />
     <None Include="Models\Blocks\_ReadMe.txt" />
     <None Include="Models\Pages\_ReadMe.txt" />
