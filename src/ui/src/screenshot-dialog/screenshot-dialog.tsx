@@ -3,6 +3,7 @@ import { computed } from "mobx";
 import Button from "@material/react-button";
 import html2canvas from "html2canvas";
 import DrawablePreview from "../drawable-preview/drawable-preview";
+import { Dimensions } from "../store/review-store";
 
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
@@ -15,6 +16,8 @@ import { inject, observer } from "mobx-react";
 interface ScreenshotPickerProps {
     iframe: HTMLIFrameElement;
     propertyName?: string;
+    documentRelativePosition?: Dimensions;
+    documentSize?: Dimensions;
     resources?: ReviewResources;
     onImageSelected: (string, PixelCrop?) => void;
     toggle: () => void;
@@ -185,22 +188,59 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
             return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
         }
 
+        // if user didn't click on the property then try to show default crop on the pin location
+        function getDefaultDocumentCrop(position: Dimensions, size: Dimensions) {
+            const rectangleSize = 20;
+
+            if (!position || !size) {
+                return null;
+            }
+
+            if (size.x === 0 || size.y === 0) {
+                return null;
+            }
+
+            let defaultDocumentCrop: any = {};
+            defaultDocumentCrop.width = rectangleSize;
+            defaultDocumentCrop.height = rectangleSize;
+
+            // get x and y
+            defaultDocumentCrop.x = (position.x * 100) / size.x - rectangleSize / 2;
+            defaultDocumentCrop.y = (position.y * 100) / size.y - rectangleSize / 2;
+            if (defaultDocumentCrop.x < 0) {
+                defaultDocumentCrop.x = 0;
+            } else if (defaultDocumentCrop.x + rectangleSize > 100) {
+                defaultDocumentCrop.x = 100 - rectangleSize;
+            }
+            if (defaultDocumentCrop.y < 0) {
+                defaultDocumentCrop.y = 0;
+            } else if (defaultDocumentCrop.y + rectangleSize > 100) {
+                defaultDocumentCrop.y = 100 - rectangleSize;
+            }
+
+            return defaultDocumentCrop;
+        }
+
+        let defaultDocumentCrop =
+            getDefaultDocumentCrop(this.props.documentRelativePosition, this.props.documentSize) ||
+            Object.assign(this.defaultCrop);
+
         if (!this.props.propertyName) {
-            return this.defaultCrop;
+            return defaultDocumentCrop;
         }
 
         var propertyEl: HTMLElement = this.props.iframe.contentDocument.querySelector(
             `[data-epi-property-name='${this.props.propertyName}']`
         );
         if (!propertyEl) {
-            return this.defaultCrop;
+            return defaultDocumentCrop;
         }
 
         const iframeWidth = this.props.iframe.offsetWidth;
         const iframeHeight = this.props.iframe.offsetHeight;
 
         if (iframeWidth === 0 || iframeHeight === 0) {
-            return this.defaultCrop;
+            return defaultDocumentCrop;
         }
 
         const elWidth = propertyEl.offsetWidth;
