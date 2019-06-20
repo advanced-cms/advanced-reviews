@@ -143,4 +143,20 @@ $border: 1px solid #c0c0c0;
             line-height: 40px;
         }
     }
+
+    .property-name-label {
+        background-color: #f7542b;
+        color: #fff;
+        margin-left: 8px;
+
+        .mdc-chip__icon--leading {
+            color: #fff;
+        }
+
+        .mdc-chip__text {
+            max-width: 100px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
 }

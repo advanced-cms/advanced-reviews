@@ -5,6 +5,7 @@ import { IReviewComponentStore, PinLocation, Priority } from "../store/review-st
 import MaterialIcon from "@material/react-material-icon";
 import IconButton from "@material/react-icon-button";
 import CheckBox from "@material/react-checkbox";
+import { Chip } from "@material/react-chips";
 import Switch from "@material/react-switch";
 import List, { ListItem } from "@material/react-list";
 import { ReviewDetails } from "../details/review-details";
@@ -15,6 +16,7 @@ import Comment from "../comment/comment";
 import "@material/react-list/index.scss";
 import "@material/react-checkbox/index.scss";
 import "@material/react-switch/index.scss";
+import "@material/react-chips/index.scss";
 import "./reviews-sliding-panel.scss";
 
 interface SlidingPanelProps {
@@ -167,6 +169,10 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         const { editedPinLocation, filter, reviewLocations } = this.props.reviewStore!;
         const res = this.props.resources!;
 
+        const chipPropertyNameSettings = {
+            title: editedPinLocation && editedPinLocation.propertyName
+        };
+
         return (
             <>
                 {!this.state.panelVisible && (
@@ -187,6 +193,14 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     onChange={this.resolveTask}
                                 />
                                 <label htmlFor="resolved">{res.panel.resolved}</label>
+                                {editedPinLocation.propertyName && (
+                                    <Chip
+                                        className="property-name-label"
+                                        label={editedPinLocation.propertyName}
+                                        leadingIcon={<MaterialIcon icon="bookmark" />}
+                                        {...chipPropertyNameSettings}
+                                    />
+                                )}
                                 <PinNavigator />
                             </div>
                         )}
