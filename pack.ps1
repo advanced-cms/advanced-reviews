@@ -1,11 +1,15 @@
 $defaultVersion="1.0.0"
+$workingDirectory = Get-Location
+$zip = "$workingDirectory\packages\7-Zip.CommandLine.18.1.0\tools\7za.exe"
+$nuget = "$workingDirectory\build\tools\nuget.exe"
+
 function ZipCurrentModule
 {
     Param ([String]$moduleName)
     Robocopy.exe $defaultVersion\ $version\ /S
-    ((Get-Content -Path module.config -Raw) -Replace $defaultVersion, $version ) | Set-Content -Path module.config
-    7z a "$moduleName.zip" $version Views module.config
-    git checkout module.config
+    ((Get-Content -Path module.config -Raw).TrimEnd() -Replace $defaultVersion, $version ) | Set-Content -Path module.config
+    Start-Process -NoNewWindow -Wait -FilePath $zip -ArgumentList "a", "$moduleName.zip", "$version", "Views", "module.config"
+    ((Get-Content -Path module.config -Raw).TrimEnd() -Replace $version, $defaultVersion ) | Set-Content -Path module.config
     Remove-Item $version -Force -Recurse
 }
 
@@ -22,7 +26,5 @@ ZipCurrentModule -moduleName advanced-cms.ExternalReviews
 Set-Location ..\advanced-cms.Reviews
 ZipCurrentModule -moduleName advanced-cms.Reviews
 
-Set-Location ..\..\..\
-nuget pack Advanced.CMS.AdvancedReviews.nuspec -Version $version
-Set-Location ..\..\
-Move-Item src\alloy\Advanced.CMS.AdvancedReviews.$version.nupkg Advanced.CMS.AdvancedReviews.$version.nupkg -Force
+Set-Location $workingDirectory
+Start-Process -NoNewWindow -Wait -FilePath $nuget -ArgumentList "pack", "$workingDirectory\src\alloy\Advanced.CMS.AdvancedReviews.nuspec", "-Version $version"
