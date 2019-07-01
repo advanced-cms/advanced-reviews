@@ -69,6 +69,15 @@ const reviewLocations = [
             firstComment: createComment("Lina", "Lorem ipsum dolorum.", new Date("2019-03-03")),
             isDone: false
         }
+    },
+    {
+        id: "5",
+        data: {
+            documentRelativePosition: { x: 125, y: 330 },
+            propertyName: "Very long property name test1 test2 test3 test4 test5",
+            firstComment: createComment("Lina", "Lorem ipsum dolorum.", new Date("2019-03-03")),
+            isDone: false
+        }
     }
 ];
 
