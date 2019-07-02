@@ -57,7 +57,6 @@ namespace AdvancedExternalReviews.EditReview
                 return x.Value.Substring(0, groupStart - 1) + viewUrl + x.Value.Substring(groupEnd + 1);
             });
 
-
             return html;
         }
 
@@ -94,8 +93,22 @@ namespace AdvancedExternalReviews.EditReview
             if (filterContext.Result is ViewResultBase)
             {
                 var response = filterContext.HttpContext.Response;
-                response.Output = new BufferedTextWriter(response.Output, ReplaceImages);
+                response.Output = new BufferedTextWriter(response.Output, ReplaceHtml);
             }
+        }
+
+        private string RemoveEPiHtml(string html)
+        {
+            html = Regex.Replace(html, "(<script.*epi-cms/communicationInjector.js.*</script>)", "", RegexOptions.IgnoreCase);
+            html = Regex.Replace(html, "(<link.*epi-cms/epiEditMode.css.* />)", "", RegexOptions.IgnoreCase);
+            return html;
+        }
+
+        private string ReplaceHtml(string html)
+        {
+            html = ReplaceImages(html);
+            html = RemoveEPiHtml(html);
+            return html;
         }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
