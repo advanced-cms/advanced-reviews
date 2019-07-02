@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using EPiServer.Core;
@@ -7,7 +8,7 @@ using EPiServer.Web.Mvc.Html;
 namespace AdvancedExternalReviews.DraftContentAreaPreview
 {
     /// <summary>
-    /// Modified version of ContentAreaRenderer that displays 
+    /// Modified version of ContentAreaRenderer that displays
     /// draft content versions in ExternalReview context
     /// </summary>
     public class DraftContentAreaRenderer : ContentAreaRenderer
@@ -28,9 +29,8 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             }
 
             // ************************************************************************************
-            // This code is copied from ContentAreaRenderer.Render method
-            // all protected methods are call using defaultContentAreaRenderer to make sure
-            // that overriden versiona will be used
+            // The code modifies original Render method using reflection to make sure
+            // proper list of items is used.
             // ************************************************************************************
 
             if (contentArea == null || contentArea.IsEmpty)
@@ -48,7 +48,15 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 viewContext.Writer.Write(tagBuilder.ToString(TagRenderMode.StartTag));
             }
 
-            var contentAreaItems = contentArea.Items.Select(x => x.CreateWritableClone());
+            var contentAreaItems = contentArea.Items.Select(x => x.CreateWritableClone()).ToList();
+            foreach (var contentAreaItem in contentAreaItems)
+            {
+                if (contentAreaItem.RenderSettings == null)
+                {
+                    contentAreaItem.RenderSettings = new Dictionary<string, object>();
+                }
+            }
+
             this.CallProtectedMethod(nameof(RenderContentAreaItems), htmlHelper, contentAreaItems);
             if (tagBuilder == null)
                 return;
