@@ -88,19 +88,22 @@ Each pin is in fact a standalone `Thread` the can go on until both Reviewer and 
 This feature is a combination of the previous ones.
 It is to allow external reviewers, so the user that may **not be a part of your organization**, or simply users who are **reluctant to learn EPiServer** to access unpublished data and provide feedback if needed.
 
-TODO
+
 
 ### Expirable token based urls
 All generated links are token-based. You can generate as many links as needed, each of them can be revoked at any time.
 
 Additionally, all urls are time limited (the TimeSpan can be configured, please look further down) which means that after a specific amount of time such link will no longer work.
 
-TODO
-
 ### Visual content reviews
-Visually express issues in reviewed content by highlighting or adding screenshots
+You can visually express issues in reviewed content by highlighting or adding screenshots
 
-TODO
+Once you decide to attach a screenshot then we will automatically determine the dimensions of the EPiServer property that was clicked on and preselect it.
+The default crop can be changed according to your needs.
+
+The highlighting tool allows you to clear and redraw.
+
+![Screenshot manipulation](assets/documentation/screenshot_manipulation.png "Screenshot manipulation")
 
 ## External reviews
 
@@ -112,7 +115,7 @@ There are two types of links:
 * view - external reviewer can preview draft content version 
 * editable - external reviewver can add comments using advanced review widget
  
-![External review links component](assets/documentation/external_review_list_component.png "External review links component")
+![External review links component](assets/documentation/external_reviewer.gif "External review links component")
 
 ### Share dialog
 Editor can share external review links using share dialog.
@@ -133,12 +136,37 @@ There are few settings related with external review. They are all set using Opti
 
  | Option        | Default           | Description  |
  | ---- | ---- | ---- |
+ | ContentPreviewUrl | externalContentView | path prefix added before token for "View" preview links |
+ | ReviewsUrl | externalContentReviews | path prefix added before token for "Edit" review links |
  | EmailSubject | [subject email template]|  email subject template |
  | EmailEdit | [email template] |email body template used for readonly content links |
  | EmailView | [email template]| email body template used for editable links |
- | EditableLinksEnabled | false |When true then Editor can create editable links |
+ | EditableLinksEnabled | false |When true then Editor can create editable links that allow external reviewers to add comments |
  | ViewLinkValidTo | 5 days |For how long view link is valid |
  | EditLinkValidTo | 5 days | For how long editable link is valid |
+
+In order to add those options you would have to add a new `InitializableModule`.
+This snipped turns on editable review links: 
+
+```csharp
+[ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+public class ExternalReviewInitialization : IInitializableModule
+{
+    public void Initialize(InitializationEngine context)
+    {
+        // Editable external review links are turned off by default
+        ServiceLocator.Current.GetInstance<ExternalReviewOptions>().EditableLinksEnabled = true;
+    }
+
+    public void Uninitialize(InitializationEngine context)
+    {
+    }
+
+    public void Preload(string[] parameters)
+    {
+    }
+}
+```
 
 # For contributors
 
