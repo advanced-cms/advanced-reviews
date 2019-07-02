@@ -12,17 +12,56 @@ using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.EditReview
 {
-    public class ConvertEditLinksFilter: ActionFilterAttribute
+    public class ConvertEditLinksFilter : ActionFilterAttribute
     {
         private readonly ExternalReviewOptions _externalReviewOptions;
+        private readonly UrlResolver _urlResolver;
 
         public ConvertEditLinksFilter()
         {
             _externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            _urlResolver = ServiceLocator.Current.GetInstance<UrlResolver>();
         }
 
-        public override void OnActionExecuting
-            (ActionExecutingContext filterContext)
+        /// <summary>
+        /// Use regex to find all images src attributes and replace them with viewmode URLs
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        private string ReplaceImages(string html)
+        {
+            const string pattern = "<img.*?src=[\"'](.+?)[\"'].*?>";
+
+            html = Regex.Replace(html, pattern, x =>
+            {
+                if (x.Groups.Count == 1)
+                {
+                    return x.Value;
+                }
+
+                var imgSrc = x.Groups[1];
+                var editUrl = imgSrc.Value;
+                var content = _urlResolver.Route(new UrlBuilder(editUrl), ContextMode.Edit);
+                if (content == null)
+                {
+                    return x.Value;
+                }
+                var viewUrl = _urlResolver.GetUrl(content.ContentLink, content.LanguageBranch(), new VirtualPathArguments
+                {
+                    ContextMode = ContextMode.Default
+                });
+
+                var groupStart = imgSrc.Index - x.Index;
+                var groupEnd = groupStart + imgSrc.Length;
+
+                return x.Value.Substring(0, groupStart - 1) + viewUrl + x.Value.Substring(groupEnd + 1);
+            });
+
+
+            return html;
+        }
+
+        public override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             if (!ExternalReview.IsInExternalReviewContext)
             {
@@ -41,9 +80,7 @@ namespace AdvancedExternalReviews.EditReview
                 return;
             }
 
-            var response = filterContext.HttpContext.Response;
-
-            if (response.ContentType != "text/html")
+            if (filterContext.HttpContext.Response.ContentType != "text/html")
             {
                 return;
             }
@@ -54,69 +91,60 @@ namespace AdvancedExternalReviews.EditReview
                 return;
             }
 
-            var originalFilter =
-                filterContext.HttpContext.Response.Filter;
-            filterContext.HttpContext.Response.Filter =
-                new LinksFilter(originalFilter);
+            if (filterContext.Result is ViewResultBase)
+            {
+                var response = filterContext.HttpContext.Response;
+                response.Output = new BufferedTextWriter(response.Output, ReplaceImages);
+            }
         }
 
-        public class LinksFilter : MemoryStream
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            private readonly Stream _responseStream;
-            private readonly UrlResolver _urlResolver;
-
-            public LinksFilter(Stream stream)
+            if (filterContext.HttpContext.Response.Output is BufferedTextWriter bufferedTextWriter)
             {
-                _urlResolver = UrlResolver.Current;
-                _responseStream = stream;
-            }
-
-            public override void Write(byte[] buffer,
-                int offset, int count)
-            {
-                var html = Encoding.UTF8.GetString(buffer);
-                html = ReplaceImages(html);
-                buffer = Encoding.UTF8.GetBytes(html);
-                _responseStream.Write(buffer, offset, buffer.Length);
-            }
-            
-            /// <summary>
-            /// Use regex to find all images src attributes and replace them with viewmode URLs
-            /// </summary>
-            /// <param name="html"></param>
-            /// <returns></returns>
-            private string ReplaceImages(string html)
-            {
-                const string pattern = "<img.*?src=[\"'](.+?)[\"'].*?>";
-
-                html = Regex.Replace(html, pattern, x =>
+                try
                 {
-                    if (x.Groups.Count == 1)
-                    {
-                        return x.Value;
-                    }
-
-                    var imgSrc = x.Groups[1];
-                    var editUrl = imgSrc.Value;
-                    var content = _urlResolver.Route(new UrlBuilder(editUrl), ContextMode.Edit);
-                    if (content == null)
-                    {
-                        return x.Value;
-                    }
-                    var viewUrl = _urlResolver.GetUrl(content.ContentLink, content.LanguageBranch(), new VirtualPathArguments
-                    {
-                        ContextMode = ContextMode.Default
-                    });
-
-                    var groupStart = imgSrc.Index - x.Index;
-                    var groupEnd = groupStart + imgSrc.Length;
-
-                    return x.Value.Substring(0, groupStart - 1) + viewUrl + x.Value.Substring(groupEnd + 1);
-                });
-
-
-                return html;
+                    bufferedTextWriter.Flush(filterContext.Exception == null);
+                }
+                finally
+                {
+                    filterContext.HttpContext.Response.Output = bufferedTextWriter.InnerTextWriter;
+                }
             }
+        }
+    }
+
+    public class BufferedTextWriter: TextWriter
+    {
+        private readonly StringBuilder stringBuilder = new StringBuilder();
+        public readonly TextWriter InnerTextWriter;
+
+        private readonly Func<string, string> textRewriteFunction;
+
+        public BufferedTextWriter(TextWriter innerTextWriter, Func<string, string> textRewriteFunction)
+        {
+            InnerTextWriter = innerTextWriter ?? throw new ArgumentNullException(nameof(innerTextWriter));
+            this.textRewriteFunction = textRewriteFunction;
+        }
+
+        public override Encoding Encoding => InnerTextWriter.Encoding;
+
+        public override void Write(char value)
+        {
+            stringBuilder.Append(value);
+        }
+
+        public void Flush(bool rewriteText)
+        {
+            var bufferedText = stringBuilder.ToString();
+
+            if (rewriteText && textRewriteFunction != null)
+            {
+                bufferedText = textRewriteFunction.Invoke(bufferedText);
+            }
+
+            InnerTextWriter.Write(bufferedText);
+            InnerTextWriter.Flush();
         }
     }
 }
