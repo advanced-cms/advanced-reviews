@@ -42,7 +42,7 @@ namespace AdvancedExternalReviews.EditReview
             {
                 return null;
             }
-            
+
             // HttpContext.Current.Request.RequestContext.SetContextMode(ContextMode.Edit);
 
             try
@@ -55,7 +55,7 @@ namespace AdvancedExternalReviews.EditReview
 
                 return page;
             }
-            catch (ContentNotFoundException e)
+            catch
             {
                 return null;
             }
