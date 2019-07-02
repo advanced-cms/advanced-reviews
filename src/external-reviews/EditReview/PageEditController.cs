@@ -9,6 +9,7 @@ using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;
+using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.EditReview
 {
@@ -18,6 +19,7 @@ namespace AdvancedExternalReviews.EditReview
     public class PageEditController: Controller
     {
         private readonly IContentLoader _contentLoader;
+        private readonly UrlResolver _urlResolver;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
@@ -26,13 +28,14 @@ namespace AdvancedExternalReviews.EditReview
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
-            ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory)
+            ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory, UrlResolver urlResolver)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _approvalReviewsRepository = approvalReviewsRepository;
             _externalReviewOptions = externalReviewOptions;
             _serializerFactory = serializerFactory;
+            _urlResolver = urlResolver;
         }
 
         [ConvertEditLinksFilter]
@@ -47,6 +50,7 @@ namespace AdvancedExternalReviews.EditReview
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
 
             const string url = "Views/PagePreview/Index.cshtml";
+            var startPageUrl = _urlResolver.GetUrl(ContentReference.StartPage);
 
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resolvedPath))
@@ -55,7 +59,7 @@ namespace AdvancedExternalReviews.EditReview
                 {
                     Token = token,
                     Name = content.Name,
-                    EditableContentUrlSegment = $"/en/{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
+                    EditableContentUrlSegment = $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
                     ReviewPins = _serializerFactory.GetSerializer(KnownContentTypes.Json).Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink))
@@ -142,6 +146,9 @@ namespace AdvancedExternalReviews.EditReview
         public string Token { get; set; }
         public string Name { get; set; }
 
+        /// <summary>
+        /// Url used by the iframe, it contains specific language branch in which the content was created
+        /// </summary>
         public string EditableContentUrlSegment { get; set; }
 
         public string ReviewJsScriptPath { get; set; }

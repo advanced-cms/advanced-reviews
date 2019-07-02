@@ -18,19 +18,21 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     [ServiceConfiguration(typeof(IExternalReviewLinksRepository), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ExternalReviewLinksRepository: IExternalReviewLinksRepository
     {
+        private readonly ExternalReviewLinkBuilder _externalReviewLinkBuilder;
         private readonly DynamicDataStoreFactory _dataStoreFactory;
         private readonly ExternalReviewOptions _externalReviewOptions;
 
-        public ExternalReviewLinksRepository(DynamicDataStoreFactory dataStoreFactory, ExternalReviewOptions externalReviewOptions)
+        public ExternalReviewLinksRepository(ExternalReviewLinkBuilder externalReviewLinkBuilder, DynamicDataStoreFactory dataStoreFactory, ExternalReviewOptions externalReviewOptions)
         {
+            _externalReviewLinkBuilder = externalReviewLinkBuilder;
             _dataStoreFactory = dataStoreFactory;
             _externalReviewOptions = externalReviewOptions;
         }
-        
+
         public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink)
         {
-            return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink).ToList().Select(x =>
-                ExternalReviewLink.FromExternalReview(x, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl));
+            return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink).ToList().Select(
+                _externalReviewLinkBuilder.FromExternalReview);
         }
 
         public ExternalReviewLink GetContentByToken(string token)
@@ -47,7 +49,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             {
                 return null;
             }
-            return ExternalReviewLink.FromExternalReview(externalReviewLinkDds, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl);
+            return _externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
         }
 
         public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo)
@@ -60,7 +62,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 ValidTo = DateTime.Now.Add(validTo)
             };
             GetStore().Save(externalReviewLink);
-            return ExternalReviewLink.FromExternalReview(externalReviewLink, _externalReviewOptions.ReviewsUrl, _externalReviewOptions.ContentPreviewUrl);
+            return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
         }
 
         public void DeleteLink(string token)
