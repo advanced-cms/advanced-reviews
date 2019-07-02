@@ -185,6 +185,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReviewLinksRepository\ExternalReviewLink.cs" />
+    <Compile Include="ReviewLinksRepository\ExternalReviewLinkBuilder.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkDds.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkExtension.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinksRepository.cs" />
