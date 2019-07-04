@@ -66,8 +66,18 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             return;
         }
 
+        const scrollLeft = e.srcElement.scrollLeft;
+        const scrollTop = e.srcElement.scrollTop;
+
+        const body = this.props.iframe.parentNode as HTMLBodyElement;
+        if (body) {
+            this.props.iframe.contentWindow.scrollTo(scrollLeft, scrollTop);
+            return;
+        }
+
         const previewContainer = this.props.iframe.parentNode as HTMLElement;
-        previewContainer.scrollTop = e.srcElement.scrollTop;
+        previewContainer.scrollLeft = scrollLeft;
+        previewContainer.scrollTop = scrollTop;
     }
 
     addReviewLocation(e) {
