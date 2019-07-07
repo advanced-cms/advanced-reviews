@@ -4,7 +4,7 @@ module.exports = (env, argv) => {
     const webpackCommon = require("./webpack.config.common")(env, argv);
     const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-    webpackCommon.entry = "./review-component-widget/review-component-widget.tsx";
+    webpackCommon.entry = "./src/review-component-widget/review-component-widget.tsx";
 
     webpackCommon.output = {
         filename: "ReviewWidget.js",

@@ -1,4 +1,10 @@
 {
+  "command": {
+    "label": "Advanced Review",
+    "tooltip": "Toggle advanced review",
+    "labelenabled": "Turn off Advanced Review",
+    "labelnotenabled": "Turn on Advanced Review"
+  },
   "dialog": {
     "addcomment": "Add comment",
     "changepriority": "Change priority",

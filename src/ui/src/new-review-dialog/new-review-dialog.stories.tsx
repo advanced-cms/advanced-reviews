@@ -2,11 +2,11 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { Provider } from "mobx-react";
 import { createStores, PinLocation, Comment } from "../store/review-store";
-import resources from "../.storybook/resources.json";
+import resources from "../../.storybook/resources.json";
 import NewReviewDialog from "./new-review-dialog";
 import { decorate } from "@storybook/addon-actions";
-import screenshots from "../.storybook/screenshots.json";
-import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
+import screenshots from "../../.storybook/screenshots.json";
+import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
 stores.reviewStore.currentUser = "Lina";

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import { createStores } from "../store/review-store";
-import resources from "../.storybook/resources.json";
+import resources from "../../.storybook/resources.json";
 import { Provider } from "mobx-react";
 import TextField, { Input } from "@material/react-text-field";
-import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
+import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
 
 //TODO: async
 const stores = createStores(new FakeAdvancedReviewService(), resources);

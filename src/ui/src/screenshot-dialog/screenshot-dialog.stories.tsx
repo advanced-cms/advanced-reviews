@@ -3,8 +3,8 @@ import { storiesOf } from "@storybook/react";
 import ScreenshotDialog from "./screenshot-dialog";
 import { action } from "@storybook/addon-actions";
 import { createStores } from "../store/review-store";
-import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
-import resources from "../.storybook/resources.json";
+import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
+import resources from "../../.storybook/resources.json";
 import { Provider } from "mobx-react";
 import { StringLiteral } from "@babel/types";
 
@@ -40,7 +40,7 @@ const Component = ({ propertyName }: ComponentProps) => {
                     onLoad={onIframeLoaded}
                     ref={setAnchorElement}
                     style={{ width: "100%", height: "985px" }}
-                    src="../.storybook/fake_OPE.html"
+                    src="../../.storybook/fake_OPE.html"
                 />
             </div>
 

@@ -1,3 +1,10 @@
+interface ExternalReviewResources_Component {
+    /** External review links */
+    title: string;
+    /** Manage list of external review links */
+    description: string;
+}
+
 interface ExternalReviewResources_Removedialog {
     /** Cancel */
     cancel: string;
@@ -42,6 +49,7 @@ interface ExternalReviewResources_Sharedialog {
 }
 
 interface ExternalReviewResources {
+    component: ExternalReviewResources_Component;
     removedialog: ExternalReviewResources_Removedialog;
     list: ExternalReviewResources_List;
     sharedialog: ExternalReviewResources_Sharedialog;

@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import ShareDialog from "./external-review-share-dialog";
 import { action } from "@storybook/addon-actions";
-import res from "../.storybook/externalResources.json";
+import res from "../../.storybook/externalResources.json";
 
 storiesOf("External reviews", module).add("Share dialog", () => {
     return (

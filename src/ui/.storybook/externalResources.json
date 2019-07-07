@@ -1,4 +1,8 @@
 {
+  "component": {
+    "title": "External review links",
+    "description": "Manage list of external review links"
+  },
   "removedialog": {
     "cancel": "Cancel",
     "description": "Are you sure you want to remove link?",

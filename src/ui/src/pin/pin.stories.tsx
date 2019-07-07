@@ -2,10 +2,10 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { withKnobs, boolean, select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import resources from "../.storybook/resources.json";
+import resources from "../../.storybook/resources.json";
 import Pin from "./pin";
 import { Comment, Priority, PinLocation, createStores } from "../store/review-store";
-import FakeAdvancedReviewService from "../.storybook/fake-advanced-review-service";
+import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
 
 const stories = storiesOf("Pin", module);
 stories.addDecorator(withKnobs);

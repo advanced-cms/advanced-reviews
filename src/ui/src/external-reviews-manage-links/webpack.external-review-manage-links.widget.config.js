@@ -1,15 +1,15 @@
 const path = require("path");
 
 module.exports = (env, argv) => {
-    const webpackCommon = require("../webpack.config.common")(env, argv);
+    const webpackCommon = require("../../webpack.config.common")(env, argv);
 
-    webpackCommon.entry = "./external-reviews-manage-links/external-review-manage-links-widget.tsx";
+    webpackCommon.entry = "./src/external-reviews-manage-links/external-review-manage-links-widget.tsx";
 
     webpackCommon.output = {
         filename: "external-review-manage-links-component.js",
         libraryTarget: "amd",
         libraryExport: "default",
-        path: path.resolve(__dirname, "../../alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts")
+        path: path.resolve(__dirname, "../../../alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts")
     };
 
     webpackCommon.externals = [

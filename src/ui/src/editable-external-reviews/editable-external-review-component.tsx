@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "mobx-react";
 import axios from "axios";
 
-import res from "../.storybook/resources.json";
+import res from "../../.storybook/resources.json";
 import { createStores } from "../store/review-store";
 
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";

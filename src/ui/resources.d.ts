@@ -1,3 +1,14 @@
+interface ReviewResources_Command {
+    /** Advanced Review */
+    label: string;
+    /** Toggle advanced review */
+    tooltip: string;
+    /** Turn off Advanced Review */
+    labelenabled: string;
+    /** Turn on Advanced Review */
+    labelnotenabled: string;
+}
+
 interface ReviewResources_Dialog {
     /** Add comment */
     addcomment: string;
@@ -63,6 +74,7 @@ interface ReviewResources_Priority {
 }
 
 interface ReviewResources {
+    command: ReviewResources_Command;
     dialog: ReviewResources_Dialog;
     panel: ReviewResources_Panel;
     screenshot: ReviewResources_Screenshot;

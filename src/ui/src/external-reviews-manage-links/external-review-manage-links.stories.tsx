@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import ExternalReviewWidgetContent from "./external-review-manage-links";
 import FakeReviewLinksStore from "./fake-review-links-store";
-import res from "../.storybook/externalResources.json";
+import res from "../../.storybook/externalResources.json";
 
 storiesOf("External reviews/Review component", module)
     .add("default", () => {
