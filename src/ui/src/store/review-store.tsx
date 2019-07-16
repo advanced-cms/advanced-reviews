@@ -384,7 +384,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     }
 
     @action getUserAvatarUrl(userName: string): string {
-        return `/review-avatars/${userName}.jpg`;
+        return `/src/review-avatars/${userName}.jpg`;
     }
 
     private saveLocation(reviewLocation: PinLocation): Promise<PinLocation> {
