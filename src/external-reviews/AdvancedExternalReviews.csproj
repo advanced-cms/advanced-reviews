@@ -169,6 +169,7 @@
     <Compile Include="DraftContentAreaPreview\DraftContentAreaLoader.cs" />
     <Compile Include="DraftContentAreaPreview\DraftContentAreaRenderer.cs" />
     <Compile Include="EditReview\ConvertEditLinksFilter.cs" />
+    <Compile Include="EditReview\PropertyResolver.cs" />
     <Compile Include="ExternalReview.cs" />
     <Compile Include="ManageLinks\ExternalReviewLinksManageComponent.cs" />
     <Compile Include="ExternalReviewOptions.cs" />
