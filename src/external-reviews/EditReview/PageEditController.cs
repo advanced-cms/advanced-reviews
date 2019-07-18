@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
@@ -16,7 +15,7 @@ namespace AdvancedExternalReviews.EditReview
     /// <summary>
     /// Controller used to render editable external review page
     /// </summary>
-    public class PageEditController: Controller
+    public class PageEditController : Controller
     {
         private readonly IContentLoader _contentLoader;
         private readonly UrlResolver _urlResolver;
@@ -24,11 +23,13 @@ namespace AdvancedExternalReviews.EditReview
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly IObjectSerializerFactory _serializerFactory;
+        private readonly PropertyResolver _propertyResolver;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
-            ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory, UrlResolver urlResolver)
+            ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
+            UrlResolver urlResolver, PropertyResolver propertyResolver)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
@@ -36,6 +37,7 @@ namespace AdvancedExternalReviews.EditReview
             _externalReviewOptions = externalReviewOptions;
             _serializerFactory = serializerFactory;
             _urlResolver = urlResolver;
+            _propertyResolver = propertyResolver;
         }
 
         [ConvertEditLinksFilter]
@@ -55,14 +57,17 @@ namespace AdvancedExternalReviews.EditReview
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resolvedPath))
             {
+                var serializer = _serializerFactory.GetSerializer(KnownContentTypes.Json);
                 var pagePreviewModel = new ContentPreviewModel
                 {
                     Token = token,
                     Name = content.Name,
-                    EditableContentUrlSegment = $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
+                    EditableContentUrlSegment =
+                        $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
-                    ReviewPins = _serializerFactory.GetSerializer(KnownContentTypes.Json).Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink))
+                    ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
+                    Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData))
                 };
                 return View(resolvedPath, pagePreviewModel);
             }
@@ -154,5 +159,6 @@ namespace AdvancedExternalReviews.EditReview
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }
         public string ReviewPins { get; set; }
+        public string Metadata { get; set; }
     }
 }

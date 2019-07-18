@@ -83,6 +83,17 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
 
     const setUserName = (newUserName: string) => {
         stores.reviewStore.currentUser = newUserName;
+        try {
+            const properties = {};
+            const meta = JSON.parse(metadata);
+            Object.keys(meta).forEach(key => {
+                const newKey = key[0].toUpperCase() + key.substring(1);
+                properties[newKey] = meta[key];
+            });
+            stores.reviewStore.updateDisplayNamesDictionary(properties);
+        } catch (ex) {
+            console.warn("Couldn't parse metadata", ex);
+        }
         stores.reviewStore.load();
         setShowUserNameDialog(false);
     };
@@ -104,6 +115,7 @@ const reviewEl = document.getElementById("reviews-editor");
 const addUrl = reviewEl.dataset.url;
 const userName: string = reviewEl.dataset.user;
 const initialPins: string = reviewEl.dataset.pins;
+const metadata: string = reviewEl.dataset.metadata;
 ReactDOM.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
     reviewEl
