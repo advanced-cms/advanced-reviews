@@ -38,13 +38,19 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
         const isNextEnabled = currentItemIndex < reviewLocations.length - 1;
         let nextTitle = "next";
         if (isNextEnabled) {
-            nextTitle = nextTitle + ": " + reviewLocations[currentItemIndex + 1].propertyName;
+            nextTitle =
+                nextTitle +
+                ": " +
+                this.props.reviewStore.resolvePropertyDisplayName(reviewLocations[currentItemIndex + 1].propertyName);
         }
 
         const isPrevEnabled = currentItemIndex > 0;
         let prevTitle = "prev";
         if (isPrevEnabled) {
-            prevTitle = prevTitle + ": " + reviewLocations[currentItemIndex - 1].propertyName;
+            prevTitle =
+                prevTitle +
+                ": " +
+                this.props.reviewStore.resolvePropertyDisplayName(reviewLocations[currentItemIndex - 1].propertyName);
         }
 
         return (

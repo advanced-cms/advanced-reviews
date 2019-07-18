@@ -170,7 +170,8 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         const res = this.props.resources!;
 
         const chipPropertyNameSettings = {
-            title: editedPinLocation && editedPinLocation.propertyName
+            title:
+                editedPinLocation && this.props.reviewStore.resolvePropertyDisplayName(editedPinLocation.propertyName)
         };
 
         return (
@@ -206,7 +207,9 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     {editedPinLocation.propertyName && (
                                         <Chip
                                             className="property-name-label"
-                                            label={editedPinLocation.propertyName}
+                                            label={this.props.reviewStore.resolvePropertyDisplayName(
+                                                editedPinLocation.propertyName
+                                            )}
                                             leadingIcon={<MaterialIcon icon="bookmark" />}
                                             {...chipPropertyNameSettings}
                                         />
