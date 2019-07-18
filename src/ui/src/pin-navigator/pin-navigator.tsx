@@ -9,10 +9,12 @@ import "@material/react-material-icon/index.scss";
 import "./pin-navigator.scss";
 
 interface PinNavigatorProps {
+    resources?: ReviewResources;
     reviewStore?: IReviewComponentStore;
 }
 
 @inject("reviewStore")
+@inject("resources")
 @observer
 export default class PinNavigator extends React.Component<PinNavigatorProps, any> {
     showReview(incrementBy: number): void {
@@ -29,6 +31,7 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
 
     render() {
         const { reviewLocations } = this.props.reviewStore!;
+        const res = this.props.resources!;
 
         const currentItemIndex = reviewLocations.indexOf(this.props.reviewStore.editedPinLocation);
 
@@ -45,9 +48,9 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
         }
 
         return (
-            <>
+            <div className="pin-navigator">
                 {reviewLocations.length > 1 && (
-                    <div className="pin-navigator">
+                    <>
                         <Button
                             className="next-prev-icon"
                             title={prevTitle}
@@ -67,9 +70,12 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
                         >
                             <MaterialIcon icon="chevron_right" />
                         </Button>
-                    </div>
+                    </>
                 )}
-            </>
+                <Button className="next-prev-icon" title={res.panel.gobacktolist} aria-pressed="false">
+                    <MaterialIcon icon="list" onClick={() => (this.props.reviewStore.editedPinLocation = null)} />
+                </Button>
+            </div>
         );
     }
 }
