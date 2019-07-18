@@ -176,74 +176,82 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         return (
             <>
                 {!this.state.panelVisible && (
-                    <div className={classNames("panel-container narrow", filter.reviewMode ? "review-mode" : "")}>
-                        <IconButton title={res.panel.expand} onClick={this.showPanel}>
-                            <MaterialIcon icon="first_page" />
-                        </IconButton>
-                        <Legend filter={filter} />
-                    </div>
+                    <>
+                        <div className="panel-container-settings narrow">
+                            <IconButton title={res.panel.expand} onClick={this.showPanel}>
+                                <MaterialIcon icon="first_page" />
+                            </IconButton>
+                        </div>
+                        <div className={classNames("panel-container narrow", filter.reviewMode ? "review-mode" : "")}>
+                            <Legend filter={filter} />
+                        </div>
+                    </>
                 )}
                 {this.state.panelVisible && (
-                    <div className="panel-container">
-                        {editedPinLocation && (
-                            <div className="panel-header">
-                                <CheckBox
-                                    nativeControlId="resolved"
-                                    checked={this.props.reviewStore.editedPinLocation.isDone}
-                                    onChange={this.resolveTask}
-                                />
-                                <label htmlFor="resolved">{res.panel.resolved}</label>
-                                {editedPinLocation.propertyName && (
-                                    <Chip
-                                        className="property-name-label"
-                                        label={editedPinLocation.propertyName}
-                                        leadingIcon={<MaterialIcon icon="bookmark" />}
-                                        {...chipPropertyNameSettings}
+                    <>
+                        <div className="panel-container-settings">
+                            <IconButton className="close-panel" onClick={this.hidePanel} title={res.panel.collapse}>
+                                <MaterialIcon icon="last_page" />
+                            </IconButton>
+                        </div>
+                        <div className="panel-container">
+                            {editedPinLocation && (
+                                <div className="panel-header">
+                                    <CheckBox
+                                        nativeControlId="resolved"
+                                        checked={this.props.reviewStore.editedPinLocation.isDone}
+                                        onChange={this.resolveTask}
                                     />
-                                )}
-                                <PinNavigator />
-                            </div>
-                        )}
-                        {!editedPinLocation && (
-                            <>
-                                <IconButton className="close-panel" onClick={this.hidePanel} title={res.panel.collapse}>
-                                    <MaterialIcon icon="last_page" />
-                                </IconButton>
-                                <Filters filter={filter} />
-                                <h3>List of Pins</h3>
-                                <List
-                                    singleSelection
-                                    selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
-                                    handleSelect={activatedIndex => this.onSelected(activatedIndex)}
-                                    className="locations"
-                                >
-                                    {reviewLocations.map(location => (
-                                        <ListItem title={res.panel.clicktoedit} key={location.id}>
-                                            <Comment
-                                                comment={location.firstComment}
-                                                isImportant={location.priority === Priority.Important}
-                                                isDone={location.isDone}
-                                            />
-                                            <IconButton
-                                                className="edit"
-                                                title={res.panel.opendetails}
-                                                onClick={e => this.onEditClick(e, location)}
-                                            >
-                                                <MaterialIcon icon="edit" />
-                                            </IconButton>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </>
-                        )}
-                        {editedPinLocation && (
-                            <ReviewDetails
-                                onCancel={() => (this.props.reviewStore.editedPinLocation = null)}
-                                iframe={this.props.iframe}
-                                currentEditLocation={this.props.reviewStore.editedPinLocation}
-                            />
-                        )}
-                    </div>
+                                    <label htmlFor="resolved">{res.panel.resolved}</label>
+                                    {editedPinLocation.propertyName && (
+                                        <Chip
+                                            className="property-name-label"
+                                            label={editedPinLocation.propertyName}
+                                            leadingIcon={<MaterialIcon icon="bookmark" />}
+                                            {...chipPropertyNameSettings}
+                                        />
+                                    )}
+                                    <PinNavigator />
+                                </div>
+                            )}
+                            {!editedPinLocation && (
+                                <>
+                                    <Filters filter={filter} />
+                                    <h3>List of Pins</h3>
+                                    <List
+                                        singleSelection
+                                        selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
+                                        handleSelect={activatedIndex => this.onSelected(activatedIndex)}
+                                        className="locations"
+                                    >
+                                        {reviewLocations.map(location => (
+                                            <ListItem title={res.panel.clicktoedit} key={location.id}>
+                                                <Comment
+                                                    comment={location.firstComment}
+                                                    isImportant={location.priority === Priority.Important}
+                                                    isDone={location.isDone}
+                                                />
+                                                <IconButton
+                                                    className="edit"
+                                                    title={res.panel.opendetails}
+                                                    onClick={e => this.onEditClick(e, location)}
+                                                >
+                                                    <MaterialIcon icon="edit" />
+                                                </IconButton>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </>
+                            )}
+                            {editedPinLocation && (
+                                <ReviewDetails
+                                    onCancel={() => (this.props.reviewStore.editedPinLocation = null)}
+                                    iframe={this.props.iframe}
+                                    currentEditLocation={this.props.reviewStore.editedPinLocation}
+                                />
+                            )}
+                        </div>
+                    </>
                 )}
             </>
         );
