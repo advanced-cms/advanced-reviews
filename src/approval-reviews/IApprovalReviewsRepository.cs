@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EPiServer.Core;
 
 namespace AdvancedApprovalReviews
@@ -13,12 +14,19 @@ namespace AdvancedApprovalReviews
         void Save(ContentReference contentLink, IEnumerable<ReviewLocation> reviewLocations);
 
         /// <summary>
+        /// Remove a specific review location
+        /// </summary>
+        /// <param name="id">Id of the review location</param>
+        /// <param name="contentLink">Version specific content reference</param>
+        void RemoveReviewLocation(string id, ContentReference contentLink);
+
+        /// <summary>
         /// Updates list of review locations for ContentLink
         /// </summary>
         /// <param name="contentLink">Version specific content reference</param>
         /// <param name="reviewLocation">Review Location</param>
         ReviewLocation Update(ContentReference contentLink, ReviewLocation reviewLocation);
-        
+
         /// <summary>
         /// Load content reviews
         /// </summary>

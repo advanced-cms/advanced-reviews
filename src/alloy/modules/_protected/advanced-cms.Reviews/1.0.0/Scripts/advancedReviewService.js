@@ -20,7 +20,7 @@ define([
 
     function parseResponse(reviewLocations) {
         return reviewLocations
-            .map(x => {
+            .map(function (x) {
                 var reviewLocation;
                 try {
                     reviewLocation = JSON.parse(x.data);
@@ -32,7 +32,9 @@ define([
                     data: reviewLocation
                 };
             })
-            .filter(x => !!x.data);
+            .filter(function (x) {
+                return !!x.data
+            });
     }
 
     return declare([Stateful, _ContentContextMixin], {
@@ -52,6 +54,12 @@ define([
                         data: JSON.stringify(reviewLocation)
                     }
                 });
+            }.bind(this));
+        },
+
+        remove: function (id) {
+            return this._handleContentAction(function (contentLink) {
+                return this.reviewStore.remove(id + "?contentLink=" + contentLink);
             }.bind(this));
         },
 

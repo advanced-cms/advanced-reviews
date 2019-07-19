@@ -38,6 +38,24 @@ namespace AdvancedApprovalReviews
             }
         }
 
+        public void RemoveReviewLocation(string id, ContentReference contentLink)
+        {
+            lock (_lock)
+            {
+                var reviewLocations = Load(contentLink).ToList();
+
+                var reviewLocation = reviewLocations.FirstOrDefault(x => x.Id == id);
+                if (reviewLocation == null)
+                {
+                    throw new ReviewLocationNotFoundException();
+                }
+
+                reviewLocations.Remove(reviewLocation);
+
+                Save(contentLink, reviewLocations);
+            }
+        }
+
         public IEnumerable<ReviewLocation> Load(ContentReference contentLink)
         {
             var approvalReview = LoadApprovalReview(contentLink);
@@ -66,6 +84,7 @@ namespace AdvancedApprovalReviews
 
         public void Delete(ContentReference contentLink)
         {
+            //TODO: check if the current user is the owner of the pin
             var review = GetStore().Items<ApprovalReview>().FirstOrDefault(x => x.ContentLink == contentLink);
             if (review == null)
             {

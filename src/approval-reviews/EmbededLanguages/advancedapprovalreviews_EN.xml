@@ -13,9 +13,15 @@
         <changepriority>Change priority</changepriority>
         <close>cancel</close>
         <describe>Describe the issue</describe>
-        <reviewedit>Review edit</reviewedit>        
-        <save>Save</save>        
+        <reviewedit>Review edit</reviewedit>
+        <save>Save</save>
       </dialog>
+      <removepindialog>
+        <cancel>Cancel</cancel>
+        <description>Are you sure you want to remove this pin?</description>
+        <ok>Ok</ok>
+        <title>Remove pin</title>
+      </removepindialog>
       <panel>
         <attachscreenshot>Attach screenshot</attachscreenshot>
         <clicktoedit>Click to edit</clicktoedit>
@@ -23,8 +29,8 @@
         <expand>Expand review panel</expand>
         <gobacktolist>Go back to list</gobacktolist>
         <opendetails>Open details</opendetails>
-        <removescreenshot>Remove screenshot</removescreenshot>        
-        <resolved>Resolved</resolved>       
+        <removescreenshot>Remove screenshot</removescreenshot>
+        <resolved>Resolved</resolved>
         <reviewmode>Review mode</reviewmode>
         <showscreenshot>Show screenshot</showscreenshot>
         <showactive>Show active</showactive>
@@ -33,7 +39,7 @@
       </panel>
       <screenshot>
         <apply>Apply</apply>
-        <cancel>cancel</cancel>        
+        <cancel>cancel</cancel>
         <clear>Clear</clear>
         <cropandhighlight>Crop and highlight the area you want to comment</cropandhighlight>
       </screenshot>

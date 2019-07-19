@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import { IReviewComponentStore, PinLocation, Priority } from "../store/review-store";
 import MaterialIcon from "@material/react-material-icon";
 import IconButton from "@material/react-icon-button";
+import Confirmation from "../confirmation/confirmation";
 import CheckBox from "@material/react-checkbox";
 import { Chip } from "@material/react-chips";
 import Switch from "@material/react-switch";
@@ -122,7 +123,8 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
     constructor(props: SlidingPanelProps) {
         super(props);
         this.state = {
-            panelVisible: false
+            panelVisible: false,
+            currentPinToRemove: null
         };
 
         this.locationChangedReaction = reaction(
@@ -165,8 +167,17 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         this.props.reviewStore.toggleResolve();
     };
 
+    onRemove = (action: boolean) => {
+        const pinToRemove = this.state.currentPinToRemove;
+        this.setState({ currentPinToRemove: null });
+        if (!action) {
+            return;
+        }
+        this.props.reviewStore.remove(pinToRemove);
+    };
+
     render() {
-        const { editedPinLocation, filter, reviewLocations } = this.props.reviewStore!;
+        const { editedPinLocation, filter, reviewLocations, currentUser } = this.props.reviewStore!;
         const res = this.props.resources!;
 
         const chipPropertyNameSettings = {
@@ -228,12 +239,30 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                         className="locations"
                                     >
                                         {reviewLocations.map(location => (
-                                            <ListItem title={res.panel.clicktoedit} key={location.id}>
-                                                <Comment
-                                                    comment={location.firstComment}
-                                                    isImportant={location.priority === Priority.Important}
-                                                    isDone={location.isDone}
-                                                />
+                                            <ListItem
+                                                title={res.panel.clicktoedit}
+                                                key={location.id}
+                                                onDoubleClick={e => this.onEditClick(e, location)}
+                                            >
+                                                <div>
+                                                    <Comment
+                                                        comment={location.firstComment}
+                                                        isImportant={location.priority === Priority.Important}
+                                                        isDone={location.isDone}
+                                                    />
+                                                </div>
+                                                {location.comments.length === 0 &&
+                                                    location.firstComment.author === currentUser && (
+                                                        <IconButton
+                                                            className="delete"
+                                                            title={res.removepindialog.title}
+                                                            onClick={() =>
+                                                                this.setState({ currentPinToRemove: location })
+                                                            }
+                                                        >
+                                                            <MaterialIcon icon="delete" />
+                                                        </IconButton>
+                                                    )}
                                                 <IconButton
                                                     className="edit"
                                                     title={res.panel.opendetails}
@@ -251,6 +280,16 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     onCancel={() => (this.props.reviewStore.editedPinLocation = null)}
                                     iframe={this.props.iframe}
                                     currentEditLocation={this.props.reviewStore.editedPinLocation}
+                                />
+                            )}
+                            {!!this.state.currentPinToRemove && (
+                                <Confirmation
+                                    title={res.removepindialog.title}
+                                    description={res.removepindialog.description}
+                                    okName={res.removepindialog.ok}
+                                    cancelName={res.removepindialog.cancel}
+                                    open={!!this.state.currentPinToRemove}
+                                    onCloseDialog={this.onRemove}
                                 />
                             )}
                         </div>
