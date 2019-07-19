@@ -51,6 +51,7 @@ namespace AdvancedExternalReviews.EditReview
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 segmentContext.ContextMode = ContextMode.Edit;
+                segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
                 ExternalReview.IsInExternalReviewContext = true;
 
                 return page;
