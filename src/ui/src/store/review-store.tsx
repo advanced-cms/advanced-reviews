@@ -245,6 +245,8 @@ export interface IReviewComponentStore {
 
     addComment(commentText: string, screenshot?: string): Promise<PinLocation>;
 
+    remove(pin: PinLocation): Promise<void>;
+
     save(state: NewPinDto, reviewLocation: PinLocation): Promise<PinLocation>;
 
     load(): void;
@@ -381,6 +383,21 @@ class ReviewComponentStore implements IReviewComponentStore {
             item.currentScreenshot
         );
         return this.saveLocation(editedReview);
+    }
+
+    @action.bound
+    remove(pin: PinLocation): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this._advancedReviewService
+                .remove(pin.id)
+                .then(() => {
+                    this.reviewLocations.splice(this.reviewLocations.indexOf(pin), 1);
+                    resolve();
+                })
+                .otherwise(() => {
+                    reject();
+                });
+        });
     }
 
     @action getUserAvatarUrl(userName: string): string {

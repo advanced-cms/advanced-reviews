@@ -16,6 +16,12 @@
         <reviewedit>Granska redigeringen</reviewedit>
         <save>Spara</save>
       </dialog>
+      <removepindialog>
+        <cancel>Avbryt</cancel>
+        <description>Är du säker pĺ att du vill ta bort recension?</description>
+        <ok>Ok</ok>
+        <title>Ta bort recension</title>
+      </removepindialog>
       <panel>
         <attachscreenshot>Lägg till skärmbild</attachscreenshot>
         <clicktoedit>Klicka för att redigera</clicktoedit>
@@ -23,6 +29,8 @@
         <expand>Fäll ut granskningspanel</expand>
         <gobacktolist>Gĺ tillbaka till listan</gobacktolist>
         <opendetails>Öppna detaljer</opendetails>
+        <remove>Ta bort</remove>
+        <removeconfirmation>Är du säker pĺ att du vill ta bort?</removeconfirmation>
         <removescreenshot>Ta bort skärmbild</removescreenshot>
         <resolved>Klar</resolved>
         <reviewmode>Granskningsläge</reviewmode>

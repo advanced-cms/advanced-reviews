@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { format } from "date-fns";
 import { ContextMenu } from "../common/context-menu";
-import Confirmation from "./confirmation";
+import Confirmation from "../confirmation/confirmation";
 import IconButton from "@material/react-icon-button";
 import MaterialIcon from "@material/react-material-icon";
 import List, { ListItemGraphic, ListItem, ListItemText } from "@material/react-list";

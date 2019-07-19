@@ -127,13 +127,22 @@ $border: 1px solid #c0c0c0;
             padding: 10px;
         }
 
+        .delete,
         .edit {
             display: none;
             position: absolute;
+        }
+
+        .edit {
             right: 2px;
         }
 
-        li:hover .edit {
+        .delete {
+            right: 32px;
+        }
+
+        li:hover .edit,
+        li:hover .delete {
             display: block;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Core;
@@ -19,7 +20,6 @@ namespace AdvancedApprovalReviews
             _approvalReviewsRepository = approvalReviewsRepository;
         }
 
-        [HttpGet]
         public ActionResult Get(ContentReference id)
         {
             var errorResult = ValidateContent(id);
@@ -31,7 +31,12 @@ namespace AdvancedApprovalReviews
             return Rest(_approvalReviewsRepository.Load(id));
         }
 
-        [HttpPost]
+        public ActionResult Delete(string id, ContentReference contentLink)
+        {
+            _approvalReviewsRepository.RemoveReviewLocation(id, contentLink);
+            return new EmptyResult();
+        }
+
         public ActionResult Post(PostReviewModel reviewModel)
         {
             if (reviewModel == null || reviewModel.ContentLink == null || reviewModel.ReviewLocation == null)

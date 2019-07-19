@@ -105,6 +105,20 @@ export default class FakeAdvancedReviewService implements AdvancedReviewService 
         return result;
     }
 
+    remove(id: string): Promise<any> {
+        let result: any = new Promise(resolve => {
+            resolve();
+        });
+        result.otherwise = () => {};
+        result.then = (callback) => {
+            const index = reviewLocations.findIndex(x => x.id === id);
+            reviewLocations.splice(index, 1);
+            callback();
+            return result;
+        };
+        return result;
+    }
+
     load(): Promise<any[]> {
         const convertedResult = reviewLocations.map(x => {
             return {

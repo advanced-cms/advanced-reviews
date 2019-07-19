@@ -24,6 +24,17 @@ interface ReviewResources_Dialog {
     save: string;
 }
 
+interface ReviewResources_Removepindialog {
+    /** Cancel */
+    cancel: string;
+    /** Are you sure you want to remove this pin? */
+    description: string;
+    /** Ok */
+    ok: string;
+    /** Remove pin */
+    title: string;
+}
+
 interface ReviewResources_Panel {
     /** Attach screenshot */
     attachscreenshot: string;
@@ -76,6 +87,7 @@ interface ReviewResources_Priority {
 interface ReviewResources {
     command: ReviewResources_Command;
     dialog: ReviewResources_Dialog;
+    removepindialog: ReviewResources_Removepindialog;
     panel: ReviewResources_Panel;
     screenshot: ReviewResources_Screenshot;
     priority: ReviewResources_Priority;

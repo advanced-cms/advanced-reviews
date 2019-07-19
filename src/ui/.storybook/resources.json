@@ -13,6 +13,12 @@
     "reviewedit": "Review edit",
     "save": "Save"
   },
+  "removepindialog": {
+    "cancel": "Cancel",
+    "description": "Are you sure you want to remove this pin?",
+    "ok": "Ok",
+    "title": "Remove pin"
+  },
   "panel": {
     "attachscreenshot": "Attach screenshot",
     "clicktoedit": "Click to edit",
