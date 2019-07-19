@@ -26,7 +26,7 @@ define([
         reviewEnabled: false,
 
         constructor: function () {
-            this._toggleCanExecute();
+            this._toggleIsAvailable();
 
             this.own(topic.subscribe("toggle:reviews", function (reviewEnabled) {
                 this.set("active", reviewEnabled);
@@ -34,10 +34,10 @@ define([
             }.bind(this)));
         },
 
-        contentContextChanged: function () {
+        contextChanged: function () {
             this.reviewEnabled = false;
             this.set("active", false);
-            this._toggleCanExecute();
+            this._toggleIsAvailable();
             this._publishTopic();
         },
 
@@ -52,9 +52,19 @@ define([
             }.bind(this));
         },
 
+        _toggleIsAvailable: function () {
+            return when(this.getCurrentContext()).then(function (context) {
+                if (this._isContentContext(context)) {
+                    this._toggleCanExecute();
+                } else {
+                    this.set({isAvailable: false});
+                }
+            }.bind(this));
+        },
+
         _toggleCanExecute: function () {
             return when(this.getCurrentContent()).then(function (content) {
-                this.set({ canExecute: content.status !== ContentActionSupport.versionStatus.Published });
+                this.set({ isAvailable: true, canExecute: content.status !== ContentActionSupport.versionStatus.Published });
             }.bind(this));
         }
     });
