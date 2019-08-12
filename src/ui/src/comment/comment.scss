@@ -25,21 +25,25 @@
         .author {
             font-weight: bold;
             font-size: 0.9rem;
-            margin-right: 5px;
+            margin-right: 10px;
             float: left;
+            text-overflow: ellipsis;
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .date {
             font-style: italic;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             color: #a0a0a0;
             float: left;
         }
 
         .screenshot {
-            margin-top: -3px;
             display: inline-block;
             cursor: pointer;
+            margin-left: 5px;
         }
 
         p {
