@@ -33,7 +33,9 @@ export default class Comment extends React.Component<CommentProps, any> {
                 <div className="message">
                     <div>
                         {this.props.isImportant && <MaterialIcon icon="priority_high" title={res.priority.important} />}
-                        <span className="author">{this.props.comment.author}</span>
+                        <span className="author" title={this.props.comment.author}>
+                            {this.props.comment.author}
+                        </span>
                         <span className="date" title={this.props.comment.formattedDate}>
                             {this.props.comment.userFriendlyDate}
                         </span>
