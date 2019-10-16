@@ -1,9 +1,8 @@
 import React from "react";
 import { IReviewComponentStore, NewPinDto, PinLocation } from "../store/review-store";
 import { inject, observer } from "mobx-react";
-import Button from "@material/react-button";
+import { TextButton } from "@episerver/ui-framework";
 import { IReactionDisposer, reaction } from "mobx";
-import { DropDownMenu } from "../common/drop-down-menu";
 import Comment from "../comment/comment";
 import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
 import LocationComment from "../location-comment/location-comment";
@@ -116,10 +115,10 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                             />
                         )}
                         <div className="actions">
-                            <Button onClick={this.props.onCancel}>{res.dialog.close}</Button>
-                            <Button disabled={!canSave} onClick={this.addNewComment}>
+                            <TextButton onClick={this.props.onCancel}>{res.dialog.close}</TextButton>
+                            <TextButton disabled={!canSave} onClick={this.addNewComment}>
                                 {res.dialog.addcomment}
-                            </Button>
+                            </TextButton>
                         </div>
                     </>
                 )}
