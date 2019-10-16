@@ -46,7 +46,7 @@ function Component({ initialLocale = "en" }) {
             {!!anchorElement && iframeLoaded && <IframeWithPins iframe={anchorElement} />}
             <div className="user-picker">
                 <TextField label="Current user" dense>
-                    <Input value={text} onChange={e => setText(e.currentTarget.value)} />
+                    <Input value={text} onChange={(e: React.FormEvent<any>) => setText(e.currentTarget.value)} />
                 </TextField>
             </div>
         </div>
