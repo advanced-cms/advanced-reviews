@@ -55,7 +55,6 @@
         "@episerver/ui-framework": "^0.8.1",
         "@material/react-chips": "^0.15.0",
         "@material/react-dialog": "^0.15.0",
-        "@material/react-icon-button": "^0.15.0",
         "@material/react-list": "^0.15.0",
         "@material/react-material-icon": "^0.15.0",
         "@material/react-menu-surface": "^0.15.0",
