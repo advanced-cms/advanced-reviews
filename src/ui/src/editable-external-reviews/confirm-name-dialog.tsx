@@ -33,7 +33,7 @@ const ConfirmDialog = ({ open, onClose, initialUserName }: ConfirmDialogProps) =
                     <TextField label="Display name" dense autoFocus required style={{ width: "100%" }}>
                         <Input
                             value={userName}
-                            onChange={e => setUserName(e.currentTarget.value)}
+                            onChange={(e: React.FormEvent<any>) => setUserName(e.currentTarget.value)}
                             isValid={!!userName}
                         />
                     </TextField>

@@ -49,7 +49,7 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
         });
     };
 
-    const onEmailTextChanged = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    const onEmailTextChanged = (e: React.FormEvent<any>) => {
         const newValue = e.currentTarget.value;
         setEmail(newValue);
         setIsValidEmail(checkIsValidEmail(newValue));
@@ -84,7 +84,10 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
                         required
                         style={{ width: "100%" }}
                     >
-                        <Input value={subject} onChange={event => setSubject(event.currentTarget.value)} />
+                        <Input
+                            value={subject}
+                            onChange={(event: React.FormEvent<any>) => setSubject(event.currentTarget.value)}
+                        />
                     </TextField>
                 </div>
                 <div className="text-field-container">
@@ -94,7 +97,11 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
                         required
                         helperText={<HelperText>{resources.sharedialog.messagehint}</HelperText>}
                     >
-                        <Input rows={15} value={message} onChange={e => setMessage(e.currentTarget.value)} />
+                        <Input
+                            rows={15}
+                            value={message}
+                            onChange={(e: React.FormEvent<any>) => setMessage(e.currentTarget.value)}
+                        />
                     </TextField>
                 </div>
             </DialogContent>

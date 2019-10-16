@@ -26,7 +26,7 @@ function Component() {
             <IframeWithPins iframe={iframe} />
             <div className="user-picker">
                 <TextField label="Current user" dense>
-                    <Input value={text} onChange={e => setText(e.currentTarget.value)} />
+                    <Input value={text} onChange={(e: React.FormEvent<any>) => setText(e.currentTarget.value)} />
                 </TextField>
             </div>
         </div>

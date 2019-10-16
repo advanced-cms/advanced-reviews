@@ -32,7 +32,9 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
                 <Input
                     ref={(input: any) => setCommentInput(input)}
                     value={props.value}
-                    onChange={e => props.onChange(e.currentTarget.value, props.currentScreenshot)}
+                    onChange={(e: React.FormEvent<any>) =>
+                        props.onChange(e.currentTarget.value, props.currentScreenshot)
+                    }
                 />
             </TextField>
             {!props.currentScreenshot && (
