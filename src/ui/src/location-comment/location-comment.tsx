@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { inject } from "mobx-react";
 import TextField, { Input } from "@material/react-text-field";
-import IconButton from "@material/react-icon-button";
+import { IconButton } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
 import { DropDownMenu } from "../common/drop-down-menu";
 
