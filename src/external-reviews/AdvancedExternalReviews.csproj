@@ -229,5 +229,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_DE.xml" />
+    <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_FI.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

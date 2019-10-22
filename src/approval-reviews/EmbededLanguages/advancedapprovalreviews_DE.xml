@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="German" id="de">
+    <reviewcomponent>
+      <command>
+        <label>Erweiterte Überprüfung</label>
+        <tooltip>Erweiterte Überprüfung umschalten</tooltip>
+        <labelenabled>Erweiterte Überprüfung deaktivieren</labelenabled>
+        <labelnotenabled>Erweiterte Überprüfung aktivieren</labelnotenabled>
+      </command>
+      <dialog>
+        <addcomment>Kommentar hinzufügen</addcomment>
+        <changepriority>Priorität ändern</changepriority>
+        <close>abbrechen</close>
+        <describe>Beschreiben Sie das Problem</describe>
+        <reviewedit>Überprüfung bearbeiten</reviewedit>
+        <save>Sichern</save>
+      </dialog>
+      <removepindialog>
+        <cancel>Abbrechen</cancel>
+        <description>Sind Sie sicher, dass Sie diesen Pin entfernen möchten?</description>
+        <ok>Ok</ok>
+        <title>Pin entfernen</title>
+      </removepindialog>
+      <panel>
+        <attachscreenshot>Screenshot anhängen</attachscreenshot>
+        <clicktoedit>Zum Bearbeiten anklicken</clicktoedit>
+        <collapse>Überprüfungspanel reduzieren</collapse>
+        <expand>Überprüfungspanel erweitern</expand>
+        <gobacktolist>Zurück zur Liste</gobacktolist>
+        <opendetails>Details öffnen</opendetails>
+        <removescreenshot>Screenshot entfernen</removescreenshot>
+        <resolved>Gelöst</resolved>
+        <reviewmode>Überprüfungsmodus</reviewmode>
+        <showscreenshot>Screenshot anzeigen</showscreenshot>
+        <showactive>Aktive anzeigen</showactive>
+        <showresolved>Gelöste anzeigen</showresolved>
+        <showunread>Ungelesene anzeigen</showunread>
+      </panel>
+      <screenshot>
+        <apply>Anwenden</apply>
+        <cancel>abbrechen</cancel>
+        <clear>Löschen</clear>
+        <cropandhighlight>Schneiden Sie den Bereich, den Sie kommentieren möchten, zu und markieren Sie ihn</cropandhighlight>
+      </screenshot>
+      <priority>
+        <important>Wichtig</important>
+        <normal>Normal</normal>
+        <trivial>Geringfügig</trivial>
+      </priority>
+    </reviewcomponent>
+  </language>
+</languages>

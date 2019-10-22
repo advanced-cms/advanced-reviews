@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="Finnish" id="fi">
+    <externalreviews>
+      <component>
+        <title>Ulkoiset tarkastuslinkit</title>
+        <description>Hallitse ulkoisia linkkejä</description>
+      </component>
+      <removedialog>
+        <cancel>Peru</cancel>
+        <description>Oletko varma että haluat poistaa linkin?</description>
+        <ok>Ok</ok>
+        <title>Poista linkki</title>
+      </removedialog>
+      <list>
+        <deletetitle>poista</deletetitle>
+        <emptylist>Tähän sisältöön ei ole ulkoisia linkkejä</emptylist>
+        <itemvalidto>Voimassa</itemvalidto>
+        <sharetitle>Jaa</sharetitle>
+        <viewlink>Katso</viewlink>
+        <editlink>Muokkaa</editlink>
+      </list>
+      <sharedialog>
+        <cancelbutton>Peru</cancelbutton>
+        <dialogtitle>Jaa linkki ulkoisen editorin kanssa</dialogtitle>
+        <emailmessagelabel>Sähköposti viesti</emailmessagelabel>
+        <emailsubjectlabel>Sähköpostin aihe</emailsubjectlabel>
+        <emailaddresslabel>Sähköpostiosoite</emailaddresslabel>
+        <messagehint>Teksti [#link#] tullaan korvaamaan linkkinä sisältöön.</messagehint>
+        <sendbutton>Lähetä</sendbutton>
+      </sharedialog>
+    </externalreviews>
+  </language>
+</languages>
