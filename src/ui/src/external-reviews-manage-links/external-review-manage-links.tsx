@@ -5,12 +5,12 @@ import { ContextMenu } from "../common/context-menu";
 import Confirmation from "../confirmation/confirmation";
 import { IconButton } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
-import List, { ListItemGraphic, ListItem, ListItemText } from "@material/react-list";
+import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
 import { IExternalReviewStore, ReviewLink } from "./external-review-links-store";
 import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
 
-import "@material/react-list/index.scss";
 import "./external-review-manage-links.scss";
+import "@episerver/ui-framework/dist/main.css";
 
 interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;

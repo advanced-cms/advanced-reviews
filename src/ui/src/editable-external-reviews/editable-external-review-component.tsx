@@ -9,6 +9,8 @@ import { createStores } from "../store/review-store";
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import ConfirmNameDialog from "./confirm-name-dialog";
 
+import "@episerver/ui-framework/dist/main.css";
+
 interface EditableExternalReviewProps {
     iframe: HTMLIFrameElement;
 }

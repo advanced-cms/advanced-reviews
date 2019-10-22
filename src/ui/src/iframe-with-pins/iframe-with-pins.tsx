@@ -6,8 +6,9 @@ import IframeOverlay from "../iframe-overlay/iframe-overlay";
 import PinCollection from "../pin-collection/pin-collection";
 import ReviewsSlidingPanel from "../reviews-sliding-panel/reviews-sliding-panel";
 import { Snackbar } from "@material/react-snackbar";
-import "@material/react-snackbar/index.scss";
 import PositionCalculator from "../position-calculator/position-calculator";
+
+import "@material/react-snackbar/index.scss";
 
 interface IframeState {
     newLocation: PinLocation;

@@ -7,14 +7,12 @@ import Confirmation from "../confirmation/confirmation";
 import { Checkbox, IconButton } from "@episerver/ui-framework";
 import { Chip } from "@material/react-chips";
 import Switch from "@material/react-switch";
-import List, { ListItem } from "@material/react-list";
+import { List, ListItem } from "@episerver/ui-framework";
 import { ReviewDetails } from "../details/review-details";
 import { IReactionDisposer, reaction } from "mobx";
 import PinNavigator from "../pin-navigator/pin-navigator";
 import Comment from "../comment/comment";
 
-import "@material/react-list/index.scss";
-import "@material/react-checkbox/index.scss";
 import "@material/react-switch/index.scss";
 import "@material/react-chips/index.scss";
 import "./reviews-sliding-panel.scss";

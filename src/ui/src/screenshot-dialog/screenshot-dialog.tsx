@@ -7,7 +7,6 @@ import { Dimensions } from "../store/review-store";
 
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
-import "@material/react-icon-button/index.scss";
 import "./screenshot-dialog.scss";
 
 import Dialog, { DialogContent, DialogTitle } from "@material/react-dialog";
