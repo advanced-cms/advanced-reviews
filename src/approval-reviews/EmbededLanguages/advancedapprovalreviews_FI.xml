@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="Finnish" id="fi">
+    <reviewcomponent>
+      <command>
+        <label>Laajennettu hyväksyntä</label>
+        <tooltip>Vaihda laajennettu hyväksyntä</tooltip>
+        <labelenabled>Laajennettu hyväksyntä pois päältä</labelenabled>
+        <labelnotenabled>Laajennettu hyväksyntä päälle</labelnotenabled>
+      </command>
+      <dialog>
+        <addcomment>Lisää kommentti</addcomment>
+        <changepriority>Muuta prioriteettia</changepriority>
+        <close>peruuta</close>
+        <describe>Kuvaile ongelma</describe>
+        <reviewedit>Työstä arviota</reviewedit>
+        <save>Tallenna</save>
+      </dialog>
+      <removepindialog>
+        <cancel>Peruuta</cancel>
+        <description>Haluatko varmasti poistaa tämän?</description>
+        <ok>Ok</ok>
+        <title>Poista</title>
+      </removepindialog>
+      <panel>
+        <attachscreenshot>Lisää kuvakaappaus</attachscreenshot>
+        <clicktoedit>Klikkaa editoidaksesi</clicktoedit>
+        <collapse>Sulje tarkastelupaneeli</collapse>
+        <expand>Laajenna tarkastelupaneeli</expand>
+        <gobacktolist>Takaisin listaan</gobacktolist>
+        <opendetails>Avaa yksityiskohdat</opendetails>
+        <removescreenshot>Poista ruutukaappaus</removescreenshot>
+        <resolved>Ratkaistu</resolved>
+        <reviewmode>Tarkastelutila</reviewmode>
+        <showscreenshot>Näytä kuvakaappaus</showscreenshot>
+        <showactive>Näytä aktiiviset</showactive>
+        <showresolved>Näytä ratkaistut</showresolved>
+        <showunread>Näytä lukemattomat</showunread>
+      </panel>
+      <screenshot>
+        <apply>Käytä</apply>
+        <cancel>peruuta</cancel>
+        <clear>Tyhjennä</clear>
+        <cropandhighlight>Rajaa ja korosta alue, jota haluat kommentoida</cropandhighlight>
+      </screenshot>
+      <priority>
+        <important>Tärkeää</important>
+        <normal>Normaali</normal>
+        <trivial>Helppo</trivial>
+      </priority>
+    </reviewcomponent>
+  </language>
+</languages>
+
+							 												

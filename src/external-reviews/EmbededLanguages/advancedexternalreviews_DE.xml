@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="German" id="de">
+    <externalreviews>
+      <component>
+        <title>Links zur externen Überprüfung</title>
+        <description>Verwalten der Liste der externen Überprüfungs-Links</description>
+      </component>
+      <removedialog>
+        <cancel>Abbrechen</cancel>
+        <description>Sind Sie sicher, dass Sie den Link entfernen möchten?</description>
+        <ok>Ok</ok>
+        <title>Link entfernen</title>
+      </removedialog>
+      <list>
+        <deletetitle>löschen</deletetitle>
+        <emptylist>Es gibt keine externen Links zu diesen Inhalten</emptylist>
+        <itemvalidto>Gültig für</itemvalidto>
+        <sharetitle>teilen</sharetitle>
+        <viewlink>Ansicht</viewlink>
+        <editlink>Bearbeiten</editlink>
+      </list>
+      <sharedialog>
+        <cancelbutton>Abbrechen</cancelbutton>
+        <dialogtitle>Link zum Inhalt mit einem externen Editor teilen</dialogtitle>
+        <emailmessagelabel>E-Mail Nachricht</emailmessagelabel>
+        <emailsubjectlabel>E-Mail Betreff</emailsubjectlabel>
+        <emailaddresslabel>E-Mail Adresse</emailaddresslabel>
+        <messagehint>Text [#link#] wird durch einen Link zum Inhalt ersetzt.</messagehint>
+        <sendbutton>Senden</sendbutton>
+      </sharedialog>
+    </externalreviews>
+  </language>
+</languages>
