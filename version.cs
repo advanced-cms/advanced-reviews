@@ -4,4 +4,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("advanced-cms")]
 [assembly: AssemblyProduct("advanced-reviews")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("0.3.1")]
+[assembly: AssemblyVersion("0.4.0")]
