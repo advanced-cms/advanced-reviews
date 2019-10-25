@@ -1,3 +1,5 @@
+@import "@episerver/ui-framework/dist/scss/_variables";
+
 .external-reviews-list {
     height: calc(100% - 70px);
     overflow-y: scroll;
@@ -16,12 +18,12 @@
         }
 
         .item-inactive {
-            color: #555;
+            color: $surface700;
             font-style: italic;
         }
 
         a {
-            color: #6200ee;
+            color: $mdc-theme-primary;
             cursor: pointer;
         }
 
@@ -37,7 +39,7 @@
 
 .empty-list {
     font-style: italic;
-    color: #555;
+    color: $surface700;
     height: calc(100% - 50px);
 
     > span {

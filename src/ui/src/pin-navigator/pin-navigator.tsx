@@ -5,7 +5,6 @@ import { IReviewComponentStore } from "../store/review-store";
 import { IconButton, TextButton } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
 
-import "@material/react-material-icon/index.scss";
 import "./pin-navigator.scss";
 
 interface PinNavigatorProps {

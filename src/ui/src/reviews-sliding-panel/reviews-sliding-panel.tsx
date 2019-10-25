@@ -13,8 +13,6 @@ import { IReactionDisposer, reaction } from "mobx";
 import PinNavigator from "../pin-navigator/pin-navigator";
 import Comment from "../comment/comment";
 
-import "@material/react-switch/index.scss";
-import "@material/react-chips/index.scss";
 import "./reviews-sliding-panel.scss";
 
 interface SlidingPanelProps {

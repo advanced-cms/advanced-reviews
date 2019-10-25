@@ -1,3 +1,5 @@
+@import "@episerver/ui-framework/dist/scss/_variables";
+
 .comment {
     &:after {
         content: "";
@@ -36,7 +38,7 @@
         .date {
             font-style: italic;
             font-size: 0.7rem;
-            color: #a0a0a0;
+            color: $surface800;
             float: left;
         }
 

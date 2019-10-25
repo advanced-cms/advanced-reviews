@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import TextField, { Input, HelperText } from "@material/react-text-field";
+import { Input, TextField } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
-
-import "@material/react-dialog/index.scss";
-import "@material/react-material-icon/index.scss";
-import "@material/react-text-field/index.scss";
-import "@material/react-floating-label/index.scss";
 
 import "./external-review-share-dialog.scss";
 
@@ -60,6 +55,14 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
         return emailReg.test(str);
     };
 
+    const textAreaProps = {
+        textarea: true
+    };
+
+    const isValidProps = {
+        isValid: isValidEmail
+    };
+
     return (
         <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onDialogClose}>
             <DialogTitle>{resources.sharedialog.dialogtitle}</DialogTitle>
@@ -67,19 +70,16 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
                 <div className="text-field-container">
                     <TextField
                         label={resources.sharedialog.emailaddresslabel}
-                        leadingIcon={<MaterialIcon icon="mail" />}
-                        style={{ width: 350 }}
-                        dense
+                        style={{ width: "100%" }}
                         autoFocus
                         required
                     >
-                        <Input value={email} onChange={onEmailTextChanged} isValid={isValidEmail} />
+                        <Input value={email} onChange={onEmailTextChanged} {...isValidProps} />
                     </TextField>
                 </div>
                 <div className="text-field-container">
                     <TextField
                         label={resources.sharedialog.emailsubjectlabel}
-                        dense
                         autoFocus
                         required
                         style={{ width: "100%" }}
@@ -93,9 +93,9 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
                 <div className="text-field-container">
                     <TextField
                         label={resources.sharedialog.emailmessagelabel}
-                        textarea
                         required
-                        helperText={<HelperText>{resources.sharedialog.messagehint}</HelperText>}
+                        style={{ width: "100%" }}
+                        {...textAreaProps}
                     >
                         <Input
                             rows={15}

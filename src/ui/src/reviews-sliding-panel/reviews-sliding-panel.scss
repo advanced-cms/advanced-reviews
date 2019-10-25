@@ -1,6 +1,9 @@
+@import "@episerver/ui-framework/dist/scss/_variables";
 @import "@material/switch/mixins";
+@import "@material/react-switch/index";
+@import "@material/react-chips/index";
 
-$border: 1px solid #c0c0c0;
+$border: 1px solid $surface500;
 
 .panel-container-settings {
     position: absolute;
@@ -47,19 +50,19 @@ $border: 1px solid #c0c0c0;
 
         .unread {
             .mdc-checkbox {
-                --mdc-theme-secondary: green;
+                --mdc-theme-secondary: #4caf50;
             }
         }
 
         .active {
             .mdc-checkbox {
-                --mdc-theme-secondary: red;
+                --mdc-theme-secondary: #f44336;
             }
         }
 
         .resolved {
             .mdc-checkbox {
-                --mdc-theme-secondary: gray;
+                --mdc-theme-secondary: #818181;
             }
         }
     }
@@ -77,31 +80,31 @@ $border: 1px solid #c0c0c0;
 
         .unread {
             .mdc-switch {
-                --mdc-theme-secondary: green;
+                --mdc-theme-secondary: #4caf50;
             }
 
             label {
-                color: green;
+                color: $success500;
             }
         }
 
         .active {
             .mdc-switch {
-                --mdc-theme-secondary: red;
+                --mdc-theme-secondary: #f44336;
             }
 
             label {
-                color: red;
+                color: $error500;
             }
         }
 
         .resolved {
             .mdc-switch {
-                --mdc-theme-secondary: gray;
+                --mdc-theme-secondary: #818181;
             }
 
             label {
-                color: gray;
+                color: $surface700;
             }
         }
     }
@@ -168,12 +171,12 @@ $border: 1px solid #c0c0c0;
     }
 
     .property-name-label {
-        background-color: #f7542b;
-        color: #fff;
+        background-color: $secondary700;
+        color: $surface50;
         margin-left: 8px;
 
         .mdc-chip__icon--leading {
-            color: #fff;
+            color: $surface50;
         }
 
         .mdc-chip__text {
