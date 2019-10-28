@@ -3,21 +3,16 @@ import classNames from "classnames";
 import { inject, observer } from "mobx-react";
 import { IReviewComponentStore, PinLocation, Priority } from "../store/review-store";
 import MaterialIcon from "@material/react-material-icon";
-import IconButton from "@material/react-icon-button";
 import Confirmation from "../confirmation/confirmation";
-import CheckBox from "@material/react-checkbox";
+import { Checkbox, IconButton } from "@episerver/ui-framework";
 import { Chip } from "@material/react-chips";
 import Switch from "@material/react-switch";
-import List, { ListItem } from "@material/react-list";
+import { List, ListItem } from "@episerver/ui-framework";
 import { ReviewDetails } from "../details/review-details";
 import { IReactionDisposer, reaction } from "mobx";
 import PinNavigator from "../pin-navigator/pin-navigator";
 import Comment from "../comment/comment";
 
-import "@material/react-list/index.scss";
-import "@material/react-checkbox/index.scss";
-import "@material/react-switch/index.scss";
-import "@material/react-chips/index.scss";
 import "./reviews-sliding-panel.scss";
 
 interface SlidingPanelProps {
@@ -31,24 +26,24 @@ const Legend = inject("resources")(
         return (
             <div className="type-filters">
                 <div className="filter" title={resources.panel.reviewmode}>
-                    <CheckBox checked={filter.reviewMode} onChange={() => (filter.reviewMode = !filter.reviewMode)} />
+                    <Checkbox checked={filter.reviewMode} onChange={() => (filter.reviewMode = !filter.reviewMode)} />
                 </div>
                 {filter.reviewMode && (
                     <>
                         <div className="filter unread" title={resources.panel.showunread}>
-                            <CheckBox
+                            <Checkbox
                                 checked={filter.showUnread}
                                 onChange={() => (filter.showUnread = !filter.showUnread)}
                             />
                         </div>
                         <div className="filter active" title={resources.panel.showactive}>
-                            <CheckBox
+                            <Checkbox
                                 checked={filter.showActive}
                                 onChange={() => (filter.showActive = !filter.showActive)}
                             />
                         </div>
                         <div className="filter resolved" title={resources.panel.showresolved}>
-                            <CheckBox
+                            <Checkbox
                                 checked={filter.showResolved}
                                 onChange={() => (filter.showResolved = !filter.showResolved)}
                             />
@@ -209,7 +204,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                         <div className="panel-container">
                             {editedPinLocation && (
                                 <div className="panel-header">
-                                    <CheckBox
+                                    <Checkbox
                                         nativeControlId="resolved"
                                         checked={this.props.reviewStore.editedPinLocation.isDone}
                                         onChange={this.resolveTask}

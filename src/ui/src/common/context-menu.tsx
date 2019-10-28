@@ -1,7 +1,7 @@
 import React from "react";
 import { DropDownMenu } from "./drop-down-menu";
 
-import List, { ListItem, ListItemGraphic, ListItemText } from "@material/react-list";
+import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
 
 interface MenuItem {

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@material/react-button";
+import { TextButton } from "@episerver/ui-framework";
 import { inject } from "mobx-react";
 
 interface DrawablePreviewProps {
@@ -116,9 +116,9 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
                     onMouseUp={this.handleMouseUp}
                 />
                 <div className="mdc-dialog__actions">
-                    <Button onClick={this.cancel}>{resources.screenshot.cancel}</Button>
-                    <Button onClick={this.clear}>{resources.screenshot.clear}</Button>
-                    <Button onClick={this.done}>{resources.screenshot.apply}</Button>
+                    <TextButton onClick={this.cancel}>{resources.screenshot.cancel}</TextButton>
+                    <TextButton onClick={this.clear}>{resources.screenshot.clear}</TextButton>
+                    <TextButton onClick={this.done}>{resources.screenshot.apply}</TextButton>
                 </div>
             </>
         );

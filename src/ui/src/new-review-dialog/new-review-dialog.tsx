@@ -7,10 +7,6 @@ import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "
 import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
 import LocationComment from "../location-comment/location-comment";
 
-import "@material/react-button/index.scss";
-import "@material/react-dialog/index.scss";
-import "@material/react-menu-surface/index.scss";
-import "@material/react-text-field/index.scss";
 import "./new-review-dialog.scss";
 
 interface NewReviewDialogProps {

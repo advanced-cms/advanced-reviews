@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 
 import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import TextField, { Input, HelperText } from "@material/react-text-field";
+import { Input, TextField } from "@episerver/ui-framework";
 
 import "@material/react-dialog/index.scss";
-import "@material/react-text-field/index.scss";
 
 interface ConfirmDialogProps {
     open: boolean;
@@ -24,17 +23,21 @@ const ConfirmDialog = ({ open, onClose, initialUserName }: ConfirmDialogProps) =
         onClose(userName);
     };
 
+    const inputProps = {
+        isValid: !!userName
+    };
+
     return (
         <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onDialogClose}>
             <DialogTitle>Confirm your name</DialogTitle>
             <DialogContent>
                 <p>Please enter your name. It will be used as an author of the comments.</p>
                 <div>
-                    <TextField label="Display name" dense autoFocus required style={{ width: "100%" }}>
+                    <TextField label="Display name" autoFocus required style={{ width: "100%" }}>
                         <Input
                             value={userName}
-                            onChange={e => setUserName(e.currentTarget.value)}
-                            isValid={!!userName}
+                            onChange={(e: React.FormEvent<any>) => setUserName(e.currentTarget.value)}
+                            {...inputProps}
                         />
                     </TextField>
                 </div>

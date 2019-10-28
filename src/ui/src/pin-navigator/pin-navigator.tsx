@@ -2,10 +2,9 @@ import React from "react";
 import { observer, inject } from "mobx-react";
 import { IReviewComponentStore } from "../store/review-store";
 
-import Button from "@material/react-button";
+import { IconButton, TextButton } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
 
-import "@material/react-material-icon/index.scss";
 import "./pin-navigator.scss";
 
 interface PinNavigatorProps {
@@ -57,30 +56,30 @@ export default class PinNavigator extends React.Component<PinNavigatorProps, any
             <div className="pin-navigator">
                 {reviewLocations.length > 1 && (
                     <>
-                        <Button
+                        <TextButton
                             className="next-prev-icon"
                             title={prevTitle}
                             aria-pressed="false"
                             disabled={!isPrevEnabled}
                         >
                             <MaterialIcon icon="chevron_left" onClick={() => this.showReview(-1)} />
-                        </Button>
+                        </TextButton>
                         <span className="pager">
                             {currentItemIndex + 1} / {reviewLocations.length}
                         </span>
-                        <Button
+                        <TextButton
                             className="next-prev-icon"
                             title={nextTitle}
                             onClick={() => this.showReview(1)}
                             disabled={!isNextEnabled}
                         >
                             <MaterialIcon icon="chevron_right" />
-                        </Button>
+                        </TextButton>
                     </>
                 )}
-                <Button className="next-prev-icon" title={res.panel.gobacktolist} aria-pressed="false">
+                <IconButton className="next-prev-icon" title={res.panel.gobacktolist} aria-pressed="false">
                     <MaterialIcon icon="list" onClick={() => (this.props.reviewStore.editedPinLocation = null)} />
-                </Button>
+                </IconButton>
             </div>
         );
     }

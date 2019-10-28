@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { inject } from "mobx-react";
-import TextField, { Input } from "@material/react-text-field";
-import IconButton from "@material/react-icon-button";
+import { Input, TextField } from "@episerver/ui-framework";
+import { IconButton } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
 import { DropDownMenu } from "../common/drop-down-menu";
 
@@ -26,13 +26,19 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
 
     const resources = props.resources!;
 
+    const textAreaProps = {
+        textarea: true
+    };
+
     return (
         <>
-            <TextField className="location-comment-field" label={`${resources.dialog.addcomment}...`} dense textarea>
+            <TextField className="location-comment-field" label={`${resources.dialog.addcomment}...`} {...textAreaProps}>
                 <Input
                     ref={(input: any) => setCommentInput(input)}
                     value={props.value}
-                    onChange={e => props.onChange(e.currentTarget.value, props.currentScreenshot)}
+                    onChange={(e: React.FormEvent<any>) =>
+                        props.onChange(e.currentTarget.value, props.currentScreenshot)
+                    }
                 />
             </TextField>
             {!props.currentScreenshot && (
@@ -47,7 +53,7 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
             {props.currentScreenshot && (
                 <div className="attach-screenshot">
                     <DropDownMenu icon="image" title={resources.panel.showscreenshot}>
-                        <img src={props.currentScreenshot} />
+                        <img src={props.currentScreenshot} alt="screenshot" />
                     </DropDownMenu>
                     <IconButton
                         onClick={() => props.onChange(props.value, null)}

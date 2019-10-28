@@ -15,8 +15,8 @@
     <iconUrl>https://raw.githubusercontent.com/advanced-cms/advanced-reviews/master/assets/logo.png</iconUrl>
     <projectUrl>https://github.com/advanced-cms/advanced-reviews</projectUrl>
     <dependencies>
-      <dependency id="EPiServer.CMS.Core" version="[11.11,12.0)" />
-      <dependency id="EPiServer.CMS.UI" version="[11.18,12.0)" />
+      <dependency id="EPiServer.CMS.Core" version="[11.12,12.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.22,12.0)" />
     </dependencies>
   </metadata>
   <files>

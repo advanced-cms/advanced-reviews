@@ -1,13 +1,11 @@
 import React from "react";
 import { computed } from "mobx";
-import Button from "@material/react-button";
+import { TextButton } from "@episerver/ui-framework";
 import html2canvas from "html2canvas";
 import DrawablePreview from "../drawable-preview/drawable-preview";
 import { Dimensions } from "../store/review-store";
 
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
-import "react-image-crop/lib/ReactCrop.scss";
-import "@material/react-icon-button/index.scss";
 import "./screenshot-dialog.scss";
 
 import Dialog, { DialogContent, DialogTitle } from "@material/react-dialog";
@@ -285,10 +283,10 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
                                     onComplete={this.onCropComplete}
                                 />
                                 <div className="mdc-dialog__actions">
-                                    <Button onClick={this.cancel}>cancel</Button>
-                                    <Button onClick={this.crop} disabled={!this.state.crop.width}>
+                                    <TextButton onClick={this.cancel}>cancel</TextButton>
+                                    <TextButton onClick={this.crop} disabled={!this.state.crop.width}>
                                         Crop
-                                    </Button>
+                                    </TextButton>
                                 </div>
                             </>
                         )}

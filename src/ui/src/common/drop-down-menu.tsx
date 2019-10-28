@@ -1,6 +1,6 @@
 import React from "react";
 
-import MenuSurface, { Corner } from "@material/react-menu-surface";
+import { Corner, MenuSurface } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
 
 import "./drop-down-menu.scss";
