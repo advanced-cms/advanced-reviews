@@ -12,6 +12,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId);
         ExternalReviewLink GetContentByToken(string token);
         ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId);
+        void UpdateLink(string token, DateTime validTo);
         void DeleteLink(string token);
     }
 
@@ -64,6 +65,20 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             };
             GetStore().Save(externalReviewLink);
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
+        }
+
+        public void UpdateLink(string token, DateTime validTo)
+        {
+            var store = GetStore();
+            var item = store.Items<ExternalReviewLinkDds>()
+                .FirstOrDefault(x => x.Token == token);
+            if (item == null)
+            {
+                return;
+            }
+
+            item.ValidTo = validTo;
+            store.Save(item);
         }
 
         public void DeleteLink(string token)

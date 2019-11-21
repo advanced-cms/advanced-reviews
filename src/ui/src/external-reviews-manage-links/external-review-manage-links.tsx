@@ -8,6 +8,7 @@ import MaterialIcon from "@material/react-material-icon";
 import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
 import { IExternalReviewStore, ReviewLink } from "./external-review-links-store";
 import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
+import LinkEditDialog from "./external-review-manage-links-edit";
 
 import "./external-review-manage-links.scss";
 import "@episerver/ui-framework/dist/main.css";
@@ -25,6 +26,7 @@ const ExternalReviewWidgetContent = observer(
     ({ store, resources, editableLinksEnabled }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
+        const [currentLinkToEdit, setLinkToEdit] = useState<ReviewLink>(null);
 
         const onDelete = (action: boolean) => {
             setLinkToDelete(null);
@@ -40,6 +42,14 @@ const ExternalReviewWidgetContent = observer(
                 return;
             }
             store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
+        };
+
+        const onEditClose = (validTo: Date) => {
+            setLinkToEdit(null);
+            if (validTo == null) {
+                return;
+            }
+            store.edit(currentLinkToEdit, validTo);
         };
 
         const options = [
@@ -95,6 +105,13 @@ const ExternalReviewWidgetContent = observer(
                                     />
                                     <IconButton
                                         className="item-action"
+                                        title={resources.list.editlink}
+                                        onClick={() => setLinkToEdit(item)}
+                                    >
+                                        <MaterialIcon icon="edit" />
+                                    </IconButton>
+                                    <IconButton
+                                        className="item-action"
                                         disabled={!item.isActive}
                                         title={resources.list.sharetitle}
                                         onClick={() => setLinkToShare(item)}
@@ -146,6 +163,8 @@ const ExternalReviewWidgetContent = observer(
                         resources={resources}
                     />
                 )}
+
+                {!!currentLinkToEdit && (<LinkEditDialog reviewLink={currentLinkToEdit} onClose={onEditClose} resources={resources} open={!!currentLinkToEdit} store={store} />)}
             </>
         );
     }

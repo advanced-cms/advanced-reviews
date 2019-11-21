@@ -64,6 +64,18 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return Rest(result);
         }
 
+        public ActionResult Edit(string id, DateTime validTo)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _externalReviewLinksRepository.UpdateLink(id, validTo);
+
+            return Rest(true);
+        }
+
         public async Task<ActionResult> ShareReviewLink(string id, string email, string subject, string message)
         {
             if (id == null)

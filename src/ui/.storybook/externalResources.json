@@ -16,7 +16,10 @@
     "itemvalidto": "Valid to",
     "sharetitle": "share",
     "viewlink": "View",
-    "editlink": "Edit"
+    "editlink": "Edit",
+    "editdialog": {
+      "title": "Edit link"
+    }
   },
   "sharedialog": {
     "cancelbutton": "Cancel",
@@ -26,5 +29,9 @@
     "emailaddresslabel": "Email address",
     "messagehint": "Text [#link#] will be replaced with link to content.",
     "sendbutton": "Send"
+  },
+  "shared": {
+    "ok": "Ok",
+    "cancel": "Cancel"
   }
 }

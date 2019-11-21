@@ -37,7 +37,9 @@ export interface IExternalReviewStore {
 
     delete(item: ReviewLink): void;
 
-    share(item: ReviewLink, email: string, subject: string, message: string);
+    share(item: ReviewLink, email: string, subject: string, message: string): void;
+
+    edit(item: ReviewLink, validTo: Date): void;
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
@@ -77,7 +79,13 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService.delete(item.token);
     }
 
-    share(item: ReviewLink, email: string, subject: string, message: string) {
+    share(item: ReviewLink, email: string, subject: string, message: string): void {
         this._externalReviewService.share(item.token, email, subject, message);
+    }
+
+    edit(item: ReviewLink, validTo: Date): void {
+        this._externalReviewService.edit(item.token, validTo).then(() => {
+            item.validTo = validTo;
+        });
     }
 }

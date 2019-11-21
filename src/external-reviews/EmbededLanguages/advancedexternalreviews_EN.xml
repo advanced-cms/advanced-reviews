@@ -20,6 +20,9 @@
         <sharetitle>share</sharetitle>
         <viewlink>View</viewlink>
         <editlink>Edit</editlink>
+        <editdialog>
+          <title>Edit link</title>
+        </editdialog>
       </list>
       <sharedialog>
         <cancelbutton>Cancel</cancelbutton>
@@ -30,6 +33,10 @@
         <messagehint>Text [#link#] will be replaced with link to content.</messagehint>
         <sendbutton>Send</sendbutton>
       </sharedialog>
+      <shared>
+        <ok>Ok</ok>
+        <cancel>Cancel</cancel>
+      </shared>
     </externalreviews>
   </language>
 </languages>
