@@ -14,15 +14,18 @@ namespace AdvancedExternalReviews
     public class PagePreviewPartialRouter : IPartialRouter<PageData, PageData>
     {
         private readonly IContentLoader _contentLoader;
+        private readonly ProjectContentResolver _projectContentResolver;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
 
         public PagePreviewPartialRouter(IContentLoader contentLoader,
-            IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions)
+            IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions,
+            ProjectContentResolver projectContentResolver)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
+            _projectContentResolver = projectContentResolver;
         }
 
         public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues, RequestContext requestContext)
@@ -51,12 +54,21 @@ namespace AdvancedExternalReviews
             {
                 return null;
             }
-            
+
+            var contentReference = externalReviewLink.ContentLink;
+
+            if (externalReviewLink.ProjectId.HasValue)
+            {
+                var contentContentLink = PreviewUrlResolver.IsGenerated(segmentContext.QueryString) ? content.ContentLink : contentReference;
+                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value);
+                ExternalReview.ProjectId = externalReviewLink.ProjectId;
+            }
+
             try
             {
-                var page = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
+                var page = _contentLoader.Get<IContent>(contentReference);
                 segmentContext.RemainingPath = nextSegment.Remaining;
-                ExternalReview.IsInExternalReviewContext = true;
+                ExternalReview.Token = token;
 
                 return page;
             }

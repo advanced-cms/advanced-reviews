@@ -17,6 +17,8 @@ interface ExternalReviewResources_Removedialog {
 }
 
 interface ExternalReviewResources_List {
+    /** Project ID */
+    projectid: string;
     /** delete */
     deletetitle: string;
     /** There are no external links for this content */
@@ -54,3 +56,4 @@ interface ExternalReviewResources {
     list: ExternalReviewResources_List;
     sharedialog: ExternalReviewResources_Sharedialog;
 }
+

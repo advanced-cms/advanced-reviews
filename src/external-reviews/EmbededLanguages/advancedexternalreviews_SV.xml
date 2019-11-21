@@ -13,6 +13,7 @@
         <title>Ta bort länk</title>
       </removedialog>
       <list>
+        <projectid>Projekt ID</projectid>
         <deletetitle>ta bort</deletetitle>
         <emptylist>Det finns inga externa granskningslänkar för det här innehĺllet</emptylist>
         <itemvalidto>Gäller till</itemvalidto>

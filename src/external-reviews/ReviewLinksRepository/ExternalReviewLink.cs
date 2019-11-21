@@ -7,6 +7,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     {
         public ContentReference ContentLink { get; set; }
         public bool IsEditable { get; set; }
+        public int? ProjectId { get; set; }
         public string Token { get; set; }
         public DateTime ValidTo { get; set; }
         public string LinkUrl { get; set; }

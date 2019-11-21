@@ -43,16 +43,13 @@ namespace AdvancedExternalReviews.EditReview
                 return null;
             }
 
-            // HttpContext.Current.Request.RequestContext.SetContextMode(ContextMode.Edit);
-
             try
             {
                 var page = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 segmentContext.ContextMode = ContextMode.Edit;
-                segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
-                ExternalReview.IsInExternalReviewContext = true;
+                ExternalReview.Token = token;
 
                 return page;
             }

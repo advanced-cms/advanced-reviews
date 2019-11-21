@@ -15,6 +15,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
 
         public bool IsEditable { get; set; }
 
+        public int? ProjectId { get; set; }
+
         [EPiServerDataIndex]
         public string Token { get; set; }
 

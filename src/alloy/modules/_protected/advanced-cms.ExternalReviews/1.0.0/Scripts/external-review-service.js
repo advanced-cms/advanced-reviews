@@ -4,6 +4,7 @@ define([
     "dojo/Stateful",
     "dojo/when",
     "epi/dependency",
+    "epi-cms/ApplicationSettings",
     "epi-cms/_ContentContextMixin"
 ], function (
     declare,
@@ -11,6 +12,7 @@ define([
     Stateful,
     when,
     dependency,
+    ApplicationSettings,
     _ContentContextMixin
 ) {
 
@@ -23,17 +25,23 @@ define([
         },
 
         add: function (isEditable) {
-            return this._handleContentAction(function (contentLink) {
-                return this.externalReviewStore.put({
-                    contentLink: contentLink,
+            return this._handleContentAction(function (id, type) {
+                var externalLink = {
                     isEditable: isEditable
-                });
+                };
+                if (type === "epi.cms.contentdata") {
+                    externalLink.contentLink = id;
+                } else {
+                    externalLink.contentLink = ApplicationSettings.startPage.toString();
+                }
+                return this.externalReviewStore.put(externalLink);
             }.bind(this));
         },
 
         load: function () {
-            return this._handleContentAction(function (contentLink) {
-                return this.externalReviewStore.get(contentLink);
+            return this._handleContentAction(function (id, type) {
+                var data = type === "epi.cms.project" ? {projectId: id} : {id: id};
+                return this.externalReviewStore.query(data);
             }.bind(this));
         },
 
@@ -47,14 +55,14 @@ define([
         },
 
         _handleContentAction: function (action) {
-            return when(this.getCurrentContent()).then(function (content) {
-                if (!content) {
+            return when(this.getCurrentContext()).then(function (context) {
+                if (!context) {
                     var def = new Deferred();
                     def.resolve(null);
                     return def.promise;
                 }
 
-                return action(content.contentLink);
+                return action(context.id, context.type);
             }.bind(this));
         }
     });

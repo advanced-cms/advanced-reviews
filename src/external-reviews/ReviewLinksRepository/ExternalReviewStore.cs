@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using EPiServer;
+using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Core;
 using EPiServer.Notification;
 using EPiServer.Notification.Internal;
@@ -23,23 +24,25 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly EmailNotificationProvider _emailNotificationProvider;
         private readonly ExternalReviewOptions _externalReviewOptions;
+        private readonly CurrentProject _currentProject;
 
         public ExternalReviewStore(IContentLoader contentLoader, NotificationOptions notificationOptions,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             EmailNotificationProvider emailNotificationProvider,
-            ExternalReviewOptions externalReviewOptions)
+            ExternalReviewOptions externalReviewOptions, CurrentProject currentProject)
         {
             _contentLoader = contentLoader;
             _notificationOptions = notificationOptions;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _emailNotificationProvider = emailNotificationProvider;
             _externalReviewOptions = externalReviewOptions;
+            _currentProject = currentProject;
         }
 
         [HttpGet]
-        public ActionResult Get(ContentReference id)
+        public ActionResult Get(ContentReference id, int? projectId)
         {
-            return Rest(_externalReviewLinksRepository.GetLinksForContent(id));
+            return Rest(_externalReviewLinksRepository.GetLinksForContent(id, projectId));
         }
 
         [HttpPost]
@@ -57,7 +60,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             }
 
             var validTo = externalLink.IsEditable ? _externalReviewOptions.EditLinkValidTo: _externalReviewOptions.ViewLinkValidTo;
-            var result = _externalReviewLinksRepository.AddLink(externalLink.ContentLink, externalLink.IsEditable, validTo);
+            var result = _externalReviewLinksRepository.AddLink(externalLink.ContentLink, externalLink.IsEditable, validTo, _currentProject.ProjectId);
             return Rest(result);
         }
 
@@ -78,7 +81,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             {
                 return new HttpNotFoundResult("Token not found");
             }
-            
+
             if (!_contentLoader.TryGet(externalReviewLink.ContentLink, out IContent content))
             {
                 return new HttpNotFoundResult("Content not found");

@@ -5,15 +5,17 @@ export class ReviewLink {
     @observable linkUrl: string;
     @observable validTo: Date;
     @observable isEditable: boolean;
+    @observable projectId: number;
 
     @computed get isActive(): boolean {
         return this.validTo > new Date();
     }
 
-    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean) {
+    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number) {
         this.token = token;
         this.linkUrl = linkUrl;
         this.isEditable = isEditable;
+        this.projectId = projectId;
         try {
             this.validTo = new Date(validToStr);
         } catch (error) {
@@ -55,14 +57,14 @@ export class ExternalReviewStore implements IExternalReviewStore {
 
     addLink(isEditable: boolean): void {
         this._externalReviewService.add(isEditable).then(item => {
-            this.links.push(new ReviewLink(item.token, item.linkUrl, item.validTo, item.isEditable));
+            this.links.push(new ReviewLink(item.token, item.linkUrl, item.validTo, item.isEditable, item.projectId));
         });
     }
 
     load() {
         this.links = [];
         this._externalReviewService.load().then(items => {
-            this.links = items.map(x => new ReviewLink(x.token, x.linkUrl, x.validTo, x.isEditable));
+            this.links = items.map(x => new ReviewLink(x.token, x.linkUrl, x.validTo, x.isEditable, x.projectId));
         });
     }
 

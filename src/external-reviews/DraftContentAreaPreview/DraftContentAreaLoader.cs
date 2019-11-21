@@ -1,4 +1,5 @@
-﻿using EPiServer;
+﻿using AdvancedExternalReviews.ReviewLinksRepository;
+using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Globalization;
@@ -16,15 +17,17 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
         private readonly IContentLoader _contentLoader;
         private readonly LanguageResolver _languageResolver;
         private readonly IContentVersionRepository _contentVersionRepository;
+        private readonly ProjectContentResolver _projectContentResolver;
 
-        public DraftContentAreaLoader(IContentAreaLoader defaultContentAreaLoader, IContentLoader contentLoader, LanguageResolver languageResolver,
-            IContentVersionRepository contentVersionRepository
-        )
+        public DraftContentAreaLoader(IContentAreaLoader defaultContentAreaLoader, IContentLoader contentLoader,
+            LanguageResolver languageResolver,
+            IContentVersionRepository contentVersionRepository, ProjectContentResolver projectContentResolver)
         {
             _defaultContentAreaLoader = defaultContentAreaLoader;
             _contentLoader = contentLoader;
             _languageResolver = languageResolver;
             _contentVersionRepository = contentVersionRepository;
+            _projectContentResolver = projectContentResolver;
         }
 
         public IContent Get(ContentAreaItem contentAreaItem)
@@ -34,12 +37,23 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 return _defaultContentAreaLoader.Get(contentAreaItem);
             }
 
-            // load common draft instead of published version
-            var commonDraft = _contentVersionRepository.LoadCommonDraft(contentAreaItem.ContentLink,
-                _languageResolver.GetPreferredCulture().Name);
-            if (commonDraft != null)
+            ContentReference referenceToLoad;
+            if (ExternalReview.ProjectId.HasValue)
             {
-                var content = _contentLoader.Get<IContent>(commonDraft.ContentLink);
+                // load version from project
+                referenceToLoad = _projectContentResolver.GetProjectReference(contentAreaItem.ContentLink,
+                    ExternalReview.ProjectId.Value);
+            }
+            else
+            {
+                // load common draft instead of published version
+                referenceToLoad = _contentVersionRepository.LoadCommonDraft(contentAreaItem.ContentLink,
+                    _languageResolver.GetPreferredCulture().Name).ContentLink;
+            }
+
+            if (referenceToLoad != null)
+            {
+                var content = _contentLoader.Get<IContent>(referenceToLoad);
                 if (content.IsPublished())
                 {
                     // for published version return the original method result
@@ -47,7 +61,7 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                     return defaultContent;
                 }
 
-                contentAreaItem.ContentLink = commonDraft.ContentLink;
+                contentAreaItem.ContentLink = referenceToLoad;
 
                 return content;
             }

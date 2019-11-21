@@ -79,6 +79,7 @@ const ExternalReviewWidgetContent = observer(
                             );
 
                             const icon = <MaterialIcon icon={item.isEditable ? "rate_review" : "pageview"} />;
+                            const projectInfo = item.projectId ? resources.list.projectid + ": " + item.projectId + ", " : "";
 
                             return (
                                 <ListItem key={item.token} className="list-item">
@@ -86,6 +87,7 @@ const ExternalReviewWidgetContent = observer(
                                     <ListItemText
                                         primaryText={link}
                                         secondaryText={
+                                            projectInfo +
                                             resources.list.itemvalidto +
                                             ": " +
                                             format(item.validTo, "MMM Do YYYY HH:mm")

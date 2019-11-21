@@ -83,7 +83,7 @@ define([
 
         setReviewContext: function () {
             when(editorDisplayLanguageResolver.resolve()).then(function (language) {
-                topic.publish("toggle:reviews", true, language);
+                topic.publish("reviews:initialize", true, language);
             });
         }
     });
