@@ -2,7 +2,7 @@ import { Dimensions, PinPositioningDetails } from "../store/review-store";
 
 export default class PositionCalculator {
     private readonly _documentSize: Dimensions;
-    private _document: Document;
+    private readonly _document: Document;
 
     constructor(documentSize: Dimensions, document?: Document) {
         this._documentSize = documentSize;
@@ -41,7 +41,6 @@ export default class PositionCalculator {
             }
         }
 
-        //TODO: rescale in a smart way? return this.rescale(location);
-        return location.documentRelativePosition;
+        return this.rescale(location);
     }
 }

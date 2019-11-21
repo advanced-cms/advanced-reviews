@@ -17,7 +17,7 @@
         "build-storybook": "build-storybook",
         "generate-resource-definitions": "node ./tools/resourceGenerator.js",
         "generate-resource-definitions-debug": "node --nolazy --inspect-brk=9229 ./tools/resourceGenerator.js",
-        "test": "jest --watch"
+        "test": "jest --watchAll"
     },
     "author": "advanced-cms",
     "license": "MIT",

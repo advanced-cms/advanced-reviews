@@ -33,19 +33,32 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
     }
 
     private getIframeDimensions() {
-        return { x: this.props.iframe.offsetWidth, y: this.props.iframe.offsetHeight };
+        const iframeDocumentBody = this.props.iframe.contentDocument.body;
+
+        return { x: iframeDocumentBody.offsetWidth, y: iframeDocumentBody.offsetHeight };
     }
 
     private updateDimensions() {
         this.setState({ documentSize: this.getIframeDimensions() });
     }
 
-    componentDidMount() {
+    private loadIframe() {
         this.props.iframe.contentWindow.addEventListener("resize", this.updateDimensions.bind(this));
+        this.props.iframe.contentWindow.addEventListener("beforeunload", this.unloadIframe.bind(this));
+        this.updateDimensions();
+    }
+
+    private unloadIframe() {
+        this.props.iframe.contentWindow.removeEventListener("resize", this.updateDimensions.bind(this));
+        this.props.iframe.contentWindow.removeEventListener("beforeunload", this.unloadIframe.bind(this));
+    }
+
+    componentDidMount() {
+        this.props.iframe.addEventListener("load", this.loadIframe.bind(this));
     }
 
     componentWillUnmount() {
-        this.props.iframe.contentWindow.removeEventListener("resize", this.updateDimensions.bind(this));
+        this.props.iframe.removeEventListener("load", this.loadIframe.bind(this));
     }
 
     onCloseDialog(action: string, state: NewPinDto): void {
@@ -87,7 +100,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
             this.props.reviewStore.reviewLocations.length === 0 && localStorage.getItem("reviewIntro") !== "false";
 
         const positionCalculator = new PositionCalculator(
-            { x: this.props.iframe.offsetWidth, y: this.props.iframe.offsetHeight },
+            this.state.documentSize,
             this.props.iframe.contentDocument
         );
 
