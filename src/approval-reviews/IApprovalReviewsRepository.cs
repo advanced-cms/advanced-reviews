@@ -37,6 +37,11 @@ namespace AdvancedApprovalReviews
         IEnumerable<ApprovalReview> LoadAll();
 
         void Delete(ContentReference contentLink);
+
+        /// <summary>
+        /// Triggered before reviewLocation is saved to repository
+        /// </summary>
+        event EventHandler<BeforeUpdateEventArgs> OnBeforeUpdate;
     }
 
     public class ReviewLocation

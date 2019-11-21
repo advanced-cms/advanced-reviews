@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
@@ -38,6 +39,8 @@ namespace AdvancedExternalReviews.EditReview
             _serializerFactory = serializerFactory;
             _urlResolver = urlResolver;
             _propertyResolver = propertyResolver;
+
+            approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
         }
 
         [ConvertEditLinksFilter]
@@ -109,16 +112,58 @@ namespace AdvancedExternalReviews.EditReview
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            //TODO: verify number of items added with token. There should be max size
+            if (!ValidateReviewLocation(reviewLocation))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             //TODO: security issue - we post whole item and external reviewer can modify this
 
             var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
+            if (location == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             return new RestResult
             {
                 Data = location
             };
+        }
+
+        private bool ValidateReviewLocation(ReviewLocation reviewLocation)
+        {
+            bool ValidateComment(CommentDto comment)
+            {
+                return comment.Text.Length <= _externalReviewOptions.Restrictions.MaxCommentLength;
+            }
+
+            var serializer = _serializerFactory.GetSerializer(KnownContentTypes.Json);
+            var reviewLocationDto = serializer.Deserialize<ReviewLocationDto>(reviewLocation.Data);
+            if (reviewLocationDto == null)
+            {
+                return false;
+            }
+
+            if (!ValidateComment(reviewLocationDto.FirstComment))
+            {
+                return false;
+            }
+
+            if (reviewLocationDto.Comments.Count() > _externalReviewOptions.Restrictions.MaxCommentsForReviewLocation)
+            {
+                return false;
+            }
+
+            foreach (var comment in reviewLocationDto.Comments)
+            {
+                if (!ValidateComment(comment))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static string GetJsScriptPath()
@@ -144,6 +189,30 @@ namespace AdvancedExternalReviews.EditReview
 
             return "";
         }
+
+        private void ApprovalReviewsRepository_OnBeforeUpdate(object sender, BeforeUpdateEventArgs e)
+        {
+            if (e.IsNew == false)
+            {
+                return;
+            }
+
+            if (e.ReviewLocations.Count() > _externalReviewOptions.Restrictions.MaxReviewLocationsForContent)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private class ReviewLocationDto
+        {
+            public CommentDto FirstComment { get; set; }
+            public IEnumerable<CommentDto> Comments { get; set; }
+        }
+
+        private class CommentDto
+        {
+            public string Text { get; set; }
+        }
     }
 
     public class ContentPreviewModel
@@ -162,3 +231,5 @@ namespace AdvancedExternalReviews.EditReview
         public string Metadata { get; set; }
     }
 }
+
+//TODO: pass restrictions to client?
