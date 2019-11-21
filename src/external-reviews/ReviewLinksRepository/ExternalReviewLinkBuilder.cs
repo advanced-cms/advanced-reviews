@@ -1,3 +1,5 @@
+using EPiServer;
+using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
@@ -8,20 +10,34 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     public class ExternalReviewLinkBuilder
     {
         private readonly UrlResolver _urlResolver;
+        private readonly IContentLoader _contentLoader;
         private readonly ExternalReviewOptions _options;
 
-        public ExternalReviewLinkBuilder(UrlResolver urlResolver, ExternalReviewOptions options)
+        public ExternalReviewLinkBuilder(UrlResolver urlResolver, ExternalReviewOptions options, IContentLoader contentLoader)
         {
             _urlResolver = urlResolver;
             _options = options;
+            _contentLoader = contentLoader;
         }
 
         public ExternalReviewLink FromExternalReview(ExternalReviewLinkDds externalReviewLinkDds)
         {
-            var startPageUrl = _urlResolver.GetUrl(ContentReference.StartPage);
+            ContentReference contentReference = ContentReference.StartPage;
+            if (externalReviewLinkDds.ContentLink != null)
+            {
+                // if the page has been published before we can generate a link like /alloy-plan/${_options.ContentPreviewUrl}
+                // however if the page has never been published then we have to "proxy" it through the StartPage so that the
+                // AuthorizationFilter does not block it
+                var content = _contentLoader.Get<IContent>(externalReviewLinkDds.ContentLink.ToReferenceWithoutVersion());
+                contentReference = content.IsPublished()
+                    ? externalReviewLinkDds.ContentLink
+                    : ContentReference.StartPage;
+            }
+
+            var url = _urlResolver.GetUrl(contentReference);
             // the preview url has to be language specific as it's handled entirely by the EPiServer partial router
             // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
-            var previewUrl = startPageUrl + _options.ContentPreviewUrl;
+            var previewUrl = url + _options.ContentPreviewUrl;
 
             return new ExternalReviewLink
             {
