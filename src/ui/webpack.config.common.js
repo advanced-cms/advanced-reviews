@@ -1,6 +1,5 @@
 const config = {
     resolve: {
-        // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: [".ts", ".tsx", ".js"]
     },
     module: {
@@ -17,35 +16,14 @@ const config = {
                 }
             },
             {
-                test: /\.scss$/,
+                test: /\.(sc|c)ss$/,
                 use: [
-                    {
-                        loader: "style-loader"
-                    },
-                    {
-                        loader: "css-loader"
-                    },
+                    "style-loader",
+                    "css-loader",
                     {
                         loader: "sass-loader",
                         options: {
                             includePaths: ["node_modules"]
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: "style-loader"
-                    },
-                    {
-                        loader: "css-loader",
-                        options: {
-                            modules: true,
-                            importLoaders: 1,
-                            localIdentName: "[name]_[local]_[hash:base64]",
-                            sourceMap: true
                         }
                     }
                 ]
