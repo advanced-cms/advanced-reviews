@@ -32,6 +32,12 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
 
         public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId)
         {
+            if (!projectId.HasValue)
+            {
+                // when project is null, then set it to -1
+                // to make sure that it won't return all links with no projects set
+                projectId = -1;
+            }
             return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink || x.ProjectId == projectId).ToList().Select(
                 _externalReviewLinkBuilder.FromExternalReview);
         }
