@@ -17,13 +17,14 @@ interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
     resources: ExternalReviewResources;
     editableLinksEnabled: boolean;
+    pinCodeSecurityEnabled: boolean;
 }
 
 /**
  * Component used to render list of external review links
  */
 const ExternalReviewWidgetContent = observer(
-    ({ store, resources, editableLinksEnabled }: ExternalReviewWidgetContentProps) => {
+    ({ store, resources, editableLinksEnabled, pinCodeSecurityEnabled }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
         const [currentLinkToEdit, setLinkToEdit] = useState<ReviewLink>(null);
@@ -44,12 +45,12 @@ const ExternalReviewWidgetContent = observer(
             store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
         };
 
-        const onEditClose = (validTo: Date) => {
+        const onEditClose = (validTo: Date, pinCode: string) => {
             setLinkToEdit(null);
             if (validTo == null) {
                 return;
             }
-            store.edit(currentLinkToEdit, validTo);
+            store.edit(currentLinkToEdit, validTo, pinCode);
         };
 
         const options = [
@@ -163,8 +164,15 @@ const ExternalReviewWidgetContent = observer(
                         resources={resources}
                     />
                 )}
-
-                {!!currentLinkToEdit && (<LinkEditDialog reviewLink={currentLinkToEdit} onClose={onEditClose} resources={resources} open={!!currentLinkToEdit} store={store} />)}
+                {!!currentLinkToEdit && (
+                    <LinkEditDialog
+                        reviewLink={currentLinkToEdit}
+                        onClose={onEditClose}
+                        resources={resources}
+                        open={!!currentLinkToEdit}
+                        pinCodeSecurityEnabled={pinCodeSecurityEnabled}
+                    />
+                )}
             </>
         );
     }

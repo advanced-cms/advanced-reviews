@@ -18,7 +18,8 @@
     "viewlink": "View",
     "editlink": "Edit",
     "editdialog": {
-      "title": "Edit link"
+      "title": "Edit link",
+      "pincode": "PIN"
     }
   },
   "sharedialog": {

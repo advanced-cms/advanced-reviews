@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Routing;
+using AdvancedExternalReviews.PinCodeSecurity;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
@@ -30,7 +31,7 @@ namespace AdvancedExternalReviews
 
         public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues, RequestContext requestContext)
         {
-            return null;
+            return new PartialRouteData();
         }
 
         public object RoutePartial(PageData content, SegmentContext segmentContext)
@@ -67,6 +68,13 @@ namespace AdvancedExternalReviews
             try
             {
                 var page = _contentLoader.Get<IContent>(contentReference);
+
+                // PIN code security check, if user is not authenticated, then redirect to login page
+                if (!_externalReviewOptions.CheckAuthenticated(externalReviewLink))
+                {
+                    _externalReviewOptions.RedirectToLoginPage(externalReviewLink);
+                    return null;
+                }
                 segmentContext.RemainingPath = nextSegment.Remaining;
                 ExternalReview.Token = token;
 

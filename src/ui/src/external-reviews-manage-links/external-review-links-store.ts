@@ -5,17 +5,19 @@ export class ReviewLink {
     @observable linkUrl: string;
     @observable validTo: Date;
     @observable isEditable: boolean;
+    @observable pinCode: string;
     @observable projectId: number;
 
     @computed get isActive(): boolean {
         return this.validTo > new Date();
     }
 
-    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number) {
+    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode: string = '') {
         this.token = token;
         this.linkUrl = linkUrl;
         this.isEditable = isEditable;
         this.projectId = projectId;
+        this.pinCode = pinCode;
         try {
             this.validTo = new Date(validToStr);
         } catch (error) {
@@ -39,7 +41,7 @@ export interface IExternalReviewStore {
 
     share(item: ReviewLink, email: string, subject: string, message: string): void;
 
-    edit(item: ReviewLink, validTo: Date): void;
+    edit(item: ReviewLink, validTo: Date, pinCode: string): void;
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
@@ -66,7 +68,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
     load() {
         this.links = [];
         this._externalReviewService.load().then(items => {
-            this.links = items.map(x => new ReviewLink(x.token, x.linkUrl, x.validTo, x.isEditable, x.projectId));
+            this.links = items.map(x => new ReviewLink(x.token, x.linkUrl, x.validTo, x.isEditable, x.projectId, x.pinCode));
         });
     }
 
@@ -83,9 +85,10 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService.share(item.token, email, subject, message);
     }
 
-    edit(item: ReviewLink, validTo: Date): void {
-        this._externalReviewService.edit(item.token, validTo).then(() => {
+    edit(item: ReviewLink, validTo: Date, pinCode: string): void {
+        this._externalReviewService.edit(item.token, validTo, pinCode).then(() => {
             item.validTo = validTo;
+            item.pinCode = pinCode;
         });
     }
 }

@@ -22,6 +22,7 @@
         <editlink>Edit</editlink>
         <editdialog>
           <title>Edit link</title>
+          <pincode>PIN</pincode>
         </editdialog>
       </list>
       <sharedialog>

@@ -25,7 +25,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store.initialEditMailMessage = this.params.initialEditMailMessage;
 
         ReactDOM.render(
-            <ManageLinks store={this.store} editableLinksEnabled={this.params.editableLinksEnabled} resources={res} />,
+            <ManageLinks store={this.store} editableLinksEnabled={this.params.editableLinksEnabled} pinCodeSecurityEnabled={this.params.pinCodeSecurityEnabled} resources={res} />,
             this.domNode
         );
     },

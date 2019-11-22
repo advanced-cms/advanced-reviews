@@ -19,6 +19,8 @@ interface ExternalReviewResources_Removedialog {
 interface ExternalReviewResources_List_Editdialog {
     /** Edit link */
     title: string;
+    /** PIN */
+    pincode: string;
 }
 
 interface ExternalReviewResources_List {

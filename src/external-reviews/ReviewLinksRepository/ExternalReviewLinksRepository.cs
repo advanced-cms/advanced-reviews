@@ -12,7 +12,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId);
         ExternalReviewLink GetContentByToken(string token);
         ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId);
-        void UpdateLink(string token, DateTime validTo);
+        void UpdateLink(string token, DateTime validTo, string pinCode);
         void DeleteLink(string token);
     }
 
@@ -67,7 +67,13 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
         }
 
-        public void UpdateLink(string token, DateTime validTo)
+        /// <summary>
+        /// Udate link
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="validTo"></param>
+        /// <param name="pinCode">New PIN code. If null then PIN is not updated</param>
+        public void UpdateLink(string token, DateTime validTo, string pinCode)
         {
             var store = GetStore();
             var item = store.Items<ExternalReviewLinkDds>()
@@ -78,6 +84,11 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             }
 
             item.ValidTo = validTo;
+            if (pinCode != null)
+            {
+                item.PinCode = pinCode;
+            }
+
             store.Save(item);
         }
 

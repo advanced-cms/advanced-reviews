@@ -46,7 +46,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 ProjectId = externalReviewLinkDds.ProjectId,
                 Token = externalReviewLinkDds.Token,
                 ValidTo = externalReviewLinkDds.ValidTo,
-                LinkUrl = (externalReviewLinkDds.IsEditable ? "/" + _options.ReviewsUrl: previewUrl) + "/" + externalReviewLinkDds.Token //TODO: externalReviews URL
+                LinkUrl = (externalReviewLinkDds.IsEditable ? "/" + _options.ReviewsUrl: previewUrl) + "/" + externalReviewLinkDds.Token, //TODO: externalReviews URL
+                PinCode = externalReviewLinkDds.PinCode
             };
         }
     }
