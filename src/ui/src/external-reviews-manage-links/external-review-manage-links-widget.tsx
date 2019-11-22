@@ -30,6 +30,10 @@ export default declare([WidgetBase, _ContentContextMixin], {
         );
     },
     contextChanged: function() {
+        if (!this._currentContext || (this._currentContext.type !== "epi.cms.project" && this._currentContext.type !== "epi.cms.contentdata")) {
+            return;
+        }
+
         this.store.load();
     },
     destroy: function() {

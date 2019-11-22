@@ -92,3 +92,4 @@ interface ReviewResources {
     screenshot: ReviewResources_Screenshot;
     priority: ReviewResources_Priority;
 }
+

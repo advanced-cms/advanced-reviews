@@ -4,19 +4,19 @@ namespace AdvancedExternalReviews
 {
     public static class ExternalReview
     {
-        public static bool IsInExternalReviewContext
+        public static string Token
         {
-            //TODO: check token
-            get
-            {
-                if (HttpContext.Current == null)
-                {
-                    return false;
-                }
-                var isInExternalReviewMode = HttpContext.Current.Items["IsInExternalRviewMode"];
-                return (isInExternalReviewMode is bool b) && b;
-            }
-            set => HttpContext.Current.Items["IsInExternalRviewMode"] = value;
+            get => HttpContext.Current?.Items["Token"] as string;
+            set => HttpContext.Current.Items["Token"] = value;
         }
+
+        public static int? ProjectId
+        {
+            get => (int?) HttpContext.Current?.Items["ProjectId"];
+            set => HttpContext.Current.Items["ProjectId"] = value;
+        }
+
+        public static bool IsInExternalReviewContext => !string.IsNullOrWhiteSpace(Token);
+        public static bool IsInProjectReviewContext => ProjectId.HasValue;
     }
 }

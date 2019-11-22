@@ -9,9 +9,9 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
 {
     public interface IExternalReviewLinksRepository
     {
-        IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink);
+        IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId);
         ExternalReviewLink GetContentByToken(string token);
-        ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo);
+        ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId);
         void DeleteLink(string token);
     }
 
@@ -29,9 +29,9 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             _externalReviewOptions = externalReviewOptions;
         }
 
-        public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink)
+        public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId)
         {
-            return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink).ToList().Select(
+            return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink || x.ProjectId == projectId).ToList().Select(
                 _externalReviewLinkBuilder.FromExternalReview);
         }
 
@@ -52,12 +52,13 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
         }
 
-        public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo)
+        public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId)
         {
             var externalReviewLink = new ExternalReviewLinkDds
             {
                 ContentLink = contentLink,
                 IsEditable = isEditable,
+                ProjectId = projectId,
                 Token = Guid.NewGuid().ToString(),
                 ValidTo = DateTime.Now.Add(validTo)
             };

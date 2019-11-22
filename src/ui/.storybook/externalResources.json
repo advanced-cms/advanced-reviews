@@ -10,6 +10,7 @@
     "title": "Remove link"
   },
   "list": {
+    "projectid": "Project ID",
     "deletetitle": "delete",
     "emptylist": "There are no external links for this content",
     "itemvalidto": "Valid to",

@@ -2,6 +2,7 @@
 using AdvancedExternalReviews.EditReview;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
+using EPiServer.DataAbstraction;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Web.Routing;
@@ -29,7 +30,8 @@ namespace AdvancedExternalReviews
             (
                 locator.GetInstance<IContentLoader>(),
                 locator.GetInstance<IExternalReviewLinksRepository>(),
-                locator.GetInstance<ExternalReviewOptions>()
+                locator.GetInstance<ExternalReviewOptions>(),
+                locator.GetInstance<ProjectContentResolver>()
             );
             RouteTable.Routes.RegisterPartialRouter(previewRouter);
 
