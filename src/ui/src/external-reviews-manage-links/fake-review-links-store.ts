@@ -27,7 +27,7 @@ export default class FakeReviewLinksStore extends ExternalReviewStore {
             new ReviewLink("774904d9720b45e9b32bc997f74fa041", "http://www.google.com", getDate(-1).toString(), false),
             new ReviewLink("d947b5c0d14c4a5a8c6ab0c224f8817e", "http://www.google.com", getDate(2).toString(), true),
             new ReviewLink("8e1b68777417425284e3ea2c4b9aec7e", "http://www.google.com", getDate(4).toString(), true),
-            new ReviewLink("c72b45508ace4e518a7ba9ffe0cb0d12", "http://www.google.com", getDate(10).toString(), false, "1234"),
+            new ReviewLink("c72b45508ace4e518a7ba9ffe0cb0d12", "http://www.google.com", getDate(10).toString(), false, null, "1234"),
             new ReviewLink("c72b45508ace4e518a7ba9ffe0cb0d12", "http://www.google.com", getDate(10).toString(), false),
             new ReviewLink("bb08a4c991574ac499e90937a5c036f5", "http://www.google.com", getDate(1).toString(), true)
         ];

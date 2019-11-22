@@ -12,7 +12,7 @@ export class ReviewLink {
         return this.validTo > new Date();
     }
 
-    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode: string = '') {
+    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode?: string) {
         this.token = token;
         this.linkUrl = linkUrl;
         this.isEditable = isEditable;
