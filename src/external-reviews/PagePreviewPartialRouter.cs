@@ -16,17 +16,20 @@ namespace AdvancedExternalReviews
     {
         private readonly IContentLoader _contentLoader;
         private readonly ProjectContentResolver _projectContentResolver;
+        private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
 
         public PagePreviewPartialRouter(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions,
-            ProjectContentResolver projectContentResolver)
+            ProjectContentResolver projectContentResolver,
+            IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
             _projectContentResolver = projectContentResolver;
+            _externalLinkPinCodeSecurityHandler = externalLinkPinCodeSecurityHandler;
         }
 
         public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues, RequestContext requestContext)
@@ -70,9 +73,9 @@ namespace AdvancedExternalReviews
                 var page = _contentLoader.Get<IContent>(contentReference);
 
                 // PIN code security check, if user is not authenticated, then redirect to login page
-                if (!_externalReviewOptions.CheckAuthenticated(externalReviewLink))
+                if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
                 {
-                    _externalReviewOptions.RedirectToLoginPage(externalReviewLink);
+                    _externalLinkPinCodeSecurityHandler.RedirectToLoginPage(externalReviewLink);
                     return null;
                 }
                 segmentContext.RemainingPath = nextSegment.Remaining;

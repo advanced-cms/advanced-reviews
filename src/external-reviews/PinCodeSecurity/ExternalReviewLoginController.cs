@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer.Framework.Modules.Internal;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 
 namespace AdvancedExternalReviews.PinCodeSecurity
 {
@@ -16,19 +10,26 @@ namespace AdvancedExternalReviews.PinCodeSecurity
     public class ExternalReviewLoginController : Controller
     {
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
-        private readonly ExternalReviewOptions _externalReviewOptions;
+        private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
 
-        public ExternalReviewLoginController(IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions)
+        public ExternalReviewLoginController(IExternalReviewLinksRepository externalReviewLinksRepository, IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler)
         {
             _externalReviewLinksRepository = externalReviewLinksRepository;
-            _externalReviewOptions = externalReviewOptions;
+            _externalLinkPinCodeSecurityHandler = externalLinkPinCodeSecurityHandler;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             var token = System.Web.HttpContext.Current.Request["id"];
-            if (!ValidateByToken(token))
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return new HttpNotFoundResult("Content not found");
+            }
+
+            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            if (string.IsNullOrEmpty(externalReviewLink?.PinCode))
             {
                 return new HttpNotFoundResult("Content not found");
             }
@@ -46,82 +47,25 @@ namespace AdvancedExternalReviews.PinCodeSecurity
         [HttpPost]
         public ActionResult Submit(LoginModel loginModel)
         {
-            if (!ValidateByToken(loginModel.Token))
+            if (string.IsNullOrEmpty(loginModel.Token))
             {
                 return new HttpNotFoundResult("Content not found");
             }
+
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(loginModel.Token);
-            var hash = PinCodeHashGenerator.Hash(loginModel.Code, externalReviewLink.Token);
-            if (externalReviewLink.PinCode != hash)
+            if (string.IsNullOrEmpty(externalReviewLink?.PinCode))
             {
-                return new HttpUnauthorizedResult();
+                return new HttpNotFoundResult("Content not found");
             }
 
-            var user = System.Web.HttpContext.Current.User;
-            if (user != null && user.Identity != null && user.Identity.IsAuthenticated && user.Identity is ClaimsIdentity)
+            if (_externalLinkPinCodeSecurityHandler.TryToSignIn(externalReviewLink, loginModel.Code))
             {
-                var identity = (ClaimsIdentity)user.Identity;
-                var claim = identity.FindFirst("ExternalReviewTokens");
-                if (claim != null)
-                {
-                    var tokens = new List<string>();
-                    if (!string.IsNullOrEmpty(claim.Value))
-                    {
-                        tokens.AddRange(claim.Value.Split('|'));
-                    }
-                    tokens.Add(loginModel.Token);
-                    identity.RemoveClaim(claim);
-                    identity.AddClaim(new Claim("ExternalReviewTokens", string.Join("|", tokens)));
-                }
-                else
-                {
-                    identity.AddClaim(new Claim("ExternalReviewTokens", loginModel.Token));
-                }
-                var authenticationManager = System.Web.HttpContext.Current.GetOwinContext().Authentication;
-                authenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(identity), new AuthenticationProperties() { IsPersistent = true });
+                return new RedirectResult(externalReviewLink.LinkUrl);
             }
             else
             {
-                var userName = DateTime.Now.ToString("yyyyMMddmmhhss");
-
-                var claims = new List<Claim>();
-
-                // create required claims
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, userName));
-                claims.Add(new Claim(ClaimTypes.Name, userName));
-
-                // custom – my serialized AppUserState object
-                claims.Add(new Claim("ExternalReviewTokens", loginModel.Token));
-
-                var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
-
-                var authenticationManager = System.Web.HttpContext.Current.GetOwinContext().Authentication;
-                authenticationManager.SignIn(new AuthenticationProperties()
-                {
-                    AllowRefresh = true,
-                    IsPersistent = true,
-                    ExpiresUtc = DateTime.UtcNow.Add(_externalReviewOptions.PinCodeSecurity.AuthenticationCookieLifeTime),
-                    RedirectUri = externalReviewLink.LinkUrl
-                }, identity);
+                return new HttpNotFoundResult("Content not found");
             }
-
-            return new RedirectResult(externalReviewLink.LinkUrl);
-        }
-
-        private bool ValidateByToken(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                return false;
-            }
-
-            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
-            if (string.IsNullOrEmpty(externalReviewLink.PinCode))
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 
