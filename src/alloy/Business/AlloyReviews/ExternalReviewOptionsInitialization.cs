@@ -17,6 +17,7 @@ namespace AlloyTemplates.Business.AlloyReviews
             var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
             options.EditableLinksEnabled = true;
             options.PinCodeSecurity.Enabled = true;
+            options.PinCodeSecurity.CodeLength = 5;
         }
 
         public void Uninitialize(InitializationEngine context)

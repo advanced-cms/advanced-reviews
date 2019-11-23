@@ -97,5 +97,10 @@ namespace AdvancedExternalReviews
         /// For how long authentication cookie should be valid
         /// </summary>
         public TimeSpan AuthenticationCookieLifeTime { get; set; } = TimeSpan.FromMinutes(5);
+
+        /// <summary>
+        /// PIN code length
+        /// </summary>
+        public int CodeLength { get; set; } = 4;
     }
 }

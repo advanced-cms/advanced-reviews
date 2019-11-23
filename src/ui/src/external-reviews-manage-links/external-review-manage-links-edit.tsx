@@ -12,13 +12,14 @@ interface LinkEditDialogProps {
     resources: ExternalReviewResources;
     open: boolean;
     pinCodeSecurityEnabled: boolean;
+    pinCodeLength: number;
 }
 
 /**
  * Dialog component used to edit link created in manage links
  */
 const LinkEditDialog = observer(
-    ({ reviewLink, onClose, open, resources, pinCodeSecurityEnabled }: LinkEditDialogProps) => {
+    ({ reviewLink, onClose, open, resources, pinCodeSecurityEnabled, pinCodeLength }: LinkEditDialogProps) => {
         const [validDate, setValidDate] = useState<string>(format(reviewLink.validTo, "YYYY-MM-DD"));
         const [pinCode, setPinCode] = useState<string>(reviewLink.pinCode);
         const [shouldUpdatePinCode, setShouldUpdatePinCode] = useState<boolean>(!reviewLink.pinCode);
@@ -40,11 +41,6 @@ const LinkEditDialog = observer(
             setPinCode(newValue);
         };
 
-        const additionalInputProps = {
-            maxLength: 4
-        };
-
-        //TODO: pin code should allow to add only 4 digits
         return (
             <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onCloseDialog}>
                 <DialogTitle>{resources.list.editdialog.title}</DialogTitle>
@@ -77,7 +73,7 @@ const LinkEditDialog = observer(
                                     value={pinCode}
                                     onChange={updatePinCode}
                                     type="password"
-                                    {...additionalInputProps}
+                                    maxLength={pinCodeLength}
                                 />
                             </TextField>
                             <div>{!!pinCode ? "Link secured with PIN code" : "Link with no PIN code security"}</div>

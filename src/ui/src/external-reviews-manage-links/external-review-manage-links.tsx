@@ -18,13 +18,14 @@ interface ExternalReviewWidgetContentProps {
     resources: ExternalReviewResources;
     editableLinksEnabled: boolean;
     pinCodeSecurityEnabled: boolean;
+    pinCodeLength: number;
 }
 
 /**
  * Component used to render list of external review links
  */
 const ExternalReviewWidgetContent = observer(
-    ({ store, resources, editableLinksEnabled, pinCodeSecurityEnabled }: ExternalReviewWidgetContentProps) => {
+    ({ store, resources, editableLinksEnabled, pinCodeSecurityEnabled, pinCodeLength }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
         const [currentLinkToEdit, setLinkToEdit] = useState<ReviewLink>(null);
@@ -171,6 +172,7 @@ const ExternalReviewWidgetContent = observer(
                         resources={resources}
                         open={!!currentLinkToEdit}
                         pinCodeSecurityEnabled={pinCodeSecurityEnabled}
+                        pinCodeLength={pinCodeLength}
                     />
                 )}
             </>
