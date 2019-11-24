@@ -1,4 +1,4 @@
-import { computed, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 
 export class ReviewLink {
     @observable token: string;
@@ -13,6 +13,14 @@ export class ReviewLink {
         return this.validTo > new Date();
     }
 
+    @action.bound setValidDateFromStr(validToStr: string): void {
+        try {
+            this.validTo = new Date(validToStr);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     constructor(token: string, displayName: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode?: string) {
         this.token = token;
         this.displayName = displayName;
@@ -20,11 +28,7 @@ export class ReviewLink {
         this.isEditable = isEditable;
         this.projectId = projectId;
         this.pinCode = pinCode;
-        try {
-            this.validTo = new Date(validToStr);
-        } catch (error) {
-            console.error(error);
-        }
+        this.setValidDateFromStr(validToStr);
     }
 }
 
@@ -88,10 +92,12 @@ export class ExternalReviewStore implements IExternalReviewStore {
     }
 
     edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void {
-        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then(() => {
-            item.validTo = validTo;
-            item.pinCode = pinCode;
-            item.displayName = displayName;
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then((result) => {
+            if (result) {
+                item.setValidDateFromStr(result.validTo);
+                item.pinCode = result.pinCode;
+                item.displayName = result.displayName;
+            }
         });
     }
 }

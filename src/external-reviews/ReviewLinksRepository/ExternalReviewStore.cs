@@ -93,9 +93,10 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 pinCode = PinCodeHashGenerator.Hash(pinCode, id);
             }
 
-            _externalReviewLinksRepository.UpdateLink(id, validTo, pinCode, displayName);
+            var result = _externalReviewLinksRepository.UpdateLink(id, validTo, pinCode, displayName);
+            HidePinCode(result);
 
-            return Rest(true);
+            return Rest(result);
         }
 
         public async Task<ActionResult> ShareReviewLink(string id, string email, string subject, string message)

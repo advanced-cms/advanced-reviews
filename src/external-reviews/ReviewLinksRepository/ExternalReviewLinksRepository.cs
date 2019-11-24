@@ -20,7 +20,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         /// <param name="validTo"></param>
         /// <param name="pinCode">New PIN code. If null then PIN is not updated</param>
         /// <param name="displayName">Link display name, when empty then fallback to token</param>
-        void UpdateLink(string token, DateTime validTo, string pinCode, string displayName);
+        ExternalReviewLink UpdateLink(string token, DateTime validTo, string pinCode, string displayName);
 
         void DeleteLink(string token);
     }
@@ -81,14 +81,14 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
         }
 
-        public void UpdateLink(string token, DateTime validTo, string pinCode, string displayName)
+        public ExternalReviewLink UpdateLink(string token, DateTime validTo, string pinCode, string displayName)
         {
             var store = GetStore();
             var item = store.Items<ExternalReviewLinkDds>()
                 .FirstOrDefault(x => x.Token == token);
             if (item == null)
             {
-                return;
+                return null;
             }
 
             item.ValidTo = validTo;
@@ -100,6 +100,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             item.DisplayName = displayName;
 
             store.Save(item);
+
+            return _externalReviewLinkBuilder.FromExternalReview(item);
         }
 
         public void DeleteLink(string token)
