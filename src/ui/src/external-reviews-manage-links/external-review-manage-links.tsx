@@ -105,6 +105,7 @@ const ExternalReviewWidgetContent = observer(
                                             format(item.validTo, "MMM Do YYYY HH:mm")
                                         }
                                     />
+                                    {(item.pinCode && pinCodeSecurityEnabled) && (<MaterialIcon icon="lock" className="link-secured" />)}
                                     <IconButton
                                         className="item-action"
                                         title={resources.list.editlink}
