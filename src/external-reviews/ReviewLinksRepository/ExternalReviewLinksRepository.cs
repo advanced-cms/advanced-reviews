@@ -12,7 +12,16 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId);
         ExternalReviewLink GetContentByToken(string token);
         ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId);
-        void UpdateLink(string token, DateTime validTo, string pinCode);
+
+        /// <summary>
+        /// Udate link
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="validTo"></param>
+        /// <param name="pinCode">New PIN code. If null then PIN is not updated</param>
+        /// <param name="displayName">Link display name, when empty then fallback to token</param>
+        void UpdateLink(string token, DateTime validTo, string pinCode, string displayName);
+
         void DeleteLink(string token);
     }
 
@@ -21,13 +30,12 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     {
         private readonly ExternalReviewLinkBuilder _externalReviewLinkBuilder;
         private readonly DynamicDataStoreFactory _dataStoreFactory;
-        private readonly ExternalReviewOptions _externalReviewOptions;
 
-        public ExternalReviewLinksRepository(ExternalReviewLinkBuilder externalReviewLinkBuilder, DynamicDataStoreFactory dataStoreFactory, ExternalReviewOptions externalReviewOptions)
+        public ExternalReviewLinksRepository(ExternalReviewLinkBuilder externalReviewLinkBuilder,
+            DynamicDataStoreFactory dataStoreFactory)
         {
             _externalReviewLinkBuilder = externalReviewLinkBuilder;
             _dataStoreFactory = dataStoreFactory;
-            _externalReviewOptions = externalReviewOptions;
         }
 
         public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId)
@@ -73,13 +81,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
         }
 
-        /// <summary>
-        /// Udate link
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="validTo"></param>
-        /// <param name="pinCode">New PIN code. If null then PIN is not updated</param>
-        public void UpdateLink(string token, DateTime validTo, string pinCode)
+        public void UpdateLink(string token, DateTime validTo, string pinCode, string displayName)
         {
             var store = GetStore();
             var item = store.Items<ExternalReviewLinkDds>()
@@ -94,6 +96,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             {
                 item.PinCode = pinCode;
             }
+
+            item.DisplayName = displayName;
 
             store.Save(item);
         }

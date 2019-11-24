@@ -13,6 +13,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         [EPiServerDataIndex]
         public ContentReference ContentLink { get; set; }
 
+        public string DisplayName { get; set; }
+
         public bool IsEditable { get; set; }
 
         public int? ProjectId { get; set; }

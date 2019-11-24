@@ -1,4 +1,4 @@
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -47,7 +47,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 Token = externalReviewLinkDds.Token,
                 ValidTo = externalReviewLinkDds.ValidTo,
                 LinkUrl = (externalReviewLinkDds.IsEditable ? "/" + _options.ReviewsUrl: previewUrl) + "/" + externalReviewLinkDds.Token, //TODO: externalReviews URL
-                PinCode = externalReviewLinkDds.PinCode
+                PinCode = externalReviewLinkDds.PinCode,
+                DisplayName = externalReviewLinkDds.DisplayName
             };
         }
     }

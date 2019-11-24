@@ -2,6 +2,7 @@ import { computed, observable } from "mobx";
 
 export class ReviewLink {
     @observable token: string;
+    @observable displayName: string;
     @observable linkUrl: string;
     @observable validTo: Date;
     @observable isEditable: boolean;
@@ -12,8 +13,9 @@ export class ReviewLink {
         return this.validTo > new Date();
     }
 
-    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode?: string) {
+    constructor(token: string, displayName: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode?: string) {
         this.token = token;
+        this.displayName = displayName;
         this.linkUrl = linkUrl;
         this.isEditable = isEditable;
         this.projectId = projectId;
@@ -41,7 +43,7 @@ export interface IExternalReviewStore {
 
     share(item: ReviewLink, email: string, subject: string, message: string): void;
 
-    edit(item: ReviewLink, validTo: Date, pinCode: string): void;
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void;
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
@@ -61,14 +63,14 @@ export class ExternalReviewStore implements IExternalReviewStore {
 
     addLink(isEditable: boolean): void {
         this._externalReviewService.add(isEditable).then(item => {
-            this.links.push(new ReviewLink(item.token, item.linkUrl, item.validTo, item.isEditable, item.projectId));
+            this.links.push(new ReviewLink(item.token, item.displayName, item.linkUrl, item.validTo, item.isEditable, item.projectId));
         });
     }
 
     load() {
         this.links = [];
         this._externalReviewService.load().then(items => {
-            this.links = items.map(x => new ReviewLink(x.token, x.linkUrl, x.validTo, x.isEditable, x.projectId, x.pinCode));
+            this.links = items.map(x => new ReviewLink(x.token, x.displayName, x.linkUrl, x.validTo, x.isEditable, x.projectId, x.pinCode));
         });
     }
 
@@ -85,10 +87,11 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService.share(item.token, email, subject, message);
     }
 
-    edit(item: ReviewLink, validTo: Date, pinCode: string): void {
-        this._externalReviewService.edit(item.token, validTo, pinCode).then(() => {
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void {
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then(() => {
             item.validTo = validTo;
             item.pinCode = pinCode;
+            item.displayName = displayName;
         });
     }
 }

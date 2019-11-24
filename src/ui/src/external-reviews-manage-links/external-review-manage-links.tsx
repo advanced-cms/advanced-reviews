@@ -46,12 +46,12 @@ const ExternalReviewWidgetContent = observer(
             store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
         };
 
-        const onEditClose = (validTo: Date, pinCode: string) => {
+        const onEditClose = (validTo: Date, pinCode: string, displayName: string) => {
             setLinkToEdit(null);
             if (validTo == null) {
                 return;
             }
-            store.edit(currentLinkToEdit, validTo, pinCode);
+            store.edit(currentLinkToEdit, validTo, pinCode, displayName);
         };
 
         const options = [
@@ -84,7 +84,7 @@ const ExternalReviewWidgetContent = observer(
                         {store.links.map((item: ReviewLink) => {
                             const link = item.isActive ? (
                                 <a href={item.linkUrl} target="_blank">
-                                    {item.token}
+                                    {item.displayName || item.token}
                                 </a>
                             ) : (
                                 <span className="item-inactive">{item.token}</span>
