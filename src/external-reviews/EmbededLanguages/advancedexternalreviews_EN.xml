@@ -13,7 +13,7 @@
         <title>Remove link</title>
       </removedialog>
       <list>
-        <projectid>Project ID</projectid>
+        <projectname>Project</projectname>
         <deletetitle>delete</deletetitle>
         <emptylist>There are no external links for this content</emptylist>
         <itemvalidto>Valid to</itemvalidto>

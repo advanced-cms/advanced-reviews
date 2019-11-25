@@ -13,5 +13,6 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         public DateTime ValidTo { get; set; }
         public string LinkUrl { get; set; }
         public string PinCode { get; set; }
+        public string ProjectName { get; set; }
     }
 }

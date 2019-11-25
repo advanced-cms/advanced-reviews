@@ -1,6 +1,7 @@
 ﻿using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
+using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 
@@ -11,13 +12,15 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     {
         private readonly UrlResolver _urlResolver;
         private readonly IContentLoader _contentLoader;
+        private readonly ProjectRepository _projectRepository;
         private readonly ExternalReviewOptions _options;
-
-        public ExternalReviewLinkBuilder(UrlResolver urlResolver, ExternalReviewOptions options, IContentLoader contentLoader)
+        
+        public ExternalReviewLinkBuilder(UrlResolver urlResolver, ExternalReviewOptions options, IContentLoader contentLoader, ProjectRepository projectRepository)
         {
             _urlResolver = urlResolver;
             _options = options;
             _contentLoader = contentLoader;
+            _projectRepository = projectRepository;
         }
 
         public ExternalReviewLink FromExternalReview(ExternalReviewLinkDds externalReviewLinkDds)
@@ -39,16 +42,33 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
             var previewUrl = url + _options.ContentPreviewUrl;
 
+            var projectName = "";
+            var projectId = externalReviewLinkDds.ProjectId;
+            if (projectId.HasValue)
+            {
+                try
+                {
+                    var project = _projectRepository.Get(externalReviewLinkDds.ProjectId.Value);
+                    projectName = project.Name;
+                }
+                catch
+                {
+                    projectName = string.Empty;
+                    projectId = null;
+                }
+            }
+
             return new ExternalReviewLink
             {
                 ContentLink = externalReviewLinkDds.ContentLink,
                 IsEditable = externalReviewLinkDds.IsEditable,
-                ProjectId = externalReviewLinkDds.ProjectId,
+                ProjectId = projectId,
                 Token = externalReviewLinkDds.Token,
                 ValidTo = externalReviewLinkDds.ValidTo,
                 LinkUrl = (externalReviewLinkDds.IsEditable ? "/" + _options.ReviewsUrl: previewUrl) + "/" + externalReviewLinkDds.Token, //TODO: externalReviews URL
                 PinCode = externalReviewLinkDds.PinCode,
-                DisplayName = externalReviewLinkDds.DisplayName
+                DisplayName = externalReviewLinkDds.DisplayName,
+                ProjectName = projectName
             };
         }
     }

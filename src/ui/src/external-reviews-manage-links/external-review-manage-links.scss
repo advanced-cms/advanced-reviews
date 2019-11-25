@@ -31,22 +31,24 @@
             display: none;
         }
 
+        .info-icons {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+        }
+
         .link-secured {
             font-size: 16px;
             color: #555;
-            position: absolute;
-            right: 5px;
-            bottom: 5px;
+            float: left;
         }
 
-        &:hover {
-            .item-action {
-                display: inline-block;
-            }
+        .epi-iconProject {
+            float: left;
+        }
 
-            .link-secured {
-                display: none;
-            }
+        &:hover .item-action {
+            display: inline-block;
         }
     }
 }

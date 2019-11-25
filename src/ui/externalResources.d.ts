@@ -32,8 +32,8 @@ interface ExternalReviewResources_List_Editdialog {
 }
 
 interface ExternalReviewResources_List {
-    /** Project ID */
-    projectid: string;
+    /** Project */
+    projectname: string;
     /** delete */
     deletetitle: string;
     /** There are no external links for this content */

@@ -91,7 +91,6 @@ const ExternalReviewWidgetContent = observer(
                             );
 
                             const icon = <MaterialIcon icon={item.isEditable ? "rate_review" : "pageview"} />;
-                            const projectInfo = item.projectId ? resources.list.projectid + ": " + item.projectId + ", " : "";
 
                             return (
                                 <ListItem key={item.token} className="list-item">
@@ -99,13 +98,15 @@ const ExternalReviewWidgetContent = observer(
                                     <ListItemText
                                         primaryText={link}
                                         secondaryText={
-                                            projectInfo +
                                             resources.list.itemvalidto +
                                             ": " +
                                             format(item.validTo, "MMM Do YYYY HH:mm")
                                         }
                                     />
-                                    {(item.pinCode && pinCodeSecurityEnabled) && (<MaterialIcon icon="lock" className="link-secured" />)}
+                                    <div className="info-icons">
+                                    {(item.pinCode && pinCodeSecurityEnabled) && (<MaterialIcon icon="lock" className="link-secured" title={resources.list.editdialog.linksecured} />)}
+                                    {item.projectId > 0 && (<span className="dijitReset dijitInline dijitIcon epi-iconProject" title={resources.list.projectname + ": " + item.projectName}></span>)}
+                                    </div>
                                     <IconButton
                                         className="item-action"
                                         title={resources.list.editlink}
