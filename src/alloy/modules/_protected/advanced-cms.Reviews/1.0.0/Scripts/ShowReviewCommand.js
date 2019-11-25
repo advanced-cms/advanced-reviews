@@ -41,6 +41,17 @@ define([
             this._publishTopic();
         },
 
+        itemChanged: function (id, content) {
+            this._refreshContent(content);
+        },
+
+        _refreshContent: function (content) {
+            this.set({
+                isAvailable: true,
+                canExecute: content.status !== ContentActionSupport.versionStatus.Published
+            });
+        },
+
         _execute: function () {
             this.reviewEnabled = !this.reviewEnabled;
             when(editorDisplayLanguageResolver.resolve()).then(function (language) {
@@ -56,10 +67,7 @@ define([
             return when(this.getCurrentContext()).then(function (context) {
                 if (context.type === "epi.cms.contentdata") {
                     return when(this.getCurrentContent()).then(function (content) {
-                        this.set({
-                            isAvailable: true,
-                            canExecute: content.status !== ContentActionSupport.versionStatus.Published
-                        });
+                        this._refreshContent(content);
                     }.bind(this));
                 } else {
                     this.set({
