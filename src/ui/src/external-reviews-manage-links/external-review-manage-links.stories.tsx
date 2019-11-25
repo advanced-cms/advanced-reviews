@@ -12,15 +12,23 @@ storiesOf("External reviews/Review component", module)
             "EDIT: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas rutrum lacus eget dapibus. Aenean eleifend commodo felis vitae convallis.";
         store.initialViewMailMessage =
             "VIEW: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas rutrum lacus eget dapibus. Aenean eleifend commodo felis vitae convallis.";
-        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} resources={res} />;
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} resources={res} pinCodeSecurityEnabled={false} pinCodeLength={4} />;
     })
     .add("empty", () => {
         const store = new FakeReviewLinksStore();
         store.links = [];
-        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} resources={res} />;
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} resources={res} pinCodeSecurityEnabled={false} pinCodeLength={4} />;
     })
     .add("only view links", () => {
         const store = new FakeReviewLinksStore();
         store.links = [];
-        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={false} resources={res} />;
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={false} resources={res} pinCodeSecurityEnabled={false} pinCodeLength={4} />;
+    })
+    .add("with PIN security", () => {
+        const store = new FakeReviewLinksStore();
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} resources={res} pinCodeSecurityEnabled={true} pinCodeLength={4} />;
+    })
+    .add("with PIN security not enabled", () => {
+        const store = new FakeReviewLinksStore();
+        return <ExternalReviewWidgetContent store={store} editableLinksEnabled={true} resources={res} pinCodeSecurityEnabled={false} pinCodeLength={4} />;
     });

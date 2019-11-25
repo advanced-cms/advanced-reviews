@@ -8,6 +8,7 @@ import MaterialIcon from "@material/react-material-icon";
 import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
 import { IExternalReviewStore, ReviewLink } from "./external-review-links-store";
 import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
+import LinkEditDialog from "./external-review-manage-links-edit";
 
 import "./external-review-manage-links.scss";
 import "@episerver/ui-framework/dist/main.css";
@@ -16,15 +17,18 @@ interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
     resources: ExternalReviewResources;
     editableLinksEnabled: boolean;
+    pinCodeSecurityEnabled: boolean;
+    pinCodeLength: number;
 }
 
 /**
  * Component used to render list of external review links
  */
 const ExternalReviewWidgetContent = observer(
-    ({ store, resources, editableLinksEnabled }: ExternalReviewWidgetContentProps) => {
+    ({ store, resources, editableLinksEnabled, pinCodeSecurityEnabled, pinCodeLength }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
+        const [currentLinkToEdit, setLinkToEdit] = useState<ReviewLink>(null);
 
         const onDelete = (action: boolean) => {
             setLinkToDelete(null);
@@ -40,6 +44,14 @@ const ExternalReviewWidgetContent = observer(
                 return;
             }
             store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
+        };
+
+        const onEditClose = (validTo: Date, pinCode: string, displayName: string) => {
+            setLinkToEdit(null);
+            if (validTo == null) {
+                return;
+            }
+            store.edit(currentLinkToEdit, validTo, pinCode, displayName);
         };
 
         const options = [
@@ -72,14 +84,13 @@ const ExternalReviewWidgetContent = observer(
                         {store.links.map((item: ReviewLink) => {
                             const link = item.isActive ? (
                                 <a href={item.linkUrl} target="_blank">
-                                    {item.token}
+                                    {item.displayName || item.token}
                                 </a>
                             ) : (
                                 <span className="item-inactive">{item.token}</span>
                             );
 
                             const icon = <MaterialIcon icon={item.isEditable ? "rate_review" : "pageview"} />;
-                            const projectInfo = item.projectId ? resources.list.projectid + ": " + item.projectId + ", " : "";
 
                             return (
                                 <ListItem key={item.token} className="list-item">
@@ -87,12 +98,22 @@ const ExternalReviewWidgetContent = observer(
                                     <ListItemText
                                         primaryText={link}
                                         secondaryText={
-                                            projectInfo +
                                             resources.list.itemvalidto +
                                             ": " +
                                             format(item.validTo, "MMM Do YYYY HH:mm")
                                         }
                                     />
+                                    <div className="info-icons">
+                                    {(item.pinCode && pinCodeSecurityEnabled) && (<MaterialIcon icon="lock" className="link-secured" title={resources.list.editdialog.linksecured} />)}
+                                    {item.projectId > 0 && (<span className="dijitReset dijitInline dijitIcon epi-iconProject" title={resources.list.projectname + ": " + item.projectName}></span>)}
+                                    </div>
+                                    <IconButton
+                                        className="item-action"
+                                        title={resources.list.editlink}
+                                        onClick={() => setLinkToEdit(item)}
+                                    >
+                                        <MaterialIcon icon="edit" />
+                                    </IconButton>
                                     <IconButton
                                         className="item-action"
                                         disabled={!item.isActive}
@@ -144,6 +165,16 @@ const ExternalReviewWidgetContent = observer(
                                 : store.initialViewMailMessage
                         }
                         resources={resources}
+                    />
+                )}
+                {!!currentLinkToEdit && (
+                    <LinkEditDialog
+                        reviewLink={currentLinkToEdit}
+                        onClose={onEditClose}
+                        resources={resources}
+                        open={!!currentLinkToEdit}
+                        pinCodeSecurityEnabled={pinCodeSecurityEnabled}
+                        pinCodeLength={pinCodeLength}
                     />
                 )}
             </>

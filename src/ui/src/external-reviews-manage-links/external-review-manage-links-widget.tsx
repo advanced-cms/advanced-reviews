@@ -25,12 +25,21 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store.initialEditMailMessage = this.params.initialEditMailMessage;
 
         ReactDOM.render(
-            <ManageLinks store={this.store} editableLinksEnabled={this.params.editableLinksEnabled} resources={res} />,
+            <ManageLinks
+                store={this.store}
+                editableLinksEnabled={this.params.editableLinksEnabled}
+                pinCodeSecurityEnabled={this.params.pinCodeSecurityEnabled}
+                pinCodeLength={this.params.pinCodeLength}
+                resources={res}
+            />,
             this.domNode
         );
     },
     contextChanged: function() {
-        if (!this._currentContext || (this._currentContext.type !== "epi.cms.project" && this._currentContext.type !== "epi.cms.contentdata")) {
+        if (
+            !this._currentContext ||
+            (this._currentContext.type !== "epi.cms.project" && this._currentContext.type !== "epi.cms.contentdata")
+        ) {
             return;
         }
 

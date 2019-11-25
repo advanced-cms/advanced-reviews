@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AdvancedExternalReviews.PinCodeSecurity;
 using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Core;
@@ -39,10 +41,24 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             _currentProject = currentProject;
         }
 
+
+        private void HidePinCode(ExternalReviewLink externalReviewLink)
+        {
+            if (!string.IsNullOrWhiteSpace(externalReviewLink.PinCode))
+            {
+                externalReviewLink.PinCode = "****";
+            }
+        }
+
         [HttpGet]
         public ActionResult Get(ContentReference id, int? projectId)
         {
-            return Rest(_externalReviewLinksRepository.GetLinksForContent(id, projectId));
+            var externalReviewLinks = _externalReviewLinksRepository.GetLinksForContent(id, projectId).ToList();
+            foreach (var externalReviewLink in externalReviewLinks)
+            {
+                HidePinCode(externalReviewLink);
+            }
+            return Rest(externalReviewLinks);
         }
 
         [HttpPost]
@@ -61,6 +77,25 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
 
             var validTo = externalLink.IsEditable ? _externalReviewOptions.EditLinkValidTo: _externalReviewOptions.ViewLinkValidTo;
             var result = _externalReviewLinksRepository.AddLink(externalLink.ContentLink, externalLink.IsEditable, validTo, _currentProject.ProjectId);
+            HidePinCode(result);
+            return Rest(result);
+        }
+
+        public ActionResult Edit(string id, DateTime validTo, string pinCode, string displayName)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (!string.IsNullOrWhiteSpace(pinCode))
+            {
+                pinCode = PinCodeHashGenerator.Hash(pinCode, id);
+            }
+
+            var result = _externalReviewLinksRepository.UpdateLink(id, validTo, pinCode, displayName);
+            HidePinCode(result);
+
             return Rest(result);
         }
 

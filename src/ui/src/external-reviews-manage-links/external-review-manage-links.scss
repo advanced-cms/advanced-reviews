@@ -31,6 +31,22 @@
             display: none;
         }
 
+        .info-icons {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+        }
+
+        .link-secured {
+            font-size: 16px;
+            color: #555;
+            float: left;
+        }
+
+        .epi-iconProject {
+            float: left;
+        }
+
         &:hover .item-action {
             display: inline-block;
         }
@@ -53,5 +69,28 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+    }
+}
+
+.external-link-edit-dialog {
+    width: 400px;
+
+    .checkbox-label {
+        line-height: 40px;
+        display: inline-block;
+    }
+
+    .field-group {
+        padding-bottom: 16px;
+
+        &.prolong {
+            height: 36px;
+
+            > span {
+                float: left;
+                font-size: 14px;
+                line-height: 36px;
+            }
+        }
     }
 }

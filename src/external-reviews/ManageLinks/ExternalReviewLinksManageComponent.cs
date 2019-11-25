@@ -38,6 +38,8 @@ namespace AdvancedExternalReviews.ManageLinks
                 base.Settings["initialEditMailMessage"] = _options.EmailEdit;
                 base.Settings["initialViewMailMessage"] = _options.EmailView;
                 base.Settings["editableLinksEnabled"] = _options.EditableLinksEnabled;
+                base.Settings["pinCodeSecurityEnabled"] = _options.PinCodeSecurity.Enabled;
+                base.Settings["pinCodeLength"] = _options.PinCodeSecurity.CodeLength;
 
                 return base.Settings;
             }

@@ -38,6 +38,10 @@ define([
             }.bind(this));
         },
 
+        edit: function (token, validTo, pinCode, displayName) {
+            return this.externalReviewStore.executeMethod("Edit", token, { validTo, pinCode, displayName });
+        },
+
         load: function () {
             return this._handleContentAction(function (id, type) {
                 var data = type === "epi.cms.project" ? {projectId: id} : {id: id};
@@ -50,7 +54,7 @@ define([
         },
 
         share: function (token, email, subject, message) {
-            this.externalReviewStore.executeMethod("ShareReviewLink", token,
+            return this.externalReviewStore.executeMethod("ShareReviewLink", token,
                 { email: email, subject: subject, message: message});
         },
 

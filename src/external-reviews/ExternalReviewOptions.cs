@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdvancedExternalReviews.Properties;
 using EPiServer.ServiceLocation;
 
@@ -48,5 +49,58 @@ namespace AdvancedExternalReviews
         /// For how long editable link is valid
         /// </summary>
         public TimeSpan EditLinkValidTo { get; set; } = TimeSpan.FromDays(5);
+
+        /// <summary>
+        /// Restriction options
+        /// </summary>
+        public ExternalReviewRestrictionOptions Restrictions { get; } = new ExternalReviewRestrictionOptions();
+
+        public PinCodeSecurityOptions PinCodeSecurity { get; } = new PinCodeSecurityOptions();
+    }
+
+    public class ExternalReviewRestrictionOptions
+    {
+        /// <summary>
+        /// Maximum number of review locations that can be added to the page
+        /// </summary>
+        public int MaxReviewLocationsForContent { get; set; } = int.MaxValue;
+
+        /// <summary>
+        /// Maximum number of comments that can be added to one review location
+        /// </summary>
+        public int MaxCommentsForReviewLocation { get; set; } = int.MaxValue;
+
+        /// <summary>
+        /// maximum length of comment
+        /// </summary>
+        public int MaxCommentLength { get; set; } = int.MaxValue;
+    }
+
+    public class PinCodeSecurityOptions
+    {
+        /// <summary>
+        /// When true, then PIN code check is enabled
+        /// </summary>
+        public bool Enabled { get; set; } = false;
+
+        /// <summary>
+        /// URL for login page
+        /// </summary>
+        public string ExternalReviewLoginUrl { get; set; } = "ExternalReviewLogin";
+
+        /// <summary>
+        /// Roles that can access links without PIN
+        /// </summary>
+        public IEnumerable<string> RolesWithoutPin { get; set; } = new[] {"WebEditors", "WebAdmins"};
+
+        /// <summary>
+        /// For how long authentication cookie should be valid
+        /// </summary>
+        public TimeSpan AuthenticationCookieLifeTime { get; set; } = TimeSpan.FromMinutes(5);
+
+        /// <summary>
+        /// PIN code length
+        /// </summary>
+        public int CodeLength { get; set; } = 4;
     }
 }

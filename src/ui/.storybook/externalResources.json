@@ -10,13 +10,21 @@
     "title": "Remove link"
   },
   "list": {
-    "projectid": "Project ID",
+    "projectname": "Project",
     "deletetitle": "delete",
     "emptylist": "There are no external links for this content",
     "itemvalidto": "Valid to",
     "sharetitle": "share",
     "viewlink": "View",
-    "editlink": "Edit"
+    "editlink": "Edit",
+    "editdialog": {
+      "title": "Edit link",
+      "pincode": "PIN code",
+      "displayname": "Display name",
+      "pincheckboxlabel": "Update PIN code",
+      "linksecured": "Link secured with PIN code",
+      "linknotsecured": "Link with no PIN code security"
+    }
   },
   "sharedialog": {
     "cancelbutton": "Cancel",
@@ -26,5 +34,9 @@
     "emailaddresslabel": "Email address",
     "messagehint": "Text [#link#] will be replaced with link to content.",
     "sendbutton": "Send"
+  },
+  "shared": {
+    "ok": "Ok",
+    "cancel": "Cancel"
   }
 }

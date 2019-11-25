@@ -1,26 +1,36 @@
-import { computed, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 
 export class ReviewLink {
     @observable token: string;
+    @observable displayName: string;
     @observable linkUrl: string;
     @observable validTo: Date;
     @observable isEditable: boolean;
+    @observable pinCode: string;
     @observable projectId: number;
+    projectName: string;
 
     @computed get isActive(): boolean {
         return this.validTo > new Date();
     }
 
-    constructor(token: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number) {
-        this.token = token;
-        this.linkUrl = linkUrl;
-        this.isEditable = isEditable;
-        this.projectId = projectId;
+    @action.bound setValidDateFromStr(validToStr: string): void {
         try {
             this.validTo = new Date(validToStr);
         } catch (error) {
             console.error(error);
         }
+    }
+
+    constructor(token: string, displayName: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode?: string, projectName?: string) {
+        this.token = token;
+        this.displayName = displayName;
+        this.linkUrl = linkUrl;
+        this.isEditable = isEditable;
+        this.projectId = projectId;
+        this.pinCode = pinCode;
+        this.projectName = projectName;
+        this.setValidDateFromStr(validToStr);
     }
 }
 
@@ -37,7 +47,9 @@ export interface IExternalReviewStore {
 
     delete(item: ReviewLink): void;
 
-    share(item: ReviewLink, email: string, subject: string, message: string);
+    share(item: ReviewLink, email: string, subject: string, message: string): void;
+
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void;
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
@@ -57,14 +69,14 @@ export class ExternalReviewStore implements IExternalReviewStore {
 
     addLink(isEditable: boolean): void {
         this._externalReviewService.add(isEditable).then(item => {
-            this.links.push(new ReviewLink(item.token, item.linkUrl, item.validTo, item.isEditable, item.projectId));
+            this.links.push(new ReviewLink(item.token, item.displayName, item.linkUrl, item.validTo, item.isEditable, item.projectId, null, item.projectName));
         });
     }
 
     load() {
         this.links = [];
         this._externalReviewService.load().then(items => {
-            this.links = items.map(x => new ReviewLink(x.token, x.linkUrl, x.validTo, x.isEditable, x.projectId));
+            this.links = items.map(x => new ReviewLink(x.token, x.displayName, x.linkUrl, x.validTo, x.isEditable, x.projectId, x.pinCode, x.projectName));
         });
     }
 
@@ -77,7 +89,17 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService.delete(item.token);
     }
 
-    share(item: ReviewLink, email: string, subject: string, message: string) {
+    share(item: ReviewLink, email: string, subject: string, message: string): void {
         this._externalReviewService.share(item.token, email, subject, message);
+    }
+
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void {
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then((result) => {
+            if (result) {
+                item.setValidDateFromStr(result.validTo);
+                item.pinCode = result.pinCode;
+                item.displayName = result.displayName;
+            }
+        });
     }
 }

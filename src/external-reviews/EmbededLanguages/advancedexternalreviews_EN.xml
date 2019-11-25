@@ -13,13 +13,21 @@
         <title>Remove link</title>
       </removedialog>
       <list>
-        <projectid>Project ID</projectid>
+        <projectname>Project</projectname>
         <deletetitle>delete</deletetitle>
         <emptylist>There are no external links for this content</emptylist>
         <itemvalidto>Valid to</itemvalidto>
         <sharetitle>share</sharetitle>
         <viewlink>View</viewlink>
         <editlink>Edit</editlink>
+        <editdialog>
+          <title>Edit link</title>
+          <pincode>PIN code</pincode>
+          <displayname>Display name</displayname>
+          <pincheckboxlabel>Update PIN code</pincheckboxlabel>
+          <linksecured>Link secured with PIN code</linksecured>
+          <linknotsecured>Link with no PIN code security</linknotsecured>
+        </editdialog>
       </list>
       <sharedialog>
         <cancelbutton>Cancel</cancelbutton>
@@ -30,6 +38,10 @@
         <messagehint>Text [#link#] will be replaced with link to content.</messagehint>
         <sendbutton>Send</sendbutton>
       </sharedialog>
+      <shared>
+        <ok>Ok</ok>
+        <cancel>Cancel</cancel>
+      </shared>
     </externalreviews>
   </language>
 </languages>

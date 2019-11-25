@@ -16,9 +16,24 @@ interface ExternalReviewResources_Removedialog {
     title: string;
 }
 
+interface ExternalReviewResources_List_Editdialog {
+    /** Edit link */
+    title: string;
+    /** PIN code */
+    pincode: string;
+    /** Display name */
+    displayname: string;
+    /** Update PIN code */
+    pincheckboxlabel: string;
+    /** Link secured with PIN code */
+    linksecured: string;
+    /** Link with no PIN code security */
+    linknotsecured: string;
+}
+
 interface ExternalReviewResources_List {
-    /** Project ID */
-    projectid: string;
+    /** Project */
+    projectname: string;
     /** delete */
     deletetitle: string;
     /** There are no external links for this content */
@@ -31,6 +46,7 @@ interface ExternalReviewResources_List {
     viewlink: string;
     /** Edit */
     editlink: string;
+    editdialog: ExternalReviewResources_List_Editdialog;
 }
 
 interface ExternalReviewResources_Sharedialog {
@@ -50,10 +66,18 @@ interface ExternalReviewResources_Sharedialog {
     sendbutton: string;
 }
 
+interface ExternalReviewResources_Shared {
+    /** Ok */
+    ok: string;
+    /** Cancel */
+    cancel: string;
+}
+
 interface ExternalReviewResources {
     component: ExternalReviewResources_Component;
     removedialog: ExternalReviewResources_Removedialog;
     list: ExternalReviewResources_List;
     sharedialog: ExternalReviewResources_Sharedialog;
+    shared: ExternalReviewResources_Shared;
 }
 

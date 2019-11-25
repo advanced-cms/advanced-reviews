@@ -1,0 +1,53 @@
+﻿@using System.Web.Mvc.Html
+
+@inherits System.Web.Mvc.WebViewPage<AdvancedExternalReviews.PinCodeSecurity.LoginModel>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Content review</title>
+    <meta name="robots" content="noindex">
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+
+         body {
+             height: 100%;
+             font-size: 0;
+             line-height: 0;
+             margin: 0 auto 0 auto;
+             text-align: center;
+             display: table;
+             background-color: #c0c0c0;
+         }
+
+         div {
+             display: table-cell;
+             vertical-align: middle;
+         }
+
+        form {
+            font-size: 14px;
+            padding: 20px;
+            background-color: #888;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("Submit", "ExternalReviewLogin", System.Web.Mvc.FormMethod.Post, new { tabindex="0" }))
+        {
+            <p>Enter security code</p>
+            <input type="password" name="code" tabindex="0" autofocus />
+            <input type="hidden" name="token" value="@System.Web.HttpContext.Current.Request["id"]"/>
+            <input type="submit" value="Go" />
+        }
+    </div>
+</body>
+</html>

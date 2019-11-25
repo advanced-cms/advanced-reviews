@@ -14,7 +14,10 @@ namespace AlloyTemplates.Business.AlloyReviews
         public void Initialize(InitializationEngine context)
         {
             // Editable external review links are turned off by default
-            ServiceLocator.Current.GetInstance<ExternalReviewOptions>().EditableLinksEnabled = true;
+            var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            options.EditableLinksEnabled = true;
+            options.PinCodeSecurity.Enabled = true;
+            options.PinCodeSecurity.CodeLength = 5;
         }
 
         public void Uninitialize(InitializationEngine context)

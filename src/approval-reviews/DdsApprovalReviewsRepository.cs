@@ -18,6 +18,8 @@ namespace AdvancedApprovalReviews
         private readonly DynamicDataStoreFactory _dataStoreFactory;
         private readonly IObjectSerializerFactory _serializerFactory;
 
+        public event EventHandler<BeforeUpdateEventArgs> OnBeforeUpdate;
+
         public DdsApprovalReviewsRepository(DynamicDataStoreFactory dataStoreFactory, IObjectSerializerFactory serializerFactory)
         {
             _dataStoreFactory = dataStoreFactory;
@@ -101,7 +103,21 @@ namespace AdvancedApprovalReviews
             {
                 var reviewLocations = Load(contentLink).ToList();
 
-                if (string.IsNullOrWhiteSpace(reviewLocation.Id))
+                var isNew = string.IsNullOrWhiteSpace(reviewLocation.Id);
+
+                var beforeUpdateEventArgs = new BeforeUpdateEventArgs
+                {
+                    ReviewLocations = reviewLocations,
+                    IsNew = isNew,
+                    Cancel = false
+                };
+                OnBeforeUpdate?.Invoke(this, beforeUpdateEventArgs);
+                if (beforeUpdateEventArgs.Cancel)
+                {
+                    return null;
+                }
+
+                if (isNew)
                 {
                     reviewLocation = new ReviewLocation
                     {
@@ -138,5 +154,12 @@ namespace AdvancedApprovalReviews
 
     public class ReviewLocationNotFoundException : Exception
     {
+    }
+
+    public class BeforeUpdateEventArgs : EventArgs
+    {
+        public IEnumerable<ReviewLocation> ReviewLocations { get; set; }
+        public bool IsNew { get; set; }
+        public bool Cancel { get; set; }
     }
 }
