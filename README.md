@@ -8,6 +8,7 @@ It solves a few major issues the Authors identified during their journey with EP
 The list of features (click to see more details about each section):
 
 * [Preview unpublished content](#preview-unpublished-content)
+* [Preview unpublished projects](#preview-unpublished-projects)
 * [Context aware smart reviewing](#context-aware-smart-reviewing) 
 * [Integration with default approval workflow](#integration-with-default-approval-workflow)
 * [External reviewers](#external-reviews)
@@ -28,7 +29,7 @@ https://nuget.episerver.com/package/?id=Advanced.CMS.AdvancedReviews
 ## Features
 
 ### Preview unpublished content
-Allow editors to preview unpublished and unreviewed content.
+Allow end users to preview unpublished and unreviewed content.
 
 As we all know, an EPiServer page is usually not self-contained but rather consists of many other content items like blocks or media files.
 
@@ -38,6 +39,15 @@ Now, in case the page author changed all those blocks and images the reviewer wi
 This project gives the editors a way to generate a unique URL that will present the page exactly as they see it. The preview engine will ignore content status and the content approval process.
 
 ![Preview unpublished content](assets/documentation/preview_unpublished_content.gif "Preview unpublished content")
+
+### Preview unpublished projects
+Allow end users to preview unpublished and unreviewed projects.
+
+By default, Episerver allows the preview project only inside the Edit Mode. However, it is often useful to ask users that do not have
+Edit Mode accounts to review a project before publishing.
+
+All external review links created with the Project Mode active will allow its users to access all project content items.
+![Preview unpublished projects](assets/documentation/project_overview.png "Preview unpublished projects")
 
 ### Context aware smart reviewing
 In the current workflow, the reviewer can just provide a single comment that has to include all comments for a particular content version.
