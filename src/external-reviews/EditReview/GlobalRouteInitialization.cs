@@ -38,6 +38,10 @@ namespace AdvancedExternalReviews.EditReview
 
         private static void RegisterEditPageGet(RouteRegistrationEventArgs e, ExternalReviewOptions externalReviewOptions)
         {
+            if (!externalReviewOptions.EditableLinksEnabled)
+            {
+                return;
+            }
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", "PageEdit");
             routeValues.Add("action", "Index");
@@ -53,6 +57,10 @@ namespace AdvancedExternalReviews.EditReview
 
         private void RegisterAddPinPost(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions)
         {
+            if (!externalReviewOptions.EditableLinksEnabled)
+            {
+                return;
+            }
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", "PageEdit");
             routeValues.Add("action", "AddPin");
