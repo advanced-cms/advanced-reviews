@@ -214,6 +214,7 @@
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkExtension.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinksRepository.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewStore.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
