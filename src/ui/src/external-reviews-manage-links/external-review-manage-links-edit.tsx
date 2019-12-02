@@ -62,6 +62,7 @@ const LinkEditDialog = observer(
                     <div className="field-group">
                         <TextField label={resources.list.editdialog.displayname} style={{ width: "100%" }} autoFocus>
                             <Input
+                                name="display-name"
                                 value={displayName}
                                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
                                     setDisplayName(event.currentTarget.value)
@@ -88,6 +89,8 @@ const LinkEditDialog = observer(
                             )}
                             <TextField label={resources.list.editdialog.pincode} style={{ width: "100%" }}>
                                 <Input
+                                    name="pin-code"
+                                    autoComplete="new-password"
                                     disabled={!shouldUpdatePinCode}
                                     value={pinCode}
                                     onChange={updatePinCode}
