@@ -184,6 +184,17 @@ This is our personal project that we intend to maintain.
 
 If you would like to contribute in any way, create a new feature, fix a bug or help with the documentation then we would really appreciate any kind of contributions.
 
+# Bug reporting
+
+We really appreciate bug reports. But please make sure that you include as many details as possible.
+We spent a lot of time on setting up the solution so it's possible to run the whole thing by just cloning the repo and
+calling a single command.
+That makes it super easy for you to fork this repo and create a reproducible environment.
+That will significanly speed up a potential bugfix release for you.
+
+Please remember that this is our personal project developed during our free time and any kind of help from 
+users is highly appreciated.
+
 ## Development (if you would like to help in development)
 
 ```console
