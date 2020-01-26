@@ -28,6 +28,10 @@ namespace AdvancedExternalReviews.EditReview
         private void Global_RoutesRegistrating(object sender, EPiServer.Web.Routing.RouteRegistrationEventArgs e)
         {
             var externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            if (!externalReviewOptions.IsEnabled)
+            {
+                return;
+            }
 
             GlobalFilters.Filters.Add(new ConvertEditLinksFilter());
 

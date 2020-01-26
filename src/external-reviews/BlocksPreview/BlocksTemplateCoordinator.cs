@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using EPiServer.Core;
 using EPiServer.Framework.Web;
+using EPiServer.ServiceLocation;
 using EPiServer.Web;
 
 namespace AdvancedExternalReviews.BlocksPreview
@@ -9,6 +10,12 @@ namespace AdvancedExternalReviews.BlocksPreview
     {
         public static void OnTemplateResolved(object sender, TemplateResolverEventArgs args)
         {
+            var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            if (!options.IsEnabled)
+            {
+                return;
+            }
+
             if (args.ItemToRender is BlockData)
             {
                 if (args.RequestedCategory == TemplateTypeCategories.MvcController ||

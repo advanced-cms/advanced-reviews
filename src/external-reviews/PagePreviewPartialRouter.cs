@@ -39,6 +39,11 @@ namespace AdvancedExternalReviews
 
         public object RoutePartial(PageData content, SegmentContext segmentContext)
         {
+            if (!_externalReviewOptions.IsEnabled)
+            {
+                return null;
+            }
+
             var nextSegment = segmentContext.GetNextValue(segmentContext.RemainingPath);
             if (string.IsNullOrWhiteSpace(nextSegment.Next))
             {

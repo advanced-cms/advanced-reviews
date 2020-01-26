@@ -13,6 +13,10 @@ import res from "epi/i18n!epi/cms/nls/externalreviews";
  */
 export default declare([WidgetBase, _ContentContextMixin], {
     postCreate: function() {
+        if (!this.params.isEnabled) {
+            return;
+        }
+
         this._reviewService = new ExternalReviewService();
 
         this.own(this._reviewService);
@@ -36,6 +40,10 @@ export default declare([WidgetBase, _ContentContextMixin], {
         );
     },
     contextChanged: function() {
+        if (!this.params.isEnabled) {
+            return;
+        }
+
         if (
             !this._currentContext ||
             (this._currentContext.type !== "epi.cms.project" && this._currentContext.type !== "epi.cms.contentdata")
@@ -46,6 +54,10 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store.load();
     },
     destroy: function() {
+        if (!this.params.isEnabled) {
+            return;
+        }
+
         ReactDOM.unmountComponentAtNode(this.domNode);
     }
 });
