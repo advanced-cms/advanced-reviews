@@ -39,7 +39,7 @@ define([
         },
 
         edit: function (token, validTo, pinCode, displayName) {
-            return this.externalReviewStore.executeMethod("Edit", token, { validTo, pinCode, displayName });
+            return this.externalReviewStore.executeMethod("Edit", token, { validTo: validTo, pinCode: pinCode, displayName: displayName });
         },
 
         load: function () {
