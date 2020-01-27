@@ -147,6 +147,7 @@ There are few settings related with external review. They are all set using Opti
  | Option        | Default           | Description  |
  | ---- | ---- | ---- |
  | ContentPreviewUrl | externalContentView | path prefix added before token for "View" preview links |
+ | IsEnabled | true | is the add-on enabled |
  | ReviewsUrl | externalContentReviews | path prefix added before token for "Edit" review links |
  | EmailSubject | [subject email template]|  email subject template |
  | EmailEdit | [email template] |email body template used for readonly content links |
@@ -156,25 +157,73 @@ There are few settings related with external review. They are all set using Opti
  | EditLinkValidTo | 5 days | For how long editable link is valid |
 
 In order to add those options you would have to add a new `InitializableModule`.
-This snipped turns on editable review links: 
+
+#### Examples
+
+This snippet turns on editable review links: 
 
 ```csharp
-[ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-public class ExternalReviewInitialization : IInitializableModule
+[InitializableModule]
+[ModuleDependency(typeof(FrameworkInitialization))]
+public class ExternalReviewInitialization : IConfigurableModule
 {
-    public void Initialize(InitializationEngine context)
+    public void ConfigureContainer(ServiceConfigurationContext context)
     {
-        // Editable external review links are turned off by default
-        ServiceLocator.Current.GetInstance<ExternalReviewOptions>().EditableLinksEnabled = true;
+        context.Services.Configure<ExternalReviewOptions>(options =>
+        {
+            options.EditableLinksEnabled = true;
+            options.PinCodeSecurity.Enabled = true;
+            options.PinCodeSecurity.CodeLength = 5;            
+        });
     }
 
-    public void Uninitialize(InitializationEngine context)
+    public void Initialize(InitializationEngine context) { }
+
+    public void Uninitialize(InitializationEngine context) { }
+}
+```
+
+This snippet additionally turns on pin security: 
+
+```csharp
+[InitializableModule]
+[ModuleDependency(typeof(FrameworkInitialization))]
+public class ExternalReviewInitialization : IConfigurableModule
+{
+    public void ConfigureContainer(ServiceConfigurationContext context)
     {
+        context.Services.Configure<ExternalReviewOptions>(options =>
+        {
+            options.EditableLinksEnabled = true;
+            options.PinCodeSecurity.Enabled = true;
+            options.PinCodeSecurity.CodeLength = 4;            
+        });
     }
 
-    public void Preload(string[] parameters)
+    public void Initialize(InitializationEngine context) { }
+
+    public void Uninitialize(InitializationEngine context) { }
+}
+```
+
+While this one completely disables the add-on, all custom routes, ui elements etc.
+
+```csharp
+[InitializableModule]
+[ModuleDependency(typeof(FrameworkInitialization))]
+public class ExternalReviewInitialization : IConfigurableModule
+{
+    public void ConfigureContainer(ServiceConfigurationContext context)
     {
+        context.Services.Configure<ExternalReviewOptions>(options =>
+        {
+            options.IsEnabled = false;            
+        });
     }
+
+    public void Initialize(InitializationEngine context) { }
+
+    public void Uninitialize(InitializationEngine context) { }
 }
 ```
 
