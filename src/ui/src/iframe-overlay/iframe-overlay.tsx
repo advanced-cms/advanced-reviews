@@ -1,6 +1,8 @@
 import React, { CSSProperties } from "react";
 import { inject, observer } from "mobx-react";
 import { IReviewComponentStore, PinLocation } from "../store/review-store";
+import CssSelectorGenerator from "css-selector-generator";
+import offset from "../position-calculator/offset";
 
 interface IframeOverlayProps {
     iframe: HTMLIFrameElement;
@@ -85,7 +87,12 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             return;
         }
 
+        const generator = new CssSelectorGenerator();
+
         const clickedElement = this.props.iframe.contentDocument.elementFromPoint(e.offsetX, e.offsetY) as HTMLElement;
+        const selector = generator.getSelector(clickedElement);
+
+        const nodeOffset = offset(clickedElement, this.props.iframe.contentDocument);
 
         let reviewLocation = new PinLocation(this.props.reviewStore, {
             documentRelativePosition: {
@@ -96,7 +103,16 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
                 x: this.overlayDocumentRef.current.offsetWidth,
                 y: this.overlayDocumentRef.current.offsetHeight
             },
-            isDone: false
+            isDone: false,
+            clickedDomNodeSelector: selector,
+            clickedDomNodeSize: {
+                x: clickedElement.offsetWidth,
+                y: clickedElement.offsetHeight
+            },
+            clickedDomNodePosition: {
+                x: nodeOffset.left,
+                y: nodeOffset.top
+            }
         });
 
         const propertyElement =
