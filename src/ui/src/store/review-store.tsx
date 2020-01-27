@@ -89,6 +89,9 @@ export interface PinPositioningDetails {
     propertyName?: string;
     propertyPosition?: Dimensions;
     propertySize?: Dimensions;
+    clickedDomNodeSelector?: string;
+    clickedDomNodeSize?: Dimensions;
+    clickedDomNodePosition?: Dimensions;
 }
 
 export class PinLocation implements PinPositioningDetails {
@@ -103,6 +106,9 @@ export class PinLocation implements PinPositioningDetails {
     blockName?: string;
     blockPosition?: Dimensions;
     blockSize?: Dimensions;
+    clickedDomNodeSelector?: string;
+    clickedDomNodeSize?: Dimensions;
+    clickedDomNodePosition?: Dimensions;
     @observable priority: Priority = Priority.Normal;
     @observable comments: Comment[] = [];
     /**
@@ -311,6 +317,9 @@ class ReviewComponentStore implements IReviewComponentStore {
                     propertyPosition: x.data.propertyPosition,
                     propertySize: x.data.propertySize,
                     propertyName: x.data.propertyName,
+                    clickedDomNodeSelector: x.data.clickedDomNodeSelector,
+                    clickedDomNodeSize: x.data.clickedDomNodeSize,
+                    clickedDomNodePosition: x.data.clickedDomNodePosition,
                     priority: x.data.priority,
                     isDone: x.data.isDone,
                     firstComment: this.parseComment(x.data.firstComment),
@@ -413,6 +422,9 @@ class ReviewComponentStore implements IReviewComponentStore {
                 documentSize: reviewLocation.documentSize,
                 propertyPosition: reviewLocation.propertyPosition,
                 propertySize: reviewLocation.propertySize,
+                clickedDomNodeSelector: reviewLocation.clickedDomNodeSelector,
+                clickedDomNodePosition: reviewLocation.clickedDomNodePosition,
+                clickedDomNodeSize: reviewLocation.clickedDomNodeSize,
                 priority: reviewLocation.priority,
                 comments: reviewLocation.comments.map((x: any) => {
                     return {
