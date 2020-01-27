@@ -55,6 +55,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
 
     componentDidMount() {
         this.props.iframe.addEventListener("load", this.loadIframe.bind(this));
+        this.loadIframe();
     }
 
     componentWillUnmount() {
@@ -99,10 +100,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
         const showReviewIntro: boolean =
             this.props.reviewStore.reviewLocations.length === 0 && localStorage.getItem("reviewIntro") !== "false";
 
-        const positionCalculator = new PositionCalculator(
-            this.state.documentSize,
-            this.props.iframe.contentDocument
-        );
+        const positionCalculator = new PositionCalculator(this.state.documentSize, this.props.iframe.contentDocument);
 
         return (
             <>

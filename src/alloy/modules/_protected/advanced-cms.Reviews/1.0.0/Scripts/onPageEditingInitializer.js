@@ -48,6 +48,8 @@ define([
                 reviewWidget.placeAt(div);
                 var editLayoutContainer = document.getElementsByClassName("epi-editorViewport")[0];
                 editLayoutContainer.appendChild(div);
+            } else {
+                reviewWidget.loadPins();
             }
             toggleReviewOverlay(toggle);
         });
