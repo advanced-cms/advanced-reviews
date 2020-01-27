@@ -4,20 +4,19 @@ import { Provider } from "mobx-react";
 import declare from "dojo/_base/declare";
 import WidgetBase from "dijit/_WidgetBase";
 import ApplicationSettings from "epi-cms/ApplicationSettings";
-import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import ReviewService from "advanced-cms-review/advancedReviewService";
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 
 import { createStores } from "../store/review-store";
 
-export default declare([WidgetBase, _ContentContextMixin], {
+export default declare([WidgetBase], {
     postCreate: function() {
         //TODO: async
         this._reviewService = new ReviewService();
         this.own(this._reviewService);
         this.stores = createStores(this._reviewService, res);
-        this.stores.reviewStore.load();
+        this.loadPins();
         this.stores.reviewStore.currentUser = ApplicationSettings.userName;
         this.stores.reviewStore.currentLocale = this.language;
         this.stores.reviewStore.propertyNameMapping = this.propertyNameMapping;
@@ -37,12 +36,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
     updateDisplayNamesDictionary: function(propertyNameMapping: object) {
         this.stores.reviewStore.propertyNameMapping = propertyNameMapping;
     },
-
-    contextChanged: function() {
-        if (!this._currentContext || this._currentContext.type !== "epi.cms.contentdata") {
-            return;
-        }
-
+    loadPins: function() {
         this.stores.reviewStore.load();
     },
     destroy: function() {
