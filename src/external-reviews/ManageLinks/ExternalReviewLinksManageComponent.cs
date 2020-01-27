@@ -20,9 +20,8 @@ namespace AdvancedExternalReviews.ManageLinks
             : base("advanced-cms-external-review/external-review-manage-links-component")
         {
             _options = options;
-
-            this.LanguagePath = "/externalreviews/component";
-
+            IsAvailableForUserSelection = options.IsEnabled;
+            LanguagePath = "/externalreviews/component";
             Categories = new[] {"content"};
             SortOrder = 1000;
             PlugInAreas = new[]
@@ -40,6 +39,7 @@ namespace AdvancedExternalReviews.ManageLinks
                 base.Settings["editableLinksEnabled"] = _options.EditableLinksEnabled;
                 base.Settings["pinCodeSecurityEnabled"] = _options.PinCodeSecurity.Enabled;
                 base.Settings["pinCodeLength"] = _options.PinCodeSecurity.CodeLength;
+                base.Settings["isEnabled"] = _options.IsEnabled;
 
                 return base.Settings;
             }

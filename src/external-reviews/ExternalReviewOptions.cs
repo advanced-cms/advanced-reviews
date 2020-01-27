@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AdvancedExternalReviews.Properties;
+using EPiServer.Framework.Web.Resources;
 using EPiServer.ServiceLocation;
+using EPiServer.Shell.Modules;
 
 namespace AdvancedExternalReviews
 {
@@ -9,6 +11,11 @@ namespace AdvancedExternalReviews
     public class ExternalReviewOptions
     {
         public string ReviewsUrl { get; set; } = "externalContentReviews";
+
+        /// <summary>
+        /// Gets or sets if the plugin should be initialized in Edit Mode
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// URL used for displaying readonly version of page
@@ -102,5 +109,46 @@ namespace AdvancedExternalReviews
         /// PIN code length
         /// </summary>
         public int CodeLength { get; set; } = 4;
+    }
+
+    public class AdvancedReviewsModule : ShellModule
+    {
+        public AdvancedReviewsModule(string name, string routeBasePath, string resourceBasePath)
+            : base(name, routeBasePath, resourceBasePath)
+        {
+        }
+
+        /// <inheritdoc />
+        public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
+        {
+            var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            return new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
+        }
+    }
+
+    public class AdvancedApprovalModule : ShellModule
+    {
+        public AdvancedApprovalModule(string name, string routeBasePath, string resourceBasePath)
+            : base(name, routeBasePath, resourceBasePath)
+        {
+        }
+
+        /// <inheritdoc />
+        public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
+        {
+            var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            return new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
+        }
+    }
+
+    public class AdvancedReviewsModuleViewModel : ModuleViewModel
+    {
+        public AdvancedReviewsModuleViewModel(ShellModule shellModule, IClientResourceService clientResourceService, ExternalReviewOptions options) :
+            base(shellModule, clientResourceService)
+        {
+            Options = options;
+        }
+
+        public ExternalReviewOptions Options { get; }
     }
 }

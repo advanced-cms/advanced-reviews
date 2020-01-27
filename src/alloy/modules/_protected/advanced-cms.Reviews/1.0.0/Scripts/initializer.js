@@ -25,6 +25,11 @@ define([
         initialize: function () {
             this.inherited(arguments);
 
+            var options = this._settings.options || {};
+            if (!options.isEnabled) {
+                return;
+            }
+
             var registry = this.resolveDependency("epi.storeregistry");
 
             //Register store
