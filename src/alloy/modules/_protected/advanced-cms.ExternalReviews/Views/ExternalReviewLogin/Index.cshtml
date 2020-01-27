@@ -12,30 +12,51 @@
     <meta name="robots" content="noindex">
 
     <style type="text/css">
-        html {
+        html, body {
             height: 100%;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            color: #444a4c;
+            font-family: Verdana,Arial,Helvetica,sans-serif;
         }
 
-         body {
-             height: 100%;
-             font-size: 0;
-             line-height: 0;
-             margin: 0 auto 0 auto;
-             text-align: center;
-             display: table;
-             background-color: #c0c0c0;
-         }
+        * {
+            box-sizing: border-box;
+        }
 
-         div {
-             display: table-cell;
-             vertical-align: middle;
-         }
+        div {
+            height: 100%;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            -webkit-box-align: center;
+            justify-content: center;
+            align-items: center;
+        }
 
         form {
-            font-size: 14px;
-            padding: 20px;
-            background-color: #888;
-            border-radius: 2px;
+            max-width: 50%;
+            padding: 32px 20px;
+            width: 400px;
+        }
+
+        input[type="password"] {
+            font-size: 16px;
+            padding: 12px;
+            width: 80%;
+        }
+
+        input[type="submit"] {
+            font-size: 16px;
+            background: #1456F1;
+            color: #fff;
+            padding: 14px;
+            border: none;
+            cursor: pointer;
+            float: right;
         }
     </style>
 </head>
@@ -43,8 +64,7 @@
     <div>
         @using (Html.BeginForm("Submit", "ExternalReviewLogin", System.Web.Mvc.FormMethod.Post, new { tabindex="0" }))
         {
-            <p>Enter security code</p>
-            <input type="password" name="code" tabindex="0" autofocus />
+            <input type="password" placeholder="Enter security code" name="code" tabindex="0" autofocus />
             <input type="hidden" name="token" value="@System.Web.HttpContext.Current.Request["id"]"/>
             <input type="submit" value="Go" />
         }
