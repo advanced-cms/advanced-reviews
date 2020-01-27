@@ -8,24 +8,22 @@ namespace AlloyTemplates.Business.AlloyReviews
     /// <summary>
     /// Module for customizing external reviews
     /// </summary>
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class ExternalReviewInitialization : IInitializableModule
+    [InitializableModule]
+    [ModuleDependency(typeof(FrameworkInitialization))]
+    public class ExternalReviewInitialization : IConfigurableModule
     {
-        public void Initialize(InitializationEngine context)
+        public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            // Editable external review links are turned off by default
-            var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
-            options.EditableLinksEnabled = true;
-            options.PinCodeSecurity.Enabled = true;
-            options.PinCodeSecurity.CodeLength = 5;
+            context.Services.Configure<ExternalReviewOptions>(options =>
+            {
+                options.EditableLinksEnabled = true;
+                options.PinCodeSecurity.Enabled = true;
+                options.PinCodeSecurity.CodeLength = 5;
+            });
         }
 
-        public void Uninitialize(InitializationEngine context)
-        {
-        }
+        public void Initialize(InitializationEngine context) { }
 
-        public void Preload(string[] parameters)
-        {
-        }
+        public void Uninitialize(InitializationEngine context) { }
     }
 }
