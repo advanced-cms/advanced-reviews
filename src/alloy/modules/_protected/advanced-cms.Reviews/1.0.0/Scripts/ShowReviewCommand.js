@@ -23,22 +23,15 @@ define([
         tooltip: res.tooltip,
         iconClass: 'epi-icon--medium epi-review-icon',
         canExecute: false,
-        reviewEnabled: false,
 
         constructor: function () {
             this._toggleCanExecute();
-
-            this.own(topic.subscribe("reviews:toggle", function (reviewEnabled) {
-                this.set("active", reviewEnabled);
-                this.set('label', reviewEnabled ? res.labelenabled : res.labelnotenabled);
-            }.bind(this)));
         },
 
         contextChanged: function () {
-            this.reviewEnabled = false;
             this.set("active", false);
             this._toggleCanExecute();
-            this._publishTopic();
+            topic.publish("reviews:toggle", this.active);
         },
 
         itemChanged: function (id, content) {
@@ -52,15 +45,16 @@ define([
             });
         },
 
-        _execute: function () {
-            this.reviewEnabled = !this.reviewEnabled;
-            when(editorDisplayLanguageResolver.resolve()).then(function (language) {
-                topic.publish("reviews:initialize", this.reviewEnabled, language);
-            }.bind(this));
+        _activeSetter: function (active) {
+            this.active = active;
+            this.set('label', active ? res.labelenabled : res.labelnotenabled);
         },
 
-        _publishTopic: function () {
-            topic.publish("reviews:toggle", this.reviewEnabled);
+        _execute: function () {
+            this.set("active", !this.active);
+            when(editorDisplayLanguageResolver.resolve()).then(function (language) {
+                topic.publish("reviews:toggle", this.active, language);
+            }.bind(this));
         },
 
         _toggleCanExecute: function () {

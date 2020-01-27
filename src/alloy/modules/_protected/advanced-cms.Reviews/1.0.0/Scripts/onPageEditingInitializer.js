@@ -36,21 +36,25 @@ define([
     }
 
     function initialize() {
-        topic.subscribe("reviews:toggle", function (toggle) {
-            toggleReviewOverlay(toggle);
-        });
-
-        topic.subscribe("reviews:initialize", function (toggle, language) {
+        topic.subscribe("reviews:toggle", function (toggle, language) {
             if (!reviewWidget) {
-                var div = document.createElement("div");
-                var iframe = document.getElementsByName("sitePreview")[0];
-                reviewWidget = new ReviewWidget({ iframe: iframe, language: language, propertyNameMapping: latestPropertyNameMappings });
-                reviewWidget.placeAt(div);
-                var editLayoutContainer = document.getElementsByClassName("epi-editorViewport")[0];
-                editLayoutContainer.appendChild(div);
-            } else {
+                if (toggle) {
+                    var div = document.createElement("div");
+                    var iframe = document.getElementsByName("sitePreview")[0];
+                    reviewWidget = new ReviewWidget({
+                        iframe: iframe,
+                        language: language,
+                        propertyNameMapping: latestPropertyNameMappings
+                    });
+                    reviewWidget.placeAt(div);
+                    var editLayoutContainer = document.getElementsByClassName("epi-editorViewport")[0];
+                    editLayoutContainer.appendChild(div);
+                }
+            }
+            else {
                 reviewWidget.loadPins();
             }
+
             toggleReviewOverlay(toggle);
         });
 
