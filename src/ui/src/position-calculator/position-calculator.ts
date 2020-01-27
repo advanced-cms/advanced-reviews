@@ -11,16 +11,11 @@ export default class PositionCalculator {
     }
 
     private positionDomNode(
-        selector: string,
+        node: HTMLElement,
         documentRelativeOffset: Dimensions,
         nodePosition: Dimensions,
         nodeSize: Dimensions
     ) {
-        const node: HTMLElement = this._document.querySelector(selector);
-        if (!node) {
-            return;
-        }
-
         const nodeOffset = offset(node, this._document);
 
         const originalOffsetFromLeft = documentRelativeOffset.x - nodePosition.x;
@@ -38,12 +33,27 @@ export default class PositionCalculator {
         };
     }
 
+    private resize(location: PinPositioningDetails) {
+        const xFactor = location.documentRelativePosition.x / location.documentSize.x;
+        const yFactor = location.documentRelativePosition.y / location.documentSize.y;
+
+        return {
+            x: xFactor * this._documentSize.x,
+            y: yFactor * this._documentSize.y
+        };
+    }
+
     calculate(location: PinPositioningDetails): Dimensions {
         if (this._document) {
             if (location.propertyName && location.propertyPosition && location.propertySize) {
-                const selector = `[data-epi-property-name='${location.propertyName}']`;
+                const node: HTMLElement = this._document.querySelector(
+                    `[data-epi-property-name='${location.propertyName}']`
+                );
+                if (!node) {
+                    return this.resize(location);
+                }
                 return this.positionDomNode(
-                    selector,
+                    node,
                     location.documentRelativePosition,
                     location.propertyPosition,
                     location.propertySize
@@ -53,8 +63,13 @@ export default class PositionCalculator {
                 location.clickedDomNodePosition &&
                 location.clickedDomNodeSize
             ) {
+                const node: HTMLElement = this._document.querySelector(location.clickedDomNodeSelector);
+                if (!node) {
+                    return this.resize(location);
+                }
+
                 return this.positionDomNode(
-                    location.clickedDomNodeSelector,
+                    node,
                     location.documentRelativePosition,
                     location.clickedDomNodePosition,
                     location.clickedDomNodeSize
@@ -62,12 +77,6 @@ export default class PositionCalculator {
             }
         }
 
-        const xFactor = location.documentRelativePosition.x / location.documentSize.x;
-        const yFactor = location.documentRelativePosition.y / location.documentSize.y;
-
-        return {
-            x: xFactor * this._documentSize.x,
-            y: yFactor * this._documentSize.y
-        };
+        return this.resize(location);
     }
 }
