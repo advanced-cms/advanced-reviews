@@ -171,9 +171,7 @@ public class ExternalReviewInitialization : IConfigurableModule
     {
         context.Services.Configure<ExternalReviewOptions>(options =>
         {
-            options.EditableLinksEnabled = true;
-            options.PinCodeSecurity.Enabled = true;
-            options.PinCodeSecurity.CodeLength = 5;            
+            options.EditableLinksEnabled = true;          
         });
     }
 
