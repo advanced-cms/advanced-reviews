@@ -201,5 +201,8 @@
     <EmbeddedResource Include="EmbededLanguages\advancedapprovalreviews_DE.xml" />
     <EmbeddedResource Include="EmbededLanguages\advancedapprovalreviews_FI.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="EmbededLanguages\advancedapprovalreviews_NO.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
