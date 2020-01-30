@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+    <language name="Norsk" id="no">
+    <reviewcomponent>
+      <command>
+        <label>Avansert vurdering</label>
+        <tooltip>Skru av/på vurderingsvisning</tooltip>
+        <labelenabled>Deaktivér 'Avansert vurdering'</labelenabled>
+        <labelnotenabled>Aktivér 'Avansert vurdering'</labelnotenabled>
+      </command>
+      <dialog>
+        <addcomment>Legg til kommentar</addcomment>
+        <changepriority>Endre prioritering</changepriority>
+        <close>avbryt</close>
+        <describe>Beskriv problemet</describe>
+        <reviewedit>Gå gjennom endringene</reviewedit>
+        <save>Lagre</save>
+      </dialog>
+      <removepindialog>
+        <cancel>Avbryt</cancel>
+        <description>Er du sikker på at du vil fjerne denne pinnen?</description>
+        <ok>Ok</ok>
+        <title>Ta bort pin</title>
+      </removepindialog>
+      <panel>
+        <attachscreenshot>Legg ved skjermbilde</attachscreenshot>
+        <clicktoedit>Klikk for å redigere</clicktoedit>
+        <collapse>Lukk vurderingspanelet</collapse>
+        <expand>Åpne vurderingspanelet</expand>
+        <gobacktolist>Gå tilbake til lista</gobacktolist>
+        <opendetails>Åpne detaljer</opendetails>
+        <remove>Fjern</remove>
+        <removeconfirmation>Er du sikker på at du vil fjerne?</removeconfirmation>
+        <removescreenshot>Fjern skjermbilde</removescreenshot>
+        <resolved>Løst</resolved>
+        <reviewmode>Vurderingsvisning</reviewmode>
+        <showscreenshot>Vis skjermbilde</showscreenshot>
+        <showactive>Vis aktive</showactive>
+        <showresolved>Vis løste</showresolved>
+        <showunread>Vis uløste</showunread>
+      </panel>
+      <screenshot>
+        <apply>Anvend</apply>
+        <cancel>avbryt</cancel>
+        <clear>Tøm</clear>
+        <cropandhighlight>Beskjær og marker området du ønsker å kommentere</cropandhighlight>
+      </screenshot>
+      <priority>
+        <important>Viktig</important>
+        <normal>Normal</normal>
+        <trivial>Triviell</trivial>
+      </priority>
+    </reviewcomponent>
+  </language>
+</languages>
