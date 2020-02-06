@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="Norsk" id="no">
+    <externalreviews>
+      <component>
+        <title>Liste med lenker for eksterne bidragsytere</title>
+        <description>Håndter liste med lenker for eksterne bidragsytere</description>
+      </component>
+      <removedialog>
+        <cancel>Avbryt</cancel>
+        <description>Er du sikker på at du vil fjerne lenka?</description>
+        <ok>Ok</ok>
+        <title>Fjern lenke</title>
+      </removedialog>
+      <list>
+        <projectname>Prosjekt</projectname>
+        <deletetitle>fjern</deletetitle>
+        <emptylist>Det finnes ingen lenker for eksterne bidragsytere for dette innholdet</emptylist>
+        <itemvalidto>Gyldig til</itemvalidto>
+        <sharetitle>del</sharetitle>
+        <viewlink>Vis</viewlink>
+        <editlink>Rediger</editlink>
+        <editdialog>
+          <title>Rediger lenke</title>
+          <pincode>PIN-kode</pincode>
+          <displayname>Visningsnavn</displayname>
+          <pincheckboxlabel>Oppdater PIN-kode</pincheckboxlabel>
+          <linksecured>Lenke sikret med PIN-kode</linksecured>
+          <linknotsecured>Lenke uten PIN-kode</linknotsecured>
+        </editdialog>
+      </list>
+      <sharedialog>
+        <cancelbutton>Avbryt</cancelbutton>
+        <dialogtitle>Del lenke til innholdet med ekstern bidragsyter</dialogtitle>
+        <emailmessagelabel>E-postinnhold</emailmessagelabel>
+        <emailsubjectlabel>E-postemne</emailsubjectlabel>
+        <emailaddresslabel>E-postadresse</emailaddresslabel>
+        <messagehint>Teksten [#link#] vil erstattes med ei lenke til innholdet</messagehint>
+        <sendbutton>Send</sendbutton>
+      </sharedialog>
+      <shared>
+        <ok>Ok</ok>
+        <cancel>Avbryt</cancel>
+      </shared>
+    </externalreviews>
+  </language>
+</languages>
