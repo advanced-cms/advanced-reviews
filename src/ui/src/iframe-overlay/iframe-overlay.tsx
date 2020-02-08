@@ -7,6 +7,8 @@ import offset from "../position-calculator/offset";
 interface IframeOverlayProps {
     iframe: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
+    external: boolean;
+
     reviewLocationCreated(location: PinLocation): void;
 }
 
@@ -89,10 +91,16 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
 
         const generator = new CssSelectorGenerator();
 
-        const clickedElement = this.props.iframe.contentDocument.elementFromPoint(e.offsetX, e.offsetY) as HTMLElement;
+        let point: { x: number; y: number };
+        if (this.props.external) {
+            point = { x: e.pageX, y: e.pageY };
+        } else {
+            point = { x: e.offsetX, y: e.offsetY };
+        }
+        const clickedElement = this.props.iframe.contentDocument.elementFromPoint(point.x, point.y) as HTMLElement;
         const selector = generator.getSelector(clickedElement);
 
-        const nodeOffset = offset(clickedElement, this.props.iframe.contentDocument);
+        const nodeOffset = offset(clickedElement, this.props.external);
 
         let reviewLocation = new PinLocation(this.props.reviewStore, {
             documentRelativePosition: {

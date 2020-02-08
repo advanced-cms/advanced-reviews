@@ -18,6 +18,7 @@ interface IframeState {
 interface IframeWithPinsProps {
     iframe: HTMLIFrameElement;
     reviewStore?: IReviewComponentStore;
+    external?: boolean;
 }
 
 @inject("reviewStore")
@@ -100,7 +101,11 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
         const showReviewIntro: boolean =
             this.props.reviewStore.reviewLocations.length === 0 && localStorage.getItem("reviewIntro") !== "false";
 
-        const positionCalculator = new PositionCalculator(this.state.documentSize, this.props.iframe.contentDocument);
+        const positionCalculator = new PositionCalculator(
+            this.state.documentSize,
+            this.props.external,
+            this.props.iframe.contentDocument
+        );
 
         return (
             <>
@@ -108,6 +113,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
                     <IframeOverlay
                         iframe={this.props.iframe}
                         reviewLocationCreated={location => this.setState({ newLocation: location })}
+                        external={this.props.external}
                     >
                         <PinCollection newLocation={this.state.newLocation} positionCalculator={positionCalculator} />
                         {showReviewIntro && (
