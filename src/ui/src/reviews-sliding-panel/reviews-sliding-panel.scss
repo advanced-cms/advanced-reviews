@@ -12,10 +12,10 @@ $border: 1px solid $surface500;
     background: white;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    right: 500px;
+    right: 510px;
 
     &.narrow {
-        right: 70px;
+        right: 80px;
     }
 }
 
@@ -24,7 +24,7 @@ $border: 1px solid $surface500;
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0;
+    right: 10px;
     background: white;
     width: 480px;
     overflow-y: auto;
@@ -123,7 +123,8 @@ $border: 1px solid $surface500;
 
     .locations {
         border-top: $border;
-        max-height: 600px;
+        max-height: calc(100% - 220px);
+        overflow-y: auto;
 
         .mdc-list-item {
             cursor: pointer;
