@@ -106,7 +106,7 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
                 <ConfirmNameDialog open={true} initialUserName={userName} onClose={setUserName} />
             ) : (
                 <Provider {...stores}>
-                    <IframeWithPins iframe={iframe} />
+                    <IframeWithPins iframe={iframe} external />
                 </Provider>
             )}
         </>
