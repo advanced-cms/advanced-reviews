@@ -9,7 +9,6 @@ using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;
-using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.EditReview
 {
@@ -19,25 +18,25 @@ namespace AdvancedExternalReviews.EditReview
     public class PageEditController : Controller
     {
         private readonly IContentLoader _contentLoader;
-        private readonly UrlResolver _urlResolver;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly IObjectSerializerFactory _serializerFactory;
+        private readonly StartPageUrlResolver _startPageUrlResolver;
         private readonly PropertyResolver _propertyResolver;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
-            UrlResolver urlResolver, PropertyResolver propertyResolver)
+            StartPageUrlResolver startPageUrlResolver, PropertyResolver propertyResolver)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _approvalReviewsRepository = approvalReviewsRepository;
             _externalReviewOptions = externalReviewOptions;
             _serializerFactory = serializerFactory;
-            _urlResolver = urlResolver;
+            _startPageUrlResolver = startPageUrlResolver;
             _propertyResolver = propertyResolver;
 
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
@@ -55,7 +54,7 @@ namespace AdvancedExternalReviews.EditReview
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
 
             const string url = "Views/PagePreview/Index.cshtml";
-            var startPageUrl = _urlResolver.GetUrl(ContentReference.StartPage);
+            var startPageUrl = _startPageUrlResolver.GetUrl(externalReviewLink.ContentLink);
 
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resolvedPath))
