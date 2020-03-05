@@ -1,4 +1,4 @@
-﻿using AdvancedExternalReviews.ReviewLinksRepository;
+﻿using System;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -54,11 +54,15 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             if (referenceToLoad != null)
             {
                 var content = _contentLoader.Get<IContent>(referenceToLoad);
+                if (HasExpired(content as IVersionable))
+                {
+                    return null;
+                }
+
                 if (content.IsPublished())
                 {
                     // for published version return the original method result
-                    var defaultContent = _defaultContentAreaLoader.Get(contentAreaItem);
-                    return defaultContent;
+                    return _defaultContentAreaLoader.Get(contentAreaItem);
                 }
 
                 contentAreaItem.ContentLink = referenceToLoad;
@@ -72,6 +76,11 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
         public DisplayOption LoadDisplayOption(ContentAreaItem contentAreaItem)
         {
             return _defaultContentAreaLoader.LoadDisplayOption(contentAreaItem);
+        }
+
+        private static bool HasExpired(IVersionable content)
+        {
+            return content.Status == VersionStatus.Published && content.StopPublish < DateTime.Now;
         }
     }
 }
