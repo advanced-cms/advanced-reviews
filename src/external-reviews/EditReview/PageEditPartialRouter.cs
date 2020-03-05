@@ -54,6 +54,8 @@ namespace AdvancedExternalReviews.EditReview
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 segmentContext.ContextMode = ContextMode.Edit;
+                // set ContentLink in DataTokens to make IPageRouteHelper working
+                segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
                 ExternalReview.Token = token;
 
                 return page;
