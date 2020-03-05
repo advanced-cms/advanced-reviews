@@ -48,19 +48,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             }
             else
             {
-                ContentReference contentReference = ContentReference.StartPage;
-                if (externalReviewLinkDds.ContentLink != null)
-                {
-                    // if the page has been published before we can generate a link like /alloy-plan/${_options.ContentPreviewUrl}
-                    // however if the page has never been published then we have to "proxy" it through the StartPage so that the
-                    // AuthorizationFilter does not block it
-                    var content = _contentLoader.Get<IContent>(externalReviewLinkDds.ContentLink.ToReferenceWithoutVersion());
-                    contentReference = content.IsPublished()
-                        ? externalReviewLinkDds.ContentLink
-                        : ContentReference.StartPage;
-                }
-
-                var url = _urlResolver.GetUrl(contentReference);
+                var url = _urlResolver.GetUrl(ContentReference.StartPage);
                 // the preview url has to be language specific as it's handled entirely by the EPiServer partial router
                 // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
                 externalUrlPrefix = UrlPath.Combine(url, _options.ContentPreviewUrl);
