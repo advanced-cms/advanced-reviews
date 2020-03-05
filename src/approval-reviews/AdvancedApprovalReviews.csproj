@@ -185,6 +185,7 @@
     <Compile Include="ReviewLocationsPreview.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="StartPageResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbededLanguages\advancedapprovalreviews_EN.xml">
