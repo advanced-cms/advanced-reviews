@@ -66,6 +66,7 @@ namespace AdvancedExternalReviews.EditReview
                     Name = content.Name,
                     EditableContentUrlSegment =
                         $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
+                    AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/AddPin",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
                     ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
@@ -223,6 +224,11 @@ namespace AdvancedExternalReviews.EditReview
         /// Url used by the iframe, it contains specific language branch in which the content was created
         /// </summary>
         public string EditableContentUrlSegment { get; set; }
+
+        /// <summary>
+        /// Url where new pins will be posted to
+        /// </summary>
+        public string AddPinUrl { get; set; }
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }
