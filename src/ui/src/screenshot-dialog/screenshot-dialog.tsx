@@ -112,7 +112,10 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
     };
 
     componentDidMount(): void {
-        html2canvas(this.props.iframe.contentDocument.body).then(canvas => {
+        html2canvas(this.props.iframe.contentDocument.body, {
+            allowTaint: true,
+            useCORS: true
+        }).then(canvas => {
             this.setState({ input: canvas.toDataURL() });
         });
     }
