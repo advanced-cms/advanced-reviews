@@ -36,7 +36,8 @@ namespace AdvancedExternalReviews.EditReview
             GlobalFilters.Filters.Add(new ConvertEditLinksFilter());
 
             RegisterEditPageGet(e, externalReviewOptions);
-            RegisterAddPinPost(e.Routes, externalReviewOptions);
+            RegisterEditableActionPost(e.Routes, externalReviewOptions, nameof(PageEditController.AddPin));
+            RegisterEditableActionPost(e.Routes, externalReviewOptions, nameof(PageEditController.RemovePin));
             RegisterLoginPage(e.Routes, externalReviewOptions);
         }
 
@@ -59,7 +60,7 @@ namespace AdvancedExternalReviews.EditReview
             e.Routes.Add(route);
         }
 
-        private void RegisterAddPinPost(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions)
+        private void RegisterEditableActionPost(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions, string method)
         {
             if (!externalReviewOptions.EditableLinksEnabled)
             {
@@ -67,9 +68,9 @@ namespace AdvancedExternalReviews.EditReview
             }
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", "PageEdit");
-            routeValues.Add("action", "AddPin");
+            routeValues.Add("action", method);
 
-            var route = new Route(externalReviewOptions.ReviewsUrl + "/AddPin", routeValues, new MvcRouteHandler());
+            var route = new Route($"{externalReviewOptions.ReviewsUrl}/{method}", routeValues, new MvcRouteHandler());
             string[] allowedMethods = { "POST" };
             var methodConstraints = new HttpMethodConstraint(allowedMethods);
             route.Constraints = new RouteValueDictionary { { "httpMethod", methodConstraints } };

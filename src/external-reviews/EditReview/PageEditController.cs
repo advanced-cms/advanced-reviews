@@ -67,6 +67,7 @@ namespace AdvancedExternalReviews.EditReview
                     EditableContentUrlSegment =
                         $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
                     AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/AddPin",
+                    RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/RemovePin",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
                     ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
@@ -78,28 +79,28 @@ namespace AdvancedExternalReviews.EditReview
             return new HttpNotFoundResult("Content not found");
         }
 
+        // get token based on URL segment
+        private static string GetToken()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+            if (request.UrlReferrer == null)
+            {
+                return null;
+            }
+
+            var segments = request.UrlReferrer.Segments;
+            if (segments.Length == 0)
+            {
+                return null;
+            }
+
+            var lastSegment = segments.Last();
+            return lastSegment;
+        }
+
         [HttpPost]
         public ActionResult AddPin(ReviewLocation reviewLocation)
         {
-            // get token based on URL segment
-            string GetToken()
-            {
-                var request = System.Web.HttpContext.Current.Request;
-                if (request.UrlReferrer == null)
-                {
-                    return null;
-                }
-
-                var segements = request.UrlReferrer.Segments;
-                if (segements.Length == 0)
-                {
-                    return null;
-                }
-
-                var lastSegment = segements.Last();
-                return lastSegment;
-            }
-
             var token = GetToken();
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -129,6 +130,25 @@ namespace AdvancedExternalReviews.EditReview
             {
                 Data = location
             };
+        }
+
+        [HttpPost]
+        public ActionResult RemovePin(DeleteReviewLocation location)
+        {
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var reviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            if (reviewLink == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _approvalReviewsRepository.RemoveReviewLocation(location.Id, reviewLink.ContentLink);
+            return new EmptyResult();
         }
 
         private bool ValidateReviewLocation(ReviewLocation reviewLocation)
@@ -215,6 +235,11 @@ namespace AdvancedExternalReviews.EditReview
         }
     }
 
+    public class DeleteReviewLocation
+    {
+        public string Id { get; set; }
+    }
+
     public class ContentPreviewModel
     {
         public string Token { get; set; }
@@ -229,6 +254,7 @@ namespace AdvancedExternalReviews.EditReview
         /// Url where new pins will be posted to
         /// </summary>
         public string AddPinUrl { get; set; }
+        public string RemovePinUrl { get; set; }
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }

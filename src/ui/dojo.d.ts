@@ -36,6 +36,7 @@ declare module "advanced-cms-review/advancedReviewService" {
 interface AdvancedReviewService {
     add(id: string, data: any): Promise<any>;
     load(): Promise<any[]>;
+    remove(id: string): Promise<any>;
 }
 
 declare module "advanced-cms-external-review/external-review-service" {

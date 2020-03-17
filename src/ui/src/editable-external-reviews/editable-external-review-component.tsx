@@ -71,6 +71,27 @@ class ExternalReviewService implements AdvancedReviewService {
         r.otherwise = result.catch;
         return result;
     }
+
+    remove(id: string): Promise<any> {
+        const result = new Promise((resolve, reject) => {
+            axios
+                .post(removeUrl, {
+                    id: id
+                })
+                .then(function() {
+                    resolve();
+                })
+                .catch(function(error) {
+                    reject(error);
+                });
+        });
+
+        // make Promise compatible with dojo
+        const r = result as any;
+        r.__proto__.otherwise = r.__proto__.catch;
+
+        return result;
+    }
 }
 
 const reviewService = new ExternalReviewService();
@@ -114,7 +135,8 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
 }
 
 const reviewEl = document.getElementById("reviews-editor");
-const addUrl = reviewEl.dataset.url;
+const addUrl = reviewEl.dataset.addUrl;
+const removeUrl = reviewEl.dataset.removeUrl;
 const userName: string = reviewEl.dataset.user;
 const initialPins: string = reviewEl.dataset.pins;
 const metadata: string = reviewEl.dataset.metadata;
