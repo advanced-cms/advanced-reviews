@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -71,7 +71,10 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                     return _defaultContentAreaLoader.Get(contentAreaItem);
                 }
 
-                contentAreaItem.ContentLink = referenceToLoad;
+                if (!contentAreaItem.IsReadOnly)
+                {
+                    contentAreaItem.ContentLink = referenceToLoad;
+                }
 
                 return content;
             }
