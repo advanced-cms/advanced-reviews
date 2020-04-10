@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -47,8 +47,14 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             else
             {
                 // load common draft instead of published version
-                referenceToLoad = _contentVersionRepository.LoadCommonDraft(contentAreaItem.ContentLink,
-                    _languageResolver.GetPreferredCulture().Name).ContentLink;
+                var loadCommonDraft = _contentVersionRepository.LoadCommonDraft(contentAreaItem.ContentLink,
+                    _languageResolver.GetPreferredCulture().Name);
+                if (loadCommonDraft == null)
+                {
+                    // fallback to default implementation if there is no common draft in a given language
+                    return _defaultContentAreaLoader.Get(contentAreaItem);
+                }
+                referenceToLoad = loadCommonDraft.ContentLink;
             }
 
             if (referenceToLoad != null)
