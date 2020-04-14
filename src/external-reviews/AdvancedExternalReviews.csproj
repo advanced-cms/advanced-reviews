@@ -208,6 +208,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RemoveExpiredTokensJob.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLink.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkBuilder.cs" />
     <Compile Include="ReviewLinksRepository\ExternalReviewLinkDds.cs" />
