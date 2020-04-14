@@ -14,6 +14,10 @@ export class ReviewLink {
         return this.validTo > new Date();
     }
 
+    @computed get isPersisted(): boolean {
+        return !!this.token;
+    }
+
     @action.bound setValidDateFromStr(validToStr: string): void {
         try {
             this.validTo = new Date(validToStr);
@@ -22,7 +26,16 @@ export class ReviewLink {
         }
     }
 
-    constructor(token: string, displayName: string, linkUrl: string, validToStr: string, isEditable: boolean, projectId?: number, pinCode?: string, projectName?: string) {
+    constructor(
+        token: string,
+        displayName: string,
+        linkUrl: string,
+        validToStr: string,
+        isEditable: boolean,
+        projectId?: number,
+        pinCode?: string,
+        projectName?: string
+    ) {
         this.token = token;
         this.displayName = displayName;
         this.linkUrl = linkUrl;
@@ -43,7 +56,7 @@ export interface IExternalReviewStore {
 
     initialEditMailMessage: string;
 
-    addLink(isEditable: boolean): void;
+    addLink(isEditable: boolean): Promise<ReviewLink>;
 
     delete(item: ReviewLink): void;
 
@@ -67,16 +80,39 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService = externalReviewService;
     }
 
-    addLink(isEditable: boolean): void {
-        this._externalReviewService.add(isEditable).then(item => {
-            this.links.push(new ReviewLink(item.token, item.displayName, item.linkUrl, item.validTo, item.isEditable, item.projectId, null, item.projectName));
+    addLink(isEditable: boolean): Promise<ReviewLink> {
+        return this._externalReviewService.add(isEditable).then(item => {
+            const reviewLink = new ReviewLink(
+                item.token,
+                item.displayName,
+                item.linkUrl,
+                item.validTo,
+                item.isEditable,
+                item.projectId,
+                null,
+                item.projectName
+            );
+            this.links.push(reviewLink);
+            return reviewLink;
         });
     }
 
     load() {
         this.links = [];
         this._externalReviewService.load().then(items => {
-            this.links = items.map(x => new ReviewLink(x.token, x.displayName, x.linkUrl, x.validTo, x.isEditable, x.projectId, x.pinCode, x.projectName));
+            this.links = items.map(
+                x =>
+                    new ReviewLink(
+                        x.token,
+                        x.displayName,
+                        x.linkUrl,
+                        x.validTo,
+                        x.isEditable,
+                        x.projectId,
+                        x.pinCode,
+                        x.projectName
+                    )
+            );
         });
     }
 
@@ -94,7 +130,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
     }
 
     edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void {
-        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then((result) => {
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then(result => {
             if (result) {
                 item.setValidDateFromStr(result.validTo);
                 item.pinCode = result.pinCode;

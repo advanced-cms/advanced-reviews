@@ -18,6 +18,7 @@ interface ExternalReviewWidgetContentProps {
     resources: ExternalReviewResources;
     editableLinksEnabled: boolean;
     pinCodeSecurityEnabled: boolean;
+    pinCodeSecurityRequired?: boolean;
     pinCodeLength: number;
 }
 
@@ -25,10 +26,19 @@ interface ExternalReviewWidgetContentProps {
  * Component used to render list of external review links
  */
 const ExternalReviewWidgetContent = observer(
-    ({ store, resources, editableLinksEnabled, pinCodeSecurityEnabled, pinCodeLength }: ExternalReviewWidgetContentProps) => {
+    ({
+        store,
+        resources,
+        editableLinksEnabled,
+        pinCodeSecurityEnabled,
+        pinCodeSecurityRequired,
+        pinCodeLength
+    }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
         const [currentLinkToEdit, setLinkToEdit] = useState<ReviewLink>(null);
+
+        const isPinRequired = pinCodeSecurityEnabled && pinCodeSecurityRequired;
 
         const onDelete = (action: boolean) => {
             setLinkToDelete(null);
@@ -46,28 +56,44 @@ const ExternalReviewWidgetContent = observer(
             store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
         };
 
-        const onEditClose = (validTo: Date, pinCode: string, displayName: string) => {
+        const onEditClose = async (validTo: Date, pinCode: string, displayName: string) => {
             setLinkToEdit(null);
             if (validTo == null) {
                 return;
             }
-            store.edit(currentLinkToEdit, validTo, pinCode, displayName);
+            if (currentLinkToEdit.isPersisted) {
+                store.edit(currentLinkToEdit, validTo, pinCode, displayName);
+                return;
+            }
+
+            if (isPinRequired && !pinCode) {
+                return;
+            }
+
+            const reviewLink = await store.addLink(currentLinkToEdit.isEditable);
+            store.edit(reviewLink, null, pinCode, displayName);
+        };
+
+        const addNewLink = isEditable => {
+            if (isEditable || !isPinRequired) {
+                store.addLink(isEditable);
+                return;
+            }
+
+            const temporaryLink = new ReviewLink(null, null, null, null, isEditable);
+            setLinkToEdit(temporaryLink);
         };
 
         const options = [
             {
                 name: resources.list.viewlink,
                 icon: "pageview",
-                onSelected: () => {
-                    store.addLink(false);
-                }
+                onSelected: () => addNewLink(false)
             },
             {
                 name: resources.list.editlink,
                 icon: "rate_review",
-                onSelected: () => {
-                    store.addLink(true);
-                }
+                onSelected: () => addNewLink(true)
             }
         ];
 
@@ -104,8 +130,19 @@ const ExternalReviewWidgetContent = observer(
                                         }
                                     />
                                     <div className="info-icons">
-                                    {(item.pinCode && pinCodeSecurityEnabled) && (<MaterialIcon icon="lock" className="link-secured" title={resources.list.editdialog.linksecured} />)}
-                                    {item.projectId > 0 && (<span className="dijitReset dijitInline dijitIcon epi-iconProject" title={resources.list.projectname + ": " + item.projectName}></span>)}
+                                        {item.pinCode && pinCodeSecurityEnabled && (
+                                            <MaterialIcon
+                                                icon="lock"
+                                                className="link-secured"
+                                                title={resources.list.editdialog.linksecured}
+                                            />
+                                        )}
+                                        {item.projectId > 0 && (
+                                            <span
+                                                className="dijitReset dijitInline dijitIcon epi-iconProject"
+                                                title={resources.list.projectname + ": " + item.projectName}
+                                            ></span>
+                                        )}
                                     </div>
                                     <IconButton
                                         className="item-action"
@@ -138,7 +175,7 @@ const ExternalReviewWidgetContent = observer(
                     {editableLinksEnabled ? (
                         <ContextMenu icon="playlist_add" title="" menuItems={options} />
                     ) : (
-                        <IconButton title="Add link" onClick={() => store.addLink(false)}>
+                        <IconButton title="Add link" onClick={() => addNewLink(false)}>
                             <MaterialIcon icon="playlist_add" />
                         </IconButton>
                     )}
@@ -174,6 +211,7 @@ const ExternalReviewWidgetContent = observer(
                         resources={resources}
                         open={!!currentLinkToEdit}
                         pinCodeSecurityEnabled={pinCodeSecurityEnabled}
+                        pinCodeSecurityRequired={pinCodeSecurityRequired}
                         pinCodeLength={pinCodeLength}
                     />
                 )}

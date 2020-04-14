@@ -38,6 +38,7 @@ namespace AdvancedExternalReviews.ManageLinks
                 base.Settings["initialViewMailMessage"] = _options.EmailView;
                 base.Settings["editableLinksEnabled"] = _options.EditableLinksEnabled;
                 base.Settings["pinCodeSecurityEnabled"] = _options.PinCodeSecurity.Enabled;
+                base.Settings["pinCodeSecurityRequired"] = _options.PinCodeSecurity.Required;
                 base.Settings["pinCodeLength"] = _options.PinCodeSecurity.CodeLength;
                 base.Settings["isEnabled"] = _options.IsEnabled;
 

@@ -91,6 +91,11 @@ namespace AdvancedExternalReviews
         public bool Enabled { get; set; } = false;
 
         /// <summary>
+        /// When true, it would not be possible to create a new a new link without a PIN
+        /// </summary>
+        public bool Required { get; set; } = false;
+
+        /// <summary>
         /// URL for login page
         /// </summary>
         public string ExternalReviewLoginUrl { get; set; } = "ExternalReviewLogin";
