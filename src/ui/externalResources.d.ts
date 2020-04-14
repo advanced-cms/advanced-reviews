@@ -19,8 +19,12 @@ interface ExternalReviewResources_Removedialog {
 interface ExternalReviewResources_List_Editdialog {
     /** Edit link */
     title: string;
+    /** Add link */
+    newitemtitle: string;
     /** PIN code */
     pincode: string;
+    /** digits */
+    digits: string;
     /** Display name */
     displayname: string;
     /** Update PIN code */
@@ -29,6 +33,8 @@ interface ExternalReviewResources_List_Editdialog {
     linksecured: string;
     /** Link with no PIN code security */
     linknotsecured: string;
+    /** Optional link name */
+    displaynamehelptext: string;
 }
 
 interface ExternalReviewResources_List {
@@ -80,4 +86,3 @@ interface ExternalReviewResources {
     sharedialog: ExternalReviewResources_Sharedialog;
     shared: ExternalReviewResources_Shared;
 }
-

@@ -155,6 +155,29 @@ There are few settings related with external review. They are all set using Opti
  | EditableLinksEnabled | false |When true then Editor can create editable links that allow external reviewers to add comments |
  | ViewLinkValidTo | 5 days |For how long view link is valid |
  | EditLinkValidTo | 5 days | For how long editable link is valid |
+ | PinCodeSecurity | [PinCodeSecurityOptions](#PinCodeSecurityOptions) | Settings specific to links security |
+ | Restrictions | [ExternalReviewRestrictionOptions](#ExternalReviewRestrictionOptions) | Restrictions around external reviewers |
+
+#### ExternalReviewRestrictionOptions
+#### ExternalReviewRestrictionOptions
+
+ | Option        | Default           | Description  |
+ | ---- | ---- | ---- |
+ | MaxReviewLocationsForContent | int.MaxValue | How many pins can be added by an external reviewer |
+ | MaxCommentsForReviewLocation | int.MaxValue | How many comments can be added by an external reviewer to one pin |
+ | MaxCommentLength | int.MaxValue | Max length of a comment |
+
+#### PinCodeSecurityOptions
+
+ | Option        | Default           | Description  |
+ | ---- | ---- | ---- |
+ | Enabled | false | When true, then PIN code check is enabled |
+ | Required | false | When true, it would not be possible to create a new a new link without a PIN |
+ | ExternalReviewLoginUrl | ExternalReviewLogin | URL for login page |
+ | RolesWithoutPin | WebEditors & WebAdmins | Roles that can access links without PIN |
+ | AuthenticationCookieLifeTime | 5 minutes | For how long authentication cookie should be valid |
+ | CodeLength | 4 | PIN code length |
+
 
 In order to add those options you would have to add a new `InitializableModule`.
 
@@ -195,6 +218,30 @@ public class ExternalReviewInitialization : IConfigurableModule
             options.EditableLinksEnabled = true;
             options.PinCodeSecurity.Enabled = true;
             options.PinCodeSecurity.CodeLength = 4;            
+        });
+    }
+
+    public void Initialize(InitializationEngine context) { }
+
+    public void Uninitialize(InitializationEngine context) { }
+}
+```
+
+This snippet makes the pin required for all VIEW links: 
+
+```csharp
+[InitializableModule]
+[ModuleDependency(typeof(FrameworkInitialization))]
+public class ExternalReviewInitialization : IConfigurableModule
+{
+    public void ConfigureContainer(ServiceConfigurationContext context)
+    {
+        context.Services.Configure<ExternalReviewOptions>(options =>
+        {
+            options.EditableLinksEnabled = true;
+            options.PinCodeSecurity.Enabled = true;
+            options.PinCodeSecurity.Required = true;
+            options.PinCodeSecurity.CodeLength = 4;
         });
     }
 

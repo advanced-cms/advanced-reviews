@@ -22,11 +22,14 @@
         <editlink>Edit</editlink>
         <editdialog>
           <title>Edit link</title>
+          <newitemtitle>Add link</newitemtitle>
           <pincode>PIN code</pincode>
+          <digits>digits</digits>
           <displayname>Display name</displayname>
           <pincheckboxlabel>Update PIN code</pincheckboxlabel>
           <linksecured>Link secured with PIN code</linksecured>
           <linknotsecured>Link with no PIN code security</linknotsecured>
+          <displaynamehelptext>Optional link name</displaynamehelptext>
         </editdialog>
       </list>
       <sharedialog>
