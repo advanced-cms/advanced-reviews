@@ -3,10 +3,12 @@ import offset from "./offset";
 
 export default class PositionCalculator {
     private readonly _documentSize: Dimensions;
+    private readonly _external: boolean;
     private readonly _document: Document;
 
-    constructor(documentSize: Dimensions, document?: Document) {
+    constructor(documentSize: Dimensions, external: boolean, document?: Document) {
         this._documentSize = documentSize;
+        this._external = external;
         this._document = document;
     }
 
@@ -16,7 +18,7 @@ export default class PositionCalculator {
         nodePosition: Dimensions,
         nodeSize: Dimensions
     ) {
-        const nodeOffset = offset(node, this._document);
+        const nodeOffset = offset(node, this._external);
 
         const originalOffsetFromLeft = documentRelativeOffset.x - nodePosition.x;
         const originalOffsetFromTop = documentRelativeOffset.y - nodePosition.y;
@@ -45,7 +47,19 @@ export default class PositionCalculator {
 
     calculate(location: PinPositioningDetails): Dimensions {
         if (this._document) {
-            if (location.propertyName && location.propertyPosition && location.propertySize) {
+            if (location.clickedDomNodeSelector && location.clickedDomNodePosition && location.clickedDomNodeSize) {
+                const node: HTMLElement = this._document.querySelector(location.clickedDomNodeSelector);
+                if (!node) {
+                    return this.resize(location);
+                }
+
+                return this.positionDomNode(
+                    node,
+                    location.documentRelativePosition,
+                    location.clickedDomNodePosition,
+                    location.clickedDomNodeSize
+                );
+            } else if (location.propertyName && location.propertyPosition && location.propertySize) {
                 const node: HTMLElement = this._document.querySelector(
                     `[data-epi-property-name='${location.propertyName}']`
                 );
@@ -57,22 +71,6 @@ export default class PositionCalculator {
                     location.documentRelativePosition,
                     location.propertyPosition,
                     location.propertySize
-                );
-            } else if (
-                location.clickedDomNodeSelector &&
-                location.clickedDomNodePosition &&
-                location.clickedDomNodeSize
-            ) {
-                const node: HTMLElement = this._document.querySelector(location.clickedDomNodeSelector);
-                if (!node) {
-                    return this.resize(location);
-                }
-
-                return this.positionDomNode(
-                    node,
-                    location.documentRelativePosition,
-                    location.clickedDomNodePosition,
-                    location.clickedDomNodeSize
                 );
             }
         }

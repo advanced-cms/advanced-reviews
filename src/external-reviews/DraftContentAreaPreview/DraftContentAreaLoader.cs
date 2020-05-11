@@ -1,4 +1,4 @@
-﻿using AdvancedExternalReviews.ReviewLinksRepository;
+﻿using System;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -47,21 +47,34 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             else
             {
                 // load common draft instead of published version
-                referenceToLoad = _contentVersionRepository.LoadCommonDraft(contentAreaItem.ContentLink,
-                    _languageResolver.GetPreferredCulture().Name).ContentLink;
+                var loadCommonDraft = _contentVersionRepository.LoadCommonDraft(contentAreaItem.ContentLink,
+                    _languageResolver.GetPreferredCulture().Name);
+                if (loadCommonDraft == null)
+                {
+                    // fallback to default implementation if there is no common draft in a given language
+                    return _defaultContentAreaLoader.Get(contentAreaItem);
+                }
+                referenceToLoad = loadCommonDraft.ContentLink;
             }
 
             if (referenceToLoad != null)
             {
                 var content = _contentLoader.Get<IContent>(referenceToLoad);
+                if (HasExpired(content as IVersionable))
+                {
+                    return null;
+                }
+
                 if (content.IsPublished())
                 {
                     // for published version return the original method result
-                    var defaultContent = _defaultContentAreaLoader.Get(contentAreaItem);
-                    return defaultContent;
+                    return _defaultContentAreaLoader.Get(contentAreaItem);
                 }
 
-                contentAreaItem.ContentLink = referenceToLoad;
+                if (!contentAreaItem.IsReadOnly)
+                {
+                    contentAreaItem.ContentLink = referenceToLoad;
+                }
 
                 return content;
             }
@@ -72,6 +85,11 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
         public DisplayOption LoadDisplayOption(ContentAreaItem contentAreaItem)
         {
             return _defaultContentAreaLoader.LoadDisplayOption(contentAreaItem);
+        }
+
+        private static bool HasExpired(IVersionable content)
+        {
+            return content.Status == VersionStatus.Published && content.StopPublish < DateTime.Now;
         }
     }
 }

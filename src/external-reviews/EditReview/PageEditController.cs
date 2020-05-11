@@ -9,7 +9,6 @@ using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;
-using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.EditReview
 {
@@ -19,25 +18,25 @@ namespace AdvancedExternalReviews.EditReview
     public class PageEditController : Controller
     {
         private readonly IContentLoader _contentLoader;
-        private readonly UrlResolver _urlResolver;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly IObjectSerializerFactory _serializerFactory;
+        private readonly StartPageUrlResolver _startPageUrlResolver;
         private readonly PropertyResolver _propertyResolver;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
-            UrlResolver urlResolver, PropertyResolver propertyResolver)
+            StartPageUrlResolver startPageUrlResolver, PropertyResolver propertyResolver)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _approvalReviewsRepository = approvalReviewsRepository;
             _externalReviewOptions = externalReviewOptions;
             _serializerFactory = serializerFactory;
-            _urlResolver = urlResolver;
+            _startPageUrlResolver = startPageUrlResolver;
             _propertyResolver = propertyResolver;
 
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
@@ -55,7 +54,7 @@ namespace AdvancedExternalReviews.EditReview
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
 
             const string url = "Views/PagePreview/Index.cshtml";
-            var startPageUrl = _urlResolver.GetUrl(ContentReference.StartPage);
+            var startPageUrl = _startPageUrlResolver.GetUrl(externalReviewLink.ContentLink);
 
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resolvedPath))
@@ -67,6 +66,8 @@ namespace AdvancedExternalReviews.EditReview
                     Name = content.Name,
                     EditableContentUrlSegment =
                         $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
+                    AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/AddPin",
+                    RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/RemovePin",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
                     ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
@@ -78,28 +79,28 @@ namespace AdvancedExternalReviews.EditReview
             return new HttpNotFoundResult("Content not found");
         }
 
+        // get token based on URL segment
+        private static string GetToken()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+            if (request.UrlReferrer == null)
+            {
+                return null;
+            }
+
+            var segments = request.UrlReferrer.Segments;
+            if (segments.Length == 0)
+            {
+                return null;
+            }
+
+            var lastSegment = segments.Last();
+            return lastSegment;
+        }
+
         [HttpPost]
         public ActionResult AddPin(ReviewLocation reviewLocation)
         {
-            // get token based on URL segment
-            string GetToken()
-            {
-                var request = System.Web.HttpContext.Current.Request;
-                if (request.UrlReferrer == null)
-                {
-                    return null;
-                }
-
-                var segements = request.UrlReferrer.Segments;
-                if (segements.Length == 0)
-                {
-                    return null;
-                }
-
-                var lastSegment = segements.Last();
-                return lastSegment;
-            }
-
             var token = GetToken();
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -129,6 +130,25 @@ namespace AdvancedExternalReviews.EditReview
             {
                 Data = location
             };
+        }
+
+        [HttpPost]
+        public ActionResult RemovePin(DeleteReviewLocation location)
+        {
+            var token = GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var reviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            if (reviewLink == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _approvalReviewsRepository.RemoveReviewLocation(location.Id, reviewLink.ContentLink);
+            return new EmptyResult();
         }
 
         private bool ValidateReviewLocation(ReviewLocation reviewLocation)
@@ -215,6 +235,11 @@ namespace AdvancedExternalReviews.EditReview
         }
     }
 
+    public class DeleteReviewLocation
+    {
+        public string Id { get; set; }
+    }
+
     public class ContentPreviewModel
     {
         public string Token { get; set; }
@@ -224,6 +249,12 @@ namespace AdvancedExternalReviews.EditReview
         /// Url used by the iframe, it contains specific language branch in which the content was created
         /// </summary>
         public string EditableContentUrlSegment { get; set; }
+
+        /// <summary>
+        /// Url where new pins will be posted to
+        /// </summary>
+        public string AddPinUrl { get; set; }
+        public string RemovePinUrl { get; set; }
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }

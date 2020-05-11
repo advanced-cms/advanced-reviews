@@ -11,6 +11,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     {
         IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId);
         ExternalReviewLink GetContentByToken(string token);
+        int RemoveExpiredLinks();
         ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId);
 
         /// <summary>
@@ -20,7 +21,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         /// <param name="validTo"></param>
         /// <param name="pinCode">New PIN code. If null then PIN is not updated</param>
         /// <param name="displayName">Link display name, when empty then fallback to token</param>
-        ExternalReviewLink UpdateLink(string token, DateTime validTo, string pinCode, string displayName);
+        ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName);
 
         void DeleteLink(string token);
     }
@@ -48,6 +49,18 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             }
             return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink || x.ProjectId == projectId).ToList().Select(
                 _externalReviewLinkBuilder.FromExternalReview);
+        }
+
+        public int RemoveExpiredLinks()
+        {
+            var store = GetStore();
+            var expiredItems = store.Items<ExternalReviewLinkDds>().Where(x => x.ValidTo < DateTime.Now).ToList();
+            foreach (var item in expiredItems)
+            {
+                store.Delete(item.Id);
+            }
+
+            return expiredItems.Count;
         }
 
         public ExternalReviewLink GetContentByToken(string token)
@@ -81,7 +94,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
         }
 
-        public ExternalReviewLink UpdateLink(string token, DateTime validTo, string pinCode, string displayName)
+        public ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName)
         {
             var store = GetStore();
             var item = store.Items<ExternalReviewLinkDds>()
@@ -91,7 +104,11 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 return null;
             }
 
-            item.ValidTo = validTo;
+            if (validTo.HasValue)
+            {
+                item.ValidTo = validTo.Value;
+            }
+
             if (pinCode != null)
             {
                 item.PinCode = pinCode;

@@ -33,6 +33,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
                 store={this.store}
                 editableLinksEnabled={this.params.editableLinksEnabled}
                 pinCodeSecurityEnabled={this.params.pinCodeSecurityEnabled}
+                pinCodeSecurityRequired={this.params.pinCodeSecurityRequired}
                 pinCodeLength={this.params.pinCodeLength}
                 resources={res}
             />,

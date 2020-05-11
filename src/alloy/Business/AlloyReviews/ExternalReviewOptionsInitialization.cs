@@ -18,6 +18,7 @@ namespace AlloyTemplates.Business.AlloyReviews
             {
                 options.EditableLinksEnabled = true;
                 options.PinCodeSecurity.Enabled = true;
+                options.PinCodeSecurity.Required = true;
                 options.PinCodeSecurity.CodeLength = 5;
             });
         }

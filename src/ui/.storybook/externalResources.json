@@ -19,11 +19,14 @@
     "editlink": "Edit",
     "editdialog": {
       "title": "Edit link",
+      "newitemtitle": "Add link",
       "pincode": "PIN code",
+      "digits": "digits",
       "displayname": "Display name",
       "pincheckboxlabel": "Update PIN code",
       "linksecured": "Link secured with PIN code",
-      "linknotsecured": "Link with no PIN code security"
+      "linknotsecured": "Link with no PIN code security",
+      "displaynamehelptext": "Optional link name"
     }
   },
   "sharedialog": {

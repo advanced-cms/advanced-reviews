@@ -81,7 +81,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return Rest(result);
         }
 
-        public ActionResult Edit(string id, DateTime validTo, string pinCode, string displayName)
+        public ActionResult Edit(string id, DateTime? validTo, string pinCode, string displayName)
         {
             if (id == null)
             {

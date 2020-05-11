@@ -20,7 +20,7 @@ describe("when property position data is not available", () => {
     describe("and the document size is the same as the saved one", () => {
         beforeEach(() => {
             pin = getPin();
-            positionCalculator = new PositionCalculator(originalDocumentLocation);
+            positionCalculator = new PositionCalculator(originalDocumentLocation, false);
         });
 
         test("it should return original position", () => {
@@ -33,7 +33,7 @@ describe("when property position data is not available", () => {
         beforeEach(() => {
             pin = getPin();
             const newDocumentSize: Dimensions = { x: 1200, y: 600 };
-            positionCalculator = new PositionCalculator(newDocumentSize);
+            positionCalculator = new PositionCalculator(newDocumentSize, false);
         });
 
         test("it should return rescaled position relative to the new document size", () => {

@@ -1,25 +1,21 @@
-﻿using EPiServer;
-using EPiServer.Cms.Shell;
-using EPiServer.Core;
+﻿using AdvancedApprovalReviews;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.ReviewLinksRepository
 {
     [ServiceConfiguration(typeof(ExternalReviewLinkBuilder))]
     public class ExternalReviewLinkBuilder
     {
-        private readonly UrlResolver _urlResolver;
-        private readonly IContentLoader _contentLoader;
         private readonly ProjectRepository _projectRepository;
         private readonly ExternalReviewOptions _options;
+        private readonly StartPageUrlResolver _startPageUrlResolver;
 
-        public ExternalReviewLinkBuilder(UrlResolver urlResolver, ExternalReviewOptions options, IContentLoader contentLoader, ProjectRepository projectRepository)
+        public ExternalReviewLinkBuilder(ExternalReviewOptions options,
+            StartPageUrlResolver startPageUrlResolver, ProjectRepository projectRepository)
         {
-            _urlResolver = urlResolver;
             _options = options;
-            _contentLoader = contentLoader;
+            _startPageUrlResolver = startPageUrlResolver;
             _projectRepository = projectRepository;
         }
 
@@ -48,19 +44,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             }
             else
             {
-                ContentReference contentReference = ContentReference.StartPage;
-                if (externalReviewLinkDds.ContentLink != null)
-                {
-                    // if the page has been published before we can generate a link like /alloy-plan/${_options.ContentPreviewUrl}
-                    // however if the page has never been published then we have to "proxy" it through the StartPage so that the
-                    // AuthorizationFilter does not block it
-                    var content = _contentLoader.Get<IContent>(externalReviewLinkDds.ContentLink.ToReferenceWithoutVersion());
-                    contentReference = content.IsPublished()
-                        ? externalReviewLinkDds.ContentLink
-                        : ContentReference.StartPage;
-                }
-
-                var url = _urlResolver.GetUrl(contentReference);
+                var url = _startPageUrlResolver.GetUrl(externalReviewLinkDds.ContentLink);
                 // the preview url has to be language specific as it's handled entirely by the EPiServer partial router
                 // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
                 externalUrlPrefix = UrlPath.Combine(url, _options.ContentPreviewUrl);
