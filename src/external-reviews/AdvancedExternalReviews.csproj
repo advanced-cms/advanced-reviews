@@ -256,12 +256,10 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_DE.xml" />
     <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_FI.xml" />
+    <EmbeddedResource Include="EmbededLanguages\advancedexternalreviews_NO.xml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="EmbededLanguages\advancedexternalreviews_NO.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
