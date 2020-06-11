@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
@@ -50,5 +52,21 @@ namespace AlloyTemplates.Models.Pages
         [Display(GroupName = Global.GroupNames.SiteSettings)]
         public virtual SiteLogotypeBlock SiteLogotype { get; set; }
 
+        public string ConcatenateItems()
+        {
+            if (this.MainContentArea == null)
+            {
+                return string.Empty;
+            }
+
+            var list = new List<string>();
+            foreach (var contentAreaItem in this.MainContentArea.FilteredItems)
+            {
+                var content = contentAreaItem.GetContent();
+                list.Add(content.Name);
+            }
+
+            return string.Join(", ", list);
+        }
     }
 }
