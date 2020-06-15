@@ -1,44 +1,43 @@
-﻿using System;
 using System.Linq;
-using AdvancedExternalReviews;
 using AdvancedExternalReviews.DraftContentAreaPreview;
 using EPiServer;
-using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 
-namespace AlloyTemplates.Models.Pages
+namespace AdvancedExternalReviews
 {
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class DisplayModesInitialization : IInitializableModule
+    public class CustomContentLoaderInitialization : IInitializableModule
     {
         public void Initialize(InitializationEngine context)
         {
             var events = ServiceLocator.Current.GetInstance<IContentEvents>();
-            if (ServiceLocator.Current.GetInstance<ExternalReviewOptions>().ReplaceChildren)
+            var externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            if (externalReviewOptions.ReplaceChildren)
             {
-                events.LoadedChildren += Events_LoadedChildren;
+                events.LoadingChildren += Events_LoadingChildren;
             }
         }
 
-        private void Events_LoadedChildren(object sender, ChildrenEventArgs e)
+        private void Events_LoadingChildren(object sender, ChildrenEventArgs e)
         {
             if (!ExternalReview.IsInExternalReviewContext)
             {
                 return;
             }
 
+            var reviewsContentLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
+
             e.CancelAction = true;
-            e.ChildrenItems = ServiceLocator.Current.GetInstance<ReviewsContentLoader>().GetChildrenWithReviews<IContent>(e.ContentLink).ToList();
+            e.ChildrenItems = reviewsContentLoader.GetChildrenWithReviews<IContent>(e.ContentLink).ToList();
         }
 
         public void Uninitialize(InitializationEngine context)
         {
             var events = ServiceLocator.Current.GetInstance<IContentEvents>();
-            events.LoadedChildren += Events_LoadedChildren;
+            events.LoadingChildren -= Events_LoadingChildren;
         }
 
         public void Preload(string[] parameters)

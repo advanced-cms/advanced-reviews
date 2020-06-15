@@ -4,6 +4,8 @@ namespace AdvancedExternalReviews
 {
     public static class ExternalReview
     {
+        public static object locker = new object();
+
         public static string Token
         {
             get => HttpContext.Current?.Items["Token"] as string;
