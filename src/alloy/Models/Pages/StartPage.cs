@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Principal;
-using System.Text;
+using AdvancedExternalReviews.DraftContentAreaPreview;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.SpecializedProperties;
 using AlloyTemplates.Models.Blocks;
+using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Security;
@@ -71,6 +72,38 @@ namespace AlloyTemplates.Models.Pages
                 var content = contentAreaItem.GetContent();
                 list.Add(content.Name);
             }
+
+            return string.Join(", ", list);
+        }
+
+        public string ConcatenateChildren()
+        {
+            var contentAreaLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var items = contentAreaLoader.GetChildren<IContent>(this.ContentLink);
+            var list = new List<string>();
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+
+            return string.Join(", ", list);
+        }
+
+        public string ConcatenateChildrenWithReviews()
+        {
+            var contentAreaLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
+            var items = contentAreaLoader.GetChildrenWithReviews<IContent>(this.ContentLink);
+            var list = new List<string>();
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+
+
+            var reference = this.ContentLink.ToReferenceWithoutVersion();
+            ContentProvider provider = ServiceLocator.Current.GetInstance<IContentProviderManager>().ProviderMap.GetProvider(reference);
+            string languageID = this.Language.Name;
+            IList<GetChildrenReferenceResult> childrenReferences = provider.GetChildrenReferences<IContent>(reference, languageID, 0, 1000);
 
             return string.Join(", ", list);
         }
