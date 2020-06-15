@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Web;
 
 namespace AdvancedExternalReviews
 {
@@ -16,6 +17,30 @@ namespace AdvancedExternalReviews
         {
             get => (string) HttpContext.Current?.Items["IsEditLink"] == bool.TrueString;
             set => HttpContext.Current.Items["IsEditLink"] = value.ToString();
+        }
+
+        public static IList<string> CustomLoaded
+        {
+            get
+            {
+                if (HttpContext.Current == null)
+                {
+                    return new List<string>();
+                }
+
+                if (HttpContext.Current.Items["CustomLoaded"] as IList<string> == null)
+                {
+                    lock (locker)
+                    {
+                        if (HttpContext.Current.Items["CustomLoaded"] as IList<string> == null)
+                        {
+                            HttpContext.Current.Items["CustomLoaded"] = new List<string>();
+                        }
+                    }
+                }
+
+                return HttpContext.Current?.Items["CustomLoaded"] as IList<string>;
+            }
         }
 
         public static int? ProjectId
