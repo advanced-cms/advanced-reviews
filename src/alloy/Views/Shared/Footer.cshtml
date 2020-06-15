@@ -1,4 +1,6 @@
-﻿@model IPageViewModel<SitePageData>
+﻿@using EPiServer.ServiceLocation
+@using EPiServer.Web.Routing
+@model IPageViewModel<SitePageData>
 <div class="row">
     <div class="span12 footer">
         <hr />
@@ -28,13 +30,16 @@
                         {
                             if (!Model.Layout.IsInReadonlyMode)
                             {
-                            <a href="@Model.Layout.LoginUrl" title="@Html.Translate("/footer/login")">@Html.Translate("/footer/login")</a>
+                                <a href="@Model.Layout.LoginUrl" title="@Html.Translate("/footer/login")">@Html.Translate("/footer/login")</a>
                             }
                         }
                     </li>
                 </ul>
 
             </div>
+
+            @Model.CurrentPage.Name = <span>@Model.CurrentPage.Name</span>
+            IPageRouteHelper = @Html.Raw(ServiceLocator.Current.GetInstance<IPageRouteHelper>().Content.Name)
         </div>
     </div>
 </div>
