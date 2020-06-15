@@ -63,6 +63,8 @@ namespace AdvancedExternalReviews
         public ExternalReviewRestrictionOptions Restrictions { get; } = new ExternalReviewRestrictionOptions();
 
         public PinCodeSecurityOptions PinCodeSecurity { get; } = new PinCodeSecurityOptions();
+
+        public bool ReplaceChildren { get; set; } = true;
     }
 
     public class ExternalReviewRestrictionOptions

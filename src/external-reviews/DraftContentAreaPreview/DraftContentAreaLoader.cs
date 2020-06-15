@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Core.Internal;
+using EPiServer.Filters;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
@@ -106,13 +108,14 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
         private readonly IContentVersionRepository _contentVersionRepository;
         private readonly LanguageResolver _languageResolver;
         private readonly IContentProviderManager _contentProviderManager;
+        private readonly IContentChildrenSorter _childrenSorter;
 
         public ReviewsContentLoader(IContentLoader contentLoader, IContentLanguageAccessor languageAccessor,
             ProjectContentResolver projectContentResolver,
             IContentVersionRepository contentVersionRepository,
             LanguageResolver languageResolver,
-            IContentProviderManager contentProviderManager
-        )
+            IContentProviderManager contentProviderManager,
+            IContentChildrenSorter childrenSorter)
         {
             _contentLoader = contentLoader;
             _languageAccessor = languageAccessor;
@@ -120,6 +123,7 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             _contentVersionRepository = contentVersionRepository;
             _languageResolver = languageResolver;
             _contentProviderManager = contentProviderManager;
+            _childrenSorter = childrenSorter;
         }
 
         public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink) where T : IContent
@@ -140,7 +144,6 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 throw new ArgumentNullException(nameof(contentLink), "Parameter has no value set");
             }
 
-
             if (!ExternalReview.IsInExternalReviewContext)
             {
                 return _contentLoader.GetChildren<T>(contentLink);
@@ -154,7 +157,8 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
 
             var provider = _contentProviderManager.ProviderMap.GetProvider(referenceWithoutVersion);
 
-            var localizable = _contentLoader.Get<IContent>(referenceWithoutVersion, loaderOptions) as ILocalizable;
+            var parentContent = _contentLoader.Get<IContent>(referenceWithoutVersion, loaderOptions);
+            var localizable = parentContent as ILocalizable;
             var languageID = localizable != null ? localizable.Language.Name : (string)null;
             var childrenReferences =
                 provider.GetChildrenReferences<T>(referenceWithoutVersion, languageID, startIndex, maxRows);
@@ -203,7 +207,21 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 }
             }
 
-            return result.Select(_contentLoader.Get<T>);
+            var childrenWithReviews = result.Select(_contentLoader.Get<T>).ToList();
+
+
+            if (childrenWithReviews.Count > 0)
+            {
+                var pageData = parentContent as PageData;
+                if (pageData != null && pageData.ChildSortOrder == FilterSortOrder.Alphabetical && (startIndex == -1 && maxRows == -1 ||
+                                                                                                    childrenWithReviews.Count < maxRows && startIndex == 0))
+                {
+                    var collection = this._childrenSorter.Sort((IEnumerable<IContent>) childrenWithReviews);
+                    childrenWithReviews = collection.Cast<T>().ToList();
+                }
+            }
+
+            return childrenWithReviews;
         }
 
         private bool HasExpired(IVersionable content)

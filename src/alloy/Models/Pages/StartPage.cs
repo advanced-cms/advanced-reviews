@@ -99,7 +99,6 @@ namespace AlloyTemplates.Models.Pages
                 list.Add(item.Name);
             }
 
-
             var reference = this.ContentLink.ToReferenceWithoutVersion();
             ContentProvider provider = ServiceLocator.Current.GetInstance<IContentProviderManager>().ProviderMap.GetProvider(reference);
             string languageID = this.Language.Name;
