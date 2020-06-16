@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Web;
+using EPiServer.Core;
 
 namespace AdvancedExternalReviews
 {
@@ -51,5 +54,43 @@ namespace AdvancedExternalReviews
 
         public static bool IsInExternalReviewContext => !string.IsNullOrWhiteSpace(Token);
         public static bool IsInProjectReviewContext => ProjectId.HasValue;
+
+        public static object _linkLock = new object();
+
+        private static ConcurrentDictionary<string, IContent>  GetCachedLinksDictionary()
+        {
+            if (HttpContext.Current == null)
+            {
+                return null;
+            }
+
+            var key = "_cachedReviewLinks";
+            if (HttpContext.Current.Items[key] as ConcurrentDictionary<string, IContent> == null)
+            {
+                lock (_linkLock)
+                {
+                    if (HttpContext.Current.Items[key] as ConcurrentDictionary<string, IContent> == null)
+                    {
+                        HttpContext.Current.Items[key] = new ConcurrentDictionary<string, IContent>();
+                    }
+                }
+            }
+
+            return HttpContext.Current?.Items[key] as ConcurrentDictionary<string, IContent>;
+        }
+
+        public static IContent GetCachedContent(CultureInfo preferredCulture, ContentReference contentLink)
+        {
+            if (GetCachedLinksDictionary().TryGetValue(preferredCulture.Name + "_" + contentLink.ToReferenceWithoutVersion(), out var result))
+            {
+                return result;
+            }
+            return null;
+        }
+
+        public static void SetCachedLink(CultureInfo preferredCulture, IContent contentLink)
+        {
+            GetCachedLinksDictionary()[preferredCulture.Name + "_" + contentLink.ContentLink.ToReferenceWithoutVersion()] = contentLink;
+        }
     }
 }

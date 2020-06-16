@@ -39,8 +39,11 @@ namespace AlloyTemplates.Models.Pages
 
         public string ListAncestors()
         {
-            var ancestors = ServiceLocator.Current.GetInstance<IContentLoader>().GetAncestors(this.ContentLink);
-            return String.Join("-> ", ancestors.Select(x => x.Name));
+            var ancestors = ServiceLocator.Current.GetInstance<IContentLoader>().GetAncestors(this.ContentLink).ToList();
+
+            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(new ContentReference(12));
+
+            return String.Join("-> ", ancestors.Select(x => x.Name)) + "-------" + content.Name;
         }
     }
 }

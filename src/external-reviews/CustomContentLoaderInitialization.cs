@@ -4,6 +4,7 @@ using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
+using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 
 namespace AdvancedExternalReviews
@@ -32,8 +33,22 @@ namespace AdvancedExternalReviews
 
         private void Events_LoadingContent(object sender, ContentEventArgs e)
         {
-            if (!ExternalReview.IsInExternalReviewContext || ExternalReview.CustomLoaded.Contains(e.ContentLink.ToString()))
+            if (!ExternalReview.IsInExternalReviewContext)
             {
+                return;
+            }
+
+            if (ExternalReview.CustomLoaded.Contains(e.ContentLink.ToString()))
+            {
+                var preferredCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
+                var cachedContent = ExternalReview.GetCachedContent(preferredCulture, e.ContentLink);
+                if (cachedContent != null)
+                {
+                    e.ContentLink = cachedContent.ContentLink;
+                    e.Content = cachedContent;
+                    e.CancelAction = true;
+                }
+
                 return;
             }
 
@@ -47,7 +62,13 @@ namespace AdvancedExternalReviews
                 return;
             }
 
+            var unpublishedCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
+            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(unpublished);
+
+            ExternalReview.SetCachedLink(unpublishedCulture, content);
+
             e.ContentLink = unpublished;
+            e.Content = content;
         }
 
         private void Events_LoadingChildren(object sender, ChildrenEventArgs e)
