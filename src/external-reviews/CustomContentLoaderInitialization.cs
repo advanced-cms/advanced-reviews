@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using AdvancedExternalReviews.DraftContentAreaPreview;
 using EPiServer;
 using EPiServer.Core;
@@ -11,14 +11,22 @@ namespace AdvancedExternalReviews
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class CustomContentLoaderInitialization : IInitializableModule
     {
+        private bool _replacementChildren = false;
+        private bool _replacementContent = false;
+
         public void Initialize(InitializationEngine context)
         {
             var events = ServiceLocator.Current.GetInstance<IContentEvents>();
             var externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
-            if (externalReviewOptions.ReplaceChildren)
+            if (externalReviewOptions.ContentReplacement.ReplaceChildren)
+            {
+                events.LoadingContent += Events_LoadingContent;
+                _replacementChildren = true;
+            }
+            if (externalReviewOptions.ContentReplacement.ReplaceContent)
             {
                 events.LoadingChildren += Events_LoadingChildren;
-                events.LoadingContent += Events_LoadingContent;
+                _replacementContent = true;
             }
         }
 
@@ -58,8 +66,15 @@ namespace AdvancedExternalReviews
         public void Uninitialize(InitializationEngine context)
         {
             var events = ServiceLocator.Current.GetInstance<IContentEvents>();
-            events.LoadingChildren -= Events_LoadingChildren;
-            events.LoadingContent -= Events_LoadingContent;
+            if (_replacementChildren)
+            {
+                events.LoadingChildren -= Events_LoadingChildren;
+            }
+
+            if (_replacementContent)
+            {
+                events.LoadingContent -= Events_LoadingContent;
+            }
         }
 
         public void Preload(string[] parameters)
