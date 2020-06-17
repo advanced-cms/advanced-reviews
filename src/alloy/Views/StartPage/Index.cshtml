@@ -13,3 +13,7 @@
 <br />
 <div>With Review items</div>
 @Html.Raw(Model.CurrentPage.ConcatenateChildrenWithReviews())
+
+<br />
+<div>Url resolver</div>
+<a href="@Url.ContentUrl(Model.CurrentPage.LinkURL)">Link (should be project specific)</a>

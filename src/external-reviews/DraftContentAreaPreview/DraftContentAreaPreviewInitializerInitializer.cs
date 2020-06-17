@@ -26,7 +26,8 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
 
             context.Services.Intercept<UrlResolver>(
                 (locator, defaultUrlResolver) =>
-                    new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>()));
+                    new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
+                        locator.GetInstance<IPermanentLinkMapper>()));
         }
 
         public void Initialize(InitializationEngine context)
