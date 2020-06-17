@@ -20,7 +20,6 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 (locator, defaultContentAreaLoader) => new DraftContentAreaLoader(defaultContentAreaLoader,
                     locator.GetInstance<IContentLoader>(), locator.GetInstance<ReviewsContentLoader>()));
 
-
             context.Services.Intercept<ContentAreaRenderer>(
                 (locator, defaultContentAreaRenderer) => new DraftContentAreaRenderer(defaultContentAreaRenderer));
 
@@ -28,6 +27,10 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 (locator, defaultUrlResolver) =>
                     new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
                         locator.GetInstance<IPermanentLinkMapper>()));
+
+            context.Services.Intercept<IContentLoader>(
+                (locator, defaultContentLoader) =>
+                    new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>()));
         }
 
         public void Initialize(InitializationEngine context)

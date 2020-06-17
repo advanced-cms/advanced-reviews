@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using EPiServer;
 using EPiServer.Cms.Shell;
@@ -38,18 +39,28 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             _childrenSorter = childrenSorter;
         }
 
-        public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink) where T : IContent
+        public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink) where T : IContentData
         {
             return GetChildrenWithReviews<T>(contentLink, CreateDefaultListOption());
         }
 
-        public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink, LoaderOptions loaderOptions) where T : IContent
+        public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink, CultureInfo language) where T : IContentData
+        {
+            return GetChildrenWithReviews<T>(contentLink, new LoaderOptions() {LanguageLoaderOption.Specific(language)}, -1, -1);
+        }
+
+        public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink, CultureInfo language, int startIndex, int maxRows) where T : IContentData
+        {
+            return GetChildrenWithReviews<T>(contentLink, language);
+        }
+
+        public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink, LoaderOptions loaderOptions) where T : IContentData
         {
             return GetChildrenWithReviews<T>(contentLink, loaderOptions, -1, -1);
         }
 
         public IEnumerable<T> GetChildrenWithReviews<T>(
-            ContentReference contentLink, LoaderOptions loaderOptions, int startIndex, int maxRows) where T : IContent
+            ContentReference contentLink, LoaderOptions loaderOptions, int startIndex, int maxRows) where T : IContentData
         {
             if (ContentReference.IsNullOrEmpty(contentLink))
             {
@@ -91,14 +102,14 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                         continue;
                     }
 
-                    if (content.IsPublished())
+                    if ((content as IContent).IsPublished())
                     {
                         // for published version return the original method result
                         result.Add(childReference.ContentLink);
                         continue;
                     }
 
-                    result.Add(content.ContentLink);
+                    result.Add((content as IContent).ContentLink);
                 }
             }
 

@@ -183,6 +183,7 @@
     <Compile Include="BlocksPreview\BlocksTemplateCoordinator.cs" />
     <Compile Include="CustomContentLoaderInitialization.cs" />
     <Compile Include="DraftContentAreaPreview\ReviewsContentLoader.cs" />
+    <Compile Include="DraftContentLoader.cs" />
     <Compile Include="PinCodeSecurity\ExternalLinkPinCodeSecurityHandler.cs" />
     <Compile Include="PreviewUrlResolver.cs" />
     <Compile Include="DraftContentAreaPreview\DraftContentAreaPreviewInitializerInitializer.cs" />
