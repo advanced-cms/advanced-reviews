@@ -61,13 +61,13 @@ namespace AlloyTemplates.Models.Pages
 
         public string ConcatenateItems()
         {
-            if (this.MainContentArea == null)
+            if (MainContentArea == null)
             {
                 return string.Empty;
             }
 
             var list = new List<string>();
-            foreach (var contentAreaItem in this.MainContentArea.FilteredItems)
+            foreach (var contentAreaItem in MainContentArea.FilteredItems)
             {
                 var content = contentAreaItem.GetContent();
                 list.Add(content.Name);
@@ -78,8 +78,8 @@ namespace AlloyTemplates.Models.Pages
 
         public string ConcatenateChildren()
         {
-            var contentAreaLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            var items = contentAreaLoader.GetChildren<IContent>(this.ContentLink);
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var items = contentLoader.GetChildren<IContent>(ContentLink);
             var list = new List<string>();
             foreach (var item in items)
             {
@@ -89,19 +89,39 @@ namespace AlloyTemplates.Models.Pages
             return string.Join(", ", list);
         }
 
-        public string ConcatenateChildrenWithReviews()
+        public string GetChildProducts()
         {
-            var contentAreaLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
-            var items = contentAreaLoader.GetChildrenWithReviews<IContent>(this.ContentLink);
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var items = contentLoader.GetChildren<ProductPage>(ContentLink);
             var list = new List<string>();
             foreach (var item in items)
             {
                 list.Add(item.Name);
             }
 
-            var reference = this.ContentLink.ToReferenceWithoutVersion();
+            return string.Join(", ", list);
+        }
+
+        public string GetAlloyPlanProduct()
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var alloyPlan = contentLoader.Get<ProductPage>(new ContentReference(6));
+            return alloyPlan.Name;
+        }
+
+        public string ConcatenateChildrenWithReviews()
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
+            var items = contentLoader.GetChildrenWithReviews<IContent>(ContentLink);
+            var list = new List<string>();
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+
+            var reference = ContentLink.ToReferenceWithoutVersion();
             ContentProvider provider = ServiceLocator.Current.GetInstance<IContentProviderManager>().ProviderMap.GetProvider(reference);
-            string languageID = this.Language.Name;
+            string languageID = Language.Name;
             IList<GetChildrenReferenceResult> childrenReferences = provider.GetChildrenReferences<IContent>(reference, languageID, 0, 1000);
 
             return string.Join(", ", list);

@@ -5,15 +5,23 @@
 
 <div>ContentArea ContentItems</div>
 @Html.Raw(Model.CurrentPage.ConcatenateItems())
-<div>With Review items</div>
 <br />
-<div>With GetChildren</div>
+<br />
+<div>GetChildren&lt;IContent&gt;(ContentLink)</div>
 @Html.Raw(Model.CurrentPage.ConcatenateChildren())
-
 <br />
-<div>With Review items</div>
+<br />
+<div>GetChildren&lt;ProductPage&gt;(ContentLink)</div>
+@Html.Raw(Model.CurrentPage.GetChildProducts())
+<br />
+<br />
+<div>Get&lt;IContent&gt;(new ContentReference("5")) - AlloyPlan</div>
+@Html.Raw(Model.CurrentPage.GetAlloyPlanProduct())
+<br />
+<br />
+<div>GetChildrenWithReviews&lt;IContent&gt;(ContentLink)</div>
 @Html.Raw(Model.CurrentPage.ConcatenateChildrenWithReviews())
-
 <br />
-<div>Url resolver</div>
+<br />
+<div>Url.ContentUrl(Model.CurrentPage.LinkURL)</div>
 <a href="@Url.ContentUrl(Model.CurrentPage.LinkURL)">Link (should be project specific)</a>
