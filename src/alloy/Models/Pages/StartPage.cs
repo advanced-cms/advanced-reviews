@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 using System.Text;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.SpecializedProperties;
 using AlloyTemplates.Models.Blocks;
+using EPiServer.Framework;
+using EPiServer.Framework.Initialization;
+using EPiServer.Security;
+using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 
 namespace AlloyTemplates.Models.Pages
 {
@@ -69,4 +75,43 @@ namespace AlloyTemplates.Models.Pages
             return string.Join(", ", list);
         }
     }
+
+    public class CustomVirtualRole : VirtualRoleProviderBase
+    {
+        public override bool IsInVirtualRole(IPrincipal principal, object context)
+        {
+            /* var requestContext = ServiceLocator.Current.GetInstance<System.Web.Routing.RequestContext>();
+             if (ContentReference.IsNullOrEmpty(requestContext.GetContentLink()))
+             {
+
+             }*/
+
+            var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+            //var languageId = pageRouteHelper.LanguageID;
+            //if (languageId == "test")
+            {
+            }
+
+            return false;
+        }
+    }
+
+    [InitializableModule]
+    public class CustomContentLoaderInitialization : IInitializableModule
+    {
+        public void Initialize(InitializationEngine context)
+        {
+            var virtualRoleRepository = ServiceLocator.Current.GetInstance<IVirtualRoleRepository>();
+            virtualRoleRepository.Register("VirtualRole", new CustomVirtualRole());
+        }
+
+        public void Uninitialize(InitializationEngine context)
+        {
+        }
+
+        public void Preload(string[] parameters)
+        {
+        }
+    }
+
 }

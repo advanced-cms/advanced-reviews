@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
 using AlloyTemplates.Models.Pages;
 using AlloyTemplates.Models.ViewModels;
+using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Mvc;
+using EPiServer.Web.Routing;
 
 namespace AlloyTemplates.Controllers
 {
@@ -10,6 +12,11 @@ namespace AlloyTemplates.Controllers
     {
         public ActionResult Index(StartPage currentPage)
         {
+/*            var languageId = ServiceLocator.Current.GetInstance<IPageRouteHelper>().LanguageID;
+            if (languageId == "test")
+            {
+            }*/
+
             var model = PageViewModel.Create(currentPage);
 
             if (SiteDefinition.Current.StartPage.CompareToIgnoreWorkID(currentPage.ContentLink)) // Check if it is the StartPage or just a page of the StartPage type.
