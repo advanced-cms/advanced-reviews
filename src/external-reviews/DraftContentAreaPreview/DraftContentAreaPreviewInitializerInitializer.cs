@@ -30,7 +30,14 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
 
             context.Services.Intercept<IContentLoader>(
                 (locator, defaultContentLoader) =>
-                    new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>()));
+                {
+                    if (!locator.GetInstance<ExternalReviewOptions>().ContentReplacement.ReplaceChildren)
+                    {
+                        return defaultContentLoader;
+                    }
+
+                    return new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>());
+                });
         }
 
         public void Initialize(InitializationEngine context)
