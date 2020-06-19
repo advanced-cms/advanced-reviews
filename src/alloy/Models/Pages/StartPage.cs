@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 using System.Text;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.SpecializedProperties;
 using AlloyTemplates.Models.Blocks;
+using EPiServer.Framework;
+using EPiServer.Framework.Initialization;
+using EPiServer.Security;
+using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 
 namespace AlloyTemplates.Models.Pages
 {
@@ -69,4 +75,39 @@ namespace AlloyTemplates.Models.Pages
             return string.Join(", ", list);
         }
     }
+
+    public class CustomVirtualRole : VirtualRoleProviderBase
+    {
+        public override bool IsInVirtualRole(IPrincipal principal, object context)
+        {
+            var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+
+            // This code is just to make sure that tokens work with custom virtual roles
+            // We had a bug from customer that if you use LanguageID from IPageRouteHelper then you would get
+            // 404 when generating an EDIT token url.
+            // The fix was to set the 'Edit' context later, after the routing is done but before rendering
+            var languageId = pageRouteHelper.LanguageID;
+
+            return true;
+        }
+    }
+
+    [InitializableModule]
+    public class CustomContentLoaderInitialization : IInitializableModule
+    {
+        public void Initialize(InitializationEngine context)
+        {
+            var virtualRoleRepository = ServiceLocator.Current.GetInstance<IVirtualRoleRepository>();
+            virtualRoleRepository.Register("VirtualRole", new CustomVirtualRole());
+        }
+
+        public void Uninitialize(InitializationEngine context)
+        {
+        }
+
+        public void Preload(string[] parameters)
+        {
+        }
+    }
+
 }

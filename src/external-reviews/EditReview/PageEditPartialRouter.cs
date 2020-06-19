@@ -2,7 +2,6 @@
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
-using EPiServer.Web;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
 
@@ -23,7 +22,7 @@ namespace AdvancedExternalReviews.EditReview
 
         public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues, RequestContext requestContext)
         {
-            return null;
+            return new PartialRouteData();
         }
 
         public object RoutePartial(PageData content, SegmentContext segmentContext)
@@ -53,9 +52,12 @@ namespace AdvancedExternalReviews.EditReview
                 var page = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
-                segmentContext.ContextMode = ContextMode.Edit;
-                // set ContentLink in DataTokens to make IPageRouteHelper working
+                // We can't set the Edit context here because it breaks the routing if you have useClaims=true in virtualRoles setting
+                // and when you have a custom VirtualRole class that uses IPageRouteHelper to fetch the current language from url
+                // segmentContext.ContextMode = ContextMode.Edit;
                 segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
+
+                ExternalReview.IsEditLink = true;
                 ExternalReview.Token = token;
 
                 return page;
