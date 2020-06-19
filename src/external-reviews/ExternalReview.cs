@@ -10,6 +10,12 @@ namespace AdvancedExternalReviews
             set => HttpContext.Current.Items["Token"] = value;
         }
 
+        public static bool IsEditLink
+        {
+            get => (string) HttpContext.Current?.Items["IsEditLink"] == bool.TrueString;
+            set => HttpContext.Current.Items["IsEditLink"] = value.ToString();
+        }
+
         public static int? ProjectId
         {
             get => (int?) HttpContext.Current?.Items["ProjectId"];

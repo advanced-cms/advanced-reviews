@@ -60,6 +60,23 @@ namespace AdvancedExternalReviews.EditReview
             return html;
         }
 
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (!ExternalReview.IsInExternalReviewContext)
+            {
+                return;
+            }
+
+            if (!ExternalReview.IsEditLink)
+            {
+                return;
+            }
+
+            // Set context to Edit to get the data-epi attributes render. It has to be done here, after the routing is already done and before
+            // controller render the HTML
+            filterContext.RequestContext.SetContextMode(ContextMode.Edit);
+        }
+
         public override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             if (!ExternalReview.IsInExternalReviewContext)

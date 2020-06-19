@@ -1,10 +1,7 @@
-﻿using System.Web;
-using System.Web.Routing;
+﻿using System.Web.Routing;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
-using EPiServer.ServiceLocation;
-using EPiServer.Web;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
 
@@ -55,25 +52,12 @@ namespace AdvancedExternalReviews.EditReview
                 var page = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
-                segmentContext.ContextMode = ContextMode.Edit;
-                // set ContentLink in DataTokens to make IPageRouteHelper working
+                // We can't set the Edit context here because it breaks the routing if you have useClaims=true in virtualRoles setting
+                // and when you have a custom VirtualRole class that uses IPageRouteHelper to fetch the current language from url
+                // segmentContext.ContextMode = ContextMode.Edit;
                 segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
 
-                var requestContext = ServiceLocator.Current.GetInstance<System.Web.Routing.RequestContext>();
-                if (ContentReference.IsNullOrEmpty(requestContext.GetContentLink()))
-                {
-                    requestContext.SetContentLink(page.ContentLink);
-                }
-
-/*
-                var routeCollection = ServiceLocator.Current.GetInstance<RouteCollection>();
-                routeCollection[0].GetRouteData(requestContext.HttpContext).DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
-*/
-
-
-                //var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-
-
+                ExternalReview.IsEditLink = true;
                 ExternalReview.Token = token;
 
                 return page;

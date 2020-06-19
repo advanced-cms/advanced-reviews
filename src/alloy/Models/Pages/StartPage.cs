@@ -80,19 +80,15 @@ namespace AlloyTemplates.Models.Pages
     {
         public override bool IsInVirtualRole(IPrincipal principal, object context)
         {
-            /* var requestContext = ServiceLocator.Current.GetInstance<System.Web.Routing.RequestContext>();
-             if (ContentReference.IsNullOrEmpty(requestContext.GetContentLink()))
-             {
-
-             }*/
-
             var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-            //var languageId = pageRouteHelper.LanguageID;
-            //if (languageId == "test")
-            {
-            }
 
-            return false;
+            // This code is just to make sure that tokens work with custom virtual roles
+            // We had a bug from customer that if you use LanguageID from IPageRouteHelper then you would get
+            // 404 when generating an EDIT token url.
+            // The fix was to set the 'Edit' context later, after the routing is done but before rendering
+            var languageId = pageRouteHelper.LanguageID;
+
+            return true;
         }
     }
 
