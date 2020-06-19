@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AdvancedExternalReviews;
 using EPiServer.Core;
 using EPiServer.Filters;
 using EPiServer.Framework.Web;
@@ -21,7 +22,11 @@ namespace AlloyTemplates.Business
         {
             var accessFilter = new FilterAccess();
             var publishedFilter = new FilterPublished();
-            contents = contents.Where(x => !publishedFilter.ShouldFilter(x) && !accessFilter.ShouldFilter(x));
+            if (!ExternalReview.IsInExternalReviewContext)
+            {
+                contents = contents.Where(x => !publishedFilter.ShouldFilter(x) && !accessFilter.ShouldFilter(x));
+            }
+
             if (requirePageTemplate)
             {
                 var templateFilter = ServiceLocator.Current.GetInstance<FilterTemplate>();

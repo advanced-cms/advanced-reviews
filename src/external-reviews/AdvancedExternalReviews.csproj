@@ -181,9 +181,12 @@
     <Compile Include="BlocksPreview\BlockPreviewInitialization.cs" />
     <Compile Include="BlocksPreview\BlockPreviewViewModel.cs" />
     <Compile Include="BlocksPreview\BlocksTemplateCoordinator.cs" />
+    <Compile Include="CustomContentLoaderInitialization.cs" />
+    <Compile Include="DraftContentAreaPreview\ReviewsContentLoader.cs" />
+    <Compile Include="DraftContentLoader.cs" />
     <Compile Include="PinCodeSecurity\ExternalLinkPinCodeSecurityHandler.cs" />
     <Compile Include="PreviewUrlResolver.cs" />
-    <Compile Include="DraftContentAreaPreview\DrafContentAreaPreviewInitializerInitializer.cs" />
+    <Compile Include="DraftContentAreaPreview\DraftContentAreaPreviewInitializerInitializer.cs" />
     <Compile Include="DraftContentAreaPreview\DraftContentAreaLoader.cs" />
     <Compile Include="DraftContentAreaPreview\DraftContentAreaRenderer.cs" />
     <Compile Include="EditReview\ConvertEditLinksFilter.cs" />

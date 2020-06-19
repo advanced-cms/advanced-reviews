@@ -63,6 +63,21 @@ namespace AdvancedExternalReviews
         public ExternalReviewRestrictionOptions Restrictions { get; } = new ExternalReviewRestrictionOptions();
 
         public PinCodeSecurityOptions PinCodeSecurity { get; } = new PinCodeSecurityOptions();
+
+        public ContentReplacement ContentReplacement { get; private set; } = new ContentReplacement();
+    }
+
+    public class ContentReplacement
+    {
+        /// <summary>
+        /// Should replace children contents when in review mode
+        /// </summary>
+        public bool ReplaceChildren { get; set; } = false;
+
+        /// <summary>
+        /// Should replace content when loading using IContentLoader
+        /// </summary>
+        public bool ReplaceContent { get; set; } = false;
     }
 
     public class ExternalReviewRestrictionOptions

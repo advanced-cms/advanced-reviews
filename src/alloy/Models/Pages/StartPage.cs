@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Principal;
-using System.Text;
+using AdvancedExternalReviews.DraftContentAreaPreview;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.SpecializedProperties;
 using AlloyTemplates.Models.Blocks;
+using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Security;
@@ -60,17 +61,68 @@ namespace AlloyTemplates.Models.Pages
 
         public string ConcatenateItems()
         {
-            if (this.MainContentArea == null)
+            if (MainContentArea == null)
             {
                 return string.Empty;
             }
 
             var list = new List<string>();
-            foreach (var contentAreaItem in this.MainContentArea.FilteredItems)
+            foreach (var contentAreaItem in MainContentArea.FilteredItems)
             {
                 var content = contentAreaItem.GetContent();
                 list.Add(content.Name);
             }
+
+            return string.Join(", ", list);
+        }
+
+        public string ConcatenateChildren()
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var items = contentLoader.GetChildren<IContent>(ContentLink);
+            var list = new List<string>();
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+
+            return string.Join(", ", list);
+        }
+
+        public string GetChildProducts()
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var items = contentLoader.GetChildren<ProductPage>(ContentLink);
+            var list = new List<string>();
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+
+            return string.Join(", ", list);
+        }
+
+        public string GetAlloyPlanProduct()
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var alloyPlan = contentLoader.Get<ProductPage>(new ContentReference(6));
+            return alloyPlan.Name;
+        }
+
+        public string ConcatenateChildrenWithReviews()
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
+            var items = contentLoader.GetChildrenWithReviews<IContent>(ContentLink);
+            var list = new List<string>();
+            foreach (var item in items)
+            {
+                list.Add(item.Name);
+            }
+
+            var reference = ContentLink.ToReferenceWithoutVersion();
+            ContentProvider provider = ServiceLocator.Current.GetInstance<IContentProviderManager>().ProviderMap.GetProvider(reference);
+            string languageID = Language.Name;
+            IList<GetChildrenReferenceResult> childrenReferences = provider.GetChildrenReferences<IContent>(reference, languageID, 0, 1000);
 
             return string.Join(", ", list);
         }

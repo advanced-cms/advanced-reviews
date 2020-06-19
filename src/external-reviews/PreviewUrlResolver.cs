@@ -14,11 +14,13 @@ namespace AdvancedExternalReviews
         private readonly UrlResolver _defaultUrlResolver;
         private readonly IContentLoader _contentLoader;
         private readonly Injected<ExternalReviewOptions> _externalReviewOptions;
+        private readonly IPermanentLinkMapper _permanentLinkMapper;
 
-        public PreviewUrlResolver(UrlResolver defaultUrlResolver, IContentLoader contentLoader)
+        public PreviewUrlResolver(UrlResolver defaultUrlResolver, IContentLoader contentLoader, IPermanentLinkMapper permanentLinkMapper)
         {
             _defaultUrlResolver = defaultUrlResolver;
             _contentLoader = contentLoader;
+            _permanentLinkMapper = permanentLinkMapper;
         }
 
         public override IContent Route(UrlBuilder urlBuilder, ContextMode contextMode)
@@ -43,7 +45,7 @@ namespace AdvancedExternalReviews
             var content = _contentLoader.Get<IContent>(contentLink);
             if (content is PageData)
             {
-                virtualPathData.VirtualPath += $"{_externalReviewOptions.Service.ContentPreviewUrl}/{ExternalReview.Token}?{PreviewGenerated}=true";
+                virtualPathData.VirtualPath = AppendGeneratedPostfix(virtualPathData.VirtualPath);
             }
 
             return virtualPathData;
@@ -51,7 +53,20 @@ namespace AdvancedExternalReviews
 
         public override string GetUrl(UrlBuilder urlBuilderWithInternalUrl, VirtualPathArguments arguments)
         {
-            return _defaultUrlResolver.GetUrl(urlBuilderWithInternalUrl, arguments);
+            var url = _defaultUrlResolver.GetUrl(urlBuilderWithInternalUrl, arguments);
+            if (!ExternalReview.IsInProjectReviewContext || !ExternalReview.IsInExternalReviewContext || url == null)
+            {
+                return url;
+            }
+
+            var linkMap = _permanentLinkMapper.Find(urlBuilderWithInternalUrl);
+            var content = _contentLoader.Get<IContent>(linkMap.ContentReference);
+            if (content is PageData)
+            {
+                return AppendGeneratedPostfix(url);
+            }
+
+            return url;
         }
 
         public override bool TryToPermanent(string url, out string permanentUrl)
@@ -63,6 +78,11 @@ namespace AdvancedExternalReviews
             VirtualPathArguments virtualPathArguments)
         {
             return _defaultUrlResolver.GetVirtualPathForNonContent(partialRoutedObject, language, virtualPathArguments);
+        }
+
+        private string AppendGeneratedPostfix(string url)
+        {
+            return $"{url.TrimEnd('/')}/{_externalReviewOptions.Service.ContentPreviewUrl}/{ExternalReview.Token}?{PreviewGenerated}=true";
         }
     }
 }

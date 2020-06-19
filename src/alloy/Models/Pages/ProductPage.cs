@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using AlloyTemplates.Models.Blocks;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using AlloyTemplates.Models.Properties;
+using EPiServer;
+using EPiServer.ServiceLocation;
 
 namespace AlloyTemplates.Models.Pages
 {
@@ -32,5 +36,14 @@ namespace AlloyTemplates.Models.Pages
         [CultureSpecific]
         [AllowedTypes(new[] { typeof(IContentData) },new[] { typeof(JumbotronBlock) })]
         public virtual ContentArea RelatedContentArea { get; set; }
+
+        public string ListAncestors()
+        {
+            var ancestors = ServiceLocator.Current.GetInstance<IContentLoader>().GetAncestors(this.ContentLink).ToList();
+
+            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(new ContentReference(12));
+
+            return String.Join("-> ", ancestors.Select(x => x.Name)) + "-------" + content.Name;
+        }
     }
 }
