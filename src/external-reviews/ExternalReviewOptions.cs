@@ -71,17 +71,6 @@ namespace AdvancedExternalReviews
         /// Content Replacement options
         /// </summary>
         public ContentReplacement ContentReplacement { get; private set; } = new ContentReplacement();
-
-        public NotificationsOptions Notifications { get; private set; } = new NotificationsOptions();
-    }
-
-    public class NotificationsOptions
-    {
-        public bool NotificationsEnabled { get; set; } = false;
-
-        public bool NotifyVersionCreator { get; set; }
-
-        public IEnumerable<string> NotifyRoles { get; set; }
     }
 
     public class ContentReplacement

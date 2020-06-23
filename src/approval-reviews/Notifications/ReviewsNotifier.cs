@@ -2,70 +2,78 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework.Serialization;
 using EPiServer.Notification;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 
-namespace AdvancedExternalReviews.Notifications
+namespace AdvancedApprovalReviews.Notifications
 {
     [ServiceConfiguration(typeof(ReviewsNotifier))]
     public class ReviewsNotifier
     {
         public const string ChannelName = "external-review";
 
-        private readonly ExternalReviewOptions _options;
-        private readonly IContentVersionRepository _contentVersionRepository;
+        private readonly ApprovalOptions _options;
+        private readonly IContentLoader _contentLoader;
         private readonly IPrincipalAccessor _principalAccessor;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IObjectSerializer _objectSerializer;
         private readonly INotifier _notifier;
+        private readonly ReviewLocationParser _reviewLocationParser;
 
-        public ReviewsNotifier(ExternalReviewOptions options,
-            IContentVersionRepository contentVersionRepository,
+        public ReviewsNotifier(ApprovalOptions options,
+            IContentLoader contentLoader,
             IPrincipalAccessor principalAccessor,
             ISubscriptionService subscriptionService,
             IObjectSerializer objectSerializer,
-            INotifier notifier)
+            INotifier notifier, ReviewLocationParser reviewLocationParser)
         {
             _options = options;
-            _contentVersionRepository = contentVersionRepository;
+            _contentLoader = contentLoader;
             _principalAccessor = principalAccessor;
             _subscriptionService = subscriptionService;
             _objectSerializer = objectSerializer;
             _notifier = notifier;
+            _reviewLocationParser = reviewLocationParser;
         }
 
-        public async Task<bool> NotifyCmsEditor(ContentReference contentLink, string token, string senderUser)
+        public async Task<bool> NotifyCmsEditor(ContentReference contentLink, string token, string data, bool isSenderEditModeUser)
         {
             if (!_options.Notifications.NotificationsEnabled)
             {
                 return false;
             }
 
-            var contentVersion = _contentVersionRepository.Load(contentLink);
+            var contentVersion = _contentLoader.Get<IContent>(contentLink);
             if (contentVersion == null)
             {
                 return false;
             }
 
-            var notificationReceiver = contentVersion.SavedBy;
-            //var notificationSender = _principalAccessor.CurrentName();
+            var comment = _reviewLocationParser.GetLastComment(data);
+
+            var notificationReceiver = (contentVersion as IChangeTrackable).ChangedBy;
             var users = new List<string>
             {
                 notificationReceiver
             };
+            if (isSenderEditModeUser)
+            {
+                users.Add(comment.Author);
+            }
 
             var subscribers = users.Select(x => new NotificationUser(x)).ToList();
 
             // subscribe users to comment
-            var subscriptionKey = new Uri($"projects://notification/{token}");
+            var subscriptionKey = new Uri($"advancedreviews://notification/{token}");
 
             await _subscriptionService.SubscribeAsync(subscriptionKey, subscribers).ConfigureAwait(false);
 
             var recipients = (await _subscriptionService.ListSubscribersAsync(subscriptionKey).ConfigureAwait(false))
-                //.Where(u => !u.UserName.Equals(senderUser.Identity.Name, StringComparison.OrdinalIgnoreCase))
+                .Where(u => !u.UserName.Equals(comment.Author, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             if (!recipients.Any())
@@ -78,10 +86,11 @@ namespace AdvancedExternalReviews.Notifications
             {
                 Title = contentVersion.Name,
                 ContentLink = contentLink,
-                SenderDisplayName = senderUser
+                SenderDisplayName = comment.Author,
+                Text = comment.Text
             };
 
-            var notificationMessage = new NotificationMessage()
+            var notificationMessage = new NotificationMessage
             {
                 ChannelName = ChannelName,
                 Sender = new NotificationUser(_principalAccessor.CurrentName()),
@@ -99,6 +108,41 @@ namespace AdvancedExternalReviews.Notifications
             }
 
             return true;
+        }
+    }
+
+    public class ReviewLocationDto
+    {
+        public IEnumerable<CommentDto> Comments { get; set; }
+
+        public CommentDto FirstComment { get; set; }
+    }
+
+    public class CommentDto
+    {
+        public string Author { get; set; }
+
+        public string Text { get; set; }
+    }
+
+    public class ReviewLocationParser
+    {
+        private readonly IObjectSerializer _objectSerializer;
+
+        public ReviewLocationParser(IObjectSerializerFactory objectSerializerFactory)
+        {
+            _objectSerializer = objectSerializerFactory.GetSerializer(KnownContentTypes.Json);
+        }
+
+        public CommentDto GetLastComment(string data)
+        {
+            var dto = _objectSerializer.Deserialize<ReviewLocationDto>(data);
+            if (dto.Comments == null || dto.Comments.Any() == false)
+            {
+                return dto.FirstComment;
+            }
+
+            return dto.Comments.FirstOrDefault();
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EPiServer.Cms.Shell.UI.Notifications;
 using EPiServer.Core;
 using EPiServer.Framework.Serialization;
 using EPiServer.Notification;
 using EPiServer.ServiceLocation;
 
-namespace AdvancedExternalReviews.Notifications
+namespace AdvancedApprovalReviews.Notifications
 {
     [ServiceConfiguration(typeof(IUserNotificationFormatter))]
     internal class ReviewContentNotificationFormatter : IUserNotificationFormatter
@@ -66,7 +67,7 @@ namespace AdvancedExternalReviews.Notifications
             var userName = reviewContent.SenderDisplayName ?? "external editor";
             userName = string.Format(userNameContainer, userName);
 
-            result.Content = $"{userName} added new comment for '{reviewContent.Title}'";
+            result.Content = $"{userName} added new comment: \"'{reviewContent.Text?.Ellipsis(50)}'\"";
 
             return Task.FromResult(result);
         }

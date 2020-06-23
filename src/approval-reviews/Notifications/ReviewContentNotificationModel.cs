@@ -1,6 +1,6 @@
 ﻿using EPiServer.Core;
 
-namespace AdvancedExternalReviews.Notifications
+namespace AdvancedApprovalReviews.Notifications
 {
     public class ReviewContentNotificationModel
     {
@@ -9,5 +9,7 @@ namespace AdvancedExternalReviews.Notifications
         public string SenderDisplayName { get; set; }
 
         public string Title { get; set; }
+
+        public string Text { get; set; }
     }
 }

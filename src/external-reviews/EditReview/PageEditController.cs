@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
-using AdvancedExternalReviews.Notifications;
+using AdvancedApprovalReviews.Notifications;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
@@ -104,7 +104,7 @@ namespace AdvancedExternalReviews.EditReview
         }
 
         [HttpPost]
-        public ActionResult AddPin(AddPinDto dto)
+        public ActionResult AddPin(ReviewLocation reviewLocation)
         {
             var token = GetToken();
             if (string.IsNullOrWhiteSpace(token))
@@ -125,10 +125,7 @@ namespace AdvancedExternalReviews.EditReview
 
             //TODO: security issue - we post whole item and external reviewer can modify this
 
-            if (string.IsNullOrWhiteSpace(reviewLocation.Id))
-            {
-                _reviewsNotifier.NotifyCmsEditor(reviewLink.ContentLink, token, "-----");
-            }
+            _reviewsNotifier.NotifyCmsEditor(reviewLink.ContentLink, token, reviewLocation.Data, false);
 
             var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
             if (location == null)
@@ -242,12 +239,6 @@ namespace AdvancedExternalReviews.EditReview
         private class CommentDto
         {
             public string Text { get; set; }
-        }
-
-        public class AddPinDto
-        {
-            public ReviewLocation ReviewLocation { get; set; }
-            public string LoggedUserName { get; set; }
         }
     }
 
