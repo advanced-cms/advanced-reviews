@@ -1,6 +1,6 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
+using AdvancedApprovalReviews.Notifications;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Security;
@@ -13,11 +13,14 @@ namespace AdvancedApprovalReviews
     {
         private readonly IContentLoader _contentLoader;
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
+        private readonly ReviewsNotifier _reviewsNotifier;
 
-        public ApprovalReviewStore(IContentLoader contentLoader, IApprovalReviewsRepository approvalReviewsRepository)
+        public ApprovalReviewStore(IContentLoader contentLoader, IApprovalReviewsRepository approvalReviewsRepository,
+            ReviewsNotifier reviewsNotifier)
         {
             _contentLoader = contentLoader;
             _approvalReviewsRepository = approvalReviewsRepository;
+            _reviewsNotifier = reviewsNotifier;
         }
 
         public ActionResult Get(ContentReference id)
@@ -53,6 +56,7 @@ namespace AdvancedApprovalReviews
             try
             {
                 var result = _approvalReviewsRepository.Update(reviewModel.ContentLink, reviewModel.ReviewLocation);
+                _reviewsNotifier.NotifyCmsEditor(reviewModel.ContentLink, reviewModel.ContentLink.ToString(), reviewModel.ReviewLocation.Data, true);
                 return Rest(result);
             }
             catch (ReviewLocationNotFoundException)

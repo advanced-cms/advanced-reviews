@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
+using AdvancedApprovalReviews.Notifications;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
@@ -24,12 +25,15 @@ namespace AdvancedExternalReviews.EditReview
         private readonly IObjectSerializerFactory _serializerFactory;
         private readonly StartPageUrlResolver _startPageUrlResolver;
         private readonly PropertyResolver _propertyResolver;
+        private readonly ReviewsNotifier _reviewsNotifier;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
-            StartPageUrlResolver startPageUrlResolver, PropertyResolver propertyResolver)
+            StartPageUrlResolver startPageUrlResolver,
+            PropertyResolver propertyResolver,
+            ReviewsNotifier reviewsNotifier)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
@@ -38,6 +42,7 @@ namespace AdvancedExternalReviews.EditReview
             _serializerFactory = serializerFactory;
             _startPageUrlResolver = startPageUrlResolver;
             _propertyResolver = propertyResolver;
+            _reviewsNotifier = reviewsNotifier;
 
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
         }
@@ -119,6 +124,8 @@ namespace AdvancedExternalReviews.EditReview
             }
 
             //TODO: security issue - we post whole item and external reviewer can modify this
+
+            _reviewsNotifier.NotifyCmsEditor(reviewLink.ContentLink, token, reviewLocation.Data, false);
 
             var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
             if (location == null)

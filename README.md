@@ -94,6 +94,19 @@ If the reviewer ever tries to approve content that still has some unresolved `Pi
 
 Each pin is in fact a standalone `Thread` the can go on until both Reviewer and the Author are satisfied with the end result.
 
+### Options
+There are few settings related with external review. They are all set using Options class:
+
+ | Option        | Default           | Description  |
+ | ---- | ---- | ---- |
+ | NotificationsOptions | [NotificationsOptions](#NotificationsOptions) | Allow to configure how notifications work |
+
+#### NotificationsOptions
+
+ | Option        | Default           | Description  |
+ | ---- | ---- | ---- |
+ | NotificationsEnabled | bool | Adding a new comment triggers a notification to all participants | 
+
 ### External reviewers
 This feature is a combination of the previous ones.
 It is to allow external reviewers, so the user that may **not be a part of your organization**, or simply users who are **reluctant to learn EPiServer** to access unpublished data and provide feedback if needed.
@@ -159,7 +172,6 @@ There are few settings related with external review. They are all set using Opti
  | Restrictions | [ExternalReviewRestrictionOptions](#ExternalReviewRestrictionOptions) | Restrictions around external reviewers |
  | ContentReplacement | [ContentReplacement](#ContentReplacement) | Intercept IContentLoader calls to GetChildren and Get |
 
-#### ExternalReviewRestrictionOptions
 #### ExternalReviewRestrictionOptions
 
  | Option        | Default           | Description  |
