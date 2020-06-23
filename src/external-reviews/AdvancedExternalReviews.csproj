@@ -184,6 +184,9 @@
     <Compile Include="CustomContentLoaderInitialization.cs" />
     <Compile Include="DraftContentAreaPreview\ReviewsContentLoader.cs" />
     <Compile Include="DraftContentLoader.cs" />
+    <Compile Include="Notifications\ReviewContentNotificationFormatter.cs" />
+    <Compile Include="Notifications\ReviewContentNotificationModel.cs" />
+    <Compile Include="Notifications\ReviewsNotifier.cs" />
     <Compile Include="PinCodeSecurity\ExternalLinkPinCodeSecurityHandler.cs" />
     <Compile Include="PreviewUrlResolver.cs" />
     <Compile Include="DraftContentAreaPreview\DraftContentAreaPreviewInitializerInitializer.cs" />

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
+using AdvancedExternalReviews.Notifications;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
@@ -24,12 +25,15 @@ namespace AdvancedExternalReviews.EditReview
         private readonly IObjectSerializerFactory _serializerFactory;
         private readonly StartPageUrlResolver _startPageUrlResolver;
         private readonly PropertyResolver _propertyResolver;
+        private readonly ReviewsNotifier _reviewsNotifier;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
-            StartPageUrlResolver startPageUrlResolver, PropertyResolver propertyResolver)
+            StartPageUrlResolver startPageUrlResolver,
+            PropertyResolver propertyResolver,
+            ReviewsNotifier reviewsNotifier)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
@@ -38,6 +42,7 @@ namespace AdvancedExternalReviews.EditReview
             _serializerFactory = serializerFactory;
             _startPageUrlResolver = startPageUrlResolver;
             _propertyResolver = propertyResolver;
+            _reviewsNotifier = reviewsNotifier;
 
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
         }
@@ -99,7 +104,7 @@ namespace AdvancedExternalReviews.EditReview
         }
 
         [HttpPost]
-        public ActionResult AddPin(ReviewLocation reviewLocation)
+        public ActionResult AddPin(AddPinDto dto)
         {
             var token = GetToken();
             if (string.IsNullOrWhiteSpace(token))
@@ -119,6 +124,11 @@ namespace AdvancedExternalReviews.EditReview
             }
 
             //TODO: security issue - we post whole item and external reviewer can modify this
+
+            if (string.IsNullOrWhiteSpace(reviewLocation.Id))
+            {
+                _reviewsNotifier.NotifyCmsEditor(reviewLink.ContentLink, token, "-----");
+            }
 
             var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
             if (location == null)
@@ -232,6 +242,12 @@ namespace AdvancedExternalReviews.EditReview
         private class CommentDto
         {
             public string Text { get; set; }
+        }
+
+        public class AddPinDto
+        {
+            public ReviewLocation ReviewLocation { get; set; }
+            public string LoggedUserName { get; set; }
         }
     }
 
