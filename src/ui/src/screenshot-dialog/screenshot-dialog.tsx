@@ -5,7 +5,7 @@ import html2canvas from "html2canvas";
 import DrawablePreview from "../drawable-preview/drawable-preview";
 import { Dimensions } from "../store/review-store";
 
-import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
+import ReactCrop, { Crop } from "react-image-crop";
 import "./screenshot-dialog.scss";
 
 import Dialog, { DialogContent, DialogTitle } from "@material/react-dialog";
@@ -17,7 +17,7 @@ interface ScreenshotPickerProps {
     documentRelativePosition?: Dimensions;
     documentSize?: Dimensions;
     resources?: ReviewResources;
-    onImageSelected: (string, PixelCrop?) => void;
+    onImageSelected: (string) => void;
     toggle: () => void;
     maxWidth: number;
     maxHeight: number;
@@ -25,7 +25,6 @@ interface ScreenshotPickerProps {
 
 interface ScreenshotPickerState {
     crop: Crop;
-    pixelCrop: PixelCrop;
     input: string;
     drawerInput: ResizeResult;
 }
@@ -90,7 +89,6 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         super(props);
         this.state = {
             crop: this.getDefaultCrop(),
-            pixelCrop: null,
             input: null,
             drawerInput: null
         };
@@ -121,53 +119,55 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
     }
 
     cancel = () => {
-        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null });
         this.props.toggle();
     };
 
     crop = async () => {
-        if (!this.state.pixelCrop) {
+        if (!this.state.crop) {
             return;
         }
 
-        const croppedImg = this.getCroppedImg(this.imageRef, this.state.pixelCrop);
+        const croppedImg = this.getCroppedImg(this.imageRef);
         const resizedImage = await resize(croppedImg, this.props.maxWidth, this.props.maxHeight);
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: resizedImage });
     };
 
-    getCroppedImg(image, pixelCrop) {
+    getCroppedImg(image) {
+        const crop = this.state.crop;
         const canvas = document.createElement("canvas");
-        canvas.width = pixelCrop.width;
-        canvas.height = pixelCrop.height;
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
         const ctx = canvas.getContext("2d");
 
         ctx.drawImage(
             image,
-            pixelCrop.x,
-            pixelCrop.y,
-            pixelCrop.width,
-            pixelCrop.height,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
             0,
             0,
-            pixelCrop.width,
-            pixelCrop.height
+            crop.width,
+            crop.height
         );
 
         return canvas.toDataURL();
     }
 
-    onImageLoaded = (image, pixelCrop) => {
+    onImageLoaded = image => {
         this.imageRef = image;
-        this.setState({ pixelCrop });
     };
 
-    onCropComplete = (crop, pixelCrop) => {
-        this.setState({ crop, pixelCrop });
+    onCropComplete = crop => {
+        this.setState({ crop });
     };
 
     remove = () => {
         this.props.onImageSelected(null);
-        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null });
     };
 
     onCancel = () => {
@@ -176,8 +176,8 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
     };
 
     onApplyDrawing = img => {
-        this.props.onImageSelected(img, this.state.pixelCrop);
-        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null, pixelCrop: null });
+        this.props.onImageSelected(img);
+        this.setState({ crop: this.defaultCrop, input: null, drawerInput: null });
         this.props.toggle();
     };
 

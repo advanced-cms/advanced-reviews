@@ -70,7 +70,7 @@
         "mobx-react-lite": "^1.5.0",
         "react": "^16.10.2",
         "react-dom": "^16.10.2",
-        "react-image-crop": "^6.0.18",
+        "react-image-crop": "^8.6.4",
         "react-scrollbar": "^0.5.6"
     },
     "husky": {
