@@ -1,4 +1,5 @@
 ﻿using EPiServer;
+using EPiServer.Core.Internal;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
@@ -29,6 +30,17 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                         locator.GetInstance<IPermanentLinkMapper>()));
 
             context.Services.Intercept<IContentLoader>(
+                (locator, defaultContentLoader) =>
+                {
+                    if (!locator.GetInstance<ExternalReviewOptions>().ContentReplacement.ReplaceChildren)
+                    {
+                        return defaultContentLoader;
+                    }
+
+                    return new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>());
+                });
+
+            context.Services.Intercept<ContentLoader>(
                 (locator, defaultContentLoader) =>
                 {
                     if (!locator.GetInstance<ExternalReviewOptions>().ContentReplacement.ReplaceChildren)
