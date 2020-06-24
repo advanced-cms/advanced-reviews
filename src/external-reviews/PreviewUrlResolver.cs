@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Web.Routing;
 using EPiServer;
 using EPiServer.Core;
@@ -60,10 +60,14 @@ namespace AdvancedExternalReviews
             }
 
             var linkMap = _permanentLinkMapper.Find(urlBuilderWithInternalUrl);
-            var content = _contentLoader.Get<IContent>(linkMap.ContentReference);
-            if (content is PageData)
+
+            if (linkMap != null)
             {
-                return AppendGeneratedPostfix(url);
+                var content = _contentLoader.Get<IContent>(linkMap.ContentReference);
+                if (content is PageData)
+                {
+                    return AppendGeneratedPostfix(url);
+                }
             }
 
             return url;
