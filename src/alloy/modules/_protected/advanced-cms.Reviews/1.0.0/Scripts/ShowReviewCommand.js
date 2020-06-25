@@ -26,6 +26,15 @@ define([
 
         constructor: function () {
             this._toggleCanExecute();
+
+            topic.subscribe("reviews:force-review-mode", function () {
+                when(this.getCurrentContent()).then(function (content) {
+                    this._refreshContent(content);
+                    if (this.canExecute) {
+                        this.execute();
+                    }
+                }.bind(this));
+            }.bind(this));
         },
 
         contextChanged: function () {
