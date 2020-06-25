@@ -63,7 +63,7 @@ namespace AdvancedApprovalReviews.Notifications
                 result.Link = new Uri("epi.cms.contentdata:///" + reviewContent.ContentLink);
             }
 
-            var userNameContainer = "<span class='epi-username'>{0}</span>";
+            var userNameContainer = "<span class='epi-username external-review'>{0}</span>";
             var userName = reviewContent.SenderDisplayName ?? "external editor";
             userName = string.Format(userNameContainer, userName);
 

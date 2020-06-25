@@ -8,7 +8,8 @@ define([
     "advanced-cms-review/commandsProvider",
     "advanced-cms-review/onPageEditingInitializer",
     "advanced-cms-review/approveChangesInitializer",
-    "advanced-cms-review/rejectChangesInitializer"
+    "advanced-cms-review/rejectChangesInitializer",
+    "advanced-cms-review/notificationsInitializer"
 ], function (
     declare,
     dependency,
@@ -19,7 +20,8 @@ define([
     CommandsProvider,
     onPageEditingInitializer,
     approveChangesInitializer,
-    rejectChangesInitializer
+    rejectChangesInitializer,
+    notificationsInitializer
 ) {
     return declare([_Module], {
         initialize: function () {
@@ -59,6 +61,7 @@ define([
             onPageEditingInitializer.initialize();
             approveChangesInitializer.initialize();
             rejectChangesInitializer.initialize();
+            notificationsInitializer.initialize();
         },
 
         _getRestPath: function (name) {

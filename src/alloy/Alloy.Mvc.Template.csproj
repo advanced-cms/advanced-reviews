@@ -393,6 +393,7 @@
     <Content Include="Advanced.CMS.AdvancedReviews.nuspec" />
     <Content Include="favicon.ico" />
     <Content Include="libman.json" />
+    <Content Include="modules\_protected\advanced-cms.Reviews\1.0.0\Scripts\notificationsInitializer.js" />
     <Content Include="Resources\LanguageFiles\PropertyNames_sv.xml">
       <SubType>Designer</SubType>
     </Content>
