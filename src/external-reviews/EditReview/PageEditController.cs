@@ -69,8 +69,7 @@ namespace AdvancedExternalReviews.EditReview
                 {
                     Token = token,
                     Name = content.Name,
-                    EditableContentUrlSegment =
-                        $"{startPageUrl}{_externalReviewOptions.ContentIframeEditUrlSegment}/{token}",
+                    EditableContentUrlSegment = $"{UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment)}/{token}",
                     AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/AddPin",
                     RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/RemovePin",
                     ReviewJsScriptPath = GetJsScriptPath(),
