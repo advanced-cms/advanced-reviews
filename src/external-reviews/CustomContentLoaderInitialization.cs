@@ -1,4 +1,5 @@
 ﻿using AdvancedExternalReviews.DraftContentAreaPreview;
+
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
@@ -23,9 +24,6 @@ namespace AdvancedExternalReviews
                 events.LoadingContent += Events_LoadingContent;
                 _replacementContent = true;
             }
-
-            var routingOptions = ServiceLocator.Current.GetInstance<RoutingOptions>();
-            routingOptions.UseTrailingSlash = false;
         }
 
         private void Events_LoadingContent(object sender, ContentEventArgs e)
