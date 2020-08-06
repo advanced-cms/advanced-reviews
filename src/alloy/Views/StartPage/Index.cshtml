@@ -3,7 +3,11 @@
 
 @Html.PropertyFor(x => x.CurrentPage.MainContentArea, new { CssClass = "row equal-height", tag = Global.ContentAreaTags.FullWidth })
 
-<div>ContentArea ContentItems</div>
+<div>ContentArea FilteredItems</div>
+@Html.Raw(Model.CurrentPage.ConcatenateFilteredItems())
+<br />
+<br />
+<div>ContentArea Items</div>
 @Html.Raw(Model.CurrentPage.ConcatenateItems())
 <br />
 <br />

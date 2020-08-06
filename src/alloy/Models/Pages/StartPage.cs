@@ -59,7 +59,7 @@ namespace AlloyTemplates.Models.Pages
         [Display(GroupName = Global.GroupNames.SiteSettings)]
         public virtual SiteLogotypeBlock SiteLogotype { get; set; }
 
-        public string ConcatenateItems()
+        public string ConcatenateFilteredItems()
         {
             if (MainContentArea == null)
             {
@@ -68,6 +68,23 @@ namespace AlloyTemplates.Models.Pages
 
             var list = new List<string>();
             foreach (var contentAreaItem in MainContentArea.FilteredItems)
+            {
+                var content = contentAreaItem.GetContent();
+                list.Add(content.Name);
+            }
+
+            return string.Join(", ", list);
+        }
+
+        public string ConcatenateItems()
+        {
+            if (MainContentArea == null)
+            {
+                return string.Empty;
+            }
+
+            var list = new List<string>();
+            foreach (var contentAreaItem in MainContentArea.Items)
             {
                 var content = contentAreaItem.GetContent();
                 list.Add(content.Name);
