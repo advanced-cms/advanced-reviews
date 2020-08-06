@@ -83,6 +83,15 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         parentContainer.scrollTop = scrollTop;
     }
 
+    toggleOverlays(show) {
+        this.overlayRef.current.style.display = show ? "block" : "none";
+        const propertyOverlays = document.getElementsByClassName("epi-overlay-container");
+
+        [].forEach.call(propertyOverlays, overlay => {
+            overlay.style.display = show ? "block" : "none";
+        });
+    }
+
     addReviewLocation(e) {
         //TODO: why we have to hack like this? preventDefault should take care of this
         if (this.overlayDocumentRef.current !== e.target) {
@@ -97,9 +106,10 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         } else {
             point = { x: e.offsetX, y: e.offsetY };
         }
+        this.toggleOverlays(false);
         const clickedElement = this.props.iframe.contentDocument.elementFromPoint(point.x, point.y) as HTMLElement;
         const selector = generator.getSelector(clickedElement);
-
+        this.toggleOverlays(true);
         const nodeOffset = offset(clickedElement, this.props.external);
 
         let reviewLocation = new PinLocation(this.props.reviewStore, {
@@ -139,7 +149,6 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
                 reviewLocation.blockSize = { x: blockElement.offsetWidth, y: blockElement.offsetHeight };
             }
         }
-
         this.props.reviewLocationCreated(reviewLocation);
     }
 
@@ -162,7 +171,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         };
 
         return (
-            <div ref={this.overlayRef} style={styles}>
+            <div id="review-overlay" ref={this.overlayRef} style={styles}>
                 <div ref={this.overlayDocumentRef} style={documentStyles}>
                     {this.props.children}
                 </div>
