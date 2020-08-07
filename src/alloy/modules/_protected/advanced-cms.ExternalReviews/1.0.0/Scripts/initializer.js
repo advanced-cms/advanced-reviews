@@ -26,6 +26,7 @@ define([
             registry.add("externalreviews",
                 new Throttle(
                     new JsonRest({
+                        preventCache: true,
                         target: this._getRestPath("externalreviewstore")//,
                         //idProperty: "contentLink"
                     })
