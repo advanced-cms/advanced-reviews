@@ -38,6 +38,7 @@ define([
             registry.add("approvaladvancedreview",
                 new Throttle(
                     new JsonRest({
+                        preventCache: true,
                         target: this._getRestPath("approvaladvancedreview")//,
                         //idProperty: "contentLink"
                     })
@@ -46,6 +47,7 @@ define([
             registry.add("approvallanguage",
                 new Throttle(
                     new JsonRest({
+                        preventCache: true,
                         target: this._getRestPath("approvallanguage")//,
                         //idProperty: "contentLink"
                     })
