@@ -182,6 +182,7 @@
     <Compile Include="BlocksPreview\BlockPreviewViewModel.cs" />
     <Compile Include="BlocksPreview\BlocksTemplateCoordinator.cs" />
     <Compile Include="CustomContentLoaderInitialization.cs" />
+    <Compile Include="DraftContentAreaPreview\PublishedStateAssessorDecorator.cs" />
     <Compile Include="DraftContentAreaPreview\ReviewsContentLoader.cs" />
     <Compile Include="DraftContentLoader.cs" />
     <Compile Include="PinCodeSecurity\ExternalLinkPinCodeSecurityHandler.cs" />
