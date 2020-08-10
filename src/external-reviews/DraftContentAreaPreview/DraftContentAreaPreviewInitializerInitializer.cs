@@ -1,7 +1,9 @@
 ﻿using EPiServer;
+using EPiServer.Core;
 using EPiServer.Core.Internal;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
+using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Mvc.Html;
@@ -39,6 +41,11 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
 
                     return new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>());
                 });
+
+            context.Services.Intercept<IPublishedStateAssessor>(
+                (locator, defaultPublishedStateAssessor) =>
+                    new PublishedStateAssessorDecorator(defaultPublishedStateAssessor,
+                        locator.GetInstance<LanguageResolver>()));
 
             context.Services.Intercept<ContentLoader>(
                 (locator, defaultContentLoader) =>
