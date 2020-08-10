@@ -54,6 +54,9 @@ namespace AlloyTemplates.Models.Pages
         public virtual PageReference ContactsPageLink { get; set; }
 
         [Display(GroupName = Global.GroupNames.SiteSettings)]
+        public virtual Url FooBar { get; set; }
+
+        [Display(GroupName = Global.GroupNames.SiteSettings)]
         public virtual PageReference SearchPageLink { get; set; }
 
         [Display(GroupName = Global.GroupNames.SiteSettings)]
