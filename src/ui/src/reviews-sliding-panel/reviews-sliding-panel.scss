@@ -19,6 +19,37 @@ $border: 1px solid $surface500;
     }
 }
 
+@mixin colored-switch($color) {
+    @media all and (-ms-high-contrast: none) {
+        .mdc-switch.mdc-switch--checked .mdc-switch__thumb,
+        .mdc-switch.mdc-switch--checked .mdc-switch__track {
+            background-color: $color;
+            border-color: $color;
+        }
+    }
+
+    .mdc-switch {
+        --mdc-theme-secondary: #{$color};
+    }
+
+    label {
+        color: #{$color};
+    }
+}
+
+@mixin colored-checkbox($color) {
+    @media all and (-ms-high-contrast: none) {
+        :enabled:checked.mdc-checkbox__native-control ~ .mdc-checkbox__background {
+            background-color: $color;
+            border-color: $color;
+        }
+    }
+
+    .mdc-checkbox {
+        --mdc-theme-secondary: #{$color};
+    }
+}
+
 .panel-container {
     z-index: 700;
     position: absolute;
@@ -49,21 +80,15 @@ $border: 1px solid $surface500;
         }
 
         .unread {
-            .mdc-checkbox {
-                --mdc-theme-secondary: #4caf50;
-            }
+            @include colored-checkbox(#4caf50);
         }
 
         .active {
-            .mdc-checkbox {
-                --mdc-theme-secondary: #f44336;
-            }
+            @include colored-checkbox(#f44336);
         }
 
         .resolved {
-            .mdc-checkbox {
-                --mdc-theme-secondary: #818181;
-            }
+            @include colored-checkbox(#818181);
         }
     }
 
@@ -79,33 +104,15 @@ $border: 1px solid $surface500;
         border-top: $border;
 
         .unread {
-            .mdc-switch {
-                --mdc-theme-secondary: #4caf50;
-            }
-
-            label {
-                color: $success500;
-            }
+            @include colored-switch($success500);
         }
 
         .active {
-            .mdc-switch {
-                --mdc-theme-secondary: #f44336;
-            }
-
-            label {
-                color: $error500;
-            }
+            @include colored-switch(#f44336);
         }
 
         .resolved {
-            .mdc-switch {
-                --mdc-theme-secondary: #818181;
-            }
-
-            label {
-                color: $surface700;
-            }
+            @include colored-switch(#818181);
         }
     }
 
