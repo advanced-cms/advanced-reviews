@@ -219,6 +219,10 @@ export class PinLocation implements PinPositioningDetails {
     }
 }
 
+export interface ExternalReviewOptions {
+    allowScreenshotAttachments: boolean;
+}
+
 export enum Priority {
     Important = "Important",
     Normal = "Normal",
@@ -240,6 +244,8 @@ export interface IReviewComponentStore {
      * dictionary with mappings property name to property displayname
      */
     propertyNameMapping: object;
+
+    options: ExternalReviewOptions;
 
     editedPinLocation: PinLocation;
 
@@ -287,6 +293,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     @observable editedPinLocation: PinLocation;
     @observable selectedPinLocation: PinLocation;
     @observable propertyNameMapping: object;
+    @observable options: ExternalReviewOptions;
 
     filter: ReviewCollectionFilter = new ReviewCollectionFilter();
 

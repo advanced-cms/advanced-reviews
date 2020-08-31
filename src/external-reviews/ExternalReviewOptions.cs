@@ -48,6 +48,11 @@ namespace AdvancedExternalReviews
         public bool EditableLinksEnabled { get; set; } = false;
 
         /// <summary>
+        /// Allow to take screenshots of the page to highlight spotted issues
+        /// </summary>
+        public bool AllowScreenshotAttachments { get; set; } = true;
+
+        /// <summary>
         /// For how long view link is valid
         /// </summary>
         public TimeSpan ViewLinkValidTo { get; set; } = TimeSpan.FromDays(5);

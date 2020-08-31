@@ -60,7 +60,7 @@ define([
             var area = "epi.cms.globalToolbar";
             commandregistry.registerProvider(area, commandsProvider);
 
-            onPageEditingInitializer.initialize();
+            onPageEditingInitializer.initialize(options);
             approveChangesInitializer.initialize();
             rejectChangesInitializer.initialize();
             notificationsInitializer.initialize();

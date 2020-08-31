@@ -20,6 +20,7 @@ export default declare([WidgetBase], {
         this.stores.reviewStore.currentUser = ApplicationSettings.userName;
         this.stores.reviewStore.currentLocale = this.language;
         this.stores.reviewStore.propertyNameMapping = this.propertyNameMapping;
+        this.stores.reviewStore.options = this.options;
 
         ReactDOM.render(
             <Provider {...this.stores}>

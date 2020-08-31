@@ -99,6 +99,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                             onChange={(comment, screenshot) => {
                                 this.updateComment(comment, screenshot);
                             }}
+                            allowScreenshotAttachments={this.props.reviewStore.options.allowScreenshotAttachments}
                         />
                         {this.state.screenshotMode && (
                             <ScreenshotDialog
