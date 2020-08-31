@@ -35,7 +35,7 @@ define([
         return result;
     }
 
-    function initialize() {
+    function initialize(options) {
         topic.subscribe("reviews:toggle", function (toggle, language) {
             if (!reviewWidget) {
                 if (toggle) {
@@ -44,7 +44,8 @@ define([
                     reviewWidget = new ReviewWidget({
                         iframe: iframe,
                         language: language,
-                        propertyNameMapping: latestPropertyNameMappings
+                        propertyNameMapping: latestPropertyNameMappings,
+                        options: options
                     });
                     reviewWidget.placeAt(div);
                     var editLayoutContainer = document.getElementsByClassName("epi-editorViewport")[0];

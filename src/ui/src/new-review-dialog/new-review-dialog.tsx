@@ -85,6 +85,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                                 onChange={(comment, screenshot) => {
                                     this.updateComment(comment, screenshot);
                                 }}
+                                allowScreenshotAttachments={reviewStore.options.allowScreenshotAttachments}
                             />
                         </div>
                     </DialogContent>
