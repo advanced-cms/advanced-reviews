@@ -23,7 +23,7 @@ namespace AdvancedExternalReviews.EditReview
         private readonly IApprovalReviewsRepository _approvalReviewsRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly IObjectSerializerFactory _serializerFactory;
-        private readonly StartPageUrlResolver _startPageUrlResolver;
+        private readonly IStartPageUrlResolver _startPageUrlResolver;
         private readonly PropertyResolver _propertyResolver;
         private readonly ReviewsNotifier _reviewsNotifier;
 
@@ -31,7 +31,7 @@ namespace AdvancedExternalReviews.EditReview
             IExternalReviewLinksRepository externalReviewLinksRepository,
             IApprovalReviewsRepository approvalReviewsRepository,
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
-            StartPageUrlResolver startPageUrlResolver,
+            IStartPageUrlResolver startPageUrlResolver,
             PropertyResolver propertyResolver,
             ReviewsNotifier reviewsNotifier)
         {

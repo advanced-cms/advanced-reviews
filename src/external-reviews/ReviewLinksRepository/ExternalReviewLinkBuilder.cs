@@ -9,10 +9,10 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
     {
         private readonly ProjectRepository _projectRepository;
         private readonly ExternalReviewOptions _options;
-        private readonly StartPageUrlResolver _startPageUrlResolver;
+        private readonly IStartPageUrlResolver _startPageUrlResolver;
 
         public ExternalReviewLinkBuilder(ExternalReviewOptions options,
-            StartPageUrlResolver startPageUrlResolver, ProjectRepository projectRepository)
+            IStartPageUrlResolver startPageUrlResolver, ProjectRepository projectRepository)
         {
             _options = options;
             _startPageUrlResolver = startPageUrlResolver;
