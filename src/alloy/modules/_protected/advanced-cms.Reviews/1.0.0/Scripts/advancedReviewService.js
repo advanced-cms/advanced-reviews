@@ -80,7 +80,7 @@ define([
         },
 
         setReviewContext: function () {
-            topic.publish("reviews:initialize", true);
+            topic.publish("reviews:toggle", true);
         }
     });
 });
