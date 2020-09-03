@@ -35,8 +35,8 @@ define([
         return result;
     }
 
-    function initialize(options) {
-        topic.subscribe("reviews:toggle", function (toggle, language) {
+    function initialize(options, language) {
+        topic.subscribe("reviews:toggle", function (toggle) {
             if (!reviewWidget) {
                 if (toggle) {
                     var div = document.createElement("div");

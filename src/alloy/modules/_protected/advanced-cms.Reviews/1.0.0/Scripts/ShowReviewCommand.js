@@ -5,7 +5,6 @@ define([
     "epi/shell/command/_Command",
     "epi-cms/_ContentContextMixin",
     "epi-cms/contentediting/ContentActionSupport",
-    "advanced-cms-review/editorDisplayLanguageResolver",
     "epi/i18n!epi/cms/nls/reviewcomponent.command"
 ], function (
     declare,
@@ -14,7 +13,6 @@ define([
     _Command,
     _ContentContextMixin,
     ContentActionSupport,
-    editorDisplayLanguageResolver,
     res
 ) {
     return declare([_Command, _ContentContextMixin], {
@@ -61,9 +59,7 @@ define([
 
         _execute: function () {
             this.set("active", !this.active);
-            when(editorDisplayLanguageResolver.resolve()).then(function (language) {
-                topic.publish("reviews:toggle", this.active, language);
-            }.bind(this));
+            topic.publish("reviews:toggle", this.active);
         },
 
         _toggleCanExecute: function () {

@@ -44,15 +44,6 @@ define([
                     })
                 )
             );
-            registry.add("approvallanguage",
-                new Throttle(
-                    new JsonRest({
-                        preventCache: true,
-                        target: this._getRestPath("approvallanguage")//,
-                        //idProperty: "contentLink"
-                    })
-                )
-            );
 
             var commandsProvider = new CommandsProvider();
 
@@ -60,7 +51,8 @@ define([
             var area = "epi.cms.globalToolbar";
             commandregistry.registerProvider(area, commandsProvider);
 
-            onPageEditingInitializer.initialize(options);
+            var language = this._settings.language || "";
+            onPageEditingInitializer.initialize(options, language);
             approveChangesInitializer.initialize();
             rejectChangesInitializer.initialize();
             notificationsInitializer.initialize();
