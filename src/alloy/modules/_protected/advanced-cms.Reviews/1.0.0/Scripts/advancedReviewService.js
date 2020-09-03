@@ -5,8 +5,7 @@ define([
     "dojo/topic",
     "dojo/when",
     "epi/dependency",
-    "epi-cms/_ContentContextMixin",
-    "advanced-cms-review/editorDisplayLanguageResolver"
+    "epi-cms/_ContentContextMixin"
 ], function (
     declare,
     Deferred,
@@ -14,8 +13,7 @@ define([
     topic,
     when,
     dependency,
-    _ContentContextMixin,
-    editorDisplayLanguageResolver
+    _ContentContextMixin
 ) {
 
     function parseResponse(reviewLocations) {
@@ -82,9 +80,7 @@ define([
         },
 
         setReviewContext: function () {
-            when(editorDisplayLanguageResolver.resolve()).then(function (language) {
-                topic.publish("reviews:initialize", true, language);
-            });
+            topic.publish("reviews:initialize", true);
         }
     });
 });

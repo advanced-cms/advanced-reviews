@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using AdvancedExternalReviews.Properties;
 using EPiServer.Framework.Web.Resources;
+using EPiServer.Personalization;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Modules;
 
@@ -153,7 +155,10 @@ namespace AdvancedExternalReviews
         public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
         {
             var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
-            return new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
+            var model = new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
+            var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
+            model.Language = profile.Language;
+            return model;
         }
     }
 
@@ -179,6 +184,8 @@ namespace AdvancedExternalReviews
         {
             Options = options;
         }
+
+        public string Language { get; set; }
 
         public ExternalReviewOptions Options { get; }
     }
