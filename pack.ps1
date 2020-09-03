@@ -1,6 +1,6 @@
 $defaultVersion="1.0.0"
 $workingDirectory = Get-Location
-$zip = "$workingDirectory\packages\7-Zip.CommandLine.18.1.0\tools\7za.exe"
+$zip = "$workingDirectory\packages\7-Zip.CommandLine\18.1.0\tools\7za.exe"
 $nuget = "$workingDirectory\build\tools\nuget.exe"
 
 function ZipCurrentModule
@@ -13,9 +13,6 @@ function ZipCurrentModule
     ((Get-Content -Path module.config -Raw).TrimEnd() -Replace $version, $defaultVersion ) | Set-Content -Path module.config
     Remove-Item $version -Force -Recurse -ErrorAction Ignore
 }
-
-msbuild /p:Configuration=Release
-npm run build --prefix ./src/ui
 
 $fullVersion=[System.Reflection.Assembly]::LoadFrom("src\alloy\bin\AdvancedApprovalReviews.dll").GetName().Version
 $version="$($fullVersion.major).$($fullVersion.minor).$($fullVersion.build)"

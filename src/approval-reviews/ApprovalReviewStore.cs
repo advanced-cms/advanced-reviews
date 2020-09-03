@@ -56,7 +56,9 @@ namespace AdvancedApprovalReviews
             try
             {
                 var result = _approvalReviewsRepository.Update(reviewModel.ContentLink, reviewModel.ReviewLocation);
+#pragma warning disable 4014
                 _reviewsNotifier.NotifyCmsEditor(reviewModel.ContentLink, reviewModel.ContentLink.ToString(), reviewModel.ReviewLocation.Data, true);
+#pragma warning restore 4014
                 return Rest(result);
             }
             catch (ReviewLocationNotFoundException)

@@ -21,7 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A1272902
 		README.md = README.md
 		setup.cmd = setup.cmd
 		site.cmd = site.cmd
-		version.cs = version.cs
+		build\common.props = build\common.props
+		build\version.props = build\version.props
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "approval-reviews", "src\approval-reviews\AdvancedApprovalReviews.csproj", "{7D3CB0B4-BF55-4577-ABF2-D83F8EA5D49F}"
