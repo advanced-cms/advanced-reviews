@@ -1,14 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer;
 using EPiServer.Core;
+using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
 
 namespace AdvancedApprovalReviews
 {
-    public class StartPageUrlResolver
+    public interface IStartPageUrlResolver
+    {
+        string GetUrl(ContentReference contentReference);
+    }
+
+    [ServiceConfiguration(typeof(IStartPageUrlResolver))]
+    public class StartPageUrlResolver: IStartPageUrlResolver
     {
         private readonly UrlResolver _urlResolver;
         private readonly IContentLoader _contentLoader;
