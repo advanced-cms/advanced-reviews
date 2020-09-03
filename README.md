@@ -1,6 +1,8 @@
 ![Advanced CMS](assets/logo.png "Advanced CMS")
 # Advanced Reviews
 
+![Build](https://github.com/advanced-cms/advanced-reviews/workflows/Build/badge.svg?branch=master)
+
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
 
 It solves a few major issues the Authors identified during their journey with EPiServer and after working on a number of EPiServer related enterprise solutions.
