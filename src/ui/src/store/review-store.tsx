@@ -417,7 +417,8 @@ class ReviewComponentStore implements IReviewComponentStore {
     }
 
     @action getUserAvatarUrl(userName: string): string {
-        return `/review-avatars/${userName}.jpg`;
+        const encodedUserName = encodeURIComponent(userName);
+        return `/review-avatars/get?userName=${encodedUserName}`;
     }
 
     private saveLocation(reviewLocation: PinLocation): Promise<PinLocation> {

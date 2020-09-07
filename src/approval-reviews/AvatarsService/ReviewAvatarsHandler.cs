@@ -28,13 +28,14 @@ namespace AdvancedApprovalReviews.AvatarsService
         //TODO: try to use EPiServer.Web.MediaHandlerBase to turn on caching
         public void ProcessRequest(HttpContext context)
         {
-            var userName = context.Request.RequestContext.RouteData.Values["userName"] as string;
+            var userName = context.Request.QueryString.Get("userName");
             if (string.IsNullOrWhiteSpace(userName))
             {
                 context.Response.StatusCode = 404;
                 return;
             }
 
+            userName = HttpUtility.UrlDecode(userName);
             using (var memoryStream = new MemoryStream())
             {
                 var customAvatar = _customAvatarResolver.GetImage(userName);
@@ -49,12 +50,12 @@ namespace AdvancedApprovalReviews.AvatarsService
                     var encParams = new EncoderParameters { Param = new[] { new EncoderParameter(Encoder.Quality, 90L) } };
                     identicon.Save(memoryStream, encoder, encParams);
                 }
-                
+
                 var bytesInStream = memoryStream.ToArray();
 
                 context.Response.Clear();
                 context.Response.ContentType = "Image/jpeg";
-                
+
                 context.Response.BinaryWrite(bytesInStream);
 
                 // context.Response.End() affects the cache
