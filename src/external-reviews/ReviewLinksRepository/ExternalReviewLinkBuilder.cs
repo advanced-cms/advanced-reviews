@@ -47,7 +47,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 var url = _startPageUrlResolver.GetUrl(externalReviewLinkDds.ContentLink);
                 // the preview url has to be language specific as it's handled entirely by the EPiServer partial router
                 // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
-                externalUrlPrefix = UrlPath.Combine(url, _options.ContentPreviewUrl);
+                externalUrlPrefix = UrlPath.AddFragment(url, _options.ContentPreviewUrl);
             }
 
             return new ExternalReviewLink
@@ -57,7 +57,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 ProjectId = projectId,
                 Token = externalReviewLinkDds.Token,
                 ValidTo = externalReviewLinkDds.ValidTo,
-                LinkUrl = UrlPath.Combine(externalUrlPrefix, externalReviewLinkDds.Token),
+                LinkUrl = UrlPath.AddFragment(externalUrlPrefix, externalReviewLinkDds.Token),
                 PinCode = externalReviewLinkDds.PinCode,
                 DisplayName = externalReviewLinkDds.DisplayName,
                 ProjectName = projectName
