@@ -86,9 +86,7 @@ namespace AdvancedExternalReviews
 
         private string AppendGeneratedPostfix(string url)
         {
-            var urlBuilder = new UrlBuilder(url);
-            urlBuilder.Path = string.Join("/", urlBuilder.Path.TrimEnd('/'),
-                _externalReviewOptions.Service.ContentPreviewUrl, ExternalReview.Token);
+            var urlBuilder = new UrlBuilder(UrlPath.AddFragments(url, _externalReviewOptions.Service.ContentPreviewUrl, ExternalReview.Token));
             urlBuilder.QueryCollection.Add(PreviewGenerated, bool.TrueString);
             return urlBuilder.ToString();
         }
