@@ -29,7 +29,7 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             context.Services.Intercept<UrlResolver>(
                 (locator, defaultUrlResolver) =>
                     new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
-                        locator.GetInstance<IPermanentLinkMapper>()));
+                        locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>()));
 
             context.Services.Intercept<IContentLoader>(
                 (locator, defaultContentLoader) =>
