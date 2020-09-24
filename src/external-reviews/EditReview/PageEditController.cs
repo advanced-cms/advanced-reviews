@@ -75,7 +75,8 @@ namespace AdvancedExternalReviews.EditReview
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
                     ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
-                    Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData))
+                    Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData)),
+                    Options = serializer.Serialize(_externalReviewOptions)
                 };
                 return View(resolvedPath, pagePreviewModel);
             }
@@ -266,6 +267,7 @@ namespace AdvancedExternalReviews.EditReview
         public string ResetCssPath { get; set; }
         public string ReviewPins { get; set; }
         public string Metadata { get; set; }
+        public string Options { get; set; }
     }
 }
 
