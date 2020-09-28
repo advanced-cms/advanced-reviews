@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AdvancedApprovalReviews;
 using AdvancedExternalReviews.PinCodeSecurity;
 using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
@@ -11,7 +12,6 @@ using EPiServer.Core;
 using EPiServer.Notification;
 using EPiServer.Notification.Internal;
 using EPiServer.Shell.Services.Rest;
-using EPiServer.Web;
 
 namespace AdvancedExternalReviews.ReviewLinksRepository
 {
@@ -27,11 +27,13 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         private readonly EmailNotificationProvider _emailNotificationProvider;
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly CurrentProject _currentProject;
+        private readonly ISiteUriResolver _siteUriResolver;
 
         public ExternalReviewStore(IContentLoader contentLoader, NotificationOptions notificationOptions,
             IExternalReviewLinksRepository externalReviewLinksRepository,
             EmailNotificationProvider emailNotificationProvider,
-            ExternalReviewOptions externalReviewOptions, CurrentProject currentProject)
+            ExternalReviewOptions externalReviewOptions, CurrentProject currentProject,
+            ISiteUriResolver siteUriResolver)
         {
             _contentLoader = contentLoader;
             _notificationOptions = notificationOptions;
@@ -39,8 +41,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             _emailNotificationProvider = emailNotificationProvider;
             _externalReviewOptions = externalReviewOptions;
             _currentProject = currentProject;
+            _siteUriResolver = siteUriResolver;
         }
-
 
         private void HidePinCode(ExternalReviewLink externalReviewLink)
         {
@@ -130,7 +132,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         private async Task<bool> SendMail(ExternalReviewLink externalReviewLink, string email, string subject,
             string message)
         {
-            var linkUrl = new Uri(SiteDefinition.Current.SiteUrl, externalReviewLink.LinkUrl);
+            var linkUrl = new Uri(_siteUriResolver.GetUri(externalReviewLink.ContentLink), externalReviewLink.LinkUrl);
 
             message = message.Replace("[#link#]", linkUrl.ToString());
 

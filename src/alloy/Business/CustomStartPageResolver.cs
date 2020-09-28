@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AdvancedApprovalReviews;
 using AdvancedExternalReviews;
@@ -10,7 +9,6 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
-using EPiServer.Web.Routing;
 
 namespace AlloyTemplates.Business
 {
@@ -49,16 +47,13 @@ namespace AlloyTemplates.Business
     /// </summary>
     public class CustomStartPageResolver: IStartPageUrlResolver
     {
-        private readonly UrlResolver _urlResolver;
         private readonly IContentLoader _contentLoader;
-        private Lazy<List<SiteDefinition>> _siteDefinitions;
+        private readonly ISiteDefinitionResolver _siteDefinitionResolver;
 
-        public CustomStartPageResolver(ISiteDefinitionRepository siteDefinitionRepository, UrlResolver urlResolver, IContentLoader contentLoader)
+        public CustomStartPageResolver(IContentLoader contentLoader, ISiteDefinitionResolver siteDefinitionResolver)
         {
-            _urlResolver = urlResolver;
             _contentLoader = contentLoader;
-
-            _siteDefinitions = new Lazy<List<SiteDefinition>>(() => siteDefinitionRepository.List().ToList());
+            _siteDefinitionResolver = siteDefinitionResolver;
         }
 
         private string ResolveUrlForSite(SiteDefinition siteDefinition)
@@ -80,20 +75,11 @@ namespace AlloyTemplates.Business
 
         public string GetUrl(ContentReference contentReference)
         {
-            var siteDefinition = _siteDefinitions.Value.FirstOrDefault(x => x.StartPage.ToReferenceWithoutVersion() == contentReference.ToReferenceWithoutVersion());
-            if (siteDefinition != null)
-            {
-                return ResolveUrlForSite(siteDefinition);
-            }
-            var ancestorLinks = _contentLoader.GetAncestors(contentReference)
-                .Select(x => x.ContentLink.ToReferenceWithoutVersion());
-
-            siteDefinition = _siteDefinitions.Value.FirstOrDefault(x => ancestorLinks.Contains(x.StartPage.ToReferenceWithoutVersion()));
+            var siteDefinition = _siteDefinitionResolver.GetByContent(contentReference, true);
             if (siteDefinition == null)
             {
                 throw new ApplicationException("No site found for " + contentReference);
             }
-
             return ResolveUrlForSite(siteDefinition);
         }
     }
