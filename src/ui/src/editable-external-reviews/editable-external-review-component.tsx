@@ -100,9 +100,11 @@ const stores = createStores(reviewService, res);
 stores.reviewStore.currentUser = "";
 stores.reviewStore.currentLocale = "";
 stores.reviewStore.reviewLocations = [];
+stores.reviewStore.options = {};
 
 function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps) {
     const [showUserNameDialog, setShowUserNameDialog] = useState<boolean>(true);
+    stores.reviewStore.options = JSON.parse(options);
 
     const setUserName = (newUserName: string) => {
         stores.reviewStore.currentUser = newUserName;
@@ -140,6 +142,7 @@ const removeUrl = reviewEl.dataset.removeUrl;
 const userName: string = reviewEl.dataset.user;
 const initialPins: string = reviewEl.dataset.pins;
 const metadata: string = reviewEl.dataset.metadata;
+const options: string = reviewEl.dataset.options;
 ReactDOM.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
     reviewEl
