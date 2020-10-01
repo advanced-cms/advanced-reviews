@@ -17,8 +17,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-    - name: Install dependencies
+    - name: Install server dependencies
       run: dotnet restore advanced-reviews.sln --verbosity Detailed
+    - name: Install client dependencies
+      run: setup.cmd
+      shell: cmd
     - name: Build
       run: dotnet build advanced-reviews.sln --configuration Release --no-restore
     - name: Pack
