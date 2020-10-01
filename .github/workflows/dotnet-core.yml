@@ -23,7 +23,7 @@ jobs:
       run: dotnet build advanced-reviews.sln --configuration Release --no-restore
     - name: Pack
       run: pack.cmd
-      shell: bash
+      shell: cmd
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
