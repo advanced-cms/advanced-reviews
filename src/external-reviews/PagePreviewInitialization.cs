@@ -21,7 +21,8 @@ namespace AdvancedExternalReviews
             (
                 locator.GetInstance<IContentLoader>(),
                 locator.GetInstance<IExternalReviewLinksRepository>(),
-                locator.GetInstance<ExternalReviewOptions>()
+                locator.GetInstance<ExternalReviewOptions>(),
+                locator.GetInstance<ProjectContentResolver>()
             );
             RouteTable.Routes.RegisterPartialRouter(editRouter);
 
