@@ -46,6 +46,7 @@ namespace AdvancedApprovalReviews
 
     public class ReviewLocation
     {
+        public string Token { get; set; }
         public string Id { get; set; }
         public string Data { get; set; }
     }

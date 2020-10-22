@@ -20,6 +20,7 @@ class ExternalReviewService implements AdvancedReviewService {
         let result = new Promise((resolve, reject) => {
             axios
                 .post(addUrl, {
+                    token: token,
                     id: id,
                     data: JSON.stringify(data)
                 })
@@ -76,6 +77,7 @@ class ExternalReviewService implements AdvancedReviewService {
         const result = new Promise((resolve, reject) => {
             axios
                 .post(removeUrl, {
+                    token: token,
                     id: id
                 })
                 .then(function() {
@@ -143,6 +145,7 @@ const userName: string = reviewEl.dataset.user;
 const initialPins: string = reviewEl.dataset.pins;
 const metadata: string = reviewEl.dataset.metadata;
 const options: string = reviewEl.dataset.options;
+const token: string = reviewEl.dataset.token;
 ReactDOM.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
     reviewEl

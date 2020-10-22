@@ -84,29 +84,10 @@ namespace AdvancedExternalReviews.EditReview
             return new HttpNotFoundResult("Content not found");
         }
 
-        // get token based on URL segment
-        private static string GetToken()
-        {
-            var request = System.Web.HttpContext.Current.Request;
-            if (request.UrlReferrer == null)
-            {
-                return null;
-            }
-
-            var segments = request.UrlReferrer.Segments;
-            if (segments.Length == 0)
-            {
-                return null;
-            }
-
-            var lastSegment = segments.Last();
-            return lastSegment;
-        }
-
         [HttpPost]
         public ActionResult AddPin(ReviewLocation reviewLocation)
         {
-            var token = GetToken();
+            var token = reviewLocation.Token;
             if (string.IsNullOrWhiteSpace(token))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -142,7 +123,7 @@ namespace AdvancedExternalReviews.EditReview
         [HttpPost]
         public ActionResult RemovePin(DeleteReviewLocation location)
         {
-            var token = GetToken();
+            var token = location.Token;
             if (string.IsNullOrWhiteSpace(token))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -244,6 +225,7 @@ namespace AdvancedExternalReviews.EditReview
 
     public class DeleteReviewLocation
     {
+        public string Token { get; set; }
         public string Id { get; set; }
     }
 

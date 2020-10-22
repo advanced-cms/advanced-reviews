@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using AdvancedExternalReviews.PinCodeSecurity;
 using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -51,7 +52,6 @@ namespace AdvancedExternalReviews.EditReview
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", "PageEdit");
             routeValues.Add("action", "Index");
-            routeValues.Add("token", " UrlParameter.Optional");
 
             var route = new Route(externalReviewOptions.ReviewsUrl + "/{token}", routeValues, new MvcRouteHandler());
             string[] allowedMethods = {"GET"};
@@ -87,8 +87,7 @@ namespace AdvancedExternalReviews.EditReview
             }
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", options.PinCodeSecurity.ExternalReviewLoginUrl);
-            routeValues.Add("action", "Index");
-            routeValues.Add("token", " UrlParameter.Optional");
+            routeValues.Add("action", nameof(ExternalReviewLoginController.Index));
 
             var route = new Route("ExternalReviewLogin", routeValues, new MvcRouteHandler());
             string[] allowedMethods = { "GET" };
@@ -106,7 +105,7 @@ namespace AdvancedExternalReviews.EditReview
             }
             var routeValues = new RouteValueDictionary();
             routeValues.Add("controller", options.PinCodeSecurity.ExternalReviewLoginUrl);
-            routeValues.Add("action", "Submit");
+            routeValues.Add("action", nameof(ExternalReviewLoginController.Submit));
 
             var route = new Route("ExternalReviewLogin/Submit", routeValues, new MvcRouteHandler());
             string[] allowedMethods = { "POST" };
