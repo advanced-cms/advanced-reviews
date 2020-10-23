@@ -6,24 +6,16 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews
 {
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class CustomContentLoaderInitialization : IInitializableModule
     {
-        private bool _replacementContent;
-
         public void Initialize(InitializationEngine context)
         {
             var events = ServiceLocator.Current.GetInstance<IContentEvents>();
-            var externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
-            if (externalReviewOptions.ContentReplacement.ReplaceContent)
-            {
-                events.LoadingContent += Events_LoadingContent;
-                _replacementContent = true;
-            }
+            events.LoadingContent += Events_LoadingContent;
         }
 
         private void Events_LoadingContent(object sender, ContentEventArgs e)
@@ -60,6 +52,11 @@ namespace AdvancedExternalReviews
             var unpublishedCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
             var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(unpublished);
 
+            if (!(content is IVersionable versionable) || reviewsContentLoader.HasExpired(versionable))
+            {
+                return;
+            }
+
             ExternalReview.SetCachedLink(unpublishedCulture, content);
 
             e.ContentLink = unpublished;
@@ -69,11 +66,7 @@ namespace AdvancedExternalReviews
         public void Uninitialize(InitializationEngine context)
         {
             var events = ServiceLocator.Current.GetInstance<IContentEvents>();
-
-            if (_replacementContent)
-            {
-                events.LoadingContent -= Events_LoadingContent;
-            }
+            events.LoadingContent -= Events_LoadingContent;
         }
 
         public void Preload(string[] parameters)
