@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Principal;
 using AdvancedExternalReviews.DraftContentAreaPreview;
@@ -89,8 +90,15 @@ namespace AlloyTemplates.Models.Pages
             var list = new List<string>();
             foreach (var contentAreaItem in MainContentArea.Items)
             {
-                var content = contentAreaItem.GetContent();
-                list.Add(content.Name);
+                try
+                {
+                    var content = contentAreaItem.GetContent();
+                    list.Add(content.Name);
+                }
+                catch
+                {
+                    list.Add($"Couldn't get {contentAreaItem.ContentLink} with {string.Join(Environment.NewLine, contentAreaItem.RenderSettings)}");
+                }
             }
 
             return string.Join(", ", list);
