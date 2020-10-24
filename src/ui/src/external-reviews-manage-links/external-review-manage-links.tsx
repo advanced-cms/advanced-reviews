@@ -13,9 +13,15 @@ import LinkEditDialog from "./external-review-manage-links-edit";
 import "./external-review-manage-links.scss";
 import "@episerver/ui-framework/dist/main.css";
 
+export interface VisitorGroup {
+    id: string;
+    name: string;
+}
+
 interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
     resources: ExternalReviewResources;
+    availableVisitorGroups: VisitorGroup[];
     editableLinksEnabled: boolean;
     pinCodeSecurityEnabled: boolean;
     pinCodeSecurityRequired?: boolean;
@@ -29,6 +35,7 @@ const ExternalReviewWidgetContent = observer(
     ({
         store,
         resources,
+        availableVisitorGroups,
         editableLinksEnabled,
         pinCodeSecurityEnabled,
         pinCodeSecurityRequired,
@@ -56,13 +63,13 @@ const ExternalReviewWidgetContent = observer(
             store.share(currentLinkToShare, shareLink.email, shareLink.subject, shareLink.message);
         };
 
-        const onEditClose = async (validTo: Date, pinCode: string, displayName: string) => {
+        const onEditClose = async (validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]) => {
             setLinkToEdit(null);
             if (validTo == null) {
                 return;
             }
             if (currentLinkToEdit.isPersisted) {
-                store.edit(currentLinkToEdit, validTo, pinCode, displayName);
+                store.edit(currentLinkToEdit, validTo, pinCode, displayName, visitorGroups);
                 return;
             }
 
@@ -71,7 +78,7 @@ const ExternalReviewWidgetContent = observer(
             }
 
             const reviewLink = await store.addLink(currentLinkToEdit.isEditable);
-            store.edit(reviewLink, null, pinCode, displayName);
+            store.edit(reviewLink, null, pinCode, displayName, visitorGroups);
         };
 
         const addNewLink = isEditable => {
@@ -209,6 +216,7 @@ const ExternalReviewWidgetContent = observer(
                         reviewLink={currentLinkToEdit}
                         onClose={onEditClose}
                         resources={resources}
+                        availableVisitorGroups={availableVisitorGroups}
                         open={!!currentLinkToEdit}
                         pinCodeSecurityEnabled={pinCodeSecurityEnabled}
                         pinCodeSecurityRequired={pinCodeSecurityRequired}

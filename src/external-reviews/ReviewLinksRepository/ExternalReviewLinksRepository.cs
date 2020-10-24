@@ -21,7 +21,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         /// <param name="validTo"></param>
         /// <param name="pinCode">New PIN code. If null then PIN is not updated</param>
         /// <param name="displayName">Link display name, when empty then fallback to token</param>
-        ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName);
+        /// <param name="visitorGroups">Impersonate with the following visitor groups ids</param>
+        ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName, string[] visitorGroups);
 
         void DeleteLink(string token);
     }
@@ -80,7 +81,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
         }
 
-        public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId)
+        public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo,
+            int? projectId)
         {
             var externalReviewLink = new ExternalReviewLinkDds
             {
@@ -94,7 +96,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
         }
 
-        public ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName)
+        public ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName, string[] visitorGroups)
         {
             var store = GetStore();
             var item = store.Items<ExternalReviewLinkDds>()
@@ -115,6 +117,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             }
 
             item.DisplayName = displayName;
+            item.VisitorGroups = visitorGroups ?? new[] {"cc5fc022-4186-431e-b38a-e257d8cafd51"};
 
             store.Save(item);
 

@@ -38,8 +38,14 @@ define([
             }.bind(this));
         },
 
-        edit: function (token, validTo, pinCode, displayName) {
-            return this.externalReviewStore.executeMethod("Edit", token, { validTo: validTo, pinCode: pinCode, displayName: displayName });
+        edit: function (token, validTo, pinCode, displayName, visitorGroups) {
+            var item = {
+                validTo: validTo,
+                pinCode: pinCode,
+                displayName: displayName,
+                visitorGroups: visitorGroups
+            };
+            return this.externalReviewStore.executeMethod("Edit", token, item);
         },
 
         load: function () {

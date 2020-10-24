@@ -83,7 +83,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             return Rest(result);
         }
 
-        public ActionResult Edit(string id, DateTime? validTo, string pinCode, string displayName)
+        public ActionResult Edit(string id, DateTime? validTo, string pinCode, string displayName, string[] visitorGroups)
         {
             if (id == null)
             {
@@ -95,7 +95,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 pinCode = PinCodeHashGenerator.Hash(pinCode, id);
             }
 
-            var result = _externalReviewLinksRepository.UpdateLink(id, validTo, pinCode, displayName);
+            var result = _externalReviewLinksRepository.UpdateLink(id, validTo, pinCode, displayName, visitorGroups);
             HidePinCode(result);
 
             return Rest(result);

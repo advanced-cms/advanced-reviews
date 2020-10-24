@@ -1,4 +1,5 @@
-﻿using EPiServer.ServiceLocation;
+﻿using EPiServer.Personalization.VisitorGroups;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using EPiServer.Shell.ViewComposition;
 
@@ -11,15 +12,18 @@ namespace AdvancedExternalReviews.ManageLinks
     public class ExternalReviewLinksManageComponent : ComponentDefinitionBase
     {
         private readonly ExternalReviewOptions _options;
+        private readonly IVisitorGroupRepository _visitorGroupRepository;
 
-        public ExternalReviewLinksManageComponent() : this(ServiceLocator.Current.GetInstance<ExternalReviewOptions>())
+        public ExternalReviewLinksManageComponent() : this(ServiceLocator.Current.GetInstance<ExternalReviewOptions>(),
+            ServiceLocator.Current.GetInstance<IVisitorGroupRepository>())
         {
         }
 
-        public ExternalReviewLinksManageComponent(ExternalReviewOptions options)
+        public ExternalReviewLinksManageComponent(ExternalReviewOptions options, IVisitorGroupRepository visitorGroupRepository)
             : base("advanced-cms-external-review/external-review-manage-links-component")
         {
             _options = options;
+            _visitorGroupRepository = visitorGroupRepository;
             IsAvailableForUserSelection = options.IsEnabled;
             LanguagePath = "/externalreviews/component";
             Categories = new[] {"content"};
@@ -39,6 +43,7 @@ namespace AdvancedExternalReviews.ManageLinks
                 base.Settings["editableLinksEnabled"] = _options.EditableLinksEnabled;
                 base.Settings["pinCodeSecurityEnabled"] = _options.PinCodeSecurity.Enabled;
                 base.Settings["pinCodeSecurityRequired"] = _options.PinCodeSecurity.Required;
+                base.Settings["availableVisitorGroups"] = _visitorGroupRepository.List();
                 base.Settings["pinCodeLength"] = _options.PinCodeSecurity.CodeLength;
                 base.Settings["isEnabled"] = _options.IsEnabled;
 

@@ -49,5 +49,5 @@ interface ExternalReviewService {
     load(): Promise<any[]>;
     delete(token: string): Promise<any>;
     share(token: string, email: string, subject: string, message: string): Promise<any>;
-    edit(token: string, validto: Date, pinCode: string, displayName: string): Promise<any>;
+    edit(token: string, validto: Date, pinCode: string, displayName: string, visitorGroups: string[]): Promise<any>;
 }

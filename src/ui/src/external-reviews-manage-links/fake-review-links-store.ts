@@ -125,7 +125,7 @@ export default class FakeReviewLinksStore extends ExternalReviewStore {
 
     share(item: ReviewLink, email: string, message: string) {}
 
-    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void {
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]): void {
         if (validTo) {
             item.validTo = validTo;
         }
@@ -133,5 +133,6 @@ export default class FakeReviewLinksStore extends ExternalReviewStore {
             item.pinCode = pinCode;
         }
         item.displayName = displayName;
+        item.visitorGroups = visitorGroups;
     }
 }

@@ -14,5 +14,6 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         public string LinkUrl { get; set; }
         public string PinCode { get; set; }
         public string ProjectName { get; set; }
+        public string[] VisitorGroups { get; set; }
     }
 }

@@ -35,6 +35,10 @@ interface ExternalReviewResources_List_Editdialog {
     linknotsecured: string;
     /** Optional link name */
     displaynamehelptext: string;
+    /** Visitor groups */
+    visitorgroups: string;
+    /** Impersonate as selected visitor groups */
+    visitorgroupshelptext: string;
 }
 
 interface ExternalReviewResources_List {

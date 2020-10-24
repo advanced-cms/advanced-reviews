@@ -9,6 +9,7 @@ export class ReviewLink {
     @observable pinCode: string;
     @observable projectId: number;
     projectName: string;
+    @observable visitorGroups: string[];
 
     @computed get isActive(): boolean {
         return this.validTo > new Date();
@@ -34,7 +35,8 @@ export class ReviewLink {
         isEditable: boolean,
         projectId?: number,
         pinCode?: string,
-        projectName?: string
+        projectName?: string,
+        visitorGroups?: string[]
     ) {
         this.token = token;
         this.displayName = displayName;
@@ -43,6 +45,7 @@ export class ReviewLink {
         this.projectId = projectId;
         this.pinCode = pinCode;
         this.projectName = projectName;
+        this.visitorGroups = visitorGroups;
         this.setValidDateFromStr(validToStr);
     }
 }
@@ -62,7 +65,7 @@ export interface IExternalReviewStore {
 
     share(item: ReviewLink, email: string, subject: string, message: string): void;
 
-    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void;
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]): void;
 }
 
 export class ExternalReviewStore implements IExternalReviewStore {
@@ -110,7 +113,8 @@ export class ExternalReviewStore implements IExternalReviewStore {
                         x.isEditable,
                         x.projectId,
                         x.pinCode,
-                        x.projectName
+                        x.projectName,
+                        x.visitorGroups
                     )
             );
         });
@@ -129,12 +133,13 @@ export class ExternalReviewStore implements IExternalReviewStore {
         this._externalReviewService.share(item.token, email, subject, message);
     }
 
-    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string): void {
-        this._externalReviewService.edit(item.token, validTo, pinCode, displayName).then(result => {
+    edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]): void {
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName, visitorGroups).then(result => {
             if (result) {
                 item.setValidDateFromStr(result.validTo);
                 item.pinCode = result.pinCode;
                 item.displayName = result.displayName;
+                item.visitorGroups = result.visitorGroups;
             }
         });
     }

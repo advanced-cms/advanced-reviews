@@ -4,6 +4,8 @@ import ExternalReviewWidgetContent from "./external-review-manage-links";
 import FakeReviewLinksStore from "./fake-review-links-store";
 import res from "../../.storybook/externalResources.json";
 
+const visitorGroups = [{ name: "Visitor group 1", id: "1" }, { name: "Visitor group 2", id: "2" }];
+
 storiesOf("External reviews/Review component", module)
     .add("default", () => {
         const store = new FakeReviewLinksStore();
@@ -17,6 +19,7 @@ storiesOf("External reviews/Review component", module)
                 store={store}
                 editableLinksEnabled={true}
                 resources={res}
+                availableVisitorGroups={visitorGroups}
                 pinCodeSecurityEnabled={false}
                 pinCodeLength={4}
             />
@@ -30,6 +33,7 @@ storiesOf("External reviews/Review component", module)
                 store={store}
                 editableLinksEnabled={true}
                 resources={res}
+                availableVisitorGroups={visitorGroups}
                 pinCodeSecurityEnabled={false}
                 pinCodeLength={4}
             />
@@ -43,6 +47,7 @@ storiesOf("External reviews/Review component", module)
                 store={store}
                 editableLinksEnabled={false}
                 resources={res}
+                availableVisitorGroups={visitorGroups}
                 pinCodeSecurityEnabled={false}
                 pinCodeLength={4}
             />
@@ -55,6 +60,7 @@ storiesOf("External reviews/Review component", module)
                 store={store}
                 editableLinksEnabled={true}
                 resources={res}
+                availableVisitorGroups={visitorGroups}
                 pinCodeSecurityEnabled={true}
                 pinCodeLength={4}
             />
@@ -67,6 +73,7 @@ storiesOf("External reviews/Review component", module)
                 store={store}
                 editableLinksEnabled={true}
                 resources={res}
+                availableVisitorGroups={visitorGroups}
                 pinCodeSecurityEnabled={true}
                 pinCodeSecurityRequired={true}
                 pinCodeLength={4}
@@ -80,6 +87,7 @@ storiesOf("External reviews/Review component", module)
                 store={store}
                 editableLinksEnabled={true}
                 resources={res}
+                availableVisitorGroups={visitorGroups}
                 pinCodeSecurityEnabled={false}
                 pinCodeLength={4}
             />

@@ -64,6 +64,11 @@ namespace AdvancedExternalReviews
                 return null;
             }
 
+            if (externalReviewLink.VisitorGroups != null)
+            {
+                System.Web.HttpContext.Current.Items["ImpersonatedVisitorGroupsById"] = externalReviewLink.VisitorGroups;
+            }
+
             var contentReference = externalReviewLink.ContentLink;
 
             if (externalReviewLink.ProjectId.HasValue)
