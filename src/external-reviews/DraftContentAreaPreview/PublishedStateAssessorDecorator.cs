@@ -1,4 +1,4 @@
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.Globalization;
 
 namespace AdvancedExternalReviews.DraftContentAreaPreview

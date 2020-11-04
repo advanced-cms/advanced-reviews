@@ -30,6 +30,8 @@
           <linksecured>Link secured with PIN code</linksecured>
           <linknotsecured>Link with no PIN code security</linknotsecured>
           <displaynamehelptext>Optional link name</displaynamehelptext>
+          <visitorgroups>Visitor groups</visitorgroups>
+          <visitorgroupshelptext>Impersonate as selected visitor groups</visitorgroupshelptext>
         </editdialog>
       </list>
       <sharedialog>

@@ -5,11 +5,13 @@ import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "
 import { Checkbox, Input, TextButton, TextField } from "@episerver/ui-framework";
 import { ReviewLink } from "./external-review-links-store";
 import "@material/react-dialog/index.scss";
+import { VisitorGroup } from "./external-review-manage-links";
 
 interface LinkEditDialogProps {
     reviewLink: ReviewLink;
-    onClose(validTo: Date, pinCode: string, displayName: string): void;
+    onClose(validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]): void;
     resources: ExternalReviewResources;
+    availableVisitorGroups: VisitorGroup[];
     open: boolean;
     pinCodeSecurityEnabled: boolean;
     pinCodeSecurityRequired: boolean;
@@ -25,11 +27,13 @@ const LinkEditDialog = observer(
         onClose,
         open,
         resources,
+        availableVisitorGroups,
         pinCodeSecurityEnabled,
         pinCodeSecurityRequired,
         pinCodeLength
     }: LinkEditDialogProps) => {
         const [displayName, setDisplayName] = useState<string>(reviewLink.displayName || "");
+        const [visitorGroups, setVisitorGroups] = useState<string[]>(reviewLink.visitorGroups || []);
         const [validDate, setValidDate] = useState<string>(format(reviewLink.validTo, "YYYY-MM-DD hh:mm"));
         const [prolongVisible, setProlongVisible] = useState<boolean>(true);
         const [pinCode, setPinCode] = useState<string>(reviewLink.pinCode || "");
@@ -38,11 +42,11 @@ const LinkEditDialog = observer(
 
         const onCloseDialog = (action: string) => {
             if (validDate && action !== "save") {
-                onClose(null, null, null);
+                onClose(null, null, null, null);
                 return;
             }
             const newPin = shouldUpdatePinCode ? pinCode : null;
-            onClose(parse(validDate), newPin, displayName);
+            onClose(parse(validDate), newPin, displayName, visitorGroups);
         };
 
         const updatePinCode = (event: React.FormEvent<HTMLInputElement>) => {
@@ -132,6 +136,38 @@ const LinkEditDialog = observer(
                         <div className="mdc-text-field-helper-line">
                             <p className="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">
                                 {resources.list.editdialog.displaynamehelptext}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="field-group">
+                        <span>
+                            {resources.list.editdialog.visitorgroups} ({visitorGroups.length})
+                        </span>
+                        <div className="visitor-groups-list">
+                            {availableVisitorGroups.map(v => (
+                                <div key={v.id}>
+                                    <Checkbox
+                                        nativeControlId={v.id}
+                                        checked={visitorGroups.indexOf(v.id) !== -1}
+                                        onChange={e => {
+                                            const selectedGroups = [...visitorGroups];
+                                            if (e.target.checked) {
+                                                setVisitorGroups([...selectedGroups, v.id]);
+                                            } else {
+                                                selectedGroups.splice(selectedGroups.indexOf(v.id), 1);
+                                                setVisitorGroups([...selectedGroups]);
+                                            }
+                                        }}
+                                    />
+                                    <label className="checkbox-label" htmlFor={v.id}>
+                                        {v.name}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mdc-text-field-helper-line">
+                            <p className="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">
+                                {resources.list.editdialog.visitorgroupshelptext}
                             </p>
                         </div>
                     </div>

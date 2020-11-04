@@ -25,5 +25,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         public DateTime ValidTo { get; set; }
 
         public string PinCode { get; set; }
+
+        public string[] VisitorGroups { get; set; }
     }
 }

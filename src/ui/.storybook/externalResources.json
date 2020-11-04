@@ -26,7 +26,9 @@
       "pincheckboxlabel": "Update PIN code",
       "linksecured": "Link secured with PIN code",
       "linknotsecured": "Link with no PIN code security",
-      "displaynamehelptext": "Optional link name"
+      "displaynamehelptext": "Optional link name",
+      "visitorgroups": "Visitor groups",
+      "visitorgroupshelptext": "Impersonate as selected visitor groups"
     }
   },
   "sharedialog": {

@@ -60,7 +60,8 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 LinkUrl = UrlPath.Combine(externalUrlPrefix, externalReviewLinkDds.Token),
                 PinCode = externalReviewLinkDds.PinCode,
                 DisplayName = externalReviewLinkDds.DisplayName,
-                ProjectName = projectName
+                ProjectName = projectName,
+                VisitorGroups = externalReviewLinkDds.VisitorGroups
             };
         }
     }

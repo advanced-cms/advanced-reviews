@@ -172,7 +172,6 @@ There are few settings related with external review. They are all set using Opti
  | EditLinkValidTo | 5 days | For how long editable link is valid |
  | PinCodeSecurity | [PinCodeSecurityOptions](#PinCodeSecurityOptions) | Settings specific to links security |
  | Restrictions | [ExternalReviewRestrictionOptions](#ExternalReviewRestrictionOptions) | Restrictions around external reviewers |
- | ContentReplacement | [ContentReplacement](#ContentReplacement) | Intercept IContentLoader calls to GetChildren and Get |
 
 #### ExternalReviewRestrictionOptions
 
@@ -192,15 +191,6 @@ There are few settings related with external review. They are all set using Opti
  | RolesWithoutPin | WebEditors & WebAdmins | Roles that can access links without PIN |
  | AuthenticationCookieLifeTime | 5 minutes | For how long authentication cookie should be valid |
  | CodeLength | 4 | PIN code length |
-
-#### ContentReplacement
-
- | Option        | Default           | Description  |
- | ---- | ---- | ---- |
- | ReplaceChildren | false | All custom calls to IContentLoader.GetChildren will return unpublished content items |
- | ReplaceContent | false | All custom calls to IContentLoader.Get will return unpublished content items |
-
-In order to add those options you would have to add a new `InitializableModule`.
 
 #### Examples
 
@@ -284,31 +274,6 @@ public class ExternalReviewInitialization : IConfigurableModule
         context.Services.Configure<ExternalReviewOptions>(options =>
         {
             options.IsEnabled = false;            
-        });
-    }
-
-    public void Initialize(InitializationEngine context) { }
-
-    public void Uninitialize(InitializationEngine context) { }
-}
-```
-
-If you have a custom Header/Footer where you build the UI yourself using IContentLoader calls
-then you might want to turn on the [ContentReplacement](#ContentReplacement) options.
-For example this code snippet makes sure that all unpublished content items are returned from
-all GetChildren & Get calls.
-
-```csharp
-[InitializableModule]
-[ModuleDependency(typeof(FrameworkInitialization))]
-public class ExternalReviewInitialization : IConfigurableModule
-{
-    public void ConfigureContainer(ServiceConfigurationContext context)
-    {
-        context.Services.Configure<ExternalReviewOptions>(options =>
-        {
-            options.ContentReplacement.ReplaceChildren = true;            
-            options.ContentReplacement.ReplaceContent = true;
         });
     }
 

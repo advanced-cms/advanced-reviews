@@ -6,7 +6,6 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
-using EPiServer.Web.Mvc.Html;
 using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.DraftContentAreaPreview
@@ -19,44 +18,25 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            context.Services.Intercept<IContentAreaLoader>(
-                (locator, defaultContentAreaLoader) => new DraftContentAreaLoader(defaultContentAreaLoader,
-                    locator.GetInstance<IContentLoader>(), locator.GetInstance<ReviewsContentLoader>()));
-
-            context.Services.Intercept<ContentAreaRenderer>(
-                (locator, defaultContentAreaRenderer) => new DraftContentAreaRenderer(defaultContentAreaRenderer));
-
+            // Intercepted to rewrite urls of content items which belong to the same project
             context.Services.Intercept<UrlResolver>(
                 (locator, defaultUrlResolver) =>
                     new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
                         locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>()));
 
+            // Intercepted in order to return unpublished children in external review context
             context.Services.Intercept<IContentLoader>(
-                (locator, defaultContentLoader) =>
-                {
-                    if (!locator.GetInstance<ExternalReviewOptions>().ContentReplacement.ReplaceChildren)
-                    {
-                        return defaultContentLoader;
-                    }
+                (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>()));
 
-                    return new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>());
-                });
+            // Intercepted in order to return unpublished children in external review context
+            context.Services.Intercept<ContentLoader>(
+                (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>()));
 
+            // Intercepted in order to return unpublished content items
             context.Services.Intercept<IPublishedStateAssessor>(
                 (locator, defaultPublishedStateAssessor) =>
                     new PublishedStateAssessorDecorator(defaultPublishedStateAssessor,
                         locator.GetInstance<LanguageResolver>()));
-
-            context.Services.Intercept<ContentLoader>(
-                (locator, defaultContentLoader) =>
-                {
-                    if (!locator.GetInstance<ExternalReviewOptions>().ContentReplacement.ReplaceChildren)
-                    {
-                        return defaultContentLoader;
-                    }
-
-                    return new DraftContentLoader(defaultContentLoader, locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>());
-                });
         }
 
         public void Initialize(InitializationEngine context)

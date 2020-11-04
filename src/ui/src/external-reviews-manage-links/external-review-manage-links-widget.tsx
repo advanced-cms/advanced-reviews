@@ -36,6 +36,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
                 pinCodeSecurityRequired={this.params.pinCodeSecurityRequired}
                 pinCodeLength={this.params.pinCodeLength}
                 resources={res}
+                availableVisitorGroups={this.params.availableVisitorGroups}
             />,
             this.domNode
         );
