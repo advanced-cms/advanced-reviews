@@ -57,14 +57,16 @@ namespace AdvancedExternalReviews.EditReview
             var contentReference = externalReviewLink.ContentLink;
             if (externalReviewLink.ProjectId.HasValue)
             {
+                var languageID = content.Language.Name;
+
                 var contentContentLink = PreviewUrlResolver.IsGenerated(segmentContext.QueryString) ? content.ContentLink : contentReference;
-                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value);
+                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value, languageID);
                 ExternalReview.ProjectId = externalReviewLink.ProjectId;
             }
 
             try
             {
-                var page = _contentLoader.Get<IContent>(contentReference);
+                var page = _contentLoader.Get<IContent>(contentReference, content.Language);
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 // We can't set the Edit context here because it breaks the routing if you have useClaims=true in virtualRoles setting

@@ -53,5 +53,20 @@ namespace AdvancedExternalReviews
             var item = items.FirstOrDefault(x => x.ContentLink.ToReferenceWithoutVersion() == publishedReference.ToReferenceWithoutVersion());
             return item == null ? publishedReference : items.FirstOrDefault(x => x.ContentLink.ID == item.ContentLink.ID).ContentLink;
         }
+
+        public ContentReference GetProjectReference(ContentReference publishedReference, int projectId, string languageId)
+        {
+            var items = _projectRepository.ListItems(projectId);
+            if (items == null)
+            {
+                return publishedReference;
+            }
+
+            var itemsFound = items.Where(x => x.ContentLink.ToReferenceWithoutVersion() == publishedReference.ToReferenceWithoutVersion());
+
+            var item = itemsFound.FirstOrDefault(x => x.Language.Name == languageId);
+
+            return item == null ? publishedReference : item.ContentLink;
+        }
     }
 }

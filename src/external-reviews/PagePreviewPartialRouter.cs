@@ -73,14 +73,16 @@ namespace AdvancedExternalReviews
 
             if (externalReviewLink.ProjectId.HasValue)
             {
+                var languageID = content.Language.Name;
+
                 var contentContentLink = PreviewUrlResolver.IsGenerated(segmentContext.QueryString) ? content.ContentLink : contentReference;
-                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value);
+                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value, languageID);
                 ExternalReview.ProjectId = externalReviewLink.ProjectId;
             }
 
             try
             {
-                var page = _contentLoader.Get<IContent>(contentReference);
+                var page = _contentLoader.Get<IContent>(contentReference, content.Language);
 
                 // PIN code security check, if user is not authenticated, then redirect to login page
                 if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))

@@ -136,12 +136,11 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             {
                 // load version from project
                 return _projectContentResolver.GetProjectReference(baseReference,
-                    ExternalReview.ProjectId.Value);
+                    ExternalReview.ProjectId.Value, _languageResolver.GetPreferredCulture().Name);
             }
 
             // load common draft instead of published version
-            var loadCommonDraft = _contentVersionRepository.LoadCommonDraft(baseReference,
-                _languageResolver.GetPreferredCulture().Name);
+            var loadCommonDraft = _contentVersionRepository.LoadCommonDraft(baseReference, _languageResolver.GetPreferredCulture().Name);
             if (loadCommonDraft == null)
             {
                 // fallback to default implementation if there is no common draft in a given language
