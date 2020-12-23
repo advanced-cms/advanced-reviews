@@ -7,7 +7,7 @@ namespace AdvancedApprovalReviews
 {
     public interface IStartPageUrlResolver
     {
-        string GetUrl(ContentReference contentReference);
+        string GetUrl(ContentReference contentReference, string languageBranch = null);
     }
 
     [ServiceConfiguration(typeof(IStartPageUrlResolver))]
@@ -22,10 +22,10 @@ namespace AdvancedApprovalReviews
             _siteDefinitionResolver = siteDefinitionResolver;
         }
 
-        public string GetUrl(ContentReference contentReference)
+        public string GetUrl(ContentReference contentReference, string languageBranch = null)
         {
             var site = _siteDefinitionResolver.GetByContent(contentReference, true);
-            return _urlResolver.GetUrl(site?.StartPage ?? ContentReference.StartPage);
+            return _urlResolver.GetUrl(site?.StartPage ?? ContentReference.StartPage, languageBranch);
         }
     }
 }

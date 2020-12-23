@@ -6,6 +6,7 @@ using AdvancedApprovalReviews;
 using AdvancedApprovalReviews.Notifications;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
+using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
@@ -59,7 +60,7 @@ namespace AdvancedExternalReviews.EditReview
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
 
             const string url = "Views/PagePreview/Index.cshtml";
-            var startPageUrl = _startPageUrlResolver.GetUrl(externalReviewLink.ContentLink);
+            var startPageUrl = _startPageUrlResolver.GetUrl(externalReviewLink.ContentLink, content.LanguageBranch());
 
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resolvedPath))

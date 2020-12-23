@@ -34,7 +34,7 @@ namespace AdvancedExternalReviews
             return _defaultUrlResolver.Route(urlBuilder, contextMode);
         }
 
-        public static bool IsGenerated(NameValueCollection queryString)
+        public static bool IsGeneratedForProjectPreview(NameValueCollection queryString)
         {
             return queryString[PreviewGenerated] != null;
         }

@@ -1,6 +1,5 @@
 ﻿using System.Web.Routing;
 using AdvancedExternalReviews.ReviewLinksRepository;
-using EPiServer;
 using EPiServer.Core;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
@@ -9,14 +8,14 @@ namespace AdvancedExternalReviews.EditReview
 {
     public class PageEditPartialRouter : IPartialRouter<PageData, PageData>
     {
-        private readonly IContentLoader _contentLoader;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly ProjectContentResolver _projectContentResolver;
 
-        public PageEditPartialRouter(IContentLoader contentLoader, IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions, ProjectContentResolver projectContentResolver)
+        public PageEditPartialRouter(IExternalReviewLinksRepository externalReviewLinksRepository,
+            ExternalReviewOptions externalReviewOptions,
+            ProjectContentResolver projectContentResolver)
         {
-            _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
             _projectContentResolver = projectContentResolver;
@@ -54,19 +53,11 @@ namespace AdvancedExternalReviews.EditReview
                 System.Web.HttpContext.Current.Items["ImpersonatedVisitorGroupsById"] = externalReviewLink.VisitorGroups;
             }
 
-            var contentReference = externalReviewLink.ContentLink;
-            if (externalReviewLink.ProjectId.HasValue)
-            {
-                var languageID = content.Language.Name;
-
-                var contentContentLink = PreviewUrlResolver.IsGenerated(segmentContext.QueryString) ? content.ContentLink : contentReference;
-                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value, languageID);
-                ExternalReview.ProjectId = externalReviewLink.ProjectId;
-            }
-
             try
             {
-                var page = _contentLoader.Get<IContent>(contentReference, content.Language);
+                var page = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
+                    segmentContext.QueryString);
+
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 // We can't set the Edit context here because it breaks the routing if you have useClaims=true in virtualRoles setting
@@ -74,6 +65,7 @@ namespace AdvancedExternalReviews.EditReview
                 // segmentContext.ContextMode = ContextMode.Edit;
                 segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
 
+                ExternalReview.ProjectId = externalReviewLink.ProjectId;
                 ExternalReview.IsEditLink = true;
                 ExternalReview.Token = token;
 

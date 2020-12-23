@@ -47,21 +47,19 @@ namespace AlloyTemplates.Business
     /// </summary>
     public class CustomStartPageResolver: IStartPageUrlResolver
     {
-        private readonly IContentLoader _contentLoader;
         private readonly ISiteDefinitionResolver _siteDefinitionResolver;
 
-        public CustomStartPageResolver(IContentLoader contentLoader, ISiteDefinitionResolver siteDefinitionResolver)
+        public CustomStartPageResolver(ISiteDefinitionResolver siteDefinitionResolver)
         {
-            _contentLoader = contentLoader;
             _siteDefinitionResolver = siteDefinitionResolver;
         }
 
-        private string ResolveUrlForSite(SiteDefinition siteDefinition)
+        private string ResolveUrlForSite(SiteDefinition siteDefinition, string languageBranch)
         {
             var host = siteDefinition.Hosts.FirstOrDefault(x => x.Type == HostDefinitionType.Primary);
             if (host != null)
             {
-                return UrlPath.Combine(host.Url.ToString(), ContentLanguage.PreferredCulture.Name);
+                return UrlPath.Combine(host.Url.ToString(), languageBranch);
             }
 
             host = siteDefinition.Hosts.FirstOrDefault();
@@ -70,17 +68,17 @@ namespace AlloyTemplates.Business
                 throw new ApplicationException("No host for defined for site");
             }
 
-            return UrlPath.Combine(host.Url.ToString(), ContentLanguage.PreferredCulture.Name);
+            return UrlPath.Combine(host.Url.ToString(), languageBranch);
         }
 
-        public string GetUrl(ContentReference contentReference)
+        public string GetUrl(ContentReference contentReference, string languageBranch)
         {
             var siteDefinition = _siteDefinitionResolver.GetByContent(contentReference, true);
             if (siteDefinition == null)
             {
                 throw new ApplicationException("No site found for " + contentReference);
             }
-            return ResolveUrlForSite(siteDefinition);
+            return ResolveUrlForSite(siteDefinition, languageBranch);
         }
     }
 }

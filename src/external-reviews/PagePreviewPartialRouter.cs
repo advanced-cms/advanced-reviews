@@ -2,7 +2,6 @@
 using System.Web.Routing;
 using AdvancedExternalReviews.PinCodeSecurity;
 using AdvancedExternalReviews.ReviewLinksRepository;
-using EPiServer;
 using EPiServer.Core;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
@@ -14,18 +13,16 @@ namespace AdvancedExternalReviews
     /// </summary>
     public class PagePreviewPartialRouter : IPartialRouter<PageData, PageData>
     {
-        private readonly IContentLoader _contentLoader;
         private readonly ProjectContentResolver _projectContentResolver;
         private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
 
-        public PagePreviewPartialRouter(IContentLoader contentLoader,
-            IExternalReviewLinksRepository externalReviewLinksRepository, ExternalReviewOptions externalReviewOptions,
+        public PagePreviewPartialRouter(IExternalReviewLinksRepository externalReviewLinksRepository,
+            ExternalReviewOptions externalReviewOptions,
             ProjectContentResolver projectContentResolver,
             IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler)
         {
-            _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
             _projectContentResolver = projectContentResolver;
@@ -69,36 +66,28 @@ namespace AdvancedExternalReviews
                 System.Web.HttpContext.Current.Items["ImpersonatedVisitorGroupsById"] = externalReviewLink.VisitorGroups;
             }
 
-            var contentReference = externalReviewLink.ContentLink;
-
-            if (externalReviewLink.ProjectId.HasValue)
+            // PIN code security check, if user is not authenticated, then redirect to login page
+            if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
             {
-                var languageID = content.Language.Name;
-
-                var contentContentLink = PreviewUrlResolver.IsGenerated(segmentContext.QueryString) ? content.ContentLink : contentReference;
-                contentReference = _projectContentResolver.GetProjectReference(contentContentLink, externalReviewLink.ProjectId.Value, languageID);
-                ExternalReview.ProjectId = externalReviewLink.ProjectId;
+                _externalLinkPinCodeSecurityHandler.RedirectToLoginPage(externalReviewLink);
+                return null;
             }
 
             try
             {
-                var page = _contentLoader.Get<IContent>(contentReference, content.Language);
+                var page = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
+                    segmentContext.QueryString);
 
-                // PIN code security check, if user is not authenticated, then redirect to login page
-                if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
-                {
-                    _externalLinkPinCodeSecurityHandler.RedirectToLoginPage(externalReviewLink);
-                    return null;
-                }
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 // set ContentLink in DataTokens to make IPageRouteHelper working
                 segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
                 ExternalReview.Token = token;
+                ExternalReview.ProjectId = externalReviewLink.ProjectId;
 
                 return page;
             }
-            catch (ContentNotFoundException)
+            catch
             {
                 return null;
             }

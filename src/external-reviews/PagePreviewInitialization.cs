@@ -19,7 +19,6 @@ namespace AdvancedExternalReviews
             var locator = context.Locate.Advanced;
             var editRouter = new PageEditPartialRouter
             (
-                locator.GetInstance<IContentLoader>(),
                 locator.GetInstance<IExternalReviewLinksRepository>(),
                 locator.GetInstance<ExternalReviewOptions>(),
                 locator.GetInstance<ProjectContentResolver>()
@@ -29,7 +28,6 @@ namespace AdvancedExternalReviews
             // register view route
             var previewRouter = new PagePreviewPartialRouter
             (
-                locator.GetInstance<IContentLoader>(),
                 locator.GetInstance<IExternalReviewLinksRepository>(),
                 locator.GetInstance<ExternalReviewOptions>(),
                 locator.GetInstance<ProjectContentResolver>(),
