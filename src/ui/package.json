@@ -59,7 +59,7 @@
         "@material/react-switch": "^0.15.0",
         "@types/jest": "^24.0.19",
         "@types/mocha": "^5.2.7",
-        "axios": "^0.19.0",
+        "axios": "^0.21.1",
         "classnames": "^2.2.6",
         "css-selector-generator": "^1.2.0",
         "date-fns": "^1.30.1",
