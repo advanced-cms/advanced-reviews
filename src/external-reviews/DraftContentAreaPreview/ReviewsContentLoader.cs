@@ -97,7 +97,13 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 else
                 {
                     var content = _contentLoader.Get<T>(referenceToLoad);
-                    if (!(content is IVersionable versionable) || HasExpired(versionable))
+                    if (!(content is IVersionable versionable))
+                    {
+                        result.Add(childReference.ContentLink);
+                        continue;
+                    }
+
+                    if (HasExpired(versionable))
                     {
                         continue;
                     }
