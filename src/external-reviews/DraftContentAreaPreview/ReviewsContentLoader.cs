@@ -6,6 +6,7 @@ using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Core.Internal;
+using EPiServer.DataAbstraction;
 using EPiServer.Filters;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
@@ -146,7 +147,16 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
             }
 
             // load common draft instead of published version
-            var loadCommonDraft = _contentVersionRepository.LoadCommonDraft(baseReference, _languageResolver.GetPreferredCulture().Name);
+            ContentVersion loadCommonDraft;
+            try
+            {
+                loadCommonDraft = _contentVersionRepository.LoadCommonDraft(baseReference, _languageResolver.GetPreferredCulture().Name);
+            }
+            catch (ContentNotFoundException e)
+            {
+                loadCommonDraft = null;
+            }
+            
             if (loadCommonDraft == null)
             {
                 // fallback to default implementation if there is no common draft in a given language
