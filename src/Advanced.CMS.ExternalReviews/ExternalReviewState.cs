@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -29,30 +28,6 @@ namespace Advanced.CMS.ExternalReviews
         {
             get => (string) _httpContextAccessor.HttpContext?.Items["IsEditLink"] == bool.TrueString;
             set => _httpContextAccessor.HttpContext.Items["IsEditLink"] = value.ToString();
-        }
-
-        public IList<string> CustomLoaded
-        {
-            get
-            {
-                if (_httpContextAccessor.HttpContext == null)
-                {
-                    return new List<string>();
-                }
-
-                if (_httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string> == null)
-                {
-                    lock (locker)
-                    {
-                        if (_httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string> == null)
-                        {
-                            _httpContextAccessor.HttpContext.Items["CustomLoaded"] = new List<string>();
-                        }
-                    }
-                }
-
-                return _httpContextAccessor.HttpContext?.Items["CustomLoaded"] as IList<string>;
-            }
         }
 
         public int? ProjectId
