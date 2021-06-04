@@ -61,6 +61,7 @@ namespace AdvancedExternalReviews
 
             e.ContentLink = unpublished;
             e.Content = content;
+            e.CancelAction = true;
         }
 
         public void Uninitialize(InitializationEngine context)
