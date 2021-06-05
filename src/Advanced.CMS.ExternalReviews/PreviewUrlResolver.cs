@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
+//TODO: NETCORE using Advanced.CMS.ExternalReviews.ImageProxy;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -47,11 +48,21 @@ namespace Advanced.CMS.ExternalReviews
             }
 
             var content = _contentLoader.Get<IContent>(contentLink);
-            if (content is PageData data)
+            if (_externalReviewState.IsInProjectReviewContext)
             {
-                var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
+                if (content is PageData data)
+                {
+                    var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
                 virtualPathData = AppendGeneratedPostfix(virtualPath);
+                }
             }
+
+            //TODO: NETCORE
+            // if (content is ImageData imageData)
+            // {
+            //     virtualPathData.VirtualPath =
+            //         $"/{_externalReviewState.ImageProxyRoute}?token={ExternalReview.Token}&contentLink={imageData.ContentLink}";
+            // }
 
             return virtualPathData;
         }

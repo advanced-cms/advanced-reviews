@@ -10,5 +10,9 @@
 }
 @Model.CurrentPage.Title
 
+<img src="@Url.ContentUrl(Model.CurrentPage.PageImage)" />
+Display for:
+@Html.PropertyFor(m => m.CurrentPage.PageImage)
+
 @block.Title
 @block2.Title
