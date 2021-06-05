@@ -18,8 +18,8 @@ namespace AlloyTemplates.Business.AlloyReviews
             context.Services.Configure<ExternalReviewOptions>(options =>
             {
                 options.EditableLinksEnabled = true;
-                options.PinCodeSecurity.Enabled = false;
-                options.PinCodeSecurity.Required = false;
+                options.PinCodeSecurity.Enabled = true;
+                options.PinCodeSecurity.Required = true;
                 options.PinCodeSecurity.CodeLength = 5;
             });
 

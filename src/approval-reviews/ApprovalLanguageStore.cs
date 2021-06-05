@@ -1,6 +1,5 @@
-using System.Web.Mvc;
-using EPiServer.Personalization;
-using EPiServer.Shell.Services.Rest;
+﻿using EPiServer.Shell.Services.Rest;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdvancedApprovalReviews
 {

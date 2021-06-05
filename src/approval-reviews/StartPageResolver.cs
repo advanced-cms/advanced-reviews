@@ -13,10 +13,10 @@ namespace AdvancedApprovalReviews
     [ServiceConfiguration(typeof(IStartPageUrlResolver))]
     public class StartPageUrlResolver: IStartPageUrlResolver
     {
-        private readonly UrlResolver _urlResolver;
+        private readonly IUrlResolver _urlResolver;
         private readonly ISiteDefinitionResolver _siteDefinitionResolver;
 
-        public StartPageUrlResolver(UrlResolver urlResolver, ISiteDefinitionResolver siteDefinitionResolver)
+        public StartPageUrlResolver(IUrlResolver urlResolver, ISiteDefinitionResolver siteDefinitionResolver)
         {
             _urlResolver = urlResolver;
             _siteDefinitionResolver = siteDefinitionResolver;
