@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
+using AdvancedExternalReviews.ImageProxy;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -43,16 +44,25 @@ namespace AdvancedExternalReviews
             VirtualPathArguments virtualPathArguments)
         {
             var virtualPathData = _defaultUrlResolver.GetVirtualPath(contentLink, language, virtualPathArguments);
-            if (!ExternalReview.IsInProjectReviewContext || !ExternalReview.IsInExternalReviewContext || virtualPathData == null)
+            if (!ExternalReview.IsInExternalReviewContext || virtualPathData == null)
             {
                 return virtualPathData;
             }
 
             var content = _contentLoader.Get<IContent>(contentLink);
-            if (content is PageData data)
+            if (ExternalReview.IsInProjectReviewContext)
             {
-                var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
-                virtualPathData.VirtualPath = AppendGeneratedPostfix(virtualPath);
+                if (content is PageData data)
+                {
+                    var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
+                    virtualPathData.VirtualPath = AppendGeneratedPostfix(virtualPath);
+                }
+            }
+
+            if (content is ImageData imageData)
+            {
+                virtualPathData.VirtualPath =
+                    $"/{ImageProxyExtensions.ImageProxyRoute}?token={ExternalReview.Token}&contentLink={imageData.ContentLink}";
             }
 
             return virtualPathData;
