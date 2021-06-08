@@ -25,21 +25,16 @@ namespace AdvancedExternalReviews
                 return;
             }
 
-            if (ExternalReview.CustomLoaded.Contains(e.ContentLink.ToString()))
+            var languageResolver = ServiceLocator.Current.GetInstance<LanguageResolver>();
+            var preferredCulture = languageResolver.GetPreferredCulture();
+            var cachedContent = ExternalReview.GetCachedContent(preferredCulture, e.ContentLink);
+            if (cachedContent != null)
             {
-                var preferredCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
-                var cachedContent = ExternalReview.GetCachedContent(preferredCulture, e.ContentLink);
-                if (cachedContent != null)
-                {
-                    e.ContentLink = cachedContent.ContentLink;
-                    e.Content = cachedContent;
-                    e.CancelAction = true;
-                }
-
+                e.ContentLink = cachedContent.ContentLink;
+                e.Content = cachedContent;
+                e.CancelAction = true;
                 return;
             }
-
-            ExternalReview.CustomLoaded.Add(e.ContentLink.ToString());
 
             var reviewsContentLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
 
@@ -49,8 +44,10 @@ namespace AdvancedExternalReviews
                 return;
             }
 
-            var unpublishedCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
-            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(unpublished);
+            var unpublishedCulture = languageResolver.GetPreferredCulture();
+            var providerManager = ServiceLocator.Current.GetInstance<IContentProviderManager>();
+            var provider = providerManager.GetProvider(e.ContentLink.ProviderName);
+            var content = provider.Load(unpublished, new LanguageSelector(unpublishedCulture.Name));
 
             if (!(content is IVersionable versionable) || reviewsContentLoader.HasExpired(versionable))
             {
@@ -61,6 +58,7 @@ namespace AdvancedExternalReviews
 
             e.ContentLink = unpublished;
             e.Content = content;
+            e.CancelAction = true;
         }
 
         public void Uninitialize(InitializationEngine context)
