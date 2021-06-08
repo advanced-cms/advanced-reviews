@@ -1,7 +1,7 @@
 <!-- This file may be overwritten by automation. Only values allowed here are VersionPrefix and VersionSuffix.  -->
 <Project>
   <PropertyGroup>
-    <VersionPrefix>0.8.4</VersionPrefix>
+    <VersionPrefix>0.8.5</VersionPrefix>
     <VersionSuffix>developerbuild-000001</VersionSuffix>
   </PropertyGroup>
 </Project>
