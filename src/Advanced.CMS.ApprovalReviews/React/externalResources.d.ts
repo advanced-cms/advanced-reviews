@@ -39,6 +39,10 @@ interface ExternalReviewResources_List_Editdialog {
     visitorgroups: string;
     /** Impersonate as selected visitor groups */
     visitorgroupshelptext: string;
+    /** Valid to */
+    validto: string;
+    /** Prolong by [#days#] days */
+    prolongbydays: string;
 }
 
 interface ExternalReviewResources_List {

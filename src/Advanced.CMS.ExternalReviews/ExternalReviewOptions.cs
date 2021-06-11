@@ -63,6 +63,11 @@ namespace Advanced.CMS.ExternalReviews
         public TimeSpan EditLinkValidTo { get; set; } = TimeSpan.FromDays(5);
 
         /// <summary>
+        /// Number of days added to link valid date
+        /// </summary>
+        public int ProlongDays { get; set; } = 5;
+
+        /// <summary>
         /// Restriction options
         /// </summary>
         public ExternalReviewRestrictionOptions Restrictions { get; } = new ExternalReviewRestrictionOptions();
