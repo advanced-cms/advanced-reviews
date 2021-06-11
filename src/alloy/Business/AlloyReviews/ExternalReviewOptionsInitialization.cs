@@ -21,6 +21,7 @@ namespace AlloyTemplates.Business.AlloyReviews
                 options.PinCodeSecurity.Enabled = false;
                 options.PinCodeSecurity.Required = false;
                 options.PinCodeSecurity.CodeLength = 5;
+                options.ProlongDays = 10;
             });
 
             context.Services.Configure<ApprovalOptions>(options =>

@@ -32,6 +32,8 @@
           <displaynamehelptext>Optional link name</displaynamehelptext>
           <visitorgroups>Visitor groups</visitorgroups>
           <visitorgroupshelptext>Impersonate as selected visitor groups</visitorgroupshelptext>
+          <validto>Valid to</validto>
+          <prolongbydays>Prolong by [#days#] days</prolongbydays>
         </editdialog>
       </list>
       <sharedialog>
