@@ -170,6 +170,7 @@ There are few settings related with external review. They are all set using Opti
  | EditableLinksEnabled | false |When true then Editor can create editable links that allow external reviewers to add comments |
  | ViewLinkValidTo | 5 days |For how long view link is valid |
  | EditLinkValidTo | 5 days | For how long editable link is valid |
+ | ProlongDays | 5 days | Number of days added to link valid date |
  | PinCodeSecurity | [PinCodeSecurityOptions](#PinCodeSecurityOptions) | Settings specific to links security |
  | Restrictions | [ExternalReviewRestrictionOptions](#ExternalReviewRestrictionOptions) | Restrictions around external reviewers |
 

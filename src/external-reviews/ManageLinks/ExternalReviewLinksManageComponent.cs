@@ -46,6 +46,7 @@ namespace AdvancedExternalReviews.ManageLinks
                 base.Settings["availableVisitorGroups"] = _visitorGroupRepository.List();
                 base.Settings["pinCodeLength"] = _options.PinCodeSecurity.CodeLength;
                 base.Settings["isEnabled"] = _options.IsEnabled;
+                base.Settings["prolongDays"] = _options.ProlongDays;
 
                 return base.Settings;
             }

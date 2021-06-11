@@ -16,6 +16,7 @@ interface LinkEditDialogProps {
     pinCodeSecurityEnabled: boolean;
     pinCodeSecurityRequired: boolean;
     pinCodeLength: number;
+    prolongDays: number;
 }
 
 /**
@@ -30,7 +31,8 @@ const LinkEditDialog = observer(
         availableVisitorGroups,
         pinCodeSecurityEnabled,
         pinCodeSecurityRequired,
-        pinCodeLength
+        pinCodeLength,
+        prolongDays
     }: LinkEditDialogProps) => {
         const [displayName, setDisplayName] = useState<string>(reviewLink.displayName || "");
         const [visitorGroups, setVisitorGroups] = useState<string[]>(reviewLink.visitorGroups || []);
@@ -39,6 +41,10 @@ const LinkEditDialog = observer(
         const [pinCode, setPinCode] = useState<string>(reviewLink.pinCode || "");
         const [shouldUpdatePinCode, setShouldUpdatePinCode] = useState<boolean>(!reviewLink.pinCode);
         const [canSave, setCanSave] = useState(!pinCodeSecurityRequired || !!reviewLink.pinCode);
+
+        if (prolongDays <= 0) {
+            prolongDays = 5;
+        }
 
         const onCloseDialog = (action: string) => {
             if (validDate && action !== "save") {
@@ -68,10 +74,15 @@ const LinkEditDialog = observer(
             if (today > dateCopy) {
                 dateCopy = today;
             }
-            dateCopy.setDate(dateCopy.getDate() + 5);
+            dateCopy.setDate(dateCopy.getDate() + prolongDays);
 
             setValidDate(format(dateCopy, "YYYY-MM-DD hh:mm"));
         };
+
+        const prolongTitle = (resources.list.editdialog.prolongbydays || "").replace(
+            "[#days#]",
+            prolongDays.toString()
+        );
 
         return (
             <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={onCloseDialog}>
@@ -81,8 +92,14 @@ const LinkEditDialog = observer(
                 <DialogContent className="external-link-edit-dialog">
                     {reviewLink.isPersisted && (
                         <div className="field-group prolong">
-                            <span>Valid to: {validDate}</span>{" "}
-                            {prolongVisible && <TextButton onClick={updateValidDate}>Prolong</TextButton>}
+                            <span>
+                                {resources.list.editdialog.validto}: {validDate}
+                            </span>{" "}
+                            {prolongVisible && (
+                                <TextButton title={prolongTitle} onClick={updateValidDate}>
+                                    Prolong
+                                </TextButton>
+                            )}
                         </div>
                     )}
                     {pinCodeSecurityEnabled && !reviewLink.isEditable && (

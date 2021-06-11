@@ -18,7 +18,7 @@ export interface VisitorGroup {
     name: string;
 }
 
-interface ExternalReviewWidgetContentProps {
+export interface ExternalReviewWidgetContentProps {
     store: IExternalReviewStore;
     resources: ExternalReviewResources;
     availableVisitorGroups: VisitorGroup[];
@@ -26,6 +26,7 @@ interface ExternalReviewWidgetContentProps {
     pinCodeSecurityEnabled: boolean;
     pinCodeSecurityRequired?: boolean;
     pinCodeLength: number;
+    prolongDays: number;
 }
 
 /**
@@ -39,7 +40,8 @@ const ExternalReviewWidgetContent = observer(
         editableLinksEnabled,
         pinCodeSecurityEnabled,
         pinCodeSecurityRequired,
-        pinCodeLength
+        pinCodeLength,
+        prolongDays
     }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
@@ -221,6 +223,7 @@ const ExternalReviewWidgetContent = observer(
                         pinCodeSecurityEnabled={pinCodeSecurityEnabled}
                         pinCodeSecurityRequired={pinCodeSecurityRequired}
                         pinCodeLength={pinCodeLength}
+                        prolongDays={prolongDays}
                     />
                 )}
             </>

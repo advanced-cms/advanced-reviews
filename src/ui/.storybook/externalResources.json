@@ -28,7 +28,9 @@
       "linknotsecured": "Link with no PIN code security",
       "displaynamehelptext": "Optional link name",
       "visitorgroups": "Visitor groups",
-      "visitorgroupshelptext": "Impersonate as selected visitor groups"
+      "visitorgroupshelptext": "Impersonate as selected visitor groups",
+      "validto": "Valid to",
+      "prolongbydays": "Prolong by [#days#] days"
     }
   },
   "sharedialog": {
