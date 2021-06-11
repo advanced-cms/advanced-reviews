@@ -27,16 +27,21 @@ namespace Advanced.CMS.ExternalReviews
                 return;
             }
 
-            var languageResolver = ServiceLocator.Current.GetInstance<LanguageResolver>();
-            var preferredCulture = languageResolver.GetPreferredCulture();
-            var cachedContent = externalReviewState.GetCachedContent(preferredCulture, e.ContentLink);
-            if (cachedContent != null)
+            if (externalReviewState.CustomLoaded.Contains(e.ContentLink.ToString()))
             {
-                e.ContentLink = cachedContent.ContentLink;
-                e.Content = cachedContent;
-                e.CancelAction = true;
+                var preferredCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
+                var cachedContent = externalReviewState.GetCachedContent(preferredCulture, e.ContentLink);
+                if (cachedContent != null)
+                {
+                    e.ContentLink = cachedContent.ContentLink;
+                    e.Content = cachedContent;
+                    e.CancelAction = true;
+                }
+
                 return;
             }
+
+            externalReviewState.CustomLoaded.Add(e.ContentLink.ToString());
 
             var reviewsContentLoader = ServiceLocator.Current.GetInstance<ReviewsContentLoader>();
 
@@ -46,10 +51,8 @@ namespace Advanced.CMS.ExternalReviews
                 return;
             }
 
-            var unpublishedCulture = languageResolver.GetPreferredCulture();
-            var providerManager = ServiceLocator.Current.GetInstance<IContentProviderManager>();
-            var provider = providerManager.GetProvider(e.ContentLink.ProviderName);
-            var content = provider.Load(unpublished, new LanguageSelector(unpublishedCulture.Name));
+            var unpublishedCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
+            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(unpublished);
 
             if (!(content is IVersionable versionable) || reviewsContentLoader.HasExpired(versionable))
             {
