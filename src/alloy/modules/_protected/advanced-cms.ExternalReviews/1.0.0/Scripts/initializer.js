@@ -16,7 +16,7 @@ define([
             this.inherited(arguments);
 
             var options = this._settings.options || {};
-            if (!options.isEnabled) {
+            if (!options.isPublicPreviewEnabled) {
                 return;
             }
 
