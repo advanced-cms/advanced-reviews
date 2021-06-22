@@ -13,7 +13,7 @@ import res from "epi/i18n!epi/cms/nls/externalreviews";
  */
 export default declare([WidgetBase, _ContentContextMixin], {
     postCreate: function() {
-        if (!this.params.isEnabled) {
+        if (!this.params.isPublicPreviewEnabled) {
             return;
         }
 
@@ -43,7 +43,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         );
     },
     contextChanged: function() {
-        if (!this.params.isEnabled) {
+        if (!this.params.isPublicPreviewEnabled) {
             return;
         }
 
@@ -57,7 +57,7 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store.load();
     },
     destroy: function() {
-        if (!this.params.isEnabled) {
+        if (!this.params.isPublicPreviewEnabled) {
             return;
         }
 

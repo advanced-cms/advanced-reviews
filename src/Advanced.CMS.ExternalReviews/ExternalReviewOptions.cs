@@ -19,6 +19,11 @@ namespace Advanced.CMS.ExternalReviews
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets if the plugin should be initialized in Public Mode
+        /// </summary>
+        public bool IsPublicPreviewEnabled { get; set; } = true;
+
+        /// <summary>
         /// URL used for displaying readonly version of page
         /// </summary>
         public string ContentPreviewUrl { get; set; } = "externalContentView";
