@@ -20,7 +20,7 @@ namespace AdvancedExternalReviews
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets if the plugin should be initialized in Edit Mode
+        /// Gets or sets if the plugin should be initialized in Public Mode
         /// </summary>
         public bool IsPublicPreviewEnabled { get; set; } = true;
 

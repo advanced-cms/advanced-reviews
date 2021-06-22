@@ -24,7 +24,6 @@ namespace AdvancedExternalReviews.ManageLinks
         {
             _options = options;
             _visitorGroupRepository = visitorGroupRepository;
-            //IsAvailableForUserSelection = options.IsEnabled;
             IsAvailableForUserSelection = options.IsPublicPreviewEnabled;
             LanguagePath = "/externalreviews/component";
             Categories = new[] {"content"};
