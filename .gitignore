@@ -40,3 +40,5 @@ src/alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts/external
 src/alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js.map
 src/alloy/modules/_protected/advanced-cms.ExternalReviews/Views/external-review-component.js
 src/alloy/modules/_protected/advanced-cms.ExternalReviews/Views/external-review-component.js.map
+
+src/alloy/Properties/launchSettings.json
