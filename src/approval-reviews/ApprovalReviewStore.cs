@@ -1,10 +1,10 @@
 ﻿using System.Net;
-using System.Web.Mvc;
 using AdvancedApprovalReviews.Notifications;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Security;
 using EPiServer.Shell.Services.Rest;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdvancedApprovalReviews
 {
@@ -71,7 +71,7 @@ namespace AdvancedApprovalReviews
         {
             if (!_contentLoader.TryGet(id, out IContent content))
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundResult();
             }
 
             if (!content.QueryDistinctAccess(AccessLevel.Edit))

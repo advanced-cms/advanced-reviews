@@ -1,5 +1,4 @@
-﻿using AdvancedApprovalReviews.AvatarsService;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;

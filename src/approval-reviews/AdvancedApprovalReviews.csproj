@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <Import Project="..\..\build\common.props" />
   <ItemGroup>
     <EmbeddedResource Include="EmbededLanguages\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.12.0" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.22.0" />
+    <Compile Remove="ReviewLocationsPreview.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Web.ApplicationServices" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="12.0.0-pre-021458" />
   </ItemGroup>
 </Project>
