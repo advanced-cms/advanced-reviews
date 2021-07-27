@@ -193,6 +193,17 @@ There are few settings related with external review. They are all set using Opti
  | AuthenticationCookieLifeTime | 5 minutes | For how long authentication cookie should be valid |
  | CodeLength | 4 | PIN code length |
 
+#### SEO Toolbox (Mogul SEO Manager) settings.
+If you are using SEO toolbox as redirect manager, 
+you have to add the below paths as ignored patterns, otherwise both View only review and Editable links will not work, it means it always take you the published page with, instead of displaying drafted content.
+
+Go to : Admin > Admin > Tools > SEO Toobox > Settings > Settings > Ignored Patterns 
+
+Add below two paths :
+
+/externalContentView/
+/externalPageReview
+
 #### Examples
 
 This snippet turns on editable review links: 
