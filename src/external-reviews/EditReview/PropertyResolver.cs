@@ -19,7 +19,7 @@ namespace AdvancedExternalReviews.EditReview
 
         public IDictionary<string, string> Resolve(ContentData content)
         {
-            var metadata = _metadataProvider.GetMetadataForType(() => content, typeof(ContentData));
+            var metadata = _metadataProvider.GetExtendedMetadataForType(typeof(ContentData), () => content);
             var storeModel = _modelCreator.Create(metadata);
             var properties = new Dictionary<string, string>();
             foreach (var metadataStoreModel in storeModel.Properties)

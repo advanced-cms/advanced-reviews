@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using AdvancedApprovalReviews;
 using AdvancedExternalReviews.PinCodeSecurity;
 using EPiServer;
@@ -12,6 +11,7 @@ using EPiServer.Core;
 using EPiServer.Notification;
 using EPiServer.Notification.Internal;
 using EPiServer.Shell.Services.Rest;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdvancedExternalReviews.ReviewLinksRepository
 {
@@ -87,7 +87,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             if (!string.IsNullOrWhiteSpace(pinCode))
@@ -105,23 +105,23 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             if (string.IsNullOrWhiteSpace(_notificationOptions.NotificationEmailAddress))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Sender email address is not configured. Contact with system administrator");
+                return new BadRequestObjectResult("Sender email address is not configured. Contact with system administrator");
             }
 
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
             if (externalReviewLink == null)
             {
-                return new HttpNotFoundResult("Token not found");
+                return new NotFoundObjectResult("Token not found");
             }
 
             if (!_contentLoader.TryGet(externalReviewLink.ContentLink, out IContent content))
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
 
             await SendMail(externalReviewLink, email, subject, message);
@@ -148,7 +148,9 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
                 }
             };
             var result = true;
+#pragma warning disable 618
             await _emailNotificationProvider.SendAsync(providerNotificationMessages, msg => { result = true; },
+#pragma warning restore 618
                 (msg, exception) => { result = false; }).ConfigureAwait(true);
             return result;
         }

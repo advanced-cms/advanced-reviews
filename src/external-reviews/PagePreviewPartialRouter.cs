@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Web.Routing;
 using AdvancedExternalReviews.PinCodeSecurity;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer.Core;
+using EPiServer.Core.Routing;
+using EPiServer.Core.Routing.Pipeline;
 using EPiServer.Web.Routing;
-using EPiServer.Web.Routing.Segments;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 
 namespace AdvancedExternalReviews
 {
@@ -17,31 +19,33 @@ namespace AdvancedExternalReviews
         private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PagePreviewPartialRouter(IExternalReviewLinksRepository externalReviewLinksRepository,
             ExternalReviewOptions externalReviewOptions,
             ProjectContentResolver projectContentResolver,
-            IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler)
+            IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler, IHttpContextAccessor httpContextAccessor)
         {
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
             _projectContentResolver = projectContentResolver;
             _externalLinkPinCodeSecurityHandler = externalLinkPinCodeSecurityHandler;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues, RequestContext requestContext)
+        public PartialRouteData GetPartialVirtualPath(PageData content, UrlGeneratorContext segmentContext)
         {
             return new PartialRouteData();
         }
 
-        public object RoutePartial(PageData content, SegmentContext segmentContext)
+        public object RoutePartial(PageData content, UrlResolverContext segmentContext)
         {
             if (!_externalReviewOptions.IsEnabled)
             {
                 return null;
             }
 
-            var nextSegment = segmentContext.GetNextValue(segmentContext.RemainingPath);
+            var nextSegment = segmentContext.GetNextRemainingSegment(segmentContext.RemainingPath);
             if (string.IsNullOrWhiteSpace(nextSegment.Next))
             {
                 return null;
@@ -52,7 +56,7 @@ namespace AdvancedExternalReviews
                 return null;
             }
 
-            nextSegment = segmentContext.GetNextValue(nextSegment.Remaining);
+            nextSegment = segmentContext.GetNextRemainingSegment(nextSegment.Remaining);
             var token = nextSegment.Next;
 
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
@@ -63,7 +67,7 @@ namespace AdvancedExternalReviews
 
             if (externalReviewLink.VisitorGroups != null)
             {
-                System.Web.HttpContext.Current.Items["ImpersonatedVisitorGroupsById"] = externalReviewLink.VisitorGroups;
+                _httpContextAccessor.HttpContext.Items["ImpersonatedVisitorGroupsById"] = externalReviewLink.VisitorGroups;
             }
 
             // PIN code security check, if user is not authenticated, then redirect to login page
@@ -76,12 +80,13 @@ namespace AdvancedExternalReviews
             try
             {
                 var page = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
-                    segmentContext.QueryString);
+                    segmentContext.Url.QueryCollection);
 
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 // set ContentLink in DataTokens to make IPageRouteHelper working
-                segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
+                // TODO: NETCORE segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
+                segmentContext.Content = page;
                 ExternalReview.Token = token;
                 ExternalReview.ProjectId = externalReviewLink.ProjectId;
 

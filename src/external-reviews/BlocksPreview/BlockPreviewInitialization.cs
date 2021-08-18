@@ -13,14 +13,14 @@ namespace AdvancedExternalReviews.BlocksPreview
     {
         public void Initialize(InitializationEngine context)
         {
-            context.Locate.TemplateResolver()
-                .TemplateResolved += BlocksTemplateCoordinator.OnTemplateResolved;
+            // context.Locate.TemplateResolver()
+            //     .TemplateResolved += BlocksTemplateCoordinator.OnTemplateResolved;
         }
 
         public void Uninitialize(InitializationEngine context)
         {
-            ServiceLocator.Current.GetInstance<TemplateResolver>()
-                .TemplateResolved -= BlocksTemplateCoordinator.OnTemplateResolved;
+            // ServiceLocator.Current.GetInstance<TemplateResolver>()
+            //     .TemplateResolved -= BlocksTemplateCoordinator.OnTemplateResolved;
         }
 
         public void Preload(string[] parameters)

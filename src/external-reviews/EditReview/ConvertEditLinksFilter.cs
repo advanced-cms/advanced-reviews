@@ -2,25 +2,24 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Cms.Shell;
-using EPiServer.Editor;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace AdvancedExternalReviews.EditReview
 {
     public class ConvertEditLinksFilter : ActionFilterAttribute
     {
         private readonly ExternalReviewOptions _externalReviewOptions;
-        private readonly UrlResolver _urlResolver;
+        private readonly IUrlResolver _urlResolver;
 
         public ConvertEditLinksFilter()
         {
             _externalReviewOptions = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
-            _urlResolver = ServiceLocator.Current.GetInstance<UrlResolver>();
+            _urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace AdvancedExternalReviews.EditReview
                 {
                     return x.Value;
                 }
-                var viewUrl = _urlResolver.GetUrl(content.ContentLink, content.LanguageBranch(), new VirtualPathArguments
+                var viewUrl = _urlResolver.GetUrl(content.ContentLink, content.LanguageBranch(), new UrlResolverArguments()
                 {
                     ContextMode = ContextMode.Default
                 });
@@ -74,7 +73,7 @@ namespace AdvancedExternalReviews.EditReview
 
             // Set context to Edit to get the data-epi attributes render. It has to be done here, after the routing is already done and before
             // controller render the HTML
-            filterContext.RequestContext.SetContextMode(ContextMode.Edit);
+            filterContext.HttpContext.Request.RequestContext.SetContextMode(ContextMode.Edit);
         }
 
         public override void OnResultExecuting(ResultExecutingContext filterContext)

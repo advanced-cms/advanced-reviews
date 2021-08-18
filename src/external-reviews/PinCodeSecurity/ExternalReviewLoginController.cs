@@ -1,6 +1,7 @@
-﻿using System.Web.Mvc;
-using AdvancedExternalReviews.ReviewLinksRepository;
+﻿using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer.Framework.Modules.Internal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdvancedExternalReviews.PinCodeSecurity
 {
@@ -11,27 +12,29 @@ namespace AdvancedExternalReviews.PinCodeSecurity
     {
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ExternalReviewLoginController(IExternalReviewLinksRepository externalReviewLinksRepository, IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler)
+        public ExternalReviewLoginController(IExternalReviewLinksRepository externalReviewLinksRepository, IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler, IHttpContextAccessor httpContextAccessor)
         {
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalLinkPinCodeSecurityHandler = externalLinkPinCodeSecurityHandler;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var token = System.Web.HttpContext.Current.Request["id"];
+            var token = _httpContextAccessor.HttpContext.Request.RouteValues["id"].ToString();
 
             if (string.IsNullOrEmpty(token))
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
 
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
             if (string.IsNullOrEmpty(externalReviewLink?.PinCode))
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
 
             const string url = "Views/ExternalReviewLogin/Index.cshtml";
@@ -41,7 +44,7 @@ namespace AdvancedExternalReviews.PinCodeSecurity
             {
                 return View(resolvedPath);
             }
-            return new HttpNotFoundResult("Page not found");
+            return new NotFoundObjectResult("Page not found");
         }
 
         [HttpPost]
@@ -49,13 +52,13 @@ namespace AdvancedExternalReviews.PinCodeSecurity
         {
             if (string.IsNullOrEmpty(loginModel.Token))
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
 
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(loginModel.Token);
             if (string.IsNullOrEmpty(externalReviewLink?.PinCode))
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
 
             if (_externalLinkPinCodeSecurityHandler.TryToSignIn(externalReviewLink, loginModel.Code))
@@ -64,7 +67,7 @@ namespace AdvancedExternalReviews.PinCodeSecurity
             }
             else
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
         }
     }

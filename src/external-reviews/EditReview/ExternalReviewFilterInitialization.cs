@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Web.Mvc;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
@@ -12,9 +10,9 @@ namespace AdvancedExternalReviews.EditReview
     {
         public void Initialize(InitializationEngine context)
         {
-            var providers = FilterProviders.Providers.ToList();
-            FilterProviders.Providers.Clear();
-            FilterProviders.Providers.Add(new ExternalReviewFilterProvider(providers));
+            // var providers = FilterProviders.Providers.ToList();
+            // FilterProviders.Providers.Clear();
+            // FilterProviders.Providers.Add(new ExternalReviewFilterProvider(providers));
         }
 
         public void Uninitialize(InitializationEngine context)

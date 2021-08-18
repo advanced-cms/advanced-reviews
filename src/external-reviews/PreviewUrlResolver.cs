@@ -33,10 +33,10 @@ namespace AdvancedExternalReviews
             return queryString[PreviewGenerated] != null;
         }
 
-        public VirtualPathData GetVirtualPath(ContentReference contentLink, string language,
-            VirtualPathArguments virtualPathArguments)
+        public string GetVirtualPath(ContentReference contentLink, string language,
+            UrlResolverArguments virtualPathArguments)
         {
-            var virtualPathData = _defaultUrlResolver.GetVirtualPath(contentLink, language, virtualPathArguments);
+            var virtualPathData = _defaultUrlResolver.GetUrl(contentLink, language, virtualPathArguments);
             if (!ExternalReview.IsInProjectReviewContext || !ExternalReview.IsInExternalReviewContext || virtualPathData == null)
             {
                 return virtualPathData;
@@ -46,7 +46,7 @@ namespace AdvancedExternalReviews
             if (content is PageData data)
             {
                 var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
-                virtualPathData.VirtualPath = AppendGeneratedPostfix(virtualPath);
+                virtualPathData = AppendGeneratedPostfix(virtualPath);
             }
 
             return virtualPathData;
@@ -56,9 +56,9 @@ namespace AdvancedExternalReviews
         /// Get a virtual path that can be accessed. If URL segment has been changed we need
         /// to return the original (published) version's URL segment for the routing to work.
         /// </summary>
-        private string GetAccessibleVirtualPath(VirtualPathData virtualPathData, PageData data, string language)
+        private string GetAccessibleVirtualPath(string url, PageData data, string language)
         {
-            var virtualPath = virtualPathData.VirtualPath;
+            var virtualPath = url;
             var provider = this._providerManager.ProviderMap.GetProvider(data.ContentLink.ProviderName);
             var masterContent = (PageData)provider.GetScatteredContents(new[] {data.ContentLink.ToReferenceWithoutVersion()},
                 new LanguageSelector(language ?? data.LanguageBranch())).FirstOrDefault();

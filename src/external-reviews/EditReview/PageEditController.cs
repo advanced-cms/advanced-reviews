@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web.Mvc;
 using AdvancedApprovalReviews;
 using AdvancedApprovalReviews.Notifications;
 using AdvancedExternalReviews.ReviewLinksRepository;
@@ -11,6 +10,7 @@ using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdvancedExternalReviews.EditReview
 {
@@ -54,7 +54,7 @@ namespace AdvancedExternalReviews.EditReview
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
             if (!externalReviewLink.IsEditableLink())
             {
-                return new HttpNotFoundResult("Content not found");
+                return new NotFoundObjectResult("Content not found");
             }
 
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
@@ -82,7 +82,7 @@ namespace AdvancedExternalReviews.EditReview
                 return View(resolvedPath, pagePreviewModel);
             }
 
-            return new HttpNotFoundResult("Content not found");
+            return new NotFoundObjectResult("Content not found");
         }
 
         [HttpPost]
@@ -91,18 +91,18 @@ namespace AdvancedExternalReviews.EditReview
             var token = reviewLocation.Token;
             if (string.IsNullOrWhiteSpace(token))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             var reviewLink = _externalReviewLinksRepository.GetContentByToken(token);
             if (reviewLink == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             if (!ValidateReviewLocation(reviewLocation))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             //TODO: security issue - we post whole item and external reviewer can modify this
@@ -112,7 +112,7 @@ namespace AdvancedExternalReviews.EditReview
             var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
             if (location == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             return new RestResult
@@ -127,13 +127,13 @@ namespace AdvancedExternalReviews.EditReview
             var token = location.Token;
             if (string.IsNullOrWhiteSpace(token))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             var reviewLink = _externalReviewLinksRepository.GetContentByToken(token);
             if (reviewLink == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new BadRequestResult();
             }
 
             _approvalReviewsRepository.RemoveReviewLocation(location.Id, reviewLink.ContentLink);

@@ -1,11 +1,10 @@
-﻿using System.Web.Routing;
-using AdvancedExternalReviews.EditReview;
+﻿using AdvancedExternalReviews.EditReview;
 using AdvancedExternalReviews.PinCodeSecurity;
 using AdvancedExternalReviews.ReviewLinksRepository;
-using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Web.Routing;
+using EPiServer.ServiceLocation;
+using Microsoft.AspNetCore.Http;
 
 namespace AdvancedExternalReviews
 {
@@ -21,9 +20,10 @@ namespace AdvancedExternalReviews
             (
                 locator.GetInstance<IExternalReviewLinksRepository>(),
                 locator.GetInstance<ExternalReviewOptions>(),
-                locator.GetInstance<ProjectContentResolver>()
+                locator.GetInstance<ProjectContentResolver>(),
+                locator.GetInstance<IHttpContextAccessor>()
             );
-            RouteTable.Routes.RegisterPartialRouter(editRouter);
+            // TODO: NETCORE RouteTable.Routes.RegisterPartialRouter(editRouter);
 
             // register view route
             var previewRouter = new PagePreviewPartialRouter
@@ -31,9 +31,10 @@ namespace AdvancedExternalReviews
                 locator.GetInstance<IExternalReviewLinksRepository>(),
                 locator.GetInstance<ExternalReviewOptions>(),
                 locator.GetInstance<ProjectContentResolver>(),
-                locator.GetInstance<IExternalLinkPinCodeSecurityHandler>()
+                locator.GetInstance<IExternalLinkPinCodeSecurityHandler>(),
+                locator.GetInstance<IHttpContextAccessor>()
             );
-            RouteTable.Routes.RegisterPartialRouter(previewRouter);
+            // TODO: NETCORE  RouteTable.Routes.RegisterPartialRouter(previewRouter);
 
         }
 
