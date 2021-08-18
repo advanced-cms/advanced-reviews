@@ -7,6 +7,7 @@ using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AdvancedExternalReviews.DraftContentAreaPreview
 {
@@ -19,7 +20,7 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
             // Intercepted to rewrite urls of content items which belong to the same project
-            context.Services.Intercept<UrlResolver>(
+            context.Services.Intercept<IUrlResolver>(
                 (locator, defaultUrlResolver) =>
                     new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
                         locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>()));

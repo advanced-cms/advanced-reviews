@@ -1,47 +1,93 @@
-﻿using System;
-using System.Web;
+using AlloyMvcTemplates.Extensions;
+using AlloyMvcTemplates.Infrastructure;
 using EPiServer.Cms.UI.AspNetIdentity;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
-using Owin;
+using EPiServer.Data;
+using EPiServer.DependencyInjection;
+using EPiServer.Framework.Web.Resources;
+using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.IO;
+using EPiServer.Scheduler;
+using EPiServer.Cms.TinyMce;
+using EPiServer.Web.Mvc.Html;
+using EPiServer.Cms.Shell;
+using EPiServer.Cms.UI.Admin;
+using EPiServer.Cms.UI.VisitorGroups;
 
-[assembly: OwinStartup(typeof(AlloyTemplates.Startup))]
-
-namespace AlloyTemplates
+namespace EPiServer.Templates.Alloy.Mvc
 {
     public class Startup
     {
+        private readonly IWebHostEnvironment _webHostingEnvironment;
+        private readonly IConfiguration _configuration;
 
-        public void Configuration(IAppBuilder app)
+        public Startup(IWebHostEnvironment webHostingEnvironment, IConfiguration configuration)
         {
+            _webHostingEnvironment = webHostingEnvironment;
+            _configuration = configuration;
+        }
 
-            // Add CMS integration for ASP.NET Identity
-            app.AddCmsAspNetIdentity<ApplicationUser>();
+        public void ConfigureServices(IServiceCollection services)
+        {
+            var dbPath = Path.Combine(_webHostingEnvironment.ContentRootPath, "App_Data\\Alloy.mdf");
+            var connectionstring = _configuration.GetConnectionString("EPiServerDB") ?? $"Data Source=(LocalDb)\\MSSQLLocalDB;AttachDbFilename={dbPath};Initial Catalog=alloy_mvc_netcore;Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";
 
-            // Remove to block registration of administrators
-            app.UseAdministratorRegistrationPage(() => HttpContext.Current.Request.IsLocal);
-
-            // Use cookie authentication
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            services.Configure<SchedulerOptions>(o =>
             {
-                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString(Global.LoginPath),
-                Provider = new CookieAuthenticationProvider
-                {
-                    // If the "/util/login.aspx" has been used for login otherwise you don't need it you can remove OnApplyRedirect.
-                    OnApplyRedirect = cookieApplyRedirectContext =>
-                    {
-                        app.CmsOnCookieApplyRedirect(cookieApplyRedirectContext, cookieApplyRedirectContext.OwinContext.Get<ApplicationSignInManager<ApplicationUser>>());
-                    },
+                o.Enabled = false;
+            });
 
-                    // Enables the application to validate the security stamp when the user logs in.
-                    // This is a security feature which is used when you change a password or add an external login to your account.
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager<ApplicationUser>, ApplicationUser>(
-                        validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => manager.GenerateUserIdentityAsync(user))
-                }
+            services.Configure<DataAccessOptions>(o =>
+            {
+                o.SetConnectionString(connectionstring);
+            });
+
+            services.AddCmsAspNetIdentity<ApplicationUser>();
+
+            if (_webHostingEnvironment.IsDevelopment())
+            {
+                
+                services.Configure<ClientResourceOptions>(uiOptions =>
+                {
+                    uiOptions.Debug = true;
+                });
+            }
+
+            services.AddMvc();
+            services.AddAlloy();
+            services.AddCmsHost()
+                .AddCmsHtmlHelpers()
+                .AddCmsUI()
+                .AddAdmin()
+                .AddVisitorGroupsUI()
+                .AddTinyMce();
+
+            services.AddEmbeddedLocalization<Startup>();
+        }
+
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseMiddleware<AdministratorRegistrationPageMiddleware>();
+            }
+
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapContent();
+                endpoints.MapControllerRoute("Register", "/Register", new { controller = "Register", action = "Index" });
+                endpoints.MapRazorPages();
             });
         }
     }

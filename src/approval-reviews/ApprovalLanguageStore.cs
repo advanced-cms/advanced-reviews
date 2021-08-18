@@ -11,9 +11,10 @@ namespace AdvancedApprovalReviews
         public ActionResult Get()
         {
             var _username = User.Identity.Name;
-            var profile = EPiServerProfile.Get(_username);
+            // var profile = EPiServerProfile.Get(_username);
 
-            return Rest(profile.Language);
+            // return Rest(profile.Language);
+            return Rest("en");
         }
     }
 }

@@ -29,7 +29,7 @@ namespace AlloyTemplates.Helpers
             var cssClasses = new HashSet<string>(); // Although with some overhead, a HashSet allows us to ensure we never add a CSS class more than once
             var categoryRepository = ServiceLocator.Current.GetInstance<CategoryRepository>();
 
-            foreach (var categoryName in content.Category.Select(category => categoryRepository.Get(category).Name.ToLower()))
+            foreach (var categoryName in content.Category.Select(category => categoryRepository.Get(category)?.Name.ToLower()))
             {
                 switch (categoryName)
                 {

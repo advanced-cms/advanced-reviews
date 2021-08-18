@@ -1,11 +1,13 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using EPiServer.Core;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using EPiServer;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlloyTemplates.Helpers
 {
@@ -16,11 +18,11 @@ namespace AlloyTemplates.Helpers
         /// so if the page is set as a shortcut to another page or an external URL that URL
         /// will be returned.
         /// </summary>
-        public static IHtmlString PageLinkUrl(this UrlHelper urlHelper, ContentReference contentLink)
+        public static string PageLinkUrl(this IUrlHelper urlHelper, ContentReference contentLink)
         {
             if(ContentReference.IsNullOrEmpty(contentLink))
             {
-                return MvcHtmlString.Empty;
+                return string.Empty;
             }
 
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
@@ -34,14 +36,14 @@ namespace AlloyTemplates.Helpers
         /// so if the page is set as a shortcut to another page or an external URL that URL
         /// will be returned.
         /// </summary>
-        public static IHtmlString PageLinkUrl(this UrlHelper urlHelper, PageData page)
+        public static string PageLinkUrl(this IUrlHelper urlHelper, PageData page)
         {
-            var urlResolver = ServiceLocator.Current.GetInstance<UrlResolver>();
+            var urlResolver = urlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<UrlResolver>();
             switch (page.LinkType)
             {
                 case PageShortcutType.Normal:
                 case PageShortcutType.FetchData:
-                    return new MvcHtmlString(urlResolver.GetUrl(page.ContentLink));
+                    return urlResolver.GetUrl(page.ContentLink);
 
                 case PageShortcutType.Shortcut:
                     var shortcutProperty = page.Property["PageShortcutLink"] as PropertyPageReference;
@@ -52,17 +54,9 @@ namespace AlloyTemplates.Helpers
                     break;
 
                 case PageShortcutType.External:
-                    return new MvcHtmlString(page.LinkURL);
+                    return page.LinkURL;
             }
-            return MvcHtmlString.Empty;
-        }
-
-        public static RouteValueDictionary GetPageRoute(this RequestContext requestContext, ContentReference contentLink)
-        {
-            var values = new RouteValueDictionary();
-            values[RoutingConstants.NodeKey] = contentLink;
-            values[RoutingConstants.LanguageKey] = ContentLanguage.PreferredCulture.Name;
-            return values;
+            return string.Empty;
         }
     }
 }

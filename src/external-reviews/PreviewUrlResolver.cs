@@ -1,7 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.Routing;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -11,16 +10,16 @@ using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews
 {
-    public class PreviewUrlResolver : UrlResolver
+    public class PreviewUrlResolver : IUrlResolver
     {
         private const string PreviewGenerated = "preview_generated";
-        private readonly UrlResolver _defaultUrlResolver;
+        private readonly IUrlResolver _defaultUrlResolver;
         private readonly IContentLoader _contentLoader;
         private readonly Injected<ExternalReviewOptions> _externalReviewOptions;
         private readonly IPermanentLinkMapper _permanentLinkMapper;
         private readonly IContentProviderManager _providerManager;
 
-        public PreviewUrlResolver(UrlResolver defaultUrlResolver, IContentLoader contentLoader,
+        public PreviewUrlResolver(IUrlResolver defaultUrlResolver, IContentLoader contentLoader,
             IPermanentLinkMapper permanentLinkMapper, IContentProviderManager providerManager)
         {
             _defaultUrlResolver = defaultUrlResolver;
@@ -29,17 +28,12 @@ namespace AdvancedExternalReviews
             _providerManager = providerManager;
         }
 
-        public override IContent Route(UrlBuilder urlBuilder, ContextMode contextMode)
-        {
-            return _defaultUrlResolver.Route(urlBuilder, contextMode);
-        }
-
         public static bool IsGeneratedForProjectPreview(NameValueCollection queryString)
         {
             return queryString[PreviewGenerated] != null;
         }
 
-        public override VirtualPathData GetVirtualPath(ContentReference contentLink, string language,
+        public VirtualPathData GetVirtualPath(ContentReference contentLink, string language,
             VirtualPathArguments virtualPathArguments)
         {
             var virtualPathData = _defaultUrlResolver.GetVirtualPath(contentLink, language, virtualPathArguments);
@@ -86,7 +80,12 @@ namespace AdvancedExternalReviews
             return virtualPath;
         }
 
-        public override string GetUrl(UrlBuilder urlBuilderWithInternalUrl, VirtualPathArguments arguments)
+        public string GetUrl(ContentReference contentLink, string language, UrlResolverArguments urlResolverArguments)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetUrl(UrlBuilder urlBuilderWithInternalUrl, UrlResolverArguments arguments)
         {
             var url = _defaultUrlResolver.GetUrl(urlBuilderWithInternalUrl, arguments);
             if (!ExternalReview.IsInProjectReviewContext || !ExternalReview.IsInExternalReviewContext || url == null)
@@ -108,15 +107,14 @@ namespace AdvancedExternalReviews
             return url;
         }
 
-        public override bool TryToPermanent(string url, out string permanentUrl)
+        public bool TryToPermanent(string url, out string permanentUrl)
         {
             return _defaultUrlResolver.TryToPermanent(url, out permanentUrl);
         }
 
-        public override VirtualPathData GetVirtualPathForNonContent(object partialRoutedObject, string language,
-            VirtualPathArguments virtualPathArguments)
+        public ContentRouteData Route(UrlBuilder urlBuilder, RouteArguments routeArguments)
         {
-            return _defaultUrlResolver.GetVirtualPathForNonContent(partialRoutedObject, language, virtualPathArguments);
+            return _defaultUrlResolver.Route(urlBuilder, routeArguments);
         }
 
         private string AppendGeneratedPostfix(string url)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <languages>
   <language name="English" id="en">
     <displaychannels>
@@ -11,14 +11,14 @@
     </displaychannels>
     <displayoptions>
       <full>Full</full>
-      <wide>Wide</wide>
       <narrow>Narrow</narrow>
+      <wide>Wide</wide>
     </displayoptions>
     <resolutions>
-      <standard>Standard (1366x768)</standard>
+      <androidvertical>Android vertical (480x800)</androidvertical>
       <ipadhorizontal>iPad horizontal (1024x768)</ipadhorizontal>
       <iphonevertical>iPhone vertical (320x568)</iphonevertical>
-      <androidvertical>Android vertical (480x800)</androidvertical>
+      <standard>Standard (1366x768)</standard>
     </resolutions>
   </language>
 </languages>

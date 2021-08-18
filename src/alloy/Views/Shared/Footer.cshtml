@@ -1,5 +1,3 @@
-﻿@using EPiServer.ServiceLocation
-@using EPiServer.Web.Routing
 @model IPageViewModel<SitePageData>
 <div class="row">
     <div class="span12 footer">
@@ -24,7 +22,7 @@
                     <li>
                         @if(Model.Layout.LoggedIn)
                         {
-                            @Html.ActionLink(Html.Translate("/footer/logout"), "Logout", new { language = @Model.CurrentPage.Language.Name })
+                            @Html.ContentLink(LocalizationService.Current.GetString("/footer/logout"), "Logout")
                         }
                         else
                         {
@@ -37,9 +35,6 @@
                 </ul>
 
             </div>
-
-            @Model.CurrentPage.Name = <span>@Model.CurrentPage.Name</span>
-            IPageRouteHelper = @Html.Raw(ServiceLocator.Current.GetInstance<IPageRouteHelper>().Content.Name)
         </div>
     </div>
 </div>

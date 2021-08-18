@@ -1,14 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
   <language name="English" id="en">
     <contenttypes>
+      <contactblock>
+        <properties>
+          <contactpagelink>
+            <caption>Contact</caption>
+            <help>Select who you want to show contact details for</help>
+          </contactpagelink>
+          <heading>
+            <caption>Heading</caption>
+          </heading>
+          <image>
+            <caption>Image</caption>
+          </image>
+          <linktext>
+            <caption>Link text</caption>
+          </linktext>
+          <linkurl>
+            <caption>Link</caption>
+          </linkurl>
+        </properties>
+      </contactblock>
       <icontentdata>
         <properties>
-          <!-- SitePageData -->
           <disableindexing>
             <caption>Disable indexing</caption>
             <help>Prevents the page from being indexed by search engines</help>
           </disableindexing>
+          <hidesitefooter>
+            <caption>Hide site footer</caption>
+            <help>Check this setting to hide the footer</help>
+          </hidesitefooter>
+          <hidesiteheader>
+            <caption>Hide site header</caption>
+            <help>Check this setting to hide the header including the main navigation</help>
+          </hidesiteheader>
+          <mainbody>
+            <caption>Main body</caption>
+            <help>Main editorial content of the page</help>
+          </mainbody>
+          <maincontentarea>
+            <caption>Large content area</caption>
+          </maincontentarea>
           <metadescription>
             <caption>Page description</caption>
             <help>Used as the meta description and commonly as an ingress</help>
@@ -19,184 +53,16 @@
           <metatitle>
             <caption>Title</caption>
           </metatitle>
-          <teasertext>
-            <caption>Teaser text</caption>
-            <help>Can be used to display a text other than the description when the page is dropped in a content area</help>
-          </teasertext>
           <pageimage>
             <caption>Teaser image</caption>
             <help>An image used in different contexts, for example when the page is dropped in a content area</help>
           </pageimage>
-          <hidesiteheader>
-            <caption>Hide site header</caption>
-            <help>Check this setting to hide the header including the main navigation</help>
-          </hidesiteheader>
-          <hidesitefooter>
-            <caption>Hide site footer</caption>
-            <help>Check this setting to hide the footer</help>
-          </hidesitefooter>
-          <!-- Common properties-->
-          <mainbody>
-            <caption>Main body</caption>
-            <help>Main editorial content of the page</help>
-          </mainbody>
-          <maincontentarea>
-            <caption>Large content area</caption>
-          </maincontentarea>
+          <teasertext>
+            <caption>Teaser text</caption>
+            <help>Can be used to display a text other than the description when the page is dropped in a content area</help>
+          </teasertext>
         </properties>
       </icontentdata>
-      <!-- ProductPage -->
-      <productpage>
-        <properties>
-          <uniquesellingpoints>
-            <caption>Unique selling points</caption>
-          </uniquesellingpoints>
-          <relatedcontentarea>
-            <caption>Small content area</caption>
-          </relatedcontentarea>
-        </properties>
-      </productpage>
-      <!-- StartPage -->
-      <startpage>
-        <properties>
-          <productpagelinks>
-            <caption>Products</caption>
-          </productpagelinks>
-          <companyinformationpagelinks>
-            <caption>Company information</caption>
-          </companyinformationpagelinks>
-          <customerzonepagelinks>
-            <caption>Customer zone</caption>
-          </customerzonepagelinks>
-          <newspagelinks>
-            <caption>Local news</caption>
-          </newspagelinks>
-          <globalnewspagelink>
-            <caption>Global news</caption>
-          </globalnewspagelink>
-          <contactspagelink>
-            <caption>Contact pages</caption>
-          </contactspagelink>
-          <firstcontentarea>
-            <caption>First content area</caption>
-          </firstcontentarea>
-          <secondcontentarea>
-            <caption>Second content area</caption>
-          </secondcontentarea>
-          <sitelogotype>
-            <caption>Logotype</caption>
-          </sitelogotype>
-          <searchpagelink>
-            <caption>Search page</caption>
-          </searchpagelink>
-        </properties>
-      </startpage>
-      <!-- ContactBlock -->
-      <contactblock>
-        <properties>
-          <image>
-            <caption>Image</caption>
-          </image>
-          <heading>
-            <caption>Heading</caption>
-          </heading>
-          <contactpagelink>
-            <caption>Contact</caption>
-            <help>Select who you want to show contact details for</help>
-          </contactpagelink>
-          <linktext>
-            <caption>Link text</caption>
-          </linktext>
-          <linkurl>
-            <caption>Link</caption>
-          </linkurl>
-        </properties>
-      </contactblock>
-      <!-- PageListBlock -->
-      <pagelistblock>
-        <properties>
-          <heading>
-            <caption>Heading</caption>
-          </heading>
-          <includepublishdate>
-            <caption>Include publish date</caption>
-          </includepublishdate>
-          <includeintroduction>
-            <caption>Include description</caption>
-          </includeintroduction>
-          <sortorder>
-            <caption>Sort order</caption>
-          </sortorder>
-          <count>
-            <caption>Max count</caption>
-          </count>
-          <root>
-            <caption>Page list root</caption>
-          </root>
-          <recursive>
-            <caption>Include all levels</caption>
-          </recursive>
-          <pagetypefilter>
-            <caption>Filter by page type</caption>
-          </pagetypefilter>
-          <categoryfilter>
-            <caption>Category filter</caption>
-            <help>If set, only pages matching at least one of the specified categories will be included in the list</help>
-          </categoryfilter>
-        </properties>
-      </pagelistblock>
-      <!-- JumbotronBlock -->
-      <jumbotronBlock>
-        <properties>
-          <image>
-            <caption>Image</caption>
-          </image>
-          <imagedescription>
-            <caption>Image description</caption>
-          </imagedescription>
-          <heading>
-            <caption>Large heading</caption>
-          </heading>
-          <subheading>
-            <caption>Small heading</caption>
-          </subheading>
-          <buttontext>
-            <caption>Button text</caption>
-          </buttontext>
-          <buttonlink>
-            <caption>Button link</caption>
-          </buttonlink>
-        </properties>
-      </jumbotronBlock>
-      <!-- TeaserBlock -->
-      <teaserblock>
-        <properties>
-          <heading>
-            <caption>Heading</caption>
-          </heading>
-          <text>
-            <caption>Text</caption>
-          </text>
-          <image>
-            <caption>Image</caption>
-          </image>
-          <link>
-            <caption>Link</caption>
-          </link>
-        </properties>
-      </teaserblock>
-      <!-- LogotypeBlock -->
-      <logotypeblock>
-        <properties>
-          <url>
-            <caption>Logotype</caption>
-          </url>
-          <title>
-            <caption>Title</caption>
-          </title>
-        </properties>
-      </logotypeblock>
-      <!-- ImageFile -->
       <imagefile>
         <properties>
           <copyright>
@@ -204,7 +70,130 @@
           </copyright>
         </properties>
       </imagefile>
-      <!-- VideoFile -->
+      <jumbotronblock>
+        <properties>
+          <buttonlink>
+            <caption>Button link</caption>
+          </buttonlink>
+          <buttontext>
+            <caption>Button text</caption>
+          </buttontext>
+          <heading>
+            <caption>Large heading</caption>
+          </heading>
+          <image>
+            <caption>Image</caption>
+          </image>
+          <imagedescription>
+            <caption>Image description</caption>
+          </imagedescription>
+          <subheading>
+            <caption>Small heading</caption>
+          </subheading>
+        </properties>
+      </jumbotronblock>
+      <logotypeblock>
+        <properties>
+          <title>
+            <caption>Title</caption>
+          </title>
+          <url>
+            <caption>Logotype</caption>
+          </url>
+        </properties>
+      </logotypeblock>
+      <pagelistblock>
+        <properties>
+          <categoryfilter>
+            <caption>Category filter</caption>
+            <help>If set, only pages matching at least one of the specified categories will be included in the list</help>
+          </categoryfilter>
+          <count>
+            <caption>Max count</caption>
+          </count>
+          <heading>
+            <caption>Heading</caption>
+          </heading>
+          <includeintroduction>
+            <caption>Include description</caption>
+          </includeintroduction>
+          <includepublishdate>
+            <caption>Include publish date</caption>
+          </includepublishdate>
+          <pagetypefilter>
+            <caption>Filter by page type</caption>
+          </pagetypefilter>
+          <recursive>
+            <caption>Include all levels</caption>
+          </recursive>
+          <root>
+            <caption>Page list root</caption>
+          </root>
+          <sortorder>
+            <caption>Sort order</caption>
+          </sortorder>
+        </properties>
+      </pagelistblock>
+      <productpage>
+        <properties>
+          <relatedcontentarea>
+            <caption>Small content area</caption>
+          </relatedcontentarea>
+          <uniquesellingpoints>
+            <caption>Unique selling points</caption>
+          </uniquesellingpoints>
+        </properties>
+      </productpage>
+      <startpage>
+        <properties>
+          <companyinformationpagelinks>
+            <caption>Company information</caption>
+          </companyinformationpagelinks>
+          <contactspagelink>
+            <caption>Contact pages</caption>
+          </contactspagelink>
+          <customerzonepagelinks>
+            <caption>Customer zone</caption>
+          </customerzonepagelinks>
+          <firstcontentarea>
+            <caption>First content area</caption>
+          </firstcontentarea>
+          <globalnewspagelink>
+            <caption>Global news</caption>
+          </globalnewspagelink>
+          <newspagelinks>
+            <caption>Local news</caption>
+          </newspagelinks>
+          <productpagelinks>
+            <caption>Products</caption>
+          </productpagelinks>
+          <searchpagelink>
+            <caption>Search page</caption>
+          </searchpagelink>
+          <secondcontentarea>
+            <caption>Second content area</caption>
+          </secondcontentarea>
+          <sitelogotype>
+            <caption>Logotype</caption>
+          </sitelogotype>
+        </properties>
+      </startpage>
+      <teaserblock>
+        <properties>
+          <heading>
+            <caption>Heading</caption>
+          </heading>
+          <image>
+            <caption>Image</caption>
+          </image>
+          <link>
+            <caption>Link</caption>
+          </link>
+          <text>
+            <caption>Text</caption>
+          </text>
+        </properties>
+      </teaserblock>
       <videofile>
         <properties>
           <copyright>

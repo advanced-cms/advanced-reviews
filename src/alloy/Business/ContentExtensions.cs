@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AdvancedExternalReviews;
 using EPiServer.Core;
 using EPiServer.Filters;
 using EPiServer.Framework.Web;
@@ -15,22 +14,18 @@ namespace AlloyTemplates.Business
     public static class ContentExtensions
     {
         /// <summary>
-        /// Filters content which should not be visible to the user.
+        /// Filters content which should not be visible to the user. 
         /// </summary>
         public static IEnumerable<T> FilterForDisplay<T>(this IEnumerable<T> contents, bool requirePageTemplate = false, bool requireVisibleInMenu = false)
             where T : IContent
         {
             var accessFilter = new FilterAccess();
             var publishedFilter = new FilterPublished();
-            if (!ExternalReview.IsInExternalReviewContext)
-            {
-                contents = contents.Where(x => !publishedFilter.ShouldFilter(x) && !accessFilter.ShouldFilter(x));
-            }
-
+            contents = contents.Where(x => !publishedFilter.ShouldFilter(x) && !accessFilter.ShouldFilter(x));
             if (requirePageTemplate)
             {
                 var templateFilter = ServiceLocator.Current.GetInstance<FilterTemplate>();
-                templateFilter.TemplateTypeCategories = TemplateTypeCategories.Page;
+                templateFilter.TemplateTypeCategories = TemplateTypeCategories.Request;
                 contents = contents.Where(x => !templateFilter.ShouldFilter(x));
             }
             if (requireVisibleInMenu)

@@ -25,8 +25,3 @@
 
     @Html.PropertyFor(x => x.CurrentPage.RelatedContentArea, new { CssClass = "row", Tag = Global.ContentAreaTags.OneThirdWidth })
 }
-
-<div>
-    <h3>Ancestors</h3>
-    <div>@Html.Raw(Model.CurrentPage.ListAncestors())</div>
-</div>

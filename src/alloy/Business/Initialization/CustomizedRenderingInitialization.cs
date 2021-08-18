@@ -1,36 +1,35 @@
-﻿using System.Web.Mvc;
-using EPiServer.Framework;
+﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using AlloyTemplates.Business.Rendering;
 using EPiServer.Web;
+using EPiServer.Web.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using EPiServer.Web.Mvc.Html;
 
 namespace AlloyTemplates.Business.Initialization
 {
     /// <summary>
     /// Module for customizing templates and rendering.
     /// </summary>
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class CustomizedRenderingInitialization : IInitializableModule
+    [ModuleDependency(typeof(InitializationModule))]
+    public class CustomizedRenderingInitialization : IConfigurableModule
     {
-        public void Initialize(InitializationEngine context)
+        public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            //Add custom view engine allowing partials to be placed in additional locations
-            //Note that we add it first in the list to optimize view resolving when using DisplayFor/PropertyFor
-            ViewEngines.Engines.Insert(0, new SiteViewEngine());
-
-            context.Locate.TemplateResolver()
-                .TemplateResolved += TemplateCoordinator.OnTemplateResolved;
+            //Implementations for custom interfaces can be registered here.
+            context.ConfigurationComplete += (o, e) =>
+            {
+                //Register custom implementations that should be used in favour of the default implementations
+                context.Services.AddTransient<IContentRenderer, ErrorHandlingContentRenderer>()
+                    .AddTransient<ContentAreaRenderer, AlloyContentAreaRenderer>();
+            };
         }
 
-        public void Uninitialize(InitializationEngine context)
-        {
-            ServiceLocator.Current.GetInstance<TemplateResolver>()
-                .TemplateResolved -= TemplateCoordinator.OnTemplateResolved;
-        }
+        public void Initialize(InitializationEngine context) => context.Locate.Advanced.GetInstance<ITemplateResolverEvents>().TemplateResolved += TemplateCoordinator.OnTemplateResolved;
 
-        public void Preload(string[] parameters)
-        {
-        }
+        public void Uninitialize(InitializationEngine context) => context.Locate.Advanced.GetInstance<ITemplateResolverEvents>().TemplateResolved -= TemplateCoordinator.OnTemplateResolved;
+
+        public void Preload(string[] parameters){}
     }
 }

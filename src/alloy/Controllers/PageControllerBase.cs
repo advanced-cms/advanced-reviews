@@ -1,9 +1,12 @@
-﻿using System.Web.Mvc;
 using AlloyTemplates.Business;
 using AlloyTemplates.Models.Pages;
 using AlloyTemplates.Models.ViewModels;
 using EPiServer.Web.Mvc;
 using EPiServer.Shell.Security;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using EPiServer.Web.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlloyTemplates.Controllers
 {
@@ -26,16 +29,16 @@ namespace AlloyTemplates.Controllers
         /// forms authentication for login functionality we add an action for logging out to all
         /// controllers inheriting from this class.
         /// </remarks>
-        public ActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            UISignInManager.Service.SignOut();
-            return RedirectToAction("Index");
+            await UISignInManager.Service.SignOutAsync();
+            return Redirect(HttpContext.RequestServices.GetService<UrlResolver>().GetUrl(PageContext.ContentLink, PageContext.LanguageID));
         }
 
         public virtual void ModifyLayout(LayoutModel layoutModel)
         {
             var page = PageContext.Page as SitePageData;
-            if(page != null)
+            if (page != null)
             {
                 layoutModel.HideHeader = page.HideSiteHeader;
                 layoutModel.HideFooter = page.HideSiteFooter;

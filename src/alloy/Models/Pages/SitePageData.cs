@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using AlloyTemplates.Business.Rendering;
-using AlloyTemplates.Models.Properties;
 using EPiServer.Web;
+using EPiServer.SpecializedProperties;
+using System.Collections.Generic;
 
 namespace AlloyTemplates.Models.Pages
 {
@@ -25,8 +26,8 @@ namespace AlloyTemplates.Models.Pages
 
                 // Use explicitly set meta title, otherwise fall back to page name
                 return !string.IsNullOrWhiteSpace(metaTitle)
-                        ? metaTitle
-                        : PageName;
+                       ? metaTitle
+                       : PageName;
             }
             set { this.SetPropertyValue(p => p.MetaTitle, value); }
         }
@@ -36,7 +37,7 @@ namespace AlloyTemplates.Models.Pages
             Order = 200)]
         [CultureSpecific]
         [BackingType(typeof(PropertyStringList))]
-        public virtual string[] MetaKeywords { get; set; }
+        public virtual IList<string> MetaKeywords { get; set; }
 
         [Display(
             GroupName = Global.GroupNames.MetaData,
@@ -70,8 +71,8 @@ namespace AlloyTemplates.Models.Pages
 
                 // Use explicitly set teaser text, otherwise fall back to description
                 return !string.IsNullOrWhiteSpace(teaserText)
-                        ? teaserText
-                        : MetaDescription;
+                       ? teaserText
+                       : MetaDescription;
             }
             set { this.SetPropertyValue(p => p.TeaserText, value); }
         }

@@ -14,17 +14,17 @@ namespace AdvancedApprovalReviews
 
         public void Initialize(InitializationEngine context)
         {
-            Global.RoutesRegistrating += Global_RoutesRegistrating;
+            // Global.RoutesRegistrating += Global_RoutesRegistrating;
         }
 
         public void Uninitialize(InitializationEngine context)
         {
-            Global.RoutesRegistrating -= Global_RoutesRegistrating;
+            // Global.RoutesRegistrating -= Global_RoutesRegistrating;
         }
 
-        private void Global_RoutesRegistrating(object sender, EPiServer.Web.Routing.RouteRegistrationEventArgs e)
-        {
-            e.Routes.RegisterReviewAvatarsRoute();
-        }
+        // private void Global_RoutesRegistrating(object sender, EPiServer.Web.Routing.RouteRegistrationEventArgs e)
+        // {
+        //     e.Routes.RegisterReviewAvatarsRoute();
+        // }
     }
 }

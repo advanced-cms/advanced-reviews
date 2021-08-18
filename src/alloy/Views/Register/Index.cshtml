@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 
-@using System.Web.Optimization
 @using AlloyTemplates.Controllers
 @model AlloyTemplates.Models.RegisterViewModel
 @{
@@ -10,8 +9,8 @@
 <html>
 <head>
     <title>Create Administrator Account</title>
-    @Styles.Render("~/bundles/css")
-    @Scripts.Render("~/bundles/js")
+    <link rel="stylesheet" href="~/css/css.min.css" />
+    <link rel="stylesheet" href="~/js/script.min.js" />
 </head>
 
 <body>
@@ -21,7 +20,7 @@
 
                 <h2>Create Administrator Account</h2>
 
-                @using (Html.BeginForm("/", "Register", FormMethod.Post))
+                @using (Html.BeginForm("", "Register", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     <div class="control-group">
@@ -56,3 +55,4 @@
     </div>
 </body>
 </html>
+

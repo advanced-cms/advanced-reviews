@@ -1,4 +1,4 @@
-﻿using EPiServer.Core;
+﻿﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
@@ -21,7 +21,6 @@ namespace AlloyTemplates.Models.Pages
         [Display(
             GroupName = SystemTabNames.Content,
             Order = 320)]
-        [CultureSpecific]
         public virtual ContentArea MainContentArea { get; set; }
     }
 }
