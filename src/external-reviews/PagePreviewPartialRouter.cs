@@ -4,15 +4,15 @@ using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
-using EPiServer.Web.Routing;
+using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 
 namespace AdvancedExternalReviews
 {
     /// <summary>
     /// Partial router used to display readonly version of the page
     /// </summary>
+    [ServiceConfiguration(typeof(IPartialRouter))]
     public class PagePreviewPartialRouter : IPartialRouter<PageData, PageData>
     {
         private readonly ProjectContentResolver _projectContentResolver;

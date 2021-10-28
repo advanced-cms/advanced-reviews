@@ -48,7 +48,7 @@ namespace AdvancedExternalReviews.EditReview
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
         }
 
-        [ConvertEditLinksFilter]
+        // [ConvertEditLinksFilter]
         public ActionResult Index(string token)
         {
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);

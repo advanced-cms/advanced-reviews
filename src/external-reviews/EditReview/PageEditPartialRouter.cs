@@ -2,10 +2,12 @@
 using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
+using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Http;
 
 namespace AdvancedExternalReviews.EditReview
 {
+    [ServiceConfiguration(typeof(IPartialRouter))]
     public class PageEditPartialRouter : IPartialRouter<PageData, PageData>
     {
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;

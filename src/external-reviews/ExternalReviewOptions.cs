@@ -138,8 +138,9 @@ namespace AdvancedExternalReviews
         {
             var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
             var model = new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
-            var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
-            model.Language = profile.Language;
+            // var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
+            // model.Language = profile.Language;
+            model.Language = "en";
             return model;
         }
     }
