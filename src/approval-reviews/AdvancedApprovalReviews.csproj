@@ -7,9 +7,6 @@
     <EmbeddedResource Include="EmbededLanguages\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ReviewLocationsPreview.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="12.0.0-pre-021458" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" />
   </ItemGroup>
 </Project>

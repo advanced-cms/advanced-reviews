@@ -9,7 +9,7 @@ using EPiServer.Core.Internal;
 using EPiServer.DataAbstraction;
 using EPiServer.Filters;
 using EPiServer.Globalization;
-using EPiServer.Logging.Compatibility;
+using EPiServer.Logging;
 using EPiServer.ServiceLocation;
 
 namespace AdvancedExternalReviews.DraftContentAreaPreview
@@ -24,7 +24,7 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
         private readonly LanguageResolver _languageResolver;
         private readonly IContentProviderManager _contentProviderManager;
         private readonly IContentChildrenSorter _childrenSorter;
-        private static readonly ILog _log = LogManager.GetLogger(typeof(ReviewsContentLoader));
+        private static readonly ILogger _log = LogManager.GetLogger(typeof(ReviewsContentLoader));
 
         public ReviewsContentLoader(IContentLoader contentLoader, IContentLanguageAccessor languageAccessor,
             ProjectContentResolver projectContentResolver,
@@ -159,7 +159,7 @@ namespace AdvancedExternalReviews.DraftContentAreaPreview
                 _log.Debug($"Advanced Reviews: Content {baseReference} not found for LoadUnpublishedVersion");
                 loadCommonDraft = null;
             }
-            
+
             if (loadCommonDraft == null)
             {
                 // fallback to default implementation if there is no common draft in a given language

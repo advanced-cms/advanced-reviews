@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F856CAEC-B3F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A1272902-1CD0-4507-9714-CB3AE96E78FD}"
 	ProjectSection(SolutionItems) = preProject
-		build\Templates.targets = build\Templates.targets
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
@@ -23,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A1272902
 		site.cmd = site.cmd
 		build\common.props = build\common.props
 		build\version.props = build\version.props
+		build\dependencies.props = build\dependencies.props
+		build\nuspec.props = build\nuspec.props
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "approval-reviews", "src\approval-reviews\AdvancedApprovalReviews.csproj", "{7D3CB0B4-BF55-4577-ABF2-D83F8EA5D49F}"

@@ -30,13 +30,16 @@ node_modules/
 advanced-cms.Reviews.zip
 advanced-cms.ExternalReviews.zip
 
+dist/
+out/
+
 reviewComponent.bundle.js
-src/alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts/ReviewWidget.js
-src/alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts/ReviewWidget.js.map
-src/alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts/report.html
-src/alloy/modules/_protected/advanced-cms.Reviews/Views/admin/adminPlugin.js
-src/alloy/modules/_protected/advanced-cms.Reviews/Views/admin/adminPlugin.js.map
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js.map
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/Views/external-review-component.js
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/Views/external-review-component.js.map
+src/approval-reviews/ClientResources/ReviewWidget.js
+src/approval-reviews/ClientResources/ReviewWidget.js.map
+src/approval-reviews/ClientResources/report.html
+src/approval-reviews/ClientResources/adminPlugin.js
+src/approval-reviews/ClientResources/adminPlugin.js.map
+src/external-reviews/ClientResources/external-review-manage-links-component.js
+src/external-reviews/ClientResources/external-review-manage-links-component.js.map
+src/external-reviews/ClientResources/external-review-component.js
+src/external-reviews/ClientResources/external-review-component.js.map

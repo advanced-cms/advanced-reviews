@@ -4,7 +4,7 @@ using System.Linq;
 using EPiServer.Core;
 using EPiServer.Data.Dynamic;
 using EPiServer.Framework.Serialization;
-using EPiServer.Logging.Compatibility;
+using EPiServer.Logging;
 using EPiServer.ServiceLocation;
 
 namespace AdvancedApprovalReviews
@@ -13,7 +13,7 @@ namespace AdvancedApprovalReviews
     public class DdsApprovalReviewsRepository: IApprovalReviewsRepository
     {
         private readonly object _lock = new object();
-        private static readonly ILog _log = LogManager.GetLogger(typeof(DdsApprovalReviewsRepository));
+        private static readonly ILogger _log = LogManager.GetLogger(typeof(DdsApprovalReviewsRepository));
 
         private readonly DynamicDataStoreFactory _dataStoreFactory;
         private readonly IObjectSerializerFactory _serializerFactory;
