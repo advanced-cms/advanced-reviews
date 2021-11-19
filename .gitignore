@@ -27,19 +27,19 @@ License.config
 node_modules/
 
 *.nupkg
-advanced-cms-approval-reviewss.zip
+advanced-cms-approval-reviews.zip
 advanced-cms-external-reviews.zip
 
 dist/
 out/
 
-reviewComponent.bundle.js
-src/approval-reviews/ClientResources/ReviewWidget.js
-src/approval-reviews/ClientResources/ReviewWidget.js.map
-src/approval-reviews/ClientResources/report.html
-src/approval-reviews/ClientResources/adminPlugin.js
-src/approval-reviews/ClientResources/adminPlugin.js.map
-src/external-reviews/ClientResources/external-review-manage-links-component.js
-src/external-reviews/ClientResources/external-review-manage-links-component.js.map
-src/external-reviews/ClientResources/external-review-component.js
-src/external-reviews/ClientResources/external-review-component.js.map
+src/Advanced.CMS.ApprovalReviews/ClientResources/ReviewWidget.js
+src/Advanced.CMS.ApprovalReviews/ClientResources/ReviewWidget.js.map
+src/Advanced.CMS.ApprovalReviews/ClientResources/report.html
+src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.js
+src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.js.map
+src/Advanced.CMS.ExternalReviews/ClientResources/external-review-manage-links-component.js
+src/Advanced.CMS.ExternalReviews/ClientResources/external-review-manage-links-component.js.map
+src/Advanced.CMS.ExternalReviews/ClientResources/external-review-component.js
+src/Advanced.CMS.ExternalReviews/ClientResources/external-review-component.js.map
+
