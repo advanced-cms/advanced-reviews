@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Advanced.CMS.AdvancedReviews</id>
+    <version>$version$</version>
+    <title>Advanced.CMS.AdvancedReviews</title>
+    <authors>github.com/advanced-cms</authors>
+    <owners>github.com/advanced-cms</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Context aware smart reviewing. Allow external reviewers to access unpublished data. Provide token-based, expirable links to any content version. Visually express issues in reviewed content by highlighting or adding screenshots.</description>
+    <releaseNotes/>
+    <copyright>Copyright 2019</copyright>
+    <tags>review preview content approval external</tags>
+    <license type="expression">MIT</license>
+    <iconUrl>https://raw.githubusercontent.com/advanced-cms/advanced-reviews/master/assets/logo.png</iconUrl>
+    <projectUrl>https://github.com/advanced-cms/advanced-reviews</projectUrl>
+    <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="[11.12,12.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.22,12.0)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Advanced.CMS.ApprovalReviews.dll" target="lib\net45\" />
+    <file src="bin\Advanced.CMS.ExternalReviews.dll" target="lib\net45\" />
+    <file src="out\advanced-cms-approval-reviews.zip" target="content\modules\_protected\advanced-cms-approval-reviews\" />
+    <file src="out\advanced-cms-external-reviews.zip" target="content\modules\_protected\advanced-cms-external-reviews\" />
+  </files>
+</package>

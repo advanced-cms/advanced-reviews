@@ -1,0 +1,12 @@
+﻿@using EPiServer.Core
+@using Alloy.Sample.Helpers
+@model Alloy.Sample.Models.Pages.SitePageData
+
+<div class="border">
+    @using(Html.BeginConditionalLink(Model.HasTemplate(), Url.PageLinkUrl(Model), Model.PageName))
+    {
+        <h2>@Model.PageName</h2>
+        <p>@Model.TeaserText</p>
+        @Html.DisplayFor(m => m.PageImage)
+    }
+</div>

@@ -27,8 +27,8 @@ License.config
 node_modules/
 
 *.nupkg
-advanced-cms.Reviews.zip
-advanced-cms.ExternalReviews.zip
+advanced-cms-approval-reviewss.zip
+advanced-cms-external-reviews.zip
 
 dist/
 out/

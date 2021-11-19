@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET AlloyMVC=src\alloy
+SET AlloyMVC=src\Alloy.Sample
 
 IF EXIST %AlloyMVC%\App_Data (
     ECHO Remove all files from the app data folder
@@ -13,8 +13,8 @@ REM Copy the database files to the site.
 XCOPY /y/i build\Database\DefaultSiteContent.episerverdata %AlloyMVC%\App_Data\ || Exit /B 1
 XCOPY /y/i/k build\database\Alloy.mdf %AlloyMVC%\App_Data\ || Exit /B 1
 
-CD src\ui
+CD src\Advanced.CMS.ApprovalReviews\React
 CALL npm install
-CD ..\..\
+CD ..\..\..\
 
 EXIT /B %ERRORLEVEL%
