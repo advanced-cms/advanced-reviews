@@ -1,5 +1,6 @@
 ﻿namespace Advanced.CMS.ApprovalReviews.AvatarsService
 {
+    //TODO: NETCORE
     // /// <summary>
     // /// Handler used to get user avatar based on username
     // /// </summary>

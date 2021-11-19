@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Advanced.CMS.ExternalReviews.EditReview
 {
+    //TODO: NETCORE
     public class ExternalReviewFilterProvider : IFilterProvider
     {
         // private readonly FilterProviderCollection _filterProviders;

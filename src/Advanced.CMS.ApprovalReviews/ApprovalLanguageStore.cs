@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Advanced.CMS.ApprovalReviews
 {
     [RestStore("approvallanguage")]
-    //TODO: any better way to do this?
+    //TODO: any better way to do this? REWRITE THIS TO SHELL MODULE VIEW MODEL!
     public class ApprovalLanguageStore : RestControllerBase
     {
         [HttpGet]

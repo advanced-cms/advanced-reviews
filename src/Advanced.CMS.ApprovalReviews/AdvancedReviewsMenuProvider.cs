@@ -17,7 +17,8 @@ namespace Advanced.CMS.ApprovalReviews
 
         public IEnumerable<MenuItem> GetMenuItems()
         {
-            //TODO: ??? var controllerPath = _httpContextAccessor.HttpContext.GetControllerPath(typeof(ReviewLocationPreviewPluginController), "Index");
+            //TODO: NETCORE: !minor! ??? var controllerPath = _httpContextAccessor.HttpContext.GetControllerPath(typeof(ReviewLocationPreviewPluginController), "Index");
+            // Paths.ToResource works but we should be able to get the controller path
             var controllerPath = Paths.ToResource("advanced-cms-approval-reviews" ,"ReviewLocationPreviewPlugin/Index");
             var urlMenuItem1 = new UrlMenuItem("Advanced approval review", "/global/cms/admin/csp",
                 controllerPath)

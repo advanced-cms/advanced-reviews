@@ -20,7 +20,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
             // Intercepted to rewrite urls of content items which belong to the same project
-            //TODO: fix url resolver
+            //TODO: NETCORE: fix url resolver
             // context.Services.Intercept<IUrlResolver>(
             //     (locator, defaultUrlResolver) =>
             //         new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
