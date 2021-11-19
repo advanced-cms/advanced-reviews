@@ -7,9 +7,7 @@ module.exports = (env, argv) => {
 
     webpackCommon.output = {
         filename: "external-review-component.js",
-        //libraryTarget: "amd",
-        //libraryExport: "default",
-        path: path.resolve(__dirname, "../../../ClientResources")
+        path: path.resolve(__dirname, "../../../../Advanced.CMS.ExternalReviews/ClientResources")
     };
 
     return webpackCommon;
