@@ -19,7 +19,8 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
 
         public bool IsPublished(IContent content, PublishedStateCondition condition)
         {
-            if (_externalReviewState.IsInExternalReviewContext && ExternalReview.CustomLoaded.Contains(content.ContentLink.ToString()))
+            if (_externalReviewState.IsInExternalReviewContext &&
+                _externalReviewState.CustomLoaded.Contains(content.ContentLink.ToString()))
             {
                 var cachedContent =
                     _externalReviewState.GetCachedContent(_languageResolver.GetPreferredCulture(), content.ContentLink);
