@@ -20,7 +20,7 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
         }
 
         public ExternalReviewLinksManageComponent(ExternalReviewOptions options, IVisitorGroupRepository visitorGroupRepository)
-            : base("advanced-cms-external-reviews/external-review-manage-links-component")
+            : base("advanced-cms-approval-reviews/external-review-manage-links-component")
         {
             _options = options;
             _visitorGroupRepository = visitorGroupRepository;
