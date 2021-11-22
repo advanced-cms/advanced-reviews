@@ -10,13 +10,16 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
         private readonly ProjectRepository _projectRepository;
         private readonly ExternalReviewOptions _options;
         private readonly IStartPageUrlResolver _startPageUrlResolver;
+        private readonly ReviewUrlGenerator _reviewUrlGenerator;
 
         public ExternalReviewLinkBuilder(ExternalReviewOptions options,
-            IStartPageUrlResolver startPageUrlResolver, ProjectRepository projectRepository)
+            IStartPageUrlResolver startPageUrlResolver, ProjectRepository projectRepository,
+            ReviewUrlGenerator reviewUrlGenerator)
         {
             _options = options;
             _startPageUrlResolver = startPageUrlResolver;
             _projectRepository = projectRepository;
+            _reviewUrlGenerator = reviewUrlGenerator;
         }
 
         public ExternalReviewLink FromExternalReview(ExternalReviewLinkDds externalReviewLinkDds)
@@ -40,7 +43,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
             string externalUrlPrefix;
             if (externalReviewLinkDds.IsEditable)
             {
-                externalUrlPrefix = UrlPath.EnsureStartsWithSlash(_options.ReviewsUrl);
+                externalUrlPrefix = UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.ReviewsUrl);
             }
             else
             {

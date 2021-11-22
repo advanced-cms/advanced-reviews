@@ -1,6 +1,5 @@
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Framework.Serialization;
 using EPiServer.Shell;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +11,10 @@ namespace Advanced.CMS.ApprovalReviews
     public class ReviewLocationPreviewPluginController : Controller
     {
         private readonly IApprovalReviewsRepository _repository;
-        private readonly IObjectSerializer _serializer;
 
-        public ReviewLocationPreviewPluginController(IApprovalReviewsRepository repository, IObjectSerializer serializer)
+        public ReviewLocationPreviewPluginController(IApprovalReviewsRepository repository)
         {
             _repository = repository;
-            _serializer = serializer;
         }
 
         public IActionResult Index()

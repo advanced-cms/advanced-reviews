@@ -5,6 +5,7 @@ using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Http;
 
 namespace Advanced.CMS.ExternalReviews
@@ -90,8 +91,7 @@ namespace Advanced.CMS.ExternalReviews
                 segmentContext.RemainingPath = nextSegment.Remaining;
 
                 // set ContentLink in DataTokens to make IPageRouteHelper working
-                // TODO: NETCORE segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
-                segmentContext.Content = page;
+                segmentContext.RouteValues[RoutingConstants.ContentLinkKey] = page.ContentLink;
                 _externalReviewState.Token = token;
                 _externalReviewState.ProjectId = externalReviewLink.ProjectId;
 

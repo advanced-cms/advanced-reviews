@@ -25,8 +25,7 @@ class ExternalReviewService implements AdvancedReviewService {
                     data: JSON.stringify(data)
                 })
                 .then(function(response) {
-                    const data = JSON.parse(response.data.substring(4)); //remove {}&&
-                    resolve(data);
+                    resolve(response.data);
                 })
                 .catch(function(error) {
                     reject(error);

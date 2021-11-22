@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell.ObjectEditing;
 using EPiServer.Shell.UI.Rest;
 
 namespace Advanced.CMS.ExternalReviews.EditReview
 {
+    [ServiceConfiguration]
     public class PropertyResolver
     {
         private readonly ExtensibleMetadataProvider _metadataProvider;

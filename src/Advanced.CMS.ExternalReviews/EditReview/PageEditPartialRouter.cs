@@ -3,6 +3,7 @@ using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Http;
 
 namespace Advanced.CMS.ExternalReviews.EditReview
@@ -71,8 +72,8 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 // We can't set the Edit context here because it breaks the routing if you have useClaims=true in virtualRoles setting
                 // and when you have a custom VirtualRole class that uses IPageRouteHelper to fetch the current language from url
                 // segmentContext.ContextMode = ContextMode.Edit;
-                // TODO: NETCORE segmentContext.RouteData.DataTokens[RoutingConstants.NodeKey] = page.ContentLink;
-                segmentContext.Content = page;
+                segmentContext.RouteValues[RoutingConstants.ContentLinkKey] = page.ContentLink;
+                segmentContext.RouteValues["module"] =
 
                 _externalReviewState.ProjectId = externalReviewLink.ProjectId;
                 _externalReviewState.IsEditLink = true;

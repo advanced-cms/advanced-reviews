@@ -16,7 +16,4 @@
     <EmbeddedResource Remove="React\node_modules\**" />
     <None Remove="React\node_modules\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="advanced-cms-approval-reviews.Views\Views" />
-  </ItemGroup>
 </Project>

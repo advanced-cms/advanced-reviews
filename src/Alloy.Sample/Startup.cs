@@ -70,7 +70,10 @@ namespace Alloy.Sample
 
             services.AddEmbeddedLocalization<Startup>();
 
-            services.AddAdvancedReviews();
+            services.AddAdvancedReviews(e =>
+            {
+                e.EditableLinksEnabled = true;
+            });
         }
 
 

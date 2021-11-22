@@ -26,6 +26,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         private readonly IStartPageUrlResolver _startPageUrlResolver;
         private readonly PropertyResolver _propertyResolver;
         private readonly ReviewsNotifier _reviewsNotifier;
+        private readonly ReviewUrlGenerator _reviewUrlGenerator;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
@@ -33,7 +34,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
             IStartPageUrlResolver startPageUrlResolver,
             PropertyResolver propertyResolver,
-            ReviewsNotifier reviewsNotifier)
+            ReviewsNotifier reviewsNotifier, ReviewUrlGenerator reviewUrlGenerator)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
@@ -43,49 +44,43 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             _startPageUrlResolver = startPageUrlResolver;
             _propertyResolver = propertyResolver;
             _reviewsNotifier = reviewsNotifier;
+            _reviewUrlGenerator = reviewUrlGenerator;
 
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
         }
 
         // [ConvertEditLinksFilter]
-        public ActionResult Index(string token)
+        public ActionResult Index(string id)
         {
-            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
             if (!externalReviewLink.IsEditableLink())
             {
                 return new NotFoundObjectResult("Content not found");
             }
 
             var content = _contentLoader.Get<IContent>(externalReviewLink.ContentLink);
-
-            const string url = "Views/PagePreview/Index.cshtml";
             var startPageUrl = _startPageUrlResolver.GetUrl(externalReviewLink.ContentLink, content.LanguageBranch());
 
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
-                out var resolvedPath))
+            var serializer = _serializerFactory.GetSerializer(KnownContentTypes.Json);
+            var pagePreviewModel = new ContentPreviewModel
             {
-                var serializer = _serializerFactory.GetSerializer(KnownContentTypes.Json);
-                var pagePreviewModel = new ContentPreviewModel
-                {
-                    Token = token,
-                    Name = content.Name,
-                    EditableContentUrlSegment = UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment, token),
-                    AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/AddPin",
-                    RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/RemovePin",
-                    ReviewJsScriptPath = GetJsScriptPath(),
-                    ResetCssPath = GetResetCssPath(),
-                    ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
-                    Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData)),
-                    Options = serializer.Serialize(_externalReviewOptions)
-                };
-                return View(resolvedPath, pagePreviewModel);
-            }
-
-            return new NotFoundObjectResult("Content not found");
+                Token = id,
+                Name = content.Name,
+                EditableContentUrlSegment =
+                    UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment, id),
+                AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.AddPinUrl)}",
+                RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.RemovePinUrl)}",
+                ReviewJsScriptPath = GetJsScriptPath(),
+                ResetCssPath = GetResetCssPath(),
+                ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
+                Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData)),
+                Options = serializer.Serialize(_externalReviewOptions)
+            };
+            return View("Index", pagePreviewModel);
         }
 
         [HttpPost]
-        public ActionResult AddPin(ReviewLocation reviewLocation)
+        public ActionResult AddPin([FromBody] ReviewLocation reviewLocation)
         {
             var token = reviewLocation.Token;
             if (string.IsNullOrWhiteSpace(token))
@@ -121,7 +116,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         }
 
         [HttpPost]
-        public ActionResult RemovePin(DeleteReviewLocation location)
+        public ActionResult RemovePin([FromBody] DeleteReviewLocation location)
         {
             var token = location.Token;
             if (string.IsNullOrWhiteSpace(token))
@@ -176,7 +171,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
 
         private static string GetJsScriptPath()
         {
-            const string url = "Views/external-review-component.js";
+            const string url = "ClientResources/external-review-component.js";
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var jsScriptPath))
             {
@@ -188,7 +183,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
 
         private static string GetResetCssPath()
         {
-            const string url = "Views/reset.css";
+            const string url = "ClientResources/reset.css";
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
                 out var resetCssPath))
             {

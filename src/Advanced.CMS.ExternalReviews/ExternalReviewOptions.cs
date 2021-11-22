@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using Advanced.CMS.ExternalReviews.EditReview;
 using Advanced.CMS.ExternalReviews.Properties;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.ServiceLocation;
+using EPiServer.Shell;
 using EPiServer.Shell.Modules;
 
 namespace Advanced.CMS.ExternalReviews
 {
+    [ServiceConfiguration]
+    public class ReviewUrlGenerator
+    {
+        public string ReviewsUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.Index)}");
+        public string AddPinUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.AddPin)}");
+        public string RemovePinUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.RemovePin)}");
+    }
+
     [Options]
     public class ExternalReviewOptions
     {
-        public string ReviewsUrl { get; set; } = "externalContentReviews";
-
         /// <summary>
         /// Gets or sets if the plugin should be initialized in Edit Mode
         /// </summary>

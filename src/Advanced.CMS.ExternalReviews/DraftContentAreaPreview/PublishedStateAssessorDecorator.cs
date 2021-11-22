@@ -19,14 +19,21 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
 
         public bool IsPublished(IContent content, PublishedStateCondition condition)
         {
-            if (_externalReviewState.IsInExternalReviewContext &&
-                _externalReviewState.CustomLoaded.Contains(content.ContentLink.ToString()))
+            if (_externalReviewState.IsInExternalReviewContext)
             {
-                var cachedContent =
-                    _externalReviewState.GetCachedContent(_languageResolver.GetPreferredCulture(), content.ContentLink);
-                if (cachedContent != null)
+                if (content is PageData)
                 {
                     return true;
+                }
+
+                if (_externalReviewState.CustomLoaded.Contains(content.ContentLink.ToString()))
+                {
+                    var cachedContent =
+                        _externalReviewState.GetCachedContent(_languageResolver.GetPreferredCulture(), content.ContentLink);
+                    if (cachedContent != null)
+                    {
+                        return true;
+                    }
                 }
             }
 

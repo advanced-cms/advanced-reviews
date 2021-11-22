@@ -1,6 +1,6 @@
 ﻿namespace Advanced.CMS.ExternalReviews.EditReview
 {
-    // public class ConvertEditLinksFilter : ActionFilterAttribute
+    //TODO NETCORE: // public class ConvertEditLinksFilter : ActionFilterAttribute
     // {
     //     private readonly ExternalReviewOptions _externalReviewOptions;
     //     private readonly IUrlResolver _urlResolver;
