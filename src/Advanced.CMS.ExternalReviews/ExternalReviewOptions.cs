@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Advanced.CMS.ApprovalReviews.AvatarsService;
 using Advanced.CMS.ExternalReviews.EditReview;
 using Advanced.CMS.ExternalReviews.Properties;
 using EPiServer.Framework.Web.Resources;
@@ -15,6 +16,7 @@ namespace Advanced.CMS.ExternalReviews
         public string ReviewsUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.Index)}");
         public string AddPinUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.AddPin)}");
         public string RemovePinUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.RemovePin)}");
+        public string AvatarUrl => Paths.ToResource("advanced-cms-approval-reviews", $"ReviewAvatars/{nameof(ReviewAvatarsController.Index)}");
     }
 
     [Options]
@@ -137,9 +139,9 @@ namespace Advanced.CMS.ExternalReviews
         public int CodeLength { get; set; } = 4;
     }
 
-    public class AdvancedReviewsModule : ShellModule
+    public class ApprovalReviewsShellModule : ShellModule
     {
-        public AdvancedReviewsModule(string name, string routeBasePath, string resourceBasePath)
+        public ApprovalReviewsShellModule(string name, string routeBasePath, string resourceBasePath)
             : base(name, routeBasePath, resourceBasePath)
         {
         }
@@ -148,17 +150,19 @@ namespace Advanced.CMS.ExternalReviews
         public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
         {
             var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+            var reviewUrlGenerator = ServiceLocator.Current.GetInstance<ReviewUrlGenerator>();
             var model = new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
-            //TODO var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
+            //TODO NETCORE: var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
             // model.Language = profile.Language;
             model.Language = "en";
+            model.AvatarUrl = reviewUrlGenerator.AvatarUrl;
             return model;
         }
     }
 
-    public class AdvancedApprovalModule : ShellModule
+    public class ExternalReviewsShellModule : ShellModule
     {
-        public AdvancedApprovalModule(string name, string routeBasePath, string resourceBasePath)
+        public ExternalReviewsShellModule(string name, string routeBasePath, string resourceBasePath)
             : base(name, routeBasePath, resourceBasePath)
         {
         }
@@ -180,7 +184,7 @@ namespace Advanced.CMS.ExternalReviews
         }
 
         public string Language { get; set; }
-
+        public string AvatarUrl { get; set; }
         public ExternalReviewOptions Options { get; }
     }
 }

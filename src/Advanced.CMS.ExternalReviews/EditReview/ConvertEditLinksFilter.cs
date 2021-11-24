@@ -1,4 +1,8 @@
-﻿namespace Advanced.CMS.ExternalReviews.EditReview
+﻿using System;
+using System.IO;
+using System.Text;
+
+namespace Advanced.CMS.ExternalReviews.EditReview
 {
     //TODO NETCORE: // public class ConvertEditLinksFilter : ActionFilterAttribute
     // {
@@ -132,37 +136,37 @@
     //     }
     // }
     //
-    // public class BufferedTextWriter: TextWriter
-    // {
-    //     private readonly StringBuilder stringBuilder = new StringBuilder();
-    //     public readonly TextWriter InnerTextWriter;
-    //
-    //     private readonly Func<string, string> textRewriteFunction;
-    //
-    //     public BufferedTextWriter(TextWriter innerTextWriter, Func<string, string> textRewriteFunction)
-    //     {
-    //         InnerTextWriter = innerTextWriter ?? throw new ArgumentNullException(nameof(innerTextWriter));
-    //         this.textRewriteFunction = textRewriteFunction;
-    //     }
-    //
-    //     public override Encoding Encoding => InnerTextWriter.Encoding;
-    //
-    //     public override void Write(char value)
-    //     {
-    //         stringBuilder.Append(value);
-    //     }
-    //
-    //     public void Flush(bool rewriteText)
-    //     {
-    //         var bufferedText = stringBuilder.ToString();
-    //
-    //         if (rewriteText && textRewriteFunction != null)
-    //         {
-    //             bufferedText = textRewriteFunction.Invoke(bufferedText);
-    //         }
-    //
-    //         InnerTextWriter.Write(bufferedText);
-    //         InnerTextWriter.Flush();
-    //     }
-    // }
+    public class BufferedTextWriter: TextWriter
+    {
+        private readonly StringBuilder stringBuilder = new StringBuilder();
+        public readonly TextWriter InnerTextWriter;
+
+        private readonly Func<string, string> textRewriteFunction;
+
+        public BufferedTextWriter(TextWriter innerTextWriter, Func<string, string> textRewriteFunction)
+        {
+            InnerTextWriter = innerTextWriter ?? throw new ArgumentNullException(nameof(innerTextWriter));
+            this.textRewriteFunction = textRewriteFunction;
+        }
+
+        public override Encoding Encoding => InnerTextWriter.Encoding;
+
+        public override void Write(char value)
+        {
+            stringBuilder.Append(value);
+        }
+
+        public void Flush(bool rewriteText)
+        {
+            var bufferedText = stringBuilder.ToString();
+
+            if (rewriteText && textRewriteFunction != null)
+            {
+                bufferedText = textRewriteFunction.Invoke(bufferedText);
+            }
+
+            InnerTextWriter.Write(bufferedText);
+            InnerTextWriter.Flush();
+        }
+    }
 }

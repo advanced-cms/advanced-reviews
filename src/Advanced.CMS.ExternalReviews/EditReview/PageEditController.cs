@@ -70,6 +70,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                     UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment, id),
                 AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.AddPinUrl)}",
                 RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.RemovePinUrl)}",
+                AvatarUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.AvatarUrl)}",
                 ReviewJsScriptPath = GetJsScriptPath(),
                 ResetCssPath = GetResetCssPath(),
                 ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
@@ -239,6 +240,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         /// </summary>
         public string AddPinUrl { get; set; }
         public string RemovePinUrl { get; set; }
+        public string AvatarUrl { get; set; }
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }

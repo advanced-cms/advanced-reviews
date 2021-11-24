@@ -1,9 +1,8 @@
-﻿using EPiServer;
-using EPiServer.Framework;
+﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 
-namespace AdvancedExternalReviews.ImageProxy
+namespace Advanced.CMS.ExternalReviews.ImageProxy
 {
     [InitializableModule]
     public class GlobalRouteInitialization : IConfigurableModule

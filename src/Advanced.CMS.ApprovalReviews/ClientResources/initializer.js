@@ -52,7 +52,8 @@ define([
             commandregistry.registerProvider(area, commandsProvider);
 
             var language = this._settings.language || "";
-            onPageEditingInitializer.initialize(options, language);
+            var avatarUrl = this._settings.avatarUrl || "";
+            onPageEditingInitializer.initialize(options, language, avatarUrl);
             approveChangesInitializer.initialize();
             rejectChangesInitializer.initialize();
             notificationsInitializer.initialize();

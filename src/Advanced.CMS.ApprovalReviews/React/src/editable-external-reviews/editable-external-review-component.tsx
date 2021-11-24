@@ -102,6 +102,7 @@ stores.reviewStore.currentUser = "";
 stores.reviewStore.currentLocale = "";
 stores.reviewStore.reviewLocations = [];
 stores.reviewStore.options = {};
+stores.reviewStore.reviewUrl = "";
 
 function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps) {
     const [showUserNameDialog, setShowUserNameDialog] = useState<boolean>(true);
@@ -145,6 +146,10 @@ const initialPins: string = reviewEl.dataset.pins;
 const metadata: string = reviewEl.dataset.metadata;
 const options: string = reviewEl.dataset.options;
 const token: string = reviewEl.dataset.token;
+const avatarUrl: string = reviewEl.dataset.avatarUrl;
+
+stores.reviewStore.avatarUrl = avatarUrl;
+
 ReactDOM.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
     reviewEl
