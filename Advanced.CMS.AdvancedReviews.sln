@@ -26,6 +26,36 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A1272902
 		build\nuspec.props = build\nuspec.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{A1272902-1CD0-4507-9714-CB3AE96E78FD}"
+	ProjectSection(SolutionItems) = preProject
+
+		assets\content-review.png = assets\content-review.png
+		assets\logo.png = assets\logo.png
+		assets\thumbnail.png = assets\thumbnail.png
+		assets\default emails\mail_edit.txt = assets\default emails\mail_edit.txt
+		assets\default emails\mail_preview.txt = assets\default emails\mail_preview.txt
+		assets\documentation\approval_1.gif = assets\documentation\approval_1.gif
+		assets\documentation\approval_2_decline.gif = assets\documentation\approval_2_decline.gif
+		assets\documentation\approval_3_approve_prompt.gif = assets\documentation\approval_3_approve_prompt.gif
+		assets\documentation\configure_approval.gif = assets\documentation\configure_approval.gif
+		assets\documentation\external_review_email_example.png = assets\documentation\external_review_email_example.png
+		assets\documentation\external_review_share_dialog.png = assets\documentation\external_review_share_dialog.png
+		assets\documentation\external_reviewer.gif = assets\documentation\external_reviewer.gif
+		assets\documentation\pin_answer_1.gif = assets\documentation\pin_answer_1.gif
+		assets\documentation\pin_answer_2.gif = assets\documentation\pin_answer_2.gif
+		assets\documentation\pin_answer_3.gif = assets\documentation\pin_answer_3.gif
+		assets\documentation\pin_review_1.gif = assets\documentation\pin_review_1.gif
+		assets\documentation\pin_review_2.gif = assets\documentation\pin_review_2.gif
+		assets\documentation\pin_review_3.gif = assets\documentation\pin_review_3.gif
+		assets\documentation\preview_unpublished_content.gif = assets\documentation\preview_unpublished_content.gif
+		assets\documentation\project_overview.png = assets\documentation\project_overview.png
+		assets\documentation\screenshot_manipulation.gif = assets\documentation\screenshot_manipulation.gif
+		assets\documentation\sliding_panel.gif = assets\documentation\sliding_panel.gif
+		assets\samples\abbie.jpg = assets\samples\abbie.jpg
+		assets\samples\administrator.jpg = assets\samples\administrator.jpg
+		assets\samples\eddie.jpg = assets\samples\eddie.jpg
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Advanced.CMS.ApprovalReviews", "src\Advanced.CMS.ApprovalReviews\Advanced.CMS.ApprovalReviews.csproj", "{7D3CB0B4-BF55-4577-ABF2-D83F8EA5D49F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Advanced.CMS.ExternalReviews", "src\Advanced.CMS.ExternalReviews\Advanced.CMS.ExternalReviews.csproj", "{90D5E808-1575-4BA9-8237-7323DB1B446F}"

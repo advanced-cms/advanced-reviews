@@ -26,7 +26,27 @@ The list of features (click to see more details about each section):
 Install-Package Advanced.CMS.AdvancedReviews
 ```
 
-https://nuget.episerver.com/package/?id=Advanced.CMS.AdvancedReviews
+https://nuget.optimizely.com/package/?id=Advanced.CMS.AdvancedReviews
+
+In order to start using AdvancedReviews you need to add it explicitly to your site.
+Please add the following statement to your Startup.cs
+
+```c#
+public class Startup
+{
+    ...
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+        services.AddAdvancedReviews();
+        ...
+    }
+    ...
+}
+```
+
+`AddAdvancedReviews` extension method also accepts optional parameter of Action<ExternalReviewOptions> which
+lets you configure the add-on according to your needs.
 
 ## Features
 

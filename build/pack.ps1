@@ -1,13 +1,18 @@
-Param([string]$version, [string] $configuration = "Release")
+Param([string] $configuration = "Release")
 $workingDirectory = Get-Location
 $zip = "$workingDirectory\packages\7-Zip.CommandLine\18.1.0\tools\7za.exe"
 
 # Set location to the Solution directory
 (Get-Item $PSScriptRoot).Parent.FullName | Push-Location
 
-[xml] $versionFile = Get-Content ".\build\dependencies.props"
+# Version
+[xml] $versionFile = Get-Content ".\build\version.props"
+$versionNode = $versionFile.SelectSingleNode("Project/PropertyGroup/VersionPrefix")
+$version = $versionNode.InnerText
+
+[xml] $dependenciesFile = Get-Content ".\build\dependencies.props"
 # CMS dependency
-$cmsUINode = $versionFile.SelectSingleNode("Project/PropertyGroup/CmsUIVersion")
+$cmsUINode = $dependenciesFile.SelectSingleNode("Project/PropertyGroup/CmsUIVersion")
 $cmsUIVersion = $cmsUINode.InnerText
 $cmsUIParts = $cmsUIVersion.Split(".")
 $cmsUIMajor = [int]::Parse($cmsUIParts[0]) + 1
@@ -33,8 +38,6 @@ Start-Process -NoNewWindow -Wait -FilePath $zip -ArgumentList "a", "advanced-cms
 Set-Location $workingDirectory
 
 # Packaging public packages
-echo "AAAAAAAA"
-echo $version
 dotnet pack --no-restore --no-build -c $configuration /p:PackageVersion=$version /p:CmsUIVersion=$cmsUIVersion /p:CmsUINextMajorVersion=$cmsUINextMajorVersion Advanced.CMS.AdvancedReviews.sln
 
 Pop-Location
