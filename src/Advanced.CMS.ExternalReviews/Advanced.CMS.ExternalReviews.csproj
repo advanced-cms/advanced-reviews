@@ -15,8 +15,6 @@
     <Folder Include="advanced-cms-external-reviews.Views\Views" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EPiServer.Cms.AspNetCore.Routing, Version=12.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\packages\episerver.cms.aspnetcore.routing\12.1.0\lib\net5.0\EPiServer.Cms.AspNetCore.Routing.dll</HintPath>
-    </Reference>
+    <None Remove="ClientResources/external-review-component.js" />
   </ItemGroup>
 </Project>

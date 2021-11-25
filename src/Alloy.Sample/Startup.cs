@@ -1,6 +1,5 @@
 using System.IO;
-using System.Text.Json;
-using Advanced.CMS.ExternalReviews;
+using Advanced.CMS.AdvancedReviews;
 using Alloy.Sample.Extensions;
 using Alloy.Sample.Infrastructure;
 using EPiServer.Cms.Shell;
@@ -9,7 +8,6 @@ using EPiServer.Cms.UI.Admin;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Cms.UI.VisitorGroups;
 using EPiServer.Data;
-using EPiServer.Formatters;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Scheduler;
 using EPiServer.Web.Mvc.Html;

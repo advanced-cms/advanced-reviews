@@ -1,36 +1,21 @@
 using System;
 using System.Linq;
+using Advanced.CMS.ExternalReviews;
 using EPiServer.Shell.Modules;
+using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Advanced.CMS.ExternalReviews
+namespace Advanced.CMS.AdvancedReviews
 {
-    //TODO NETCORE: why the startup filter from <see cref="Advanced.CMS.ExternalReviews.AdvancedReviewsStartupFilter" />
-    public class AdvancedReviewsStartupFilter : IStartupFilter
+    public class AdvancedReviewsEndpointRoutingExtension : IEndpointRoutingExtension
     {
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        public void MapEndpoints(IEndpointRouteBuilder endpointRouteBuilder)
         {
-            return app =>
-            {
-                // if (app == null)
-                // {
-                //     throw new ArgumentNullException(nameof (app));
-                // }
-                //
-                // // var reviewsUrl = app.ApplicationServices.GetInstance<ExternalReviewOptions>().ReviewsUrl;
-                // var reviewsUrl = AdvancedReviewsRoutingConstants.ReviewsUrl;
-                //
-                // app.UseRouting();
-                // app.UseEndpoints(endpoints =>
-                // {
-                //     endpoints.MapControllerRoute(reviewsUrl, $"/{reviewsUrl}/{{token}}",
-                //         new { controller = "PageEdit", action = "Index" });
-                // });
-
-                next(app);
-            };
+            endpointRouteBuilder.MapControllerRoute("ImageProxy", "/ImageProxy",
+                new { controller = "ImageProxy", action = "Index" });
         }
     }
 
@@ -60,7 +45,8 @@ namespace Advanced.CMS.ExternalReviews
                 services.Configure(externalReviewOptions);
             }
 
-            // services.AddStartupFilter<AdvancedReviewsStartupFilter>();
+            services.TryAddEnumerable(ServiceDescriptor.Singleton(typeof (IEndpointRoutingExtension),
+                typeof (AdvancedReviewsEndpointRoutingExtension)));
 
             return services;
         }

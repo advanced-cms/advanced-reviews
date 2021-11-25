@@ -17,7 +17,7 @@
     <EmbeddedResource Include="Resources\LanguageFiles\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Advanced.CMS.ExternalReviews\Advanced.CMS.ExternalReviews.csproj" />
+    <ProjectReference Include="..\Advanced.CMS.AdvancedReviews\Advanced.CMS.AdvancedReviews.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\**\*.*" />

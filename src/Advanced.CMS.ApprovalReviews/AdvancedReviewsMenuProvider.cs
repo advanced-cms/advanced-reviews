@@ -1,26 +1,22 @@
 using System.Collections.Generic;
-using EPiServer.Shell;
 using EPiServer.Shell.Navigation;
-using Microsoft.AspNetCore.Http;
 
 namespace Advanced.CMS.ApprovalReviews
 {
     [MenuProvider]
     public class AdvancedReviewsMenuProvider : IMenuProvider
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ReviewUrlGenerator _reviewUrlGenerator;
 
-        public AdvancedReviewsMenuProvider(IHttpContextAccessor httpContextAccessor)
+        public AdvancedReviewsMenuProvider(ReviewUrlGenerator reviewUrlGenerator)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _reviewUrlGenerator = reviewUrlGenerator;
         }
 
         public IEnumerable<MenuItem> GetMenuItems()
         {
-            //TODO: NETCORE: !minor! ??? var controllerPath = _httpContextAccessor.HttpContext.GetControllerPath(typeof(ReviewLocationPreviewPluginController), "Index");
-            // Paths.ToResource works but we should be able to get the controller path
-            var controllerPath = Paths.ToResource("advanced-cms-approval-reviews" ,"ReviewLocationPreviewPlugin/Index");
-            var urlMenuItem1 = new UrlMenuItem("Advanced approval review", "/global/cms/admin/csp",
+            var controllerPath = $"{_reviewUrlGenerator.ReviewLocationPluginUrl}/Index";
+            var urlMenuItem1 = new UrlMenuItem("Advanced approval review", "/global/cms/admin/reviewplugin",
                 controllerPath)
             {
                 Alignment = MenuItemAlignment.Left,

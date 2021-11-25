@@ -1,6 +1,5 @@
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Shell;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +10,19 @@ namespace Advanced.CMS.ApprovalReviews
     public class ReviewLocationPreviewPluginController : Controller
     {
         private readonly IApprovalReviewsRepository _repository;
+        private readonly ReviewUrlGenerator _reviewUrlGenerator;
 
-        public ReviewLocationPreviewPluginController(IApprovalReviewsRepository repository)
+        public ReviewLocationPreviewPluginController(IApprovalReviewsRepository repository, ReviewUrlGenerator reviewUrlGenerator)
         {
             _repository = repository;
+            _reviewUrlGenerator = reviewUrlGenerator;
         }
 
         public IActionResult Index()
         {
             var viewModel = new ViewModel
             {
-                ControllerUrl = Paths.ToResource("advanced-cms-approval-reviews" ,"ReviewLocationPreviewPlugin")
+                ControllerUrl = _reviewUrlGenerator.ReviewLocationPluginUrl
             };
 
             return View("Index", viewModel);

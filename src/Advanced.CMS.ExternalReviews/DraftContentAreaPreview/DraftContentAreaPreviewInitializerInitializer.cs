@@ -19,30 +19,33 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            // Intercepted to rewrite urls of content items which belong to the same project
-            //TODO: NETCORE: fix url resolver
-            // context.Services.Intercept<IUrlResolver>(
-            //     (locator, defaultUrlResolver) =>
-            //         new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
-            //             locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>()));
+            context.ConfigurationComplete += (_, _) =>
+            {
+                // Intercepted to rewrite urls of content items which belong to the same project
+                context.Services.Intercept<IUrlResolver>(
+                    (locator, defaultUrlResolver) =>
+                        new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
+                            locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>(),
+                            locator.GetInstance<ExternalReviewState>(), locator.GetInstance<ExternalReviewUrlGenerator>()));
 
-            // Intercepted in order to return unpublished children in external review context
-            context.Services.Intercept<IContentLoader>(
-                (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader,
-                    locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>(),
-                    locator.GetInstance<ExternalReviewState>()));
+                // Intercepted in order to return unpublished children in external review context
+                context.Services.Intercept<IContentLoader>(
+                    (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader,
+                        locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>(),
+                        locator.GetInstance<ExternalReviewState>()));
 
-            // Intercepted in order to return unpublished children in external review context
-            context.Services.Intercept<ContentLoader>(
-                (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader,
-                    locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>(),
-                    locator.GetInstance<ExternalReviewState>()));
+                // Intercepted in order to return unpublished children in external review context
+                context.Services.Intercept<ContentLoader>(
+                    (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader,
+                        locator.GetInstance<ServiceAccessor<ReviewsContentLoader>>(),
+                        locator.GetInstance<ExternalReviewState>()));
 
-            // Intercepted in order to return unpublished content items
-            context.Services.Intercept<IPublishedStateAssessor>(
-                (locator, defaultPublishedStateAssessor) =>
-                    new PublishedStateAssessorDecorator(defaultPublishedStateAssessor,
-                        locator.GetInstance<LanguageResolver>(), locator.GetInstance<ExternalReviewState>()));
+                // Intercepted in order to return unpublished content items
+                context.Services.Intercept<IPublishedStateAssessor>(
+                    (locator, defaultPublishedStateAssessor) =>
+                        new PublishedStateAssessorDecorator(defaultPublishedStateAssessor,
+                            locator.GetInstance<LanguageResolver>(), locator.GetInstance<ExternalReviewState>()));
+            };
         }
 
         public void Initialize(InitializationEngine context)

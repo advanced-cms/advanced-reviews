@@ -27,6 +27,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         private readonly PropertyResolver _propertyResolver;
         private readonly ReviewsNotifier _reviewsNotifier;
         private readonly ReviewUrlGenerator _reviewUrlGenerator;
+        private readonly ExternalReviewUrlGenerator _externalReviewUrlGenerator;
 
         public PageEditController(IContentLoader contentLoader,
             IExternalReviewLinksRepository externalReviewLinksRepository,
@@ -34,7 +35,8 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
             IStartPageUrlResolver startPageUrlResolver,
             PropertyResolver propertyResolver,
-            ReviewsNotifier reviewsNotifier, ReviewUrlGenerator reviewUrlGenerator)
+            ReviewsNotifier reviewsNotifier, ExternalReviewUrlGenerator externalReviewUrlGenerator,
+            ReviewUrlGenerator reviewUrlGenerator)
         {
             _contentLoader = contentLoader;
             _externalReviewLinksRepository = externalReviewLinksRepository;
@@ -44,6 +46,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             _startPageUrlResolver = startPageUrlResolver;
             _propertyResolver = propertyResolver;
             _reviewsNotifier = reviewsNotifier;
+            _externalReviewUrlGenerator = externalReviewUrlGenerator;
             _reviewUrlGenerator = reviewUrlGenerator;
 
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
@@ -68,8 +71,8 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 Name = content.Name,
                 EditableContentUrlSegment =
                     UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment, id),
-                AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.AddPinUrl)}",
-                RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.RemovePinUrl)}",
+                AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewUrlGenerator.AddPinUrl)}",
+                RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewUrlGenerator.RemovePinUrl)}",
                 AvatarUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.AvatarUrl)}",
                 ReviewJsScriptPath = GetJsScriptPath(),
                 ResetCssPath = GetResetCssPath(),

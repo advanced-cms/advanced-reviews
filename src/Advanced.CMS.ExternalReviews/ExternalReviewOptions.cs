@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Advanced.CMS.ApprovalReviews.AvatarsService;
-using Advanced.CMS.ExternalReviews.EditReview;
+using Advanced.CMS.ApprovalReviews;
 using Advanced.CMS.ExternalReviews.Properties;
 using EPiServer.Framework.Web.Resources;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
-using EPiServer.Shell;
 using EPiServer.Shell.Modules;
+using EPiServer.Shell.Profile.Internal;
 
 namespace Advanced.CMS.ExternalReviews
 {
-    [ServiceConfiguration]
-    public class ReviewUrlGenerator
-    {
-        public string ReviewsUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.Index)}");
-        public string AddPinUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.AddPin)}");
-        public string RemovePinUrl => Paths.ToResource("advanced-cms-external-reviews", $"PageEdit/{nameof(PageEditController.RemovePin)}");
-        public string AvatarUrl => Paths.ToResource("advanced-cms-approval-reviews", $"ReviewAvatars/{nameof(ReviewAvatarsController.Index)}");
-    }
-
     [Options]
     public class ExternalReviewOptions
     {
@@ -151,11 +142,13 @@ namespace Advanced.CMS.ExternalReviews
         {
             var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
             var reviewUrlGenerator = ServiceLocator.Current.GetInstance<ReviewUrlGenerator>();
-            var model = new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
-            //TODO NETCORE: var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
-            // model.Language = profile.Language;
-            model.Language = "en";
-            model.AvatarUrl = reviewUrlGenerator.AvatarUrl;
+            var principal = ServiceLocator.Current.GetInstance<IPrincipalAccessor>();
+            var currentUiCulture = ServiceLocator.Current.GetInstance<ICurrentUiCulture>();
+            var model = new AdvancedReviewsModuleViewModel(this, clientResourceService, options)
+            {
+                Language = currentUiCulture.Get(principal.Principal.Identity.Name).Name,
+                AvatarUrl = reviewUrlGenerator.AvatarUrl
+            };
             return model;
         }
     }
