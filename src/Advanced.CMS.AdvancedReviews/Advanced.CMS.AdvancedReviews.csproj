@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\build\common.props" />
+  <Import Project="..\..\build\nuspec.props" />
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <NuspecFile>Advanced.CMS.AdvancedReviews.nuspec</NuspecFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Advanced.CMS.ExternalReviews\Advanced.CMS.ExternalReviews.csproj" />
+  </ItemGroup>
+
+</Project>

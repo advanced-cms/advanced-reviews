@@ -1,0 +1,18 @@
+@using EPiServer
+@using EPiServer.ServiceLocation
+@using Alloy.Sample.Models.Pages
+@model Alloy.Sample.Models.ViewModels.PageViewModel<TestContentPage>
+
+@{
+    var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader> ();
+    var block = contentLoader.Get<TestContentBlock>(Model.CurrentPage.Reference);
+    var block2 = contentLoader.Get<TestContentBlock>(Model.CurrentPage.Reference);
+}
+@Model.CurrentPage.Title
+
+<img src="@Url.ContentUrl(Model.CurrentPage.PageImage)" />
+Display for:
+@Html.PropertyFor(m => m.CurrentPage.PageImage)
+
+@block.Title
+@block2.Title

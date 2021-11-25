@@ -26,7 +26,27 @@ The list of features (click to see more details about each section):
 Install-Package Advanced.CMS.AdvancedReviews
 ```
 
-https://nuget.episerver.com/package/?id=Advanced.CMS.AdvancedReviews
+https://nuget.optimizely.com/package/?id=Advanced.CMS.AdvancedReviews
+
+In order to start using AdvancedReviews you need to add it explicitly to your site.
+Please add the following statement to your Startup.cs
+
+```c#
+public class Startup
+{
+    ...
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+        services.AddAdvancedReviews();
+        ...
+    }
+    ...
+}
+```
+
+`AddAdvancedReviews` extension method also accepts optional parameter of Action<ExternalReviewOptions> which
+lets you configure the add-on according to your needs.
 
 ## Features
 
@@ -152,10 +172,6 @@ Below is an email example:
 
 ![External review email example](assets/documentation/external_review_email_example.png "External review email example")
 
-### Security
-*/externalContentReviews* location is only accessible to users who are members of the **ExternalReviewers** role.
-You will have to manually add personal user accounts or a shared user account that could be used by the external reviews.
-
 ### Options
 There are few settings related with external review. They are all set using Options class:
 
@@ -163,7 +179,6 @@ There are few settings related with external review. They are all set using Opti
  | ---- | ---- | ---- |
  | ContentPreviewUrl | externalContentView | path prefix added before token for "View" preview links |
  | IsEnabled | true | is the add-on enabled |
- | ReviewsUrl | externalContentReviews | path prefix added before token for "Edit" review links |
  | EmailSubject | [subject email template]|  email subject template |
  | EmailEdit | [email template] |email body template used for readonly content links |
  | EmailView | [email template]| email body template used for editable links |

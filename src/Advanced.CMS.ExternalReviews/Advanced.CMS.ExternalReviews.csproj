@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <Import Project="..\..\build\common.props" />
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Advanced.CMS.ApprovalReviews\Advanced.CMS.ApprovalReviews.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmbededLanguages\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="advanced-cms-external-reviews.Views\Views" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="ClientResources/external-review-component.js" />
+  </ItemGroup>
+</Project>

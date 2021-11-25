@@ -27,16 +27,19 @@ License.config
 node_modules/
 
 *.nupkg
-advanced-cms.Reviews.zip
-advanced-cms.ExternalReviews.zip
+advanced-cms-approval-reviews.zip
+advanced-cms-external-reviews.zip
 
-reviewComponent.bundle.js
-src/alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts/ReviewWidget.js
-src/alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts/ReviewWidget.js.map
-src/alloy/modules/_protected/advanced-cms.Reviews/1.0.0/Scripts/report.html
-src/alloy/modules/_protected/advanced-cms.Reviews/Views/admin/adminPlugin.js
-src/alloy/modules/_protected/advanced-cms.Reviews/Views/admin/adminPlugin.js.map
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/1.0.0/Scripts/external-review-manage-links-component.js.map
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/Views/external-review-component.js
-src/alloy/modules/_protected/advanced-cms.ExternalReviews/Views/external-review-component.js.map
+dist/
+out/
+
+src/Advanced.CMS.ApprovalReviews/ClientResources/ReviewWidget.js
+src/Advanced.CMS.ApprovalReviews/ClientResources/ReviewWidget.js.map
+src/Advanced.CMS.ApprovalReviews/ClientResources/report.html
+src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.js
+src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.js.map
+src/Advanced.CMS.ApprovalReviews/ClientResources/external-review-manage-links-component.js
+src/Advanced.CMS.ApprovalReviews/ClientResources/external-review-manage-links-component.js.map
+src/Advanced.CMS.ExternalReviews/ClientResources/external-review-component.js
+src/Advanced.CMS.ExternalReviews/ClientResources/external-review-component.js.map
+

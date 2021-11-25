@@ -1,0 +1,48 @@
+﻿@model Advanced.CMS.ExternalReviews.EditReview.ContentPreviewModel
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@Model.Name (@Model.Token)</title>
+        <meta name="robots" content="noindex">
+        <link type="text/css" rel="stylesheet" href="@Model.ResetCssPath" />
+
+        <style>
+            html, head, body {
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                /*font-size: 0;
+                line-height: 0;*/
+            }
+
+            iframe {
+                position: relative;
+                z-index: 1;
+                padding: 0;
+                margin: 0;
+                border: none;
+            }
+
+            #reviews-editor {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                font-size: 14px;
+                line-height: 14px;
+            }
+        </style>
+    </head><body style="width: 100%; height: 100%; font-size: 0"><div id="reviews-editor" data-token="@Model.Token" data-avatar-url="@Model.AvatarUrl" data-add-url="@Model.AddPinUrl" data-remove-url="@Model.RemovePinUrl" data-user="@Context.User.Identity.Name" data-metadata="@Model.Metadata" data-pins="@Model.ReviewPins" data-options="@Model.Options"></div>
+        <iframe id="editableIframe" src="@Model.EditableContentUrlSegment" width="100%" height="100%"></iframe>
+
+        <script type="text/javascript">
+            document.getElementById("editableIframe").onload = function() {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = "@Model.ReviewJsScriptPath";
+                document.body.appendChild(script);
+            }
+        </script>
+
+    </body></html>
+

@@ -1,0 +1,68 @@
+﻿@model Advanced.CMS.ExternalReviews.PinCodeSecurity.LoginModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Content review</title>
+    <meta name="robots" content="noindex">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            color: #444a4c;
+            font-family: Verdana,Arial,Helvetica,sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        div {
+            height: 100%;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            -webkit-box-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            max-width: 50%;
+            padding: 32px 20px;
+            width: 400px;
+        }
+
+        input[type="password"] {
+            font-size: 16px;
+            padding: 12px;
+            width: 80%;
+        }
+
+        input[type="submit"] {
+            font-size: 16px;
+            background: #1456F1;
+            color: #fff;
+            padding: 14px;
+            border: none;
+            cursor: pointer;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("Submit", "ExternalReviewLogin", FormMethod.Post, new { tabindex="0" }))
+        {
+            <input type="password" placeholder="Enter security code" name="code" tabindex="0" autofocus />
+            <input type="hidden" name="token" value="@Context.Request.Query["id"]"/>
+            <input type="submit" value="Go" />
+        }
+    </div>
+</body>
+</html>

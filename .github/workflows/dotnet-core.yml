@@ -1,10 +1,10 @@
-name: Build
+name: Build .net core
 
 on:
   push:
-    branches: [ master ]
+    branches: [ net4_master ]
   pull_request:
-    branches: [ master ]
+    branches: [ net4_master ]
 
 jobs:
   build:
@@ -16,20 +16,18 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.301
-    - name: Install server dependencies
-      run: dotnet restore advanced-reviews.sln --verbosity Detailed
+        dotnet-version: 5.0.104
     - name: Install client dependencies
       run: setup.cmd
       shell: cmd
     - name: Build
-      run: dotnet build advanced-reviews.sln --configuration Release --no-restore
+      run: build.cmd Release
     - name: Pack
-      run: pack.cmd
+      run: pack.cmd Release
       shell: cmd
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
         name: nuget
         path: |
-          *.nupkg
+          artifacts/packages/*.nupkg
