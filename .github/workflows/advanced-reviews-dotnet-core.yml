@@ -2,9 +2,9 @@ name: Build .net core
 
 on:
   push:
-    branches: [ net4_master ]
+    branches: [ master ]
   pull_request:
-    branches: [ net4_master ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -22,6 +22,7 @@ jobs:
       shell: cmd
     - name: Build
       run: build.cmd Release
+      shell: cmd
     - name: Pack
       run: pack.cmd Release
       shell: cmd

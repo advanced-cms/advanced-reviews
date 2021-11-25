@@ -2,9 +2,9 @@ name: Build .net framework
 
 on:
   push:
-    branches: [ master, netcore ]
+    branches: [ net4_master ]
   pull_request:
-    branches: [ master, netcore ]
+    branches: [ net4_master ]
 
 jobs:
   build:

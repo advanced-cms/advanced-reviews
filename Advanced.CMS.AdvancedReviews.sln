@@ -24,8 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A1272902
 		build\version.props = build\version.props
 		build\dependencies.props = build\dependencies.props
 		build\nuspec.props = build\nuspec.props
-		.github\workflows\dotnet-core.yml = .github\workflows\dotnet-core.yml
-		.github\workflows\dotnet-framework.yml = .github\workflows\dotnet-framework.yml
+		.github\workflows\advanced-reviews-dotnet-core.yml = .github\workflows\advanced-reviews-dotnet-core.yml
+		.github\workflows\advanced-reviews-dotnet-framework.yml = .github\workflows\advanced-reviews-dotnet-framework.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{A1272902-1CD0-4507-9714-CB3AE96E78FD}"
