@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <Import Project="..\..\build\common.props" />
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
-  <Import Project="..\..\build\common.props" />
   <ItemGroup>
     <EmbeddedResource Include="EmbededLanguages\**\*" />
   </ItemGroup>

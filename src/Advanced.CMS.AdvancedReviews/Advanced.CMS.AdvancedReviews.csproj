@@ -1,12 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="..\..\build\common.props" />
+  <Import Project="..\..\build\nuspec.props" />
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Advanced.CMS.AdvancedReviews</RootNamespace>
+    <OutputType>Library</OutputType>
+    <NuspecFile>Advanced.CMS.AdvancedReviews.nuspec</NuspecFile>
+    <PackageIcon>..\..\assets\logo.png</PackageIcon>
+    <PackageReadmeFile>readme.txt</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Advanced.CMS.ExternalReviews\Advanced.CMS.ExternalReviews.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\assets\logo.png" Pack="true" PackagePath="\"/>
+    <None Include="readme.txt" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
