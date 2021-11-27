@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Claims;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Http;
 
@@ -39,11 +38,16 @@ namespace Advanced.CMS.ExternalReviews.PinCodeSecurity
     {
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPrincipalAccessor _principalAccessor;
 
-        public DefaultExternalLinkPinCodeSecurityHandler(ExternalReviewOptions externalReviewOptions, IHttpContextAccessor httpContextAccessor)
+        public static string ExternalReviewTokens = "ExternalReviewTokens";
+
+        public DefaultExternalLinkPinCodeSecurityHandler(ExternalReviewOptions externalReviewOptions,
+            IHttpContextAccessor httpContextAccessor, IPrincipalAccessor principalAccessor)
         {
             _externalReviewOptions = externalReviewOptions;
             _httpContextAccessor = httpContextAccessor;
+            _principalAccessor = principalAccessor;
         }
 
         public bool UserHasAccessToLink(ExternalReviewLink externalReviewLink)
@@ -60,112 +64,32 @@ namespace Advanced.CMS.ExternalReviews.PinCodeSecurity
                 return true;
             }
 
-            var user = _httpContextAccessor.HttpContext.User;
-            if (user != null && user.Identity != null && user.Identity.IsAuthenticated)
-            {
-                // check if user is in role that allow to access link without PIN code
-                if (_externalReviewOptions.PinCodeSecurity.RolesWithoutPin != null)
-                {
-                    foreach (var role in _externalReviewOptions.PinCodeSecurity.RolesWithoutPin)
-                    {
-                        if (user.IsInRole(role))
-                        {
-                            return true;
-                        }
-                    }
-                }
+            var identityHash = _httpContextAccessor.HttpContext.Request.Cookies[ExternalReviewTokens];
 
-                // check if user is allowed to view the page
-                if (user.Identity is ClaimsIdentity identity)
-                {
-                    var claim = identity.FindFirst("ExternalReviewTokens");
-                    if (claim != null)
-                    {
-                        if (!string.IsNullOrEmpty(claim.Value))
-                        {
-                            var tokens = claim.Value.Split('|');
-                            return tokens.Contains(externalReviewLink.Token);
-                        }
-                    }
-                }
-            }
-
-            return false;
+            return externalReviewLink.PinCode == identityHash;
         }
 
         public void RedirectToLoginPage(ExternalReviewLink externalReviewLink)
         {
-            //TODO: NETCORE: HttpContext.Current.Response.Redirect("/" + _externalReviewOptions.PinCodeSecurity.ExternalReviewLoginUrl + "?id=" + externalReviewLink.Token);
+            _httpContextAccessor.HttpContext.Response.Redirect("/" + _externalReviewOptions.PinCodeSecurity.ExternalReviewLoginUrl + "?id=" +
+                                                               externalReviewLink.Token);
         }
 
         public bool TryToSignIn(ExternalReviewLink externalReviewLink, string requestedPinCode)
         {
-            throw new NotImplementedException();
-        }
+            // check if PIN code provided by user match link PIN code
+            var hash = PinCodeHashGenerator.Hash(requestedPinCode, externalReviewLink.Token);
+            if (externalReviewLink.PinCode != hash)
+            {
+                return false;
+            }
 
-        // public bool TryToSignIn(ExternalReviewLink externalReviewLink, string requestedPinCode)
-        // {
-        //     // check if PIN code provided by user match link PIN code
-        //
-        //     var hash = PinCodeHashGenerator.Hash(requestedPinCode, externalReviewLink.Token);
-        //     if (externalReviewLink.PinCode != hash)
-        //     {
-        //         return false;
-        //     }
-        //
-        //     var user = HttpContext.Current.User;
-        //
-        //     // user is already authenticated. We need to add him new claims with access to link
-        //     if (user != null && user.Identity != null && user.Identity.IsAuthenticated && user.Identity is ClaimsIdentity)
-        //     {
-        //         var identity = (ClaimsIdentity)user.Identity;
-        //         var claim = identity.FindFirst("ExternalReviewTokens");
-        //         if (claim != null)
-        //         {
-        //             var tokens = new List<string>();
-        //             if (!string.IsNullOrEmpty(claim.Value))
-        //             {
-        //                 tokens.AddRange(claim.Value.Split('|'));
-        //             }
-        //             tokens.Add(externalReviewLink.Token);
-        //             identity.RemoveClaim(claim);
-        //             identity.AddClaim(new Claim("ExternalReviewTokens", string.Join("|", tokens)));
-        //         }
-        //         else
-        //         {
-        //             identity.AddClaim(new Claim("ExternalReviewTokens", externalReviewLink.Token));
-        //         }
-        //         AuthenticationHttpContextExtensions
-        //         var authenticationManager = HttpContext.Current();
-        //         authenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(identity), new AuthenticationProperties() { IsPersistent = true });
-        //     }
-        //     else
-        //     {
-        //         // user is not authenticated, we need to authenticate and add claims to link
-        //
-        //         var userName = DateTime.Now.ToString("yyyyMMddmmhhss");
-        //
-        //         var claims = new List<Claim>();
-        //
-        //         // create required claims
-        //         claims.Add(new Claim(ClaimTypes.NameIdentifier, userName));
-        //         claims.Add(new Claim(ClaimTypes.Name, userName));
-        //
-        //         // custom – my serialized AppUserState object
-        //         claims.Add(new Claim("ExternalReviewTokens", externalReviewLink.Token));
-        //
-        //         //TODO: NETCORE: var identity = new ClaimsIdentity(claims, ""));
-        //
-        //         AuthenticationHttpContextExtensions.SignIn(new AuthenticationProperties()
-        //         {
-        //             AllowRefresh = true,
-        //             IsPersistent = true,
-        //             ExpiresUtc = DateTime.UtcNow.Add(_externalReviewOptions.PinCodeSecurity.AuthenticationCookieLifeTime),
-        //             RedirectUri = externalReviewLink.LinkUrl
-        //         }, identity);
-        //     }
-        //
-        //     return true;
-        // }
+            _httpContextAccessor.HttpContext.Response.Cookies.Append(ExternalReviewTokens, hash, new CookieOptions
+            {
+                Expires = DateTime.UtcNow.Add(_externalReviewOptions.PinCodeSecurity.AuthenticationCookieLifeTime),
+            });
+
+            return true;
+        }
     }
 }

@@ -9,7 +9,6 @@ using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Core;
 using EPiServer.Notification;
-using EPiServer.Notification.Internal;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,19 +83,19 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
         }
 
         [HttpPost]
-        public ActionResult Edit([FromBody] PinDto pinDto)
+        public ActionResult Edit(string id, [FromBody] PinDto pinDto)
         {
-            if (pinDto.Id == null)
+            if (id == null)
             {
                 return new BadRequestResult();
             }
 
             if (!string.IsNullOrWhiteSpace(pinDto.PinCode))
             {
-                pinDto.PinCode = PinCodeHashGenerator.Hash(pinDto.PinCode, pinDto.Id);
+                pinDto.PinCode = PinCodeHashGenerator.Hash(pinDto.PinCode, id);
             }
 
-            var result = _externalReviewLinksRepository.UpdateLink(pinDto.Id, pinDto.ValidTo, pinDto.PinCode, pinDto.DisplayName, pinDto.VisitorGroups);
+            var result = _externalReviewLinksRepository.UpdateLink(id, pinDto.ValidTo, pinDto.PinCode, pinDto.DisplayName, pinDto.VisitorGroups);
             HidePinCode(result);
 
             return Rest(result);
@@ -181,7 +180,6 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
 
     public class PinDto
     {
-        public string Id { get; set; }
         public DateTime? ValidTo { get; set; }
         public string PinCode { get; set; }
         public string DisplayName { get; set; }

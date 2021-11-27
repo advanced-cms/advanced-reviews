@@ -2,11 +2,16 @@ using System;
 using System.Linq;
 using Advanced.CMS.ExternalReviews;
 using EPiServer.Shell.Modules;
+using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
 
 namespace Advanced.CMS.AdvancedReviews
 {
@@ -14,8 +19,19 @@ namespace Advanced.CMS.AdvancedReviews
     {
         public void MapEndpoints(IEndpointRouteBuilder endpointRouteBuilder)
         {
+            var options = endpointRouteBuilder.ServiceProvider.GetInstance<ExternalReviewOptions>();
+
             endpointRouteBuilder.MapControllerRoute("ImageProxy", "/ImageProxy",
                 new { controller = "ImageProxy", action = "Index" });
+
+            endpointRouteBuilder.MapControllerRoute("ExternalReviewLogin",
+                $"/{options.PinCodeSecurity.ExternalReviewLoginUrl}",
+                new { controller = "ExternalReviewLogin", action = "Index" });
+
+            endpointRouteBuilder.MapControllerRoute("ExternalReviewLoginSubmit",
+                $"/{options.PinCodeSecurity.ExternalReviewLoginUrl}",
+                new { controller = "ExternalReviewLogin", action = "Submit" },
+                new { httpMethod = new HttpMethodRouteConstraint(HttpMethods.Post) });
         }
     }
 

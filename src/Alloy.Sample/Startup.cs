@@ -1,5 +1,6 @@
 using System.IO;
 using Advanced.CMS.AdvancedReviews;
+using Advanced.CMS.ApprovalReviews;
 using Alloy.Sample.Extensions;
 using Alloy.Sample.Infrastructure;
 using EPiServer.Cms.Shell;
@@ -71,6 +72,15 @@ namespace Alloy.Sample
             services.AddAdvancedReviews(e =>
             {
                 e.EditableLinksEnabled = true;
+                e.PinCodeSecurity.Enabled = true;
+                e.PinCodeSecurity.Required = true;
+                e.PinCodeSecurity.CodeLength = 5;
+                e.ProlongDays = 10;
+            });
+
+            services.Configure<ApprovalOptions>(options =>
+            {
+                options.Notifications.NotificationsEnabled = true;
             });
         }
 

@@ -56,8 +56,13 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 return null;
             }
 
+            _externalReviewState.ProjectId = externalReviewLink.ProjectId;
+            _externalReviewState.IsEditLink = true;
+            _externalReviewState.Token = token;
+
             if (externalReviewLink.VisitorGroups != null)
             {
+                //TODO: is it used?
                 _httpContextAccessor.HttpContext.Items["ImpersonatedVisitorGroupsById"] =
                     externalReviewLink.VisitorGroups;
             }
@@ -73,11 +78,6 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 // and when you have a custom VirtualRole class that uses IPageRouteHelper to fetch the current language from url
                 // segmentContext.ContextMode = ContextMode.Edit;
                 segmentContext.RouteValues[RoutingConstants.ContentLinkKey] = page.ContentLink;
-                segmentContext.RouteValues["module"] =
-
-                _externalReviewState.ProjectId = externalReviewLink.ProjectId;
-                _externalReviewState.IsEditLink = true;
-                _externalReviewState.Token = token;
 
                 return page;
             }

@@ -1,9 +1,9 @@
-﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer.Framework.Modules.Internal;
+﻿using Advanced.CMS.ExternalReviews.PinCodeSecurity;
+using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Advanced.CMS.ExternalReviews.PinCodeSecurity
+namespace Advanced.CMS.AdvancedReviews
 {
     /// <summary>
     /// Controller used to authenticate user using PIN code
@@ -22,33 +22,24 @@ namespace Advanced.CMS.ExternalReviews.PinCodeSecurity
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
-            var token = _httpContextAccessor.HttpContext.Request.RouteValues["id"].ToString();
-
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(id))
             {
                 return new NotFoundObjectResult("Content not found");
             }
 
-            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
             if (string.IsNullOrEmpty(externalReviewLink?.PinCode))
             {
                 return new NotFoundObjectResult("Content not found");
             }
 
-            const string url = "Views/ExternalReviewLogin/Index.cshtml";
-
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(ExternalReviewLoginController).Assembly, url,
-                out var resolvedPath))
-            {
-                return View(resolvedPath);
-            }
-            return new NotFoundObjectResult("Page not found");
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Submit(LoginModel loginModel)
+        public ActionResult Submit([FromForm] LoginModel loginModel)
         {
             if (string.IsNullOrEmpty(loginModel.Token))
             {

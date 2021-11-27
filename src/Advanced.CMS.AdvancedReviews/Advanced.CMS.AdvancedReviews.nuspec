@@ -26,6 +26,7 @@
   </metadata>
   <files>
     <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\Advanced.CMS.AdvancedReviews.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\Advanced.CMS.AdvancedReviews.Views.dll" target="lib\net5.0\" />
     <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\Advanced.CMS.ApprovalReviews.dll" target="lib\net5.0\" />
     <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\Advanced.CMS.ApprovalReviews.Views.dll" target="lib\net5.0\" />
     <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\Advanced.CMS.ExternalReviews.dll" target="lib\net5.0\" />
