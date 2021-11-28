@@ -17,7 +17,7 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
         {
             _options = options;
             _visitorGroupRepository = visitorGroupRepository;
-            IsAvailableForUserSelection = options.IsPublicPreviewEnabled;
+            IsAvailableForUserSelection = options.IsEnabled;
             LanguagePath = "/externalreviews/component";
             Categories = new[] {"content"};
             SortOrder = 1000;
@@ -39,7 +39,6 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
                 base.Settings["availableVisitorGroups"] = _visitorGroupRepository.List();
                 base.Settings["pinCodeLength"] = _options.PinCodeSecurity.CodeLength;
                 base.Settings["isEnabled"] = _options.IsEnabled;
-                base.Settings["isPublicPreviewEnabled"] = _options.IsPublicPreviewEnabled;
                 base.Settings["prolongDays"] = _options.ProlongDays;
 
                 return base.Settings;

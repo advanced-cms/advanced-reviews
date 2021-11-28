@@ -36,7 +36,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
 
         public object RoutePartial(PageData content, UrlResolverContext segmentContext)
         {
-            if (!_externalReviewOptions.IsEnabled)
+            if (!_externalReviewOptions.IsEnabled || !_externalReviewOptions.EditableLinksEnabled)
             {
                 return null;
             }
