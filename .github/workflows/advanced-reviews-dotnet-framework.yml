@@ -1,10 +1,10 @@
-name: Build
+name: Build .net framework
 
 on:
   push:
-    branches: [ master ]
+    branches: [ net4_master ]
   pull_request:
-    branches: [ master ]
+    branches: [ net4_master ]
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.301
+        dotnet-version: 5.0.104
     - name: Install server dependencies
       run: dotnet restore advanced-reviews.sln --verbosity Detailed
     - name: Install client dependencies

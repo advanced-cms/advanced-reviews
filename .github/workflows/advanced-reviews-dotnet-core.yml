@@ -1,0 +1,34 @@
+name: Build .net core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.104
+    - name: Install client dependencies
+      run: setup.cmd
+      shell: cmd
+    - name: Build
+      run: build.cmd Release
+      shell: cmd
+    - name: Pack
+      run: pack.cmd Release
+      shell: cmd
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: nuget
+        path: |
+          artifacts/packages/*.nupkg
