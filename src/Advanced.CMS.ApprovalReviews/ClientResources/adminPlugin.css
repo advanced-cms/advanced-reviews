@@ -3,9 +3,14 @@ body {
     padding: 0;
 }
 
+.root {
+    width: 50%;
+    margin: auto;
+    margin-top: 50px;
+}
+
 .reviews-list {
     display: table;
-    width: 100%;
 }
 
 .reviews-list .list,

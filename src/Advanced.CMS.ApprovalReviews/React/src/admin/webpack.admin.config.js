@@ -5,8 +5,6 @@ module.exports = (env, argv) => {
     webpackCommon.entry = "./src/admin/admin-plugin.tsx";
     webpackCommon.output = {
         filename: "adminPlugin.js",
-        //libraryTarget: "amd",
-        //libraryExport: "default",
         path: path.resolve(__dirname, "../../../ClientResources")
     };
     return webpackCommon;
