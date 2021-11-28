@@ -240,6 +240,8 @@ export interface IReviewComponentStore {
 
     currentLocale: string;
 
+    avatarUrl: string;
+
     /**
      * dictionary with mappings property name to property displayname
      */
@@ -300,6 +302,8 @@ class ReviewComponentStore implements IReviewComponentStore {
     currentUser = "";
 
     currentLocale = "en";
+
+    avatarUrl = "";
 
     _advancedReviewService: any;
 
@@ -416,9 +420,9 @@ class ReviewComponentStore implements IReviewComponentStore {
         });
     }
 
-    @action getUserAvatarUrl(userName: string): string {
+    @action.bound getUserAvatarUrl(userName: string): string {
         const encodedUserName = encodeURIComponent(userName);
-        return `/review-avatars/get?userName=${encodedUserName}`;
+        return `${this.avatarUrl}/${encodedUserName}`;
     }
 
     private saveLocation(reviewLocation: PinLocation): Promise<PinLocation> {

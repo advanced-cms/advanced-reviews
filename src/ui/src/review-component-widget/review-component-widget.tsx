@@ -21,6 +21,7 @@ export default declare([WidgetBase], {
         this.stores.reviewStore.currentLocale = this.language;
         this.stores.reviewStore.propertyNameMapping = this.propertyNameMapping;
         this.stores.reviewStore.options = this.options;
+        this.stores.reviewStore.avatarUrl = this.avatarUrl;
 
         ReactDOM.render(
             <Provider {...this.stores}>

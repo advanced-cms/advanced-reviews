@@ -27,7 +27,7 @@ namespace AdvancedExternalReviews
 
         public static string EnsureStartsWithSlash(string url)
         {
-            url = url.TrimEnd('/', '\\');
+            url = url.Trim('/', '\\');
             return $"/{url}";
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AdvancedApprovalReviews.AvatarsService;
 using AdvancedExternalReviews.Properties;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Personalization;
@@ -12,8 +13,6 @@ namespace AdvancedExternalReviews
     [Options]
     public class ExternalReviewOptions
     {
-        public string ReviewsUrl { get; set; } = "externalContentReviews";
-
         /// <summary>
         /// Gets or sets if the plugin should be initialized in Edit Mode
         /// </summary>
@@ -150,6 +149,8 @@ namespace AdvancedExternalReviews
             var model = new AdvancedReviewsModuleViewModel(this, clientResourceService, options);
             var profile = EPiServerProfile.Get(PrincipalInfo.CurrentPrincipal.Identity.Name);
             model.Language = profile.Language;
+            model.AvatarUrl = ReviewAvatarsController.GetUrl();
+
             return model;
         }
     }
@@ -178,7 +179,7 @@ namespace AdvancedExternalReviews
         }
 
         public string Language { get; set; }
-
+        public string AvatarUrl { get; set; }
         public ExternalReviewOptions Options { get; }
     }
 }

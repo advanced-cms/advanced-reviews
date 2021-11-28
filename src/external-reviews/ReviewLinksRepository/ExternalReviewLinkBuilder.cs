@@ -1,4 +1,5 @@
 ﻿using AdvancedApprovalReviews;
+using AdvancedExternalReviews.EditReview;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 
@@ -40,7 +41,7 @@ namespace AdvancedExternalReviews.ReviewLinksRepository
             string externalUrlPrefix;
             if (externalReviewLinkDds.IsEditable)
             {
-                externalUrlPrefix = UrlPath.EnsureStartsWithSlash(_options.ReviewsUrl);
+                externalUrlPrefix = $"{UrlPath.EnsureStartsWithSlash(PageEditController.GetUrl())}/Index";
             }
             else
             {
