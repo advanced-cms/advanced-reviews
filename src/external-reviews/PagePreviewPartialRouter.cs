@@ -36,7 +36,7 @@ namespace AdvancedExternalReviews
 
         public object RoutePartial(PageData content, SegmentContext segmentContext)
         {
-            if (!_externalReviewOptions.IsPublicPreviewEnabled)
+            if (!_externalReviewOptions.IsEnabled)
             {
                 return null;
             }

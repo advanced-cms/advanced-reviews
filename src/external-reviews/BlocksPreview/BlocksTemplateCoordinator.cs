@@ -11,7 +11,7 @@ namespace AdvancedExternalReviews.BlocksPreview
         public static void OnTemplateResolved(object sender, TemplateResolverEventArgs args)
         {
             var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
-            if (!options.IsEnabled && !options.IsPublicPreviewEnabled)
+            if (!options.IsEnabled)
             {
                 return;
             }

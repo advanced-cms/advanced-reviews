@@ -20,9 +20,9 @@ namespace AdvancedExternalReviews
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets if the plugin should be initialized in Public Mode
+        /// Gets or sets if Editor can add comments from Edit Mode by highlighting specific areas on the page
         /// </summary>
-        public bool IsPublicPreviewEnabled { get; set; } = true;
+        public bool IsReviewCommentsCommandEnabled { get; set; } = true;
 
         /// <summary>
         /// URL used for displaying readonly version of page

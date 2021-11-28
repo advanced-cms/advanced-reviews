@@ -28,7 +28,7 @@ namespace AdvancedExternalReviews.EditReview
 
         public object RoutePartial(PageData content, SegmentContext segmentContext)
         {
-            if (!_externalReviewOptions.IsEnabled)
+            if (!_externalReviewOptions.IsEnabled || !_externalReviewOptions.EditableLinksEnabled)
             {
                 return null;
             }
