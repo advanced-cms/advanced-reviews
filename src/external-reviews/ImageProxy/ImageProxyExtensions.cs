@@ -1,5 +1,4 @@
 ﻿using System.Web.Routing;
-using AdvancedApprovalReviews.AvatarsService;
 
 namespace AdvancedExternalReviews.ImageProxy
 {
@@ -9,7 +8,7 @@ namespace AdvancedExternalReviews.ImageProxy
 
         public static void RegisterImageProxyRoute(this RouteCollection routes)
         {
-            var routeData = new RouteValueDictionary {{"Controller", nameof(ReviewAvatarsHandler)}};
+            var routeData = new RouteValueDictionary {{"Controller", nameof(ImageProxyRouteHandler)}};
             var route = new Route(ImageProxyRoute, routeData, new ImageProxyRouteHandler());
             string[] allowedMethods = { "GET" };
             var methodConstraints = new HttpMethodConstraint(allowedMethods);

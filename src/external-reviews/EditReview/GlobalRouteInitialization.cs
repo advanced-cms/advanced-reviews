@@ -5,7 +5,6 @@ using EPiServer;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 
 namespace AdvancedExternalReviews.EditReview
 {
@@ -36,47 +35,8 @@ namespace AdvancedExternalReviews.EditReview
 
             GlobalFilters.Filters.Add(new ConvertEditLinksFilter());
 
-            RegisterEditPageGet(e, externalReviewOptions);
-            RegisterEditableActionPost(e.Routes, externalReviewOptions, nameof(PageEditController.AddPin));
-            RegisterEditableActionPost(e.Routes, externalReviewOptions, nameof(PageEditController.RemovePin));
             RegisterLoginPage(e.Routes, externalReviewOptions);
             RegisterSubmitLoginPage(e.Routes, externalReviewOptions);
-        }
-
-        private static void RegisterEditPageGet(RouteRegistrationEventArgs e, ExternalReviewOptions externalReviewOptions)
-        {
-            if (!externalReviewOptions.EditableLinksEnabled)
-            {
-                return;
-            }
-            var routeValues = new RouteValueDictionary();
-            routeValues.Add("controller", "PageEdit");
-            routeValues.Add("action", "Index");
-
-            var route = new Route(externalReviewOptions.ReviewsUrl + "/{token}", routeValues, new MvcRouteHandler());
-            string[] allowedMethods = {"GET"};
-            var methodConstraints = new HttpMethodConstraint(allowedMethods);
-            route.Constraints = new RouteValueDictionary {{"httpMethod", methodConstraints}};
-
-            e.Routes.Add(route);
-        }
-
-        private void RegisterEditableActionPost(RouteCollection routeCollection, ExternalReviewOptions externalReviewOptions, string method)
-        {
-            if (!externalReviewOptions.EditableLinksEnabled)
-            {
-                return;
-            }
-            var routeValues = new RouteValueDictionary();
-            routeValues.Add("controller", "PageEdit");
-            routeValues.Add("action", method);
-
-            var route = new Route($"{externalReviewOptions.ReviewsUrl}/{method}", routeValues, new MvcRouteHandler());
-            string[] allowedMethods = { "POST" };
-            var methodConstraints = new HttpMethodConstraint(allowedMethods);
-            route.Constraints = new RouteValueDictionary { { "httpMethod", methodConstraints } };
-
-            routeCollection.Add(route);
         }
 
         private void RegisterLoginPage(RouteCollection routeCollection, ExternalReviewOptions options)

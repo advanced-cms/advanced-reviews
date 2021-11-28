@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AdvancedApprovalReviews;
+using AdvancedApprovalReviews.AvatarsService;
 using AdvancedApprovalReviews.Notifications;
 using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
@@ -48,10 +49,19 @@ namespace AdvancedExternalReviews.EditReview
             approvalReviewsRepository.OnBeforeUpdate += ApprovalReviewsRepository_OnBeforeUpdate;
         }
 
-        [ConvertEditLinksFilter]
-        public ActionResult Index(string token)
+        public static string GetUrl()
         {
-            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+            ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly,
+                "PageEdit",
+                out var pageEditUrl);
+
+            return pageEditUrl;
+        }
+
+        [ConvertEditLinksFilter]
+        public ActionResult Index(string id)
+        {
+            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
             if (!externalReviewLink.IsEditableLink())
             {
                 return new HttpNotFoundResult("Content not found");
@@ -63,23 +73,25 @@ namespace AdvancedExternalReviews.EditReview
             var startPageUrl = _startPageUrlResolver.GetUrl(externalReviewLink.ContentLink, content.LanguageBranch());
 
             if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
-                out var resolvedPath))
+                out var viewPath))
             {
                 var serializer = _serializerFactory.GetSerializer(KnownContentTypes.Json);
+                var controllerUrl = GetUrl();
                 var pagePreviewModel = new ContentPreviewModel
                 {
-                    Token = token,
+                    Token = id,
                     Name = content.Name,
-                    EditableContentUrlSegment = UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment, token),
-                    AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/AddPin",
-                    RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewOptions.ReviewsUrl)}/RemovePin",
+                    EditableContentUrlSegment = UrlPath.Combine(startPageUrl, _externalReviewOptions.ContentIframeEditUrlSegment, id),
+                    AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(controllerUrl)}/AddPin",
+                    RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(controllerUrl)}/RemovePin",
+                    AvatarUrl = $"{UrlPath.EnsureStartsWithSlash(ReviewAvatarsController.GetUrl())}",
                     ReviewJsScriptPath = GetJsScriptPath(),
                     ResetCssPath = GetResetCssPath(),
                     ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
                     Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData)),
                     Options = serializer.Serialize(_externalReviewOptions)
                 };
-                return View(resolvedPath, pagePreviewModel);
+                return View(viewPath, pagePreviewModel);
             }
 
             return new HttpNotFoundResult("Content not found");
@@ -245,6 +257,7 @@ namespace AdvancedExternalReviews.EditReview
         /// </summary>
         public string AddPinUrl { get; set; }
         public string RemovePinUrl { get; set; }
+        public string AvatarUrl { get; set; }
 
         public string ReviewJsScriptPath { get; set; }
         public string ResetCssPath { get; set; }

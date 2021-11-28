@@ -152,10 +152,6 @@ Below is an email example:
 
 ![External review email example](assets/documentation/external_review_email_example.png "External review email example")
 
-### Security
-*/externalContentReviews* location is only accessible to users who are members of the **ExternalReviewers** role.
-You will have to manually add personal user accounts or a shared user account that could be used by the external reviews.
-
 ### Options
 There are few settings related with external review. They are all set using Options class:
 
@@ -163,8 +159,7 @@ There are few settings related with external review. They are all set using Opti
  | ---- | ---- | ---- |
  | ContentPreviewUrl | externalContentView | path prefix added before token for "View" preview links |
  | IsEnabled | true | is the add-on enabled |
- | IsReviewCommentsCommandEnabled | true | When true then Editor can add comments from Edit Mode by highlighting specific areas on the page |
- | ReviewsUrl | externalContentReviews | path prefix added before token for "Edit" review links |
+ | IsReviewCommentsCommandEnabled | true | When true then Editor can add comments from Edit Mode by highlighting specific areas on the page | 
  | EmailSubject | [subject email template]|  email subject template |
  | EmailEdit | [email template] |email body template used for readonly content links |
  | EmailView | [email template]| email body template used for editable links |
