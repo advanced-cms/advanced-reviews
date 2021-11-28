@@ -163,7 +163,7 @@ There are few settings related with external review. They are all set using Opti
  | ---- | ---- | ---- |
  | ContentPreviewUrl | externalContentView | path prefix added before token for "View" preview links |
  | IsEnabled | true | is the add-on enabled |
- | IsPublicPreviewEnabled | true | is the add-on enabled for public previews, option to only enabled public previews and keeping the rest of the funtionality turned off. |
+ | IsReviewCommentsCommandEnabled | true | When true then Editor can add comments from Edit Mode by highlighting specific areas on the page |
  | ReviewsUrl | externalContentReviews | path prefix added before token for "Edit" review links |
  | EmailSubject | [subject email template]|  email subject template |
  | EmailEdit | [email template] |email body template used for readonly content links |
