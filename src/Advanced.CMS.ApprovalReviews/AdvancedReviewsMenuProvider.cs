@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EPiServer.Authorization;
 using EPiServer.Shell.Navigation;
 
 namespace Advanced.CMS.ApprovalReviews
@@ -16,17 +17,16 @@ namespace Advanced.CMS.ApprovalReviews
         public IEnumerable<MenuItem> GetMenuItems()
         {
             var controllerPath = $"{_reviewUrlGenerator.ReviewLocationPluginUrl}/Index";
-            var urlMenuItem1 = new UrlMenuItem("Advanced approval review", "/global/cms/admin/reviewplugin",
-                controllerPath)
-            {
-                Alignment = MenuItemAlignment.Left,
-                IsAvailable = _ => true,
-                SortIndex = 100
-            };
 
-            return new List<MenuItem>(1)
+            return new List<MenuItem>
             {
-                urlMenuItem1
+                new UrlMenuItem("Advanced approval review", MenuPaths.Global + "/cms/admin/reviewsplugin",
+                    controllerPath)
+                {
+                    Alignment = MenuItemAlignment.Left,
+                    SortIndex = SortIndex.Last,
+                    AuthorizationPolicy = CmsPolicyNames.CmsAdmin
+                }
             };
         }
     }

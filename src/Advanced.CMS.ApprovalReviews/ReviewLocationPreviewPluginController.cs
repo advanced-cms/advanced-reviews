@@ -1,12 +1,10 @@
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Shell.Services.Rest;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Advanced.CMS.ApprovalReviews
 {
-    [Authorize(Roles = "CmsAdmin,WebAdmins,Administrators")]
     public class ReviewLocationPreviewPluginController : Controller
     {
         private readonly IApprovalReviewsRepository _repository;
