@@ -2,6 +2,7 @@
 {
     public class BlocksTemplateCoordinator
     {
+        //TODO NETCORE
         // public static void OnTemplateResolved(object sender, TemplateResolverEventArgs args)
         // {
         //     var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();

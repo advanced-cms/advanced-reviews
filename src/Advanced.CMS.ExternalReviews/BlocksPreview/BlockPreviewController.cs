@@ -1,5 +1,6 @@
 ﻿namespace Advanced.CMS.ExternalReviews.BlocksPreview
 {
+    //TODO NETCORE
     // [TemplateDescriptor(
     //     Inherited = true,
     //     TemplateTypeCategory = TemplateTypeCategories.MvcController,
