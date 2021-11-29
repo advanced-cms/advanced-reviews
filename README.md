@@ -1,7 +1,7 @@
 ![Advanced CMS](assets/logo.png "Advanced CMS")
 # Advanced Reviews
 
-![Build](https://github.com/advanced-cms/advanced-reviews/workflows/Build/badge.svg?branch=master)
+[![Build .net framework](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-framework.yml/badge.svg)](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-framework.yml)
 
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
 
