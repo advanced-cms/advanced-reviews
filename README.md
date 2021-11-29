@@ -3,7 +3,7 @@
 
 >> This is about .NET CORE 5 version. If you are interested about .NET FRAMEWORK 4 please visit https://github.com/advanced-cms/advanced-reviews/blob/net4_master/README.md
 
-![Build](https://github.com/advanced-cms/advanced-reviews/workflows/Build/badge.svg?branch=master)
+[![Build .net core](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-core.yml/badge.svg)](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-core.yml)
 
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
 
