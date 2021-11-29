@@ -1,6 +1,8 @@
 ![Advanced CMS](assets/logo.png "Advanced CMS")
 # Advanced Reviews
 
+>> This is about .NET CORE 5 version. If you are interested about .NET FRAMEWORK 4 please visit https://github.com/advanced-cms/advanced-reviews/blob/net4_master/README.md
+
 ![Build](https://github.com/advanced-cms/advanced-reviews/workflows/Build/badge.svg?branch=master)
 
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
@@ -322,7 +324,7 @@ We really appreciate bug reports. But please make sure that you include as many 
 We spent a lot of time on setting up the solution so it's possible to run the whole thing by just cloning the repo and
 calling a single command.
 That makes it super easy for you to fork this repo and create a reproducible environment.
-That will significanly speed up a potential bugfix release for you.
+That will significantly speed up a potential bugfix release for you.
 
 Please remember that this is our personal project developed during our free time and any kind of help from 
 users is highly appreciated.
@@ -330,18 +332,26 @@ users is highly appreciated.
 ## Development (if you would like to help in development)
 
 ```console
-$ setup.cmd
-$ site.cmd
-```
-
-And your IISExpress Alloy with all dependencies should be up and running.
-
-There are a few more useful commands like:
-```console
+setup.cmd
 build.cmd
 ```
-which builds both C# code and bundles all javascript dependencies, and 
+
+And then you can either run from VS, VS code or Rider. Or you can also run from the command line via `dotnet run`
+
+## Creating a new package
+
+In order to create a new local nuget you have to build first and then run
+
 ```console
-pack.ps1
+pack.cmd
 ```
 that creates a nuget package.
+
+Both build.cmd and pack.cmd accept configuration parameter, like this:
+```console
+build.cmd Release
+```
+or
+```console
+pack.cmd Release
+```
