@@ -10,8 +10,7 @@ namespace Alloy.Sample
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .MinimumLevel.Override("EPiServer", LogEventLevel.Debug)
+                .MinimumLevel.Warning()
                 .WriteTo.File("app_data/log.txt", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Warning)
                 .WriteTo.Console()
                 .CreateLogger();
