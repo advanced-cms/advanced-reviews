@@ -1,5 +1,4 @@
 ﻿using EPiServer.Personalization.VisitorGroups;
-using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using EPiServer.Shell.ViewComposition;
 
@@ -8,16 +7,10 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
     /// <summary>
     /// Edit Mode component used to manage list of external review links
     /// </summary>
-    [Component]
     public class ExternalReviewLinksManageComponent : ComponentDefinitionBase
     {
         private readonly ExternalReviewOptions _options;
         private readonly IVisitorGroupRepository _visitorGroupRepository;
-
-        public ExternalReviewLinksManageComponent() : this(ServiceLocator.Current.GetInstance<ExternalReviewOptions>(),
-            ServiceLocator.Current.GetInstance<IVisitorGroupRepository>())
-        {
-        }
 
         public ExternalReviewLinksManageComponent(ExternalReviewOptions options, IVisitorGroupRepository visitorGroupRepository)
             : base("advanced-cms-approval-reviews/external-review-manage-links-component")
