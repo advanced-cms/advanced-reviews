@@ -54,6 +54,11 @@ namespace Advanced.CMS.ExternalReviews
         public bool EditableLinksEnabled { get; set; } = false;
 
         /// <summary>
+        /// Enable Admin Mode pin reviewer plugin which allows admins to view and delete saved comments
+        /// </summary>
+        public bool IsAdminModePinReviewerPluginEnabled { get; set; } = false;
+
+        /// <summary>
         /// Allow to take screenshots of the page to highlight spotted issues
         /// </summary>
         public bool AllowScreenshotAttachments { get; set; } = true;

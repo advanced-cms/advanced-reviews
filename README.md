@@ -182,6 +182,7 @@ There are few settings related with external review. They are all set using Opti
  | ContentPreviewUrl | externalContentView | path prefix added before token for "View" preview links |
  | IsEnabled | true | is the add-on enabled |
  | IsReviewCommentsCommandEnabled | true | When true then Editor can add comments from Edit Mode by highlighting specific areas on the page |
+ | IsAdminModePinReviewerPluginEnabled | true | When true then Admin will be able to use pin reviewer plugin which allow to view and delete saved comments |
  | EmailSubject | [subject email template]|  email subject template |
  | EmailEdit | [email template] |email body template used for readonly content links |
  | EmailView | [email template]| email body template used for editable links |
