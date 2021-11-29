@@ -12,6 +12,7 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
         private readonly ExternalReviewOptions _options;
         private readonly IVisitorGroupRepository _visitorGroupRepository;
         private readonly ModuleTable _moduleTable;
+        private IEnumerable<IComponentDefinition> _componentDefinitions;
         public int SortOrder => 1000;
 
         public AdvancedReviewsComponentProvider(ExternalReviewOptions options, IVisitorGroupRepository visitorGroupRepository, ModuleTable moduleTable)
@@ -23,6 +24,11 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
 
         public IEnumerable<IComponentDefinition> GetComponentDefinitions()
         {
+            if (_componentDefinitions != null)
+            {
+                return _componentDefinitions;
+            }
+
             var isAdvancedReviewsModuleAdded = _moduleTable.TryGetModule(this.GetType().Assembly, out _);
             var isComponentReady = isAdvancedReviewsModuleAdded && _options.IsEnabled;
 
@@ -31,7 +37,8 @@ namespace Advanced.CMS.ExternalReviews.ManageLinks
                 return Enumerable.Empty<IComponentDefinition>();
             }
 
-            return new [] { new ExternalReviewLinksManageComponent(_options, _visitorGroupRepository) };
+            _componentDefinitions = new [] { new ExternalReviewLinksManageComponent(_options, _visitorGroupRepository) };
+            return _componentDefinitions;
         }
 
         public IComponent CreateComponent(IComponentDefinition definition)
