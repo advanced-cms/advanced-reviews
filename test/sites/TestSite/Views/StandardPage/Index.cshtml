@@ -1,0 +1,13 @@
+﻿@using EPiServer.Web.Mvc.Html
+@model TestSite.Models.StandardPage
+
+<!DOCTYPE html>
+<html lang="@(Model.Language)">
+<head>
+    <meta charset="utf-8" />
+    <title>@Model.Name</title>
+</head>
+<body>
+    <h1>@Html.PropertyFor(x => x.Name)</h1>
+</body>
+</html>

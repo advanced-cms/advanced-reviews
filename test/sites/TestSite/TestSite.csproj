@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPiServer.CMS" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Advanced.CMS.AdvancedReviews\Advanced.CMS.AdvancedReviews.csproj" />
+    <ProjectReference Include="..\..\Advanced.CMS.IntegrationTests\Advanced.CMS.IntegrationTests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="modules\_protected\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,1 @@
+If wwwroot does not containe any files IWebHostingEnvironment.WebRootPath is null
