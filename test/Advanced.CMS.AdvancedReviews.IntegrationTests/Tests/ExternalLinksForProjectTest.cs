@@ -15,26 +15,14 @@
     {
         // create draft page
 
+        // create project
+
+        // add page to project
+
         // create external link for page
 
-        // translate page
+        // create external link for project
 
-        // create external link for translated page
-
-        // ASSERT main branch link shows proper data
-
-        // ASSERT translated page shows proper data
-
-        // publish main branch
-
-        // change main branch data
-
-        // publish translated page
-
-        // change translated page data
-
-        // ASSERT main branch link shows proper data
-
-        // ASSERT translated page shows proper data
+        // ASSERT draft content is view
     }
 }
