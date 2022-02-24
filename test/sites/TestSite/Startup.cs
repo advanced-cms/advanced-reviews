@@ -21,6 +21,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Advanced.CMS.AdvancedReviews;
 using Advanced.CMS.IntegrationTests;
+using EPiServer.Framework.Hosting;
+using EPiServer.Web.Hosting;
 
 namespace TestSite
 {
@@ -59,6 +61,11 @@ namespace TestSite
             // services.AddUIMappedFileProviders(_webHostingEnvironment.ContentRootPath, @"..\..\..\");
 
             var builder = services.AddMvc();
+
+            if (_webHostingEnvironment.IsDevelopment())
+            {
+                services.AddUIMappedFileProviders(_webHostingEnvironment.ContentRootPath, @"..\..\..\");
+            }
 
             services.AddStartupFilter<AssignUser>();
             services.AddCmsHost()
@@ -132,6 +139,21 @@ namespace TestSite
                     context.User = cp;
                 }
             }
+        }
+    }
+
+    internal static class InternalServiceCollectionExtensions
+    {
+        /// <internal-api/>
+        public static IServiceCollection AddUIMappedFileProviders(this IServiceCollection services, string applicationRootPath, string uiSolutionRelativePath)
+        {
+            var uiSolutionFolder = Path.Combine(applicationRootPath, uiSolutionRelativePath);
+            services.Configure<CompositeFileProviderOptions>(c =>
+            {
+                c.BasePathFileProviders.Add(new MappingPhysicalFileProvider("/EPiServer/advanced-cms-external-reviews", string.Empty, Path.Combine(uiSolutionFolder, @"src\Advanced.CMS.ExternalReviews")));
+                c.BasePathFileProviders.Add(new MappingPhysicalFileProvider("/EPiServer/advanced-cms-approval-reviews", string.Empty, Path.Combine(uiSolutionFolder, @"src\Advanced.CMS.ApprovalReviews")));
+            });
+            return services;
         }
     }
 }

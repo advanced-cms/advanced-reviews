@@ -1,16 +1,20 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using Advanced.CMS.ExternalReviews;
 using Advanced.CMS.IntegrationTests;
+using EPiServer.ServiceLocation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TestSite;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests
 {
     public class SiteFixtureBase : IDisposable
     {
-        private readonly UIServiceFixture<Startup> _serviceFixture;
+        private UIServiceFixture<Startup> _serviceFixture;
         private CmsDatabaseFixture _databaseFixture;
 
         public SiteFixtureBase(Action<ExternalReviewOptions> optionsCallback = null)
@@ -25,7 +29,7 @@ namespace Advanced.CMS.AdvancedReviews.IntegrationTests
             });
             try
             {
-                _serviceFixture.CreateClient();
+                Client = _serviceFixture.CreateClient();
             }
             catch
             {
@@ -46,14 +50,15 @@ namespace Advanced.CMS.AdvancedReviews.IntegrationTests
         }
 
         public IServiceProvider Services => _serviceFixture.Services;
-        public HttpClient Client => _serviceFixture.CreateClient();
-        public HttpClient NonRedirectClient => _serviceFixture.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions()
-        {
-            AllowAutoRedirect = false
-        });
+        public HttpClient Client { get; set; }
 
         public void Dispose()
         {
+            foreach (var hostedService in Services.GetAllInstances<IHostedService>().ToList())
+            {
+                hostedService.StopAsync(new CancellationToken()).ConfigureAwait(false).GetAwaiter().GetResult();
+            }
+            Client.Dispose();
             _serviceFixture.Dispose();
             _databaseFixture.Dispose();
         }
