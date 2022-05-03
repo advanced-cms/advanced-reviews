@@ -41,14 +41,14 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 return null;
             }
 
-            var nextSegment = segmentContext.GetNextRemainingSegment(segmentContext.RemainingPath);
-            if (nextSegment.Next != _externalReviewOptions.ContentIframeEditUrlSegment)
+            var nextSegment = segmentContext.GetNextSegment(segmentContext.RemainingSegments);
+            if (nextSegment.Next.IsEmpty || nextSegment.Next.ToString() != _externalReviewOptions.ContentIframeEditUrlSegment)
             {
                 return null;
             }
 
-            nextSegment = segmentContext.GetNextRemainingSegment(nextSegment.Remaining);
-            var token = nextSegment.Next;
+            nextSegment = segmentContext.GetNextSegment(nextSegment.Remaining);
+            var token = nextSegment.Next.ToString();
 
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
             if (!externalReviewLink.IsEditableLink())
@@ -72,7 +72,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 var page = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
                     segmentContext.Url.QueryCollection);
 
-                segmentContext.RemainingPath = nextSegment.Remaining;
+                segmentContext.RemainingSegments = nextSegment.Remaining;
 
                 // We can't set the Edit context here because it breaks the routing if you have useClaims=true in virtualRoles setting
                 // and when you have a custom VirtualRole class that uses IPageRouteHelper to fetch the current language from url

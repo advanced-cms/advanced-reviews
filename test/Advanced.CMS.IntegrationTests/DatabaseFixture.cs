@@ -35,10 +35,16 @@ namespace Advanced.CMS.IntegrationTests
                 var dir = new DirectoryInfo(Path.GetDirectoryName(DESTINATION_MDF_PATH));
                 var sec = dir.GetAccessControl();
                 var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                sec.AddAccessRule(new FileSystemAccessRule(everyone, FileSystemRights.Modify | FileSystemRights.Synchronize, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                sec.AddAccessRule(new FileSystemAccessRule(everyone,
+                    FileSystemRights.Modify | FileSystemRights.Synchronize,
+                    InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None,
+                    AccessControlType.Allow));
                 dir.SetAccessControl(sec);
             }
-            catch (UnauthorizedAccessException) { }
+            catch
+            {
+
+            }
         }
 
         protected void CopyDatabaseFiles()
@@ -84,7 +90,7 @@ AND mf.physical_name = '{Path.GetFullPath(mdfPath)}'
 
         protected void CreateDatabase(string mdfPath)
         {
-            ExecuteSqlCommand(ConnectionString, $@"CREATE DATABASE [{DatabaseName}] 
+            ExecuteSqlCommand(ConnectionString, $@"CREATE DATABASE [{DatabaseName}]
                             ON PRIMARY ( FILENAME =  '{Path.GetFullPath(mdfPath)}' )
                             FOR ATTACH");
             ExecuteSqlCommand(ConnectionString, $@"ALTER DATABASE[{DatabaseName}] SET READ_WRITE WITH NO_WAIT");
@@ -96,7 +102,7 @@ AND mf.physical_name = '{Path.GetFullPath(mdfPath)}'
 
             if (fileNames.Any())
             {
-                ExecuteSqlCommand(ConnectionString, $@"ALTER DATABASE [{databaseName}] 
+                ExecuteSqlCommand(ConnectionString, $@"ALTER DATABASE [{databaseName}]
                             SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
                             EXEC sp_detach_db '{databaseName}'");
                 fileNames.ForEach(File.Delete);
@@ -138,7 +144,7 @@ AND mf.physical_name = '{Path.GetFullPath(mdfPath)}'
             return result;
         }
 
-        protected static SqlConnectionStringBuilder ConnectionString => new SqlConnectionStringBuilder
+        protected static SqlConnectionStringBuilder ConnectionString => new()
         {
             DataSource = @"(LocalDb)\MSSQLLocalDB",
             InitialCatalog = "master",

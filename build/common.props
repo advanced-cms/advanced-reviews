@@ -9,7 +9,7 @@
         <PackageLicenseUrl>github.com/advanced-cms/LICENSE</PackageLicenseUrl>
         <PackageTags>review preview content approval external</PackageTags>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>

@@ -103,20 +103,20 @@ namespace Advanced.CMS.ExternalReviews
                 return null;
             }
 
-            var nextSegment = segmentContext.GetNextRemainingSegment(segmentContext.RemainingPath);
-            if (string.IsNullOrWhiteSpace(nextSegment.Next))
+            var nextSegment = segmentContext.GetNextSegment(segmentContext.RemainingSegments);
+            if (nextSegment.Next.IsEmpty)
             {
                 return null;
             }
 
-            if (!string.Equals(nextSegment.Next, _externalReviewOptions.ContentPreviewUrl,
+            if (!string.Equals(nextSegment.Next.ToString(), _externalReviewOptions.ContentPreviewUrl,
                 StringComparison.CurrentCultureIgnoreCase))
             {
                 return null;
             }
 
-            nextSegment = segmentContext.GetNextRemainingSegment(nextSegment.Remaining);
-            var token = nextSegment.Next;
+            nextSegment = segmentContext.GetNextSegment(nextSegment.Remaining);
+            var token = nextSegment.Next.ToString();
 
             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
             if (!externalReviewLink.IsPreviewableLink())
@@ -144,7 +144,7 @@ namespace Advanced.CMS.ExternalReviews
                 var page = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
                     segmentContext.Url.QueryCollection);
 
-                segmentContext.RemainingPath = nextSegment.Remaining;
+                segmentContext.RemainingSegments = nextSegment.Remaining;
 
                 // set ContentLink in DataTokens to make IPageRouteHelper working
                 segmentContext.RouteValues[RoutingConstants.ContentLinkKey] = page.ContentLink;

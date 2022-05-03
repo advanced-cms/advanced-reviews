@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Web;
 using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ namespace Advanced.CMS.ApprovalReviews.AvatarsService
     /// <summary>
     /// Handler used to get user avatar based on username
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public class ReviewAvatarsController: Controller
     {
         private readonly ICustomAvatarResolver _customAvatarResolver;

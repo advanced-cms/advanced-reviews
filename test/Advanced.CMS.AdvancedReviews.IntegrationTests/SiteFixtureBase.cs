@@ -40,7 +40,7 @@ namespace Advanced.CMS.AdvancedReviews.IntegrationTests
         private string EnsureDatabase()
         {
             var dbFile = Path.Combine(Environment.CurrentDirectory, @"../../../sites/TestSite/App_Data/cms.mdf");
-            _databaseFixture = new CmsDatabaseFixture(Path.Combine(Environment.CurrentDirectory, @"../../Assets/db_template.mdf"), dbFile);
+            _databaseFixture = new CmsDatabaseFixture(Path.Combine(Environment.CurrentDirectory, @"../../../Assets/db_template.mdf"), dbFile);
             var connectionString = $"Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={_databaseFixture.DatabaseName};Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";
             var dbHelper = new DatabaseHelper(connectionString);
             var aspNetIdentitySchema = SolutionPathUtility.GetSolutionPath(@"test\Advanced.CMS.IntegrationTests\IdentitySchema.sql", "Advanced.CMS.AdvancedReviews.sln");

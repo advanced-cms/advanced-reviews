@@ -18,6 +18,9 @@
       <group targetFramework="net5.0">
         <dependency id="EPiServer.CMS.UI.Core" version="[$CmsUIVersion$, $CmsUINextMajorVersion$)" />
       </group>
+      <group targetFramework="net6.0">
+        <dependency id="EPiServer.CMS.UI.Core" version="[$CmsUIVersion$, $CmsUINextMajorVersion$)" />
+      </group>
     </dependencies>
     <contentFiles>
       <files include="any/any/modules/_protected/advanced-cms-approval-reviews/advanced-cms-approval-reviews.zip" buildAction="None" copyToOutput="true"  />
@@ -25,16 +28,21 @@
     </contentFiles>
   </metadata>
   <files>
-    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\Advanced.CMS.AdvancedReviews.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\Advanced.CMS.AdvancedReviews.Views.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\Advanced.CMS.ApprovalReviews.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\Advanced.CMS.ApprovalReviews.Views.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\Advanced.CMS.ExternalReviews.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\Advanced.CMS.ExternalReviews.Views.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\net5.0\Advanced.CMS.AdvancedReviews.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\net5.0\Advanced.CMS.AdvancedReviews.Views.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\net5.0\Advanced.CMS.ApprovalReviews.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\net5.0\Advanced.CMS.ApprovalReviews.Views.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\net5.0\Advanced.CMS.ExternalReviews.dll" target="lib\net5.0\" />
+    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\net5.0\Advanced.CMS.ExternalReviews.Views.dll" target="lib\net5.0\" />
+    <file src="build\CopyZipFiles.targets" target="build\net5.0\Advanced.CMS.AdvancedReviews.targets" />
+
+    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\net6.0\Advanced.CMS.AdvancedReviews.dll" target="lib\net6.0\" />
+    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\net6.0\Advanced.CMS.ApprovalReviews.dll" target="lib\net6.0\" />
+    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\net6.0\Advanced.CMS.ExternalReviews.dll" target="lib\net6.0\" />
+    <file src="build\CopyZipFiles.targets" target="build\net6.0\Advanced.CMS.AdvancedReviews.targets" />
 
     <file src="out\advanced-cms-approval-reviews\advanced-cms-approval-reviews.zip" target="contentFiles\any\any\modules\_protected\advanced-cms-approval-reviews\" />
     <file src="out\advanced-cms-external-reviews\advanced-cms-external-reviews.zip" target="contentFiles\any\any\modules\_protected\advanced-cms-external-reviews\" />
-    <file src="build\CopyZipFiles.targets" target="build\net5.0\Advanced.CMS.AdvancedReviews.targets" />
     <file src="src\Advanced.CMS.AdvancedReviews\readme.txt" target="" />
     <file src="assets\logo.png" target="" />
   </files>

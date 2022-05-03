@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Advanced.CMS.ApprovalReviews
 {
+    [SupportedOSPlatform("windows")]
     public class IdenticonGenerator
     {
         private List<GraphicsPath> shapes = new List<GraphicsPath>(16);

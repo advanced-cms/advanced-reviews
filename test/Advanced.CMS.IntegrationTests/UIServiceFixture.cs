@@ -41,9 +41,7 @@ namespace Advanced.CMS.IntegrationTests
                 context.AddSingleton(existingServiceDefinition.ImplementationType);
                 //Registera a IDatabaseMode service with SwitchableDatabaseMode resolving DatabaseModeService as inner
                 context.AddSingleton<IDatabaseMode>((sp) => new SwitchableDatabaseMode(sp.GetService(existingServiceDefinition.ImplementationType) as IDatabaseMode));
-
-                context.AddSingleton<IModuleProvider, FakeModuleProvider>();
-             });
+            });
 
             if (_customRegistrations != null)
             {
