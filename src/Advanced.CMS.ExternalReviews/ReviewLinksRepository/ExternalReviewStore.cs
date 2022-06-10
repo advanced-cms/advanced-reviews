@@ -102,9 +102,9 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
         }
 
         [HttpPost]
-        public async Task<ActionResult> ShareReviewLink([FromBody] ShareEmailDto dto)
+        public async Task<ActionResult> ShareReviewLink(string id, [FromBody] ShareEmailDto dto)
         {
-            if (dto.Id == null)
+            if (id == null)
             {
                 return new BadRequestResult();
             }
@@ -114,7 +114,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
                 return new BadRequestObjectResult("Sender email address is not configured. Contact with system administrator");
             }
 
-            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(dto.Id);
+            var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
             if (externalReviewLink == null)
             {
                 return new NotFoundObjectResult("Token not found");
@@ -172,7 +172,6 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
 
     public class ShareEmailDto
     {
-        public string Id { get; set; }
         public string Email { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
