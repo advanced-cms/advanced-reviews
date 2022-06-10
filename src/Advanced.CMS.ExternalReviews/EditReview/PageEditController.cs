@@ -176,7 +176,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         private static string GetJsScriptPath()
         {
             const string url = "ClientResources/external-review-component.js";
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
+            if (ModuleResourceResolver.Instance.TryResolveClientPath(typeof(PageEditController).Assembly, url,
                 out var jsScriptPath))
             {
                 return jsScriptPath;
@@ -188,7 +188,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         private static string GetResetCssPath()
         {
             const string url = "ClientResources/reset.css";
-            if (ModuleResourceResolver.Instance.TryResolvePath(typeof(PageEditController).Assembly, url,
+            if (ModuleResourceResolver.Instance.TryResolveClientPath(typeof(PageEditController).Assembly, url,
                 out var resetCssPath))
             {
                 return resetCssPath;
