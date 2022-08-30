@@ -5,6 +5,14 @@
 
 [![Build .net core](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-core.yml/badge.svg)](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-core.yml)
 
+## Requirements
+
+* .NET Core 6
+* CMS 12+
+* If you want to build locally you will need node16 (tested on nodejs 16.14.0)
+
+## Introduction
+
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
 
 It solves a few major issues the Authors identified during their journey with EPiServer and after working on a number of EPiServer related enterprise solutions.
