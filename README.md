@@ -3,6 +3,14 @@
 
 [![Build .net framework](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-framework.yml/badge.svg)](https://github.com/advanced-cms/advanced-reviews/actions/workflows/advanced-reviews-dotnet-framework.yml)
 
+## Requirements
+
+* .NET Framework
+* CMS 11
+* If you want to build locally you will need node12 (tested on nodejs 12.16.1)
+
+## Introduction
+
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
 
 It solves a few major issues the Authors identified during their journey with EPiServer and after working on a number of EPiServer related enterprise solutions.
