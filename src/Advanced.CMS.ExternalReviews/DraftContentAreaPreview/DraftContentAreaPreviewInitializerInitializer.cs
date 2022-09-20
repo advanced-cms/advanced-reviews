@@ -4,6 +4,7 @@ using EPiServer.Core.Internal;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Globalization;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
@@ -26,7 +27,8 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                     (locator, defaultUrlResolver) =>
                         new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
                             locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>(),
-                            locator.GetInstance<ExternalReviewState>(), locator.GetInstance<ExternalReviewUrlGenerator>()));
+                            locator.GetInstance<ExternalReviewState>(),
+                            locator.GetInstance<ExternalReviewUrlGenerator>()));
 
                 // Intercepted in order to return unpublished children in external review context
                 context.Services.Intercept<IContentLoader>(
@@ -45,6 +47,12 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                     (locator, defaultPublishedStateAssessor) =>
                         new PublishedStateAssessorDecorator(defaultPublishedStateAssessor,
                             locator.GetInstance<LanguageResolver>(), locator.GetInstance<ExternalReviewState>()));
+
+                // Intercepted in order to not filter out content without Everyone access
+                context.Services.Intercept<IContentAccessEvaluator>(
+                    (locator, defaultContentAccessEvaluator) =>
+                        new ContentAccessEvaluatorDecorator(defaultContentAccessEvaluator,
+                            locator.GetInstance<ExternalReviewState>()));
             };
         }
 
