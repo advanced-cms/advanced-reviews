@@ -23,6 +23,9 @@ jobs:
     - name: Build
       run: build.cmd Release
       shell: cmd
+    - name: Test
+      run: test.cmd Release
+      shell: cmd
     - name: Pack
       run: pack.cmd Release
       shell: cmd
