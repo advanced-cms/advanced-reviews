@@ -1,6 +1,6 @@
 using Advanced.CMS.ExternalReviews;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity
 {
     public class SiteFixtureWithPinSecurity : SiteFixtureBase
     {

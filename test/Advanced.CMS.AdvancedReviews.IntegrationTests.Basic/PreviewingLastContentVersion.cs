@@ -1,4 +1,4 @@
-﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tests
+﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic
 {
     /*
      GIVEN:

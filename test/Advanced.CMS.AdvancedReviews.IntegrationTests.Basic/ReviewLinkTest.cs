@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TestSite.Models;
 using Xunit;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tests
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic
 {
     public class SinglePageTests : IntegrationTestCollectionBaseClassFixture
     {

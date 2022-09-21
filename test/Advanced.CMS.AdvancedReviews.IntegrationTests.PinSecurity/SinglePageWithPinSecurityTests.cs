@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TestSite.Models;
 using Xunit;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tests
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity
 {
     [Collection(IntegrationTestCollectionWithPinSecurity.Name)]
     public class SinglePageWithPinSecurityTests : IClassFixture<CommonFixture>

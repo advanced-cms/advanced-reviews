@@ -18,10 +18,4 @@ namespace Advanced.CMS.AdvancedReviews.IntegrationTests
             _siteFixture = siteFixture;
         }
     }
-
-    [CollectionDefinition(Name, DisableParallelization = true)]
-    public class IntegrationTestCollectionWithPinSecurity : ICollectionFixture<SiteFixtureWithPinSecurity>
-    {
-        public const string Name = "Advanced Reviews Test Collection With Pin Security";
-    }
 }

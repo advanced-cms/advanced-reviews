@@ -40,7 +40,7 @@ namespace Advanced.CMS.AdvancedReviews.IntegrationTests
         private string EnsureDatabase()
         {
             var dbFile = Path.GetFullPath(@"..\..\..\..\sites\TestSite\App_Data\cms.mdf", Environment.CurrentDirectory);
-            var databaseMdfTemplateFile = Path.GetFullPath(@"..\..\..\Assets\db_template.mdf", Environment.CurrentDirectory);
+            var databaseMdfTemplateFile = Path.GetFullPath(@"..\..\..\..\Advanced.CMS.AdvancedReviews.IntegrationTests\Assets\db_template.mdf", Environment.CurrentDirectory);
             _databaseFixture = new CmsDatabaseFixture(databaseMdfTemplateFile, dbFile);
             var connectionString =
                 $"Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={_databaseFixture.DatabaseName};Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";
