@@ -34,7 +34,7 @@ namespace Advanced.CMS.ExternalReviews
                 if (cachedContent != null)
                 {
                     e.ContentLink = cachedContent.ContentLink;
-                    e.Content = cachedContent;
+                    e.Content = cachedContent.AllowAccessToEveryone();
                     e.CancelAction = true;
                 }
 
@@ -62,7 +62,7 @@ namespace Advanced.CMS.ExternalReviews
             externalReviewState.SetCachedLink(unpublishedCulture, content);
 
             e.ContentLink = unpublished;
-            e.Content = content;
+            e.Content = content.AllowAccessToEveryone();
             e.CancelAction = true;
         }
 
