@@ -102,7 +102,11 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                 var referenceToLoad = LoadUnpublishedVersion(childReference.ContentLink);
                 if (referenceToLoad == null)
                 {
-                    result.Add(childReference.ContentLink);
+                    var publishedContentInTargetLanguage = _contentLoader.Get<IContent>(childReference.ContentLink, loaderOptions);
+                    if (publishedContentInTargetLanguage != null)
+                    {
+                        result.Add(publishedContentInTargetLanguage.ContentLink);
+                    }
                 }
                 else
                 {
