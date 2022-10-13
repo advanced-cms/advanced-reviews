@@ -1,16 +1,15 @@
 using Advanced.CMS.ExternalReviews;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity
-{
-    public class SiteFixtureWithPinSecurity : SiteFixtureBase
-    {
-        public SiteFixtureWithPinSecurity() : base(OptionsCallback)
-        {
-        }
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity;
 
-        private static void OptionsCallback(ExternalReviewOptions options)
-        {
-            options.PinCodeSecurity.Enabled = true;
-        }
+public class SiteFixtureWithPinSecurity : SiteFixtureBase
+{
+    public SiteFixtureWithPinSecurity() : base(OptionsCallback)
+    {
+    }
+
+    private static void OptionsCallback(ExternalReviewOptions options)
+    {
+        options.PinCodeSecurity.Enabled = true;
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Advanced.CMS.ApprovalReviews;
-using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Core;
@@ -90,11 +89,6 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
                 return new BadRequestResult();
             }
 
-            if (!string.IsNullOrWhiteSpace(pinDto.PinCode))
-            {
-                pinDto.PinCode = PinCodeHashGenerator.Hash(pinDto.PinCode, id);
-            }
-
             var result = _externalReviewLinksRepository.UpdateLink(id, pinDto.ValidTo, pinDto.PinCode, pinDto.DisplayName, pinDto.VisitorGroups);
             HidePinCode(result);
 
@@ -152,7 +146,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
 #pragma warning disable 618
             await _emailNotificationProvider.SendAsync(providerNotificationMessages, msg => { result = true; },
 #pragma warning restore 618
-                (msg, exception) => { result = false; }).ConfigureAwait(true);
+                (_, _) => { result = false; }).ConfigureAwait(true);
             return result;
         }
 

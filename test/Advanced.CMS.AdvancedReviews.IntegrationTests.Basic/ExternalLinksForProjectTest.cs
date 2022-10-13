@@ -1,28 +1,26 @@
-﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic
+﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+/*
+ GIVEN:
+   - draft page
+   - project
+   - external view link to page
+ WHEN:
+   - page is translated
+ THEN:
+   - should load proper draft version
+*/
+
+public class ExternalLinksForProjectTest
 {
-    /*
-     GIVEN:
-       - draft page
-       - project
-       - external view link to page
-     WHEN:
-       - page is translated
-     THEN:
-       - should load proper draft version
-    */
+    // create draft page
 
-    public class ExternalLinksForProjectTest
-    {
-        // create draft page
+    // create project
 
-        // create project
+    // add page to project
 
-        // add page to project
+    // create external link for page
 
-        // create external link for page
+    // create external link for project
 
-        // create external link for project
-
-        // ASSERT draft content is view
-    }
+    // ASSERT draft content is view
 }

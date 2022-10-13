@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using EPiServer.Core;
 using EPiServer.Data.Dynamic;
 using EPiServer.ServiceLocation;
@@ -113,7 +114,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
 
             if (pinCode != null)
             {
-                item.PinCode = pinCode;
+                item.PinCode = PinCodeHashGenerator.Hash(pinCode, token);
             }
 
             item.DisplayName = displayName;

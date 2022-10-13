@@ -75,7 +75,7 @@ namespace Alloy.Sample
                 e.PinCodeSecurity.Enabled = true;
                 e.PinCodeSecurity.Required = true;
                 e.PinCodeSecurity.CodeLength = 5;
-                e.ProlongDays = 10;
+                // e.ProlongDays = 10;
             });
 
             services.Configure<ApprovalOptions>(options =>
