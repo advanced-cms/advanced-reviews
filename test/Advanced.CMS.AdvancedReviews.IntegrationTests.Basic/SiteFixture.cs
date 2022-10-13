@@ -1,6 +1,5 @@
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+
+public class SiteFixture : SiteFixtureBase
 {
-    public class SiteFixture : SiteFixtureBase
-    {
-    }
 }

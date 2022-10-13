@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using EPiServer.Core;
 using EPiServer.Data.Dynamic;
 using EPiServer.ServiceLocation;
@@ -84,6 +85,11 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
         public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo,
             int? projectId)
         {
+            if (contentLink.WorkID == 0)
+            {
+                throw new InvalidOperationException("Cannot create a link for version agnostic content reference");
+            }
+
             var externalReviewLink = new ExternalReviewLinkDds
             {
                 ContentLink = contentLink,
@@ -113,7 +119,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
 
             if (pinCode != null)
             {
-                item.PinCode = pinCode;
+                item.PinCode = PinCodeHashGenerator.Hash(pinCode, token);
             }
 
             item.DisplayName = displayName;

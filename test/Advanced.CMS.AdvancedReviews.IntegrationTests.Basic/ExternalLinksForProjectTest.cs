@@ -1,28 +1,55 @@
-﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+
+public class Given_Block_With_CommonDraft_And_ProjectDraft : IntegrationTestCollectionBaseClassFixture
 {
-    /*
-     GIVEN:
-       - draft page
-       - project
-       - external view link to page
-     WHEN:
-       - page is translated
-     THEN:
-       - should load proper draft version
-    */
+    protected TestEnvironment testEnvironment;
 
-    public class ExternalLinksForProjectTest
+    public Given_Block_With_CommonDraft_And_ProjectDraft(SiteFixture siteFixture) : base(siteFixture)
     {
-        // create draft page
+        testEnvironment = _testScenarioBuilderFactory.GetBuilder().Init().AddBlock().SwitchToProject().UpdateBlock()
+            .Build();
+    }
 
-        // create project
+    public class When_Adding_Link_In_ProjectMode : Given_Block_With_CommonDraft_And_ProjectDraft
+    {
+        public When_Adding_Link_In_ProjectMode(SiteFixture siteFixture) : base(siteFixture)
+        {
+            testEnvironment = _testScenarioBuilderFactory.GetBuilder(testEnvironment)
+                .WithViewPin().Build();
+        }
 
-        // add page to project
+        [Fact]
+        public async Task Should_Load_ProjectDraft()
+        {
+            var message = new HttpRequestMessage(HttpMethod.Get, testEnvironment.ExternalReviewLink.LinkUrl);
+            var response = await _siteFixture.Client.SendAsync(message);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var responseText = await response.Content.ReadAsStringAsync();
+            Assert.Contains(TestScenarioBuilder.ProjectUpdatedString, responseText);
+        }
+    }
 
-        // create external link for page
+    public class When_Adding_Link_In_CommonDraftsMode : Given_Block_With_CommonDraft_And_ProjectDraft
+    {
+        public When_Adding_Link_In_CommonDraftsMode(SiteFixture siteFixture) : base(siteFixture)
+        {
+            testEnvironment = _testScenarioBuilderFactory.GetBuilder(testEnvironment).SwitchToCommonDrafts()
+                .WithViewPin().Build();
+        }
 
-        // create external link for project
-
-        // ASSERT draft content is view
+        [Fact]
+        public async Task Should_Load_Common_Draft()
+        {
+            var message = new HttpRequestMessage(HttpMethod.Get, testEnvironment.ExternalReviewLink.LinkUrl);
+            var response = await _siteFixture.Client.SendAsync(message);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var responseText = await response.Content.ReadAsStringAsync();
+            Assert.Contains(TestScenarioBuilder.OriginalBlockContent, responseText);
+        }
     }
 }

@@ -1,39 +1,37 @@
-﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic
+﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+/*
+ GIVEN:
+   - draft page
+   - external view link to page
+ WHEN:
+   - page is translated
+ THEN:
+   - should load proper draft version
+ */
+
+public class SinglePageWithLanguagesTests
 {
-    /*
-     GIVEN:
-       - draft page
-       - external view link to page
-     WHEN:
-       - page is translated
-     THEN:
-       - should load proper draft version
-     */
+    // create draft page
 
-    public class SinglePageWithLanguagesTests
-    {
-        // create draft page
+    // create external link for page
 
-        // create external link for page
+    // translate page
 
-        // translate page
+    // create external link for translated page
 
-        // create external link for translated page
+    // ASSERT main branch link shows proper data
 
-        // ASSERT main branch link shows proper data
+    // ASSERT translated page shows proper data
 
-        // ASSERT translated page shows proper data
+    // publish main branch
 
-        // publish main branch
+    // change main branch data
 
-        // change main branch data
+    // publish translated page
 
-        // publish translated page
+    // change translated page data
 
-        // change translated page data
+    // ASSERT main branch link shows proper data
 
-        // ASSERT main branch link shows proper data
-
-        // ASSERT translated page shows proper data
-    }
+    // ASSERT translated page shows proper data
 }

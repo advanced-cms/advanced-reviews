@@ -14,7 +14,14 @@ namespace Advanced.CMS.ExternalReviews
 
             var writable = page.CreateWritableClone();
             var contentAccessControlList = new ContentAccessControlList();
-            contentAccessControlList.AddEntry(new AccessControlEntry("Everyone", AccessLevel.FullAccess));
+            if (contentAccessControlList.Contains(EveryoneRole.RoleName))
+            {
+                contentAccessControlList.Remove(EveryoneRole.RoleName);
+            }
+
+            contentAccessControlList.AddEntry(new AccessControlEntry(EveryoneRole.RoleName,
+                AccessLevel.FullAccess));
+
             writable.ACL = contentAccessControlList;
             return writable;
 

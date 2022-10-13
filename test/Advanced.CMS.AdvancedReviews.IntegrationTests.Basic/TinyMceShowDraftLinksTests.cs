@@ -1,25 +1,23 @@
-﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic
+﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+/*
+ GIVEN:
+   - draft page with TinyMce
+   - external view link to page
+ WHEN:
+   - TinyMce property contains unpublished images
+ THEN:
+   - should show draft content in TinyMce
+ */
+
+public class TinyMceShowDraftLinksTests
 {
-    /*
-     GIVEN:
-       - draft page with TinyMce
-       - external view link to page
-     WHEN:
-       - TinyMce property contains unpublished images
-     THEN:
-       - should show draft content in TinyMce
-     */
+    // create an image
 
-    public class TinyMceShowDraftLinksTests
-    {
-        // create an image
+    // create MAIN draft page
 
-        // create MAIN draft page
+    // add image link to TinyMce
 
-        // add image link to TinyMce
+    // create external link
 
-        // create external link
-
-        // ASSERT draft image is visible
-    }
+    // ASSERT draft image is visible
 }

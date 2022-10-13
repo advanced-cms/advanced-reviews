@@ -21,8 +21,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Advanced.CMS.AdvancedReviews;
 using Advanced.CMS.IntegrationTests;
+using Advanced.CMS.IntegrationTests.ServiceMocks;
 using EPiServer.Framework.Hosting;
 using EPiServer.Web.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
+using TestSite.Business.Rendering;
+using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
 
 namespace TestSite
 {
@@ -67,6 +71,11 @@ namespace TestSite
                 services.AddUIMappedFileProviders(_webHostingEnvironment.ContentRootPath, @"..\..\..\");
             }
 
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new SiteViewEngineLocationExpander());
+            });
+
             services.AddStartupFilter<AssignUser>();
             services.AddCmsHost()
                .AddCmsHtmlHelpers()
@@ -76,6 +85,7 @@ namespace TestSite
                .AddCmsAspNetIdentity<ApplicationUser>();
 
             services.AddAdvancedReviews();
+            services.MockServices();
 
             services.Configure<StaticFileOptions>("foo", o => o.OnPrepareResponse = c => c.Context.Response.Headers.Add("X-From-Custom-Option", "Something"));
         }
@@ -100,11 +110,6 @@ namespace TestSite
                 //Do some registration before MapContent
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapContent();
-                //and some other here since we want to have test that ensure that both pre and post registration works
-                endpoints.MapControllerRoute("additional", "/another/way/to/say/hello", new { controller = "Partner", action = "Hello" });
-                endpoints.MapControllerRoute("allproducts", "/partner/allproducts", new { controller = "Partner", action = "GetAllProducts" });
-                endpoints.MapControllerRoute("quicknavigator", "/partner/quicknavigator", new { controller = "Partner", action = "QuickNavigator" });
-
             });
         }
         public class AssignUser : IStartupFilter
