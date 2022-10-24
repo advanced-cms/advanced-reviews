@@ -17,12 +17,20 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Advanced.CMS.AdvancedReviews;
 using Advanced.CMS.IntegrationTests;
+using Advanced.CMS.IntegrationTests.ServiceMocks;
+using EPiServer.Cms.Shell.Service.Internal;
+using EPiServer.Cms.Shell.UI.Rest.Projects;
+using EPiServer.Cms.Shell.UI.Rest.Projects.Internal;
 using EPiServer.Framework.Hosting;
 using EPiServer.Web.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
+using TestSite.Business.Rendering;
+using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
 
 namespace TestSite
 {
@@ -67,6 +75,11 @@ namespace TestSite
                 services.AddUIMappedFileProviders(_webHostingEnvironment.ContentRootPath, @"..\..\..\");
             }
 
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new SiteViewEngineLocationExpander());
+            });
+
             services.AddStartupFilter<AssignUser>();
             services.AddCmsHost()
                .AddCmsHtmlHelpers()
@@ -76,6 +89,30 @@ namespace TestSite
                .AddCmsAspNetIdentity<ApplicationUser>();
 
             services.AddAdvancedReviews();
+            var currentProjectServiceDescriptor = services.First(s => s.ServiceType == typeof(CurrentProject));
+            services.Remove(currentProjectServiceDescriptor);
+            services.AddSingleton<CurrentProject, MockableCurrentProject>();
+            services.AddSingleton<MockableCurrentProject>();
+
+            var projectLoaderServiceServiceDescriptor = services.First(s => s.ServiceType == typeof(ProjectLoaderService));
+            services.Remove(projectLoaderServiceServiceDescriptor);
+            services.AddTransient<ProjectLoaderService, MockableProjectLoaderService>();
+            services.AddTransient<MockableProjectLoaderService>();
+
+            var projectServiceServiceDescriptor = services.First(s => s.ServiceType == typeof(ProjectService));
+            services.Remove(projectServiceServiceDescriptor);
+            services.AddTransient<ProjectService, MockableProjectService>();
+            services.AddTransient<MockableProjectService>();
+
+            var contentLoaderServiceDescriptor = services.First(s => s.ServiceType == typeof(ContentLoaderService));
+            services.Remove(contentLoaderServiceDescriptor);
+            services.AddSingleton<ContentLoaderService, MockableContentLoaderService>();
+            services.AddSingleton<MockableContentLoaderService>();
+
+            var contentServiceDescriptor = services.First(s => s.ServiceType == typeof(ContentService));
+            services.Remove(contentServiceDescriptor);
+            services.AddSingleton<ContentService, MockableContentService>();
+            services.AddSingleton<MockableContentService>();
 
             services.Configure<StaticFileOptions>("foo", o => o.OnPrepareResponse = c => c.Context.Response.Headers.Add("X-From-Custom-Option", "Something"));
         }
@@ -100,11 +137,6 @@ namespace TestSite
                 //Do some registration before MapContent
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapContent();
-                //and some other here since we want to have test that ensure that both pre and post registration works
-                endpoints.MapControllerRoute("additional", "/another/way/to/say/hello", new { controller = "Partner", action = "Hello" });
-                endpoints.MapControllerRoute("allproducts", "/partner/allproducts", new { controller = "Partner", action = "GetAllProducts" });
-                endpoints.MapControllerRoute("quicknavigator", "/partner/quicknavigator", new { controller = "Partner", action = "QuickNavigator" });
-
             });
         }
         public class AssignUser : IStartupFilter

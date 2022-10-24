@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using Advanced.CMS.ExternalReviews;
 using Advanced.CMS.IntegrationTests;
+using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.ServiceLocation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,11 +18,16 @@ public class SiteFixtureBase : IDisposable
     private UIServiceFixture<Startup> _serviceFixture;
     private CmsDatabaseFixture _databaseFixture;
 
-    public SiteFixtureBase(Action<ExternalReviewOptions> optionsCallback = null)
+    public SiteFixtureBase(Action<IServiceCollection> optionsCallback = null)
     {
         string connectionString = EnsureDatabase();
         _serviceFixture = new UIServiceFixture<Startup>(connectionString, collection =>
         {
+            collection.Configure<ProjectUIOptions>(options =>
+            {
+                options.ProjectModeEnabled = true;
+            });
+
             if (optionsCallback != null)
             {
                 collection.Configure(optionsCallback);

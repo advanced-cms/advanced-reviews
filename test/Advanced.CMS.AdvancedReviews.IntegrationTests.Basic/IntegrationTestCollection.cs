@@ -13,11 +13,11 @@ public class IntegrationTestCollection : ICollectionFixture<SiteFixture>
 public class IntegrationTestCollectionBaseClassFixture : IClassFixture<CommonFixture>
 {
     protected readonly SiteFixture _siteFixture;
-    protected readonly TestScenarioBuilder _testScenarioBuilder;
+    protected readonly TestScenarioBuilderFactory _testScenarioBuilderFactory;
 
     public IntegrationTestCollectionBaseClassFixture(SiteFixture siteFixture)
     {
         _siteFixture = siteFixture;
-        _testScenarioBuilder = ServiceLocator.Current.GetInstance<TestScenarioBuilder>();
+        _testScenarioBuilderFactory = ServiceLocator.Current.GetInstance<TestScenarioBuilderFactory>();
     }
 }

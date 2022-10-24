@@ -14,7 +14,7 @@ public class NoEveryoneAccess : IntegrationTestCollectionBaseClassFixture
     [Fact]
     public async Task When_Creating_Token_For_Page_Without_Everyone_Access_It_Returns_200()
     {
-        var testEnvironment = _testScenarioBuilder.Reset().WithoutEveryoneAccess().WithViewPin().Build();
+        var testEnvironment = _testScenarioBuilderFactory.GetBuilder().Init().WithoutEveryoneAccess().WithViewPin().Build();
 
         var message = new HttpRequestMessage(HttpMethod.Get, testEnvironment.ExternalReviewLink.LinkUrl);
         var response = await _siteFixture.Client.SendAsync(message);

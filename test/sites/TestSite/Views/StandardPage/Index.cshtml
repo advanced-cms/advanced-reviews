@@ -4,10 +4,12 @@
 <!DOCTYPE html>
 <html lang="@(Model.Language)">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>@Model.Name</title>
 </head>
 <body>
-    <h1>@Html.PropertyFor(x => x.Name)</h1>
+<h1>@Html.PropertyFor(x => x.Name)</h1>
+<h2>Fragments count = @Model.ContentArea.Count</h2>
+@Html.PropertyFor(x => x.ContentArea)
 </body>
 </html>

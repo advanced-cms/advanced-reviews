@@ -1,4 +1,5 @@
 using Advanced.CMS.ExternalReviews;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity;
 
@@ -8,8 +9,11 @@ public class SiteFixtureWithPinSecurity : SiteFixtureBase
     {
     }
 
-    private static void OptionsCallback(ExternalReviewOptions options)
+    private static void OptionsCallback(IServiceCollection services)
     {
-        options.PinCodeSecurity.Enabled = true;
+        services.Configure<ExternalReviewOptions>(options =>
+        {
+            options.PinCodeSecurity.Enabled = true;
+        });
     }
 }

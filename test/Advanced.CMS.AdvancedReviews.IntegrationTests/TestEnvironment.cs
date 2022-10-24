@@ -1,17 +1,17 @@
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer.Core;
+using TestSite.Models;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
 
 public class TestEnvironment
 {
-    public TestEnvironment(PageData page, ExternalReviewLink externalReviewLink)
+    public TestEnvironment(StandardPage page, ExternalReviewLink externalReviewLink)
     {
         Page = page;
         ExternalReviewLink = externalReviewLink;
     }
 
-    public PageData Page { get; set; }
+    public StandardPage Page { get; set; }
 
     public ExternalReviewLink ExternalReviewLink { get; set; }
 }
