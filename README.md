@@ -7,7 +7,7 @@
 
 * .NET Framework
 * CMS 11
-* If you want to build locally you will need node12 (tested on nodejs 12.16.1)
+* If you want to build locally you will need node12 (tested on nodejs 16.14.0)
 
 ## Introduction
 
