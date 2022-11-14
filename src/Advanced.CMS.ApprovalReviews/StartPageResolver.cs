@@ -7,7 +7,7 @@ namespace Advanced.CMS.ApprovalReviews
 {
     public interface IStartPageUrlResolver
     {
-        string GetUrl(ContentReference contentReference, string languageBranch = null);
+        string GetUrl(ContentReference contentReference, string languageBranch);
     }
 
     [ServiceConfiguration(typeof(IStartPageUrlResolver))]
@@ -22,7 +22,7 @@ namespace Advanced.CMS.ApprovalReviews
             _siteDefinitionResolver = siteDefinitionResolver;
         }
 
-        public string GetUrl(ContentReference contentReference, string languageBranch = null)
+        public string GetUrl(ContentReference contentReference, string languageBranch)
         {
             var site = _siteDefinitionResolver.GetByContent(contentReference, true);
             return _urlResolver.GetUrl(site?.StartPage ?? ContentReference.StartPage, languageBranch);
