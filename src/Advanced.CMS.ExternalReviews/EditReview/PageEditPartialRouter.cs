@@ -1,4 +1,6 @@
-﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+﻿using System.Globalization;
+using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
@@ -8,7 +10,7 @@ using EPiServer.Web.Routing;
 namespace Advanced.CMS.ExternalReviews.EditReview
 {
     [ServiceConfiguration(typeof(IPartialRouter))]
-    public class PageEditPartialRouter : IPartialRouter<PageData, PageData>
+    public class PageEditPartialRouter : IPartialRouter<IContent, IContent>
     {
         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
         private readonly ExternalReviewOptions _externalReviewOptions;
@@ -28,12 +30,12 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             _externalReviewState = externalReviewState;
         }
 
-        public PartialRouteData GetPartialVirtualPath(PageData content, UrlGeneratorContext urlGeneratorContext)
+        public PartialRouteData GetPartialVirtualPath(IContent content, UrlGeneratorContext urlGeneratorContext)
         {
             return new PartialRouteData();
         }
 
-        public object RoutePartial(PageData content, UrlResolverContext segmentContext)
+        public object RoutePartial(IContent content, UrlResolverContext segmentContext)
         {
             if (!_externalReviewOptions.IsEnabled || !_externalReviewOptions.EditableLinksEnabled)
             {
@@ -59,7 +61,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             _externalReviewState.IsEditLink = true;
             _externalReviewState.Token = token;
 
-            _contentLanguageAccessor.Language = content.Language;
+            _contentLanguageAccessor.Language = new CultureInfo(content.LanguageBranch());
 
             try
             {
