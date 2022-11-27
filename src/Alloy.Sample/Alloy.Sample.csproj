@@ -1,9 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Using Include="EPiServer" />
+    <Using Include="EPiServer.Core" />
+    <Using Include="EPiServer.DataAbstraction" />
+    <Using Include="EPiServer.DataAnnotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPiServer.CMS.TinyMce" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore.HtmlHelpers" />
+    <PackageReference Include="EPiServer.CMS.UI" />
+    <PackageReference Include="EPiServer.CMS.UI.AspNetIdentity" />
+    <PackageReference Include="EPiServer.CMS.UI.VisitorGroups" />
+    <PackageReference Include="EPiServer.Hosting" />
+
     <PackageReference Include="EPiServer.CMS" />
+    <PackageReference Include="EPiServer.Commerce" />
 
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Wangkanai.Detection" Version="2.0.1" />

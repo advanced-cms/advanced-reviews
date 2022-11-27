@@ -1,10 +1,27 @@
 <Project>
     <PropertyGroup>
-        <CmsUIVersion>12.5.0</CmsUIVersion>
+        <CmsCoreVersion>12.10.0</CmsCoreVersion>
+        <CmsUIVersion>*</CmsUIVersion>
+        <CommerceVersion>14.7.1</CommerceVersion>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Update="EPiServer.CMS.UI.Core" Version="$(CmsUIVersion)"/>
+        <!-- CMS CORE -->
+        <PackageReference Update="EPiServer" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.Core" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.DataAbstraction" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.DataAnnotations" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.Hosting" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.Framework" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.CMS.AspNetCore.HtmlHelpers" Version="$(CmsCoreVersion)"/>
+        <PackageReference Update="EPiServer.CMS.AspNetCore.Templating" Version="$(CmsCoreVersion)" />
+
+        <!-- CMS UI -->
         <PackageReference Update="EPiServer.CMS" Version="$(CmsUIVersion)"/>
+        <PackageReference Update="EPiServer.CMS.UI" Version="$(CmsUIVersion)"/>
+        <PackageReference Update="EPiServer.CMS.UI.Core" Version="$(CmsUIVersion)"/>
+        <PackageReference Update="EPiServer.CMS.UI.Sources" Version="$(CmsUIVersion)"/>
+        <PackageReference Update="EPiServer.CMS.UI.AspNetIdentity" Version="$(CmsUIVersion)"/>
+        <PackageReference Update="EPiServer.CMS.UI.VisitorGroups" Version="$(CmsUIVersion)"/>
 
         <PackageReference Update="xunit.assert" Version="2.4.1" />
         <PackageReference Update="xunit.core" Version="2.4.1" />
@@ -13,6 +30,8 @@
         <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.7.1" />
         <PackageReference Update="AngleSharp" Version="0.14.0" />
         <PackageReference Update="JObject" Version="1.0.0" />
+
+        <PackageReference Update="EPiServer.CMS.TinyMce" Version="*"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
@@ -24,4 +43,10 @@
         <PackageReference Update="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
         <PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0" />
     </ItemGroup>
+
+    <!-- Commerce -->
+    <ItemGroup>
+        <PackageReference Update="EPiServer.Commerce" Version="$(CommerceVersion)"/>
+    </ItemGroup>
+
 </Project>

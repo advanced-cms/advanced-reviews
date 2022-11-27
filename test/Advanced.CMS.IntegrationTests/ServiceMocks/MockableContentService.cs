@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 using EPiServer.Cms.Shell.Service.Internal;
-using EPiServer.Cms.Shell.UI.Rest.Approvals;
+using EPiServer.Cms.Shell.UI.Rest.Approvals.Internal;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Security;

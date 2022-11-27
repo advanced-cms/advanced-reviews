@@ -1,5 +1,5 @@
 ﻿using EPiServer.Cms.Shell.UI.Rest;
-using EPiServer.Cms.Shell.UI.Rest.Approvals;
+using EPiServer.Cms.Shell.UI.Rest.Approvals.Internal;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Cms.Shell.UI.Rest.Projects.Internal;
 using EPiServer.Core;

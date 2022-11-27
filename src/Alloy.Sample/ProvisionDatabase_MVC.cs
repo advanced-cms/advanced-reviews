@@ -8,6 +8,7 @@ using EPiServer.Logging;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Security;
+using ILogger = EPiServer.Logging.ILogger;
 
 namespace Alloy.Sample
 {
