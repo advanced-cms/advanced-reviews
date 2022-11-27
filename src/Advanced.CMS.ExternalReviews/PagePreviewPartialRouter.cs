@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
@@ -13,7 +15,7 @@ namespace Advanced.CMS.ExternalReviews
     /// Partial router used to display readonly version of the page
     /// </summary>
     [ServiceConfiguration(typeof(IPartialRouter))]
-    public class PagePreviewPartialRouter : IPartialRouter<PageData, PageData>
+    public class PagePreviewPartialRouter : IPartialRouter<IContent, IContent>
     {
         private readonly ProjectContentResolver _projectContentResolver;
         private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
@@ -36,12 +38,12 @@ namespace Advanced.CMS.ExternalReviews
             _externalReviewState = externalReviewState;
         }
 
-        public PartialRouteData GetPartialVirtualPath(PageData content, UrlGeneratorContext segmentContext)
+        public PartialRouteData GetPartialVirtualPath(IContent content, UrlGeneratorContext segmentContext)
         {
             return new PartialRouteData();
         }
 
-        public object RoutePartial(PageData content, UrlResolverContext segmentContext)
+        public object RoutePartial(IContent content, UrlResolverContext segmentContext)
         {
             if (!_externalReviewOptions.IsEnabled)
             {
@@ -60,7 +62,7 @@ namespace Advanced.CMS.ExternalReviews
                 return null;
             }
 
-            _contentLanguageAccessor.Language = content.Language;
+            _contentLanguageAccessor.Language = new CultureInfo(content.LanguageBranch());
 
             nextSegment = segmentContext.GetNextSegment(nextSegment.Remaining);
             var token = nextSegment.Next.ToString();
@@ -78,19 +80,20 @@ namespace Advanced.CMS.ExternalReviews
             if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
             {
                 _externalLinkPinCodeSecurityHandler.RedirectToLoginPage(externalReviewLink);
+                return null;
             }
 
             try
             {
-                var page = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
+                var versionedContent = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
                     segmentContext.Url.QueryCollection);
 
                 segmentContext.RemainingSegments = nextSegment.Remaining;
 
                 // set ContentLink in DataTokens to make IPageRouteHelper working
-                segmentContext.RouteValues[RoutingConstants.ContentLinkKey] = page.ContentLink;
+                segmentContext.RouteValues[RoutingConstants.ContentLinkKey] = versionedContent.ContentLink;
 
-                return page;
+                return versionedContent;
             }
             catch
             {

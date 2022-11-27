@@ -36,10 +36,10 @@ namespace Advanced.CMS.ExternalReviews
             return item?.ContentLink;
         }
 
-        public PageData TryGetProjectPageVersion(ExternalReviewLink externalReviewLink, PageData routedContent, NameValueCollection queryString)
+        public IContent TryGetProjectPageVersion(ExternalReviewLink externalReviewLink, IContent routedContent, NameValueCollection queryString)
         {
             var contentReference = externalReviewLink.ContentLink;
-            var page = _contentLoader.Get<PageData>(contentReference);
+            var page = _contentLoader.Get<IContent>(contentReference);
             // If not Project associate with the link then use the ContentLink stored in DDS
             if (!externalReviewLink.ProjectId.HasValue)
             {
