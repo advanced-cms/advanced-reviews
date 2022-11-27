@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Advanced.CMS.AdvancedReviews;
 using Advanced.CMS.ApprovalReviews;
@@ -8,14 +9,12 @@ using EPiServer.Cms.TinyMce;
 using EPiServer.Cms.UI.Admin;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Cms.UI.VisitorGroups;
-using EPiServer.Data;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Scheduler;
 using EPiServer.Web.Mvc.Html;
 using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -24,33 +23,20 @@ namespace Alloy.Sample
     public class Startup
     {
         private readonly IWebHostEnvironment _webHostingEnvironment;
-        private readonly IConfiguration _configuration;
 
-        public Startup(IWebHostEnvironment webHostingEnvironment, IConfiguration configuration)
+        public Startup(IWebHostEnvironment webHostingEnvironment)
         {
             _webHostingEnvironment = webHostingEnvironment;
-            _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbPath = Path.Combine(_webHostingEnvironment.ContentRootPath, "App_Data\\Alloy.mdf");
-            var connectionstring = _configuration.GetConnectionString("EPiServerDB") ?? $"Data Source=(LocalDb)\\MSSQLLocalDB;AttachDbFilename={dbPath};Initial Catalog=alloy_mvc_netcore;Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";
-
-            services.Configure<SchedulerOptions>(o =>
-            {
-                o.Enabled = false;
-            });
-
-            services.Configure<DataAccessOptions>(o =>
-            {
-                o.SetConnectionString(connectionstring);
-            });
-
-            services.AddCmsAspNetIdentity<ApplicationUser>();
-
             if (_webHostingEnvironment.IsDevelopment())
             {
+                AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(_webHostingEnvironment.ContentRootPath, "App_Data"));
+
+                services.Configure<SchedulerOptions>(options => options.Enabled = false);
+
                 services.AddUIMappedFileProviders(_webHostingEnvironment.ContentRootPath, @"..\..\");
                 services.Configure<ClientResourceOptions>(uiOptions =>
                 {
@@ -58,12 +44,14 @@ namespace Alloy.Sample
                 });
             }
 
+            services.AddCmsAspNetIdentity<ApplicationUser>();
             services.AddMvc();
             services.AddAlloy();
             services.AddCmsHost()
                 .AddCmsHtmlHelpers()
                 .AddCmsUI()
                 .AddAdmin()
+                .AddCommerce()
                 .AddVisitorGroupsUI()
                 .AddTinyMce();
 
