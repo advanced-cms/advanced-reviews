@@ -15,6 +15,8 @@
 
 This project is a set of useful enhancements that may gradually improve the reviewing process in organizations using EPiServer as their CMS.
 
+Reviewing is not only scoped to CMS pages but can also be used on any kind of routable content like Commerce products/variants, Forms etc.
+
 It solves a few major issues the Authors identified during their journey with EPiServer and after working on a number of EPiServer related enterprise solutions.
 
 The list of features (click to see more details about each section):
@@ -61,7 +63,9 @@ lets you configure the add-on according to your needs.
 ## Features
 
 ### Preview unpublished content
-Allow end users to preview unpublished and unreviewed content.
+Allow end users to preview unpublished and unreviewed content. 
+
+It works for any kind of routable content, PageData, MediaFiles, Commerce products etc.
 
 As we all know, an EPiServer page is usually not self-contained but rather consists of many other content items like blocks or media files.
 
