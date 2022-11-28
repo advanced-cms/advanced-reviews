@@ -1,6 +1,8 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+using Castle.Core.Internal;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -20,10 +22,12 @@ namespace Advanced.CMS.ExternalReviews
         private readonly IContentProviderManager _providerManager;
         private readonly ExternalReviewState _externalReviewState;
         private readonly ExternalReviewUrlGenerator _externalReviewUrlGenerator;
+        private readonly ISiteDefinitionResolver _siteDefinitionResolver;
 
         public PreviewUrlResolver(IUrlResolver defaultUrlResolver, IContentLoader contentLoader,
             IPermanentLinkMapper permanentLinkMapper, IContentProviderManager providerManager,
-            ExternalReviewState externalReviewState, ExternalReviewUrlGenerator externalReviewUrlGenerator)
+            ExternalReviewState externalReviewState, ExternalReviewUrlGenerator externalReviewUrlGenerator,
+            ISiteDefinitionResolver siteDefinitionResolver)
         {
             _defaultUrlResolver = defaultUrlResolver;
             _contentLoader = contentLoader;
@@ -31,6 +35,7 @@ namespace Advanced.CMS.ExternalReviews
             _providerManager = providerManager;
             _externalReviewState = externalReviewState;
             _externalReviewUrlGenerator = externalReviewUrlGenerator;
+            _siteDefinitionResolver = siteDefinitionResolver;
         }
 
         public static bool IsGeneratedForProjectPreview(NameValueCollection queryString)
@@ -48,13 +53,10 @@ namespace Advanced.CMS.ExternalReviews
             }
 
             var content = _contentLoader.Get<IContent>(contentLink);
-            if (_externalReviewState.IsInProjectReviewContext)
+            if (ShouldGenerateProjectModeUrlPostfix(content))
             {
-                if (content is PageData data)
-                {
-                    var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
-                    virtualPathData = AppendGeneratedPostfix(virtualPath);
-                }
+                var virtualPath = GetAccessibleVirtualPath(virtualPathData, content as PageData, language);
+                virtualPathData = AppendGeneratedPostfix(virtualPath);
             }
 
             if (content is ImageData imageData)
@@ -64,6 +66,25 @@ namespace Advanced.CMS.ExternalReviews
             }
 
             return virtualPathData;
+        }
+
+        private bool ShouldGenerateProjectModeUrlPostfix(IContent content)
+        {
+            if (!_externalReviewState.IsInProjectReviewContext)
+            {
+                return false;
+            }
+
+            if (content is not PageData)
+            {
+                return false;
+            }
+
+            var externalReviewLinksRepository = ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>();
+            var externalReviewLink = externalReviewLinksRepository.GetContentByToken(_externalReviewState.Token);
+            var pageParentSite = _siteDefinitionResolver.GetByContent(content.ContentLink, false);
+            return externalReviewLink.PinCode.IsNullOrEmpty() || pageParentSite == SiteDefinition.Current;
+
         }
 
         /// <summary>
@@ -103,21 +124,7 @@ namespace Advanced.CMS.ExternalReviews
                 return url;
             }
 
-            var content = _contentLoader.Get<IContent>(contentLink);
-            if (_externalReviewState.IsInProjectReviewContext)
-            {
-                if (content is PageData)
-                {
-                    return AppendGeneratedPostfix(url);
-                }
-            }
-
-            if (content is ImageData imageData)
-            {
-                return _externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
-            }
-
-            return url;
+            return GetInternalUrl(contentLink, url);
         }
 
         public string GetUrl(UrlBuilder urlBuilderWithInternalUrl, UrlResolverArguments arguments)
@@ -129,22 +136,26 @@ namespace Advanced.CMS.ExternalReviews
             }
 
             var linkMap = _permanentLinkMapper.Find(urlBuilderWithInternalUrl);
+            return linkMap != null ? GetInternalUrl(linkMap.ContentReference, url) : url;
+        }
 
-            if (linkMap != null)
+        /// <summary>
+        /// Appends project info or proxies the images through custom image handler to bypass security checks
+        /// </summary>
+        /// <param name="contentLink"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private string GetInternalUrl(ContentReference contentLink, string url)
+        {
+            var content = _contentLoader.Get<IContent>(contentLink);
+            if (ShouldGenerateProjectModeUrlPostfix(content))
             {
-                var content = _contentLoader.Get<IContent>(linkMap.ContentReference);
-                if (_externalReviewState.IsInProjectReviewContext)
-                {
-                    if (content is PageData)
-                    {
-                        return AppendGeneratedPostfix(url);
-                    }
-                }
+                return AppendGeneratedPostfix(url);
+            }
 
-                if (content is ImageData imageData)
-                {
-                    return _externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
-                }
+            if (content is ImageData imageData)
+            {
+                return _externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
             }
 
             return url;
