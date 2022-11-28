@@ -13,6 +13,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
         IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId);
         ExternalReviewLink GetContentByToken(string token);
         int RemoveExpiredLinks();
+        bool HasPinCode(string token);
         ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo, int? projectId);
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
             return expiredItems.Count;
         }
 
-        public ExternalReviewLink GetContentByToken(string token)
+        private ExternalReviewLinkDds GetReviewLinkDds(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -73,13 +74,26 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
             }
 
             token = token.ToLower();
-            var externalReviewLinkDds = GetStore().Items<ExternalReviewLinkDds>()
-                .FirstOrDefault(x => x.Token == token);
+            return GetStore().Items<ExternalReviewLinkDds>().FirstOrDefault(x => x.Token == token);
+        }
+
+        public bool HasPinCode(string token)
+        {
+            var externalReviewLinkDds = GetReviewLinkDds(token);
             if (externalReviewLinkDds == null)
             {
-                return null;
+                return false;
             }
-            return _externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
+
+            return !string.IsNullOrWhiteSpace(externalReviewLinkDds.PinCode);
+        }
+
+        public ExternalReviewLink GetContentByToken(string token)
+        {
+            var externalReviewLinkDds = GetReviewLinkDds(token);
+            return externalReviewLinkDds == null
+                ? null
+                : _externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
         }
 
         public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo,

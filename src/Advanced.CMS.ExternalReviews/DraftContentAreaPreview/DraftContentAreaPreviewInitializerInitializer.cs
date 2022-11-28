@@ -1,4 +1,5 @@
-﻿using EPiServer;
+﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+using EPiServer;
 using EPiServer.Core;
 using EPiServer.Core.Internal;
 using EPiServer.Framework;
@@ -28,7 +29,8 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                         new PreviewUrlResolver(defaultUrlResolver, locator.GetInstance<IContentLoader>(),
                             locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>(),
                             locator.GetInstance<ExternalReviewState>(),
-                            locator.GetInstance<ExternalReviewUrlGenerator>()));
+                            locator.GetInstance<ExternalReviewUrlGenerator>(),
+                            locator.GetInstance<ISiteDefinitionResolver>()));
 
                 // Intercepted in order to return unpublished children in external review context
                 context.Services.Intercept<IContentLoader>(
