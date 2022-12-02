@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
 using AdvancedExternalReviews.ImageProxy;
+using AdvancedExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Cms.Shell;
 using EPiServer.Core;
@@ -50,13 +51,10 @@ namespace AdvancedExternalReviews
             }
 
             var content = _contentLoader.Get<IContent>(contentLink);
-            if (ExternalReview.IsInProjectReviewContext)
+            if (ShouldGenerateProjectModeUrlPostfix(content))
             {
-                if (content is PageData data)
-                {
-                    var virtualPath = GetAccessibleVirtualPath(virtualPathData, data, language);
-                    virtualPathData.VirtualPath = AppendGeneratedPostfix(virtualPath);
-                }
+                var virtualPath = GetAccessibleVirtualPath(virtualPathData, content as PageData, language);
+                virtualPathData.VirtualPath = AppendGeneratedPostfix(virtualPath);
             }
 
             if (content is ImageData imageData)
@@ -109,7 +107,7 @@ namespace AdvancedExternalReviews
             if (linkMap != null)
             {
                 var content = _contentLoader.Get<IContent>(linkMap.ContentReference);
-                if (content is PageData)
+                if (ShouldGenerateProjectModeUrlPostfix(content))
                 {
                     return AppendGeneratedPostfix(url);
                 }
@@ -127,6 +125,27 @@ namespace AdvancedExternalReviews
             VirtualPathArguments virtualPathArguments)
         {
             return _defaultUrlResolver.GetVirtualPathForNonContent(partialRoutedObject, language, virtualPathArguments);
+        }
+
+        private bool ShouldGenerateProjectModeUrlPostfix(IContent content)
+        {
+            if (!ExternalReview.IsInProjectReviewContext)
+            {
+                return false;
+            }
+
+            if (!(content is PageData))
+            {
+                return false;
+            }
+
+            var externalReviewLinksRepository = ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>();
+            var siteDefinitionResolver = ServiceLocator.Current.GetInstance<ISiteDefinitionResolver>();
+
+            var externalReviewLink = externalReviewLinksRepository.GetContentByToken(ExternalReview.Token);
+            var pageParentSite = siteDefinitionResolver.GetByContent(content.ContentLink, false);
+            return string.IsNullOrEmpty(externalReviewLink.PinCode) || pageParentSite == SiteDefinition.Current;
+
         }
 
         private string AppendGeneratedPostfix(string url)
