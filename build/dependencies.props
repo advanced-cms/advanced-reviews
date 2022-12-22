@@ -1,8 +1,9 @@
 <Project>
     <PropertyGroup>
-        <CmsCoreVersion>12.10.0</CmsCoreVersion>
-        <CmsUIVersion>*</CmsUIVersion>
-        <CommerceVersion>14.7.1</CommerceVersion>
+        <CmsCoreVersion>12.11.0</CmsCoreVersion>
+        <CmsUIVersion>12.15.0</CmsUIVersion>
+        <CmsUmbrellaVersion>12.15.1</CmsUmbrellaVersion>
+        <CommerceVersion>14.8.0</CommerceVersion>
     </PropertyGroup>
     <ItemGroup>
         <!-- CMS CORE -->
@@ -16,7 +17,7 @@
         <PackageReference Update="EPiServer.CMS.AspNetCore.Templating" Version="$(CmsCoreVersion)" />
 
         <!-- CMS UI -->
-        <PackageReference Update="EPiServer.CMS" Version="$(CmsUIVersion)"/>
+        <PackageReference Update="EPiServer.CMS" Version="$(CmsUmbrellaVersion)"/>
         <PackageReference Update="EPiServer.CMS.UI" Version="$(CmsUIVersion)"/>
         <PackageReference Update="EPiServer.CMS.UI.Core" Version="$(CmsUIVersion)"/>
         <PackageReference Update="EPiServer.CMS.UI.Sources" Version="$(CmsUIVersion)"/>
@@ -34,12 +35,7 @@
         <PackageReference Update="EPiServer.CMS.TinyMce" Version="*"/>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-        <PackageReference Update="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-        <PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <ItemGroup>
         <PackageReference Update="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
         <PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0" />
     </ItemGroup>

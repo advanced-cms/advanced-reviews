@@ -2,7 +2,7 @@
   <Import Project="..\..\build\common.props" />
   <Import Project="..\..\build\nuspec.props" />
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <NuspecFile>Advanced.CMS.AdvancedReviews.nuspec</NuspecFile>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>

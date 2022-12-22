@@ -9,15 +9,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Context aware smart reviewing. Allow external reviewers to access unpublished data. Provide token-based, expirable links to any content version. Visually express issues in reviewed content by highlighting or adding screenshots.</description>
     <releaseNotes/>
-    <copyright>Copyright 2022</copyright>
+    <copyright>Copyright 2023</copyright>
     <tags>review preview content approval external</tags>
     <license type="expression">MIT</license>
     <icon>logo.png</icon>
     <projectUrl>https://github.com/advanced-cms/advanced-reviews</projectUrl>
     <dependencies>
-      <group targetFramework="net5.0">
-        <dependency id="EPiServer.CMS.UI.Core" version="[$CmsUIVersion$, $CmsUINextMajorVersion$)" />
-      </group>
       <group targetFramework="net6.0">
         <dependency id="EPiServer.CMS.UI.Core" version="[$CmsUIVersion$, $CmsUINextMajorVersion$)" />
       </group>
@@ -28,14 +25,6 @@
     </contentFiles>
   </metadata>
   <files>
-    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\net5.0\Advanced.CMS.AdvancedReviews.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\net5.0\Advanced.CMS.AdvancedReviews.Views.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\net5.0\Advanced.CMS.ApprovalReviews.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\net5.0\Advanced.CMS.ApprovalReviews.Views.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\net5.0\Advanced.CMS.ExternalReviews.dll" target="lib\net5.0\" />
-    <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\net5.0\Advanced.CMS.ExternalReviews.Views.dll" target="lib\net5.0\" />
-    <file src="build\CopyZipFiles.targets" target="build\net5.0\Advanced.CMS.AdvancedReviews.targets" />
-
     <file src="src\Advanced.CMS.AdvancedReviews\bin\$configuration$\net6.0\Advanced.CMS.AdvancedReviews.dll" target="lib\net6.0\" />
     <file src="src\Advanced.CMS.ApprovalReviews\bin\$configuration$\net6.0\Advanced.CMS.ApprovalReviews.dll" target="lib\net6.0\" />
     <file src="src\Advanced.CMS.ExternalReviews\bin\$configuration$\net6.0\Advanced.CMS.ExternalReviews.dll" target="lib\net6.0\" />
