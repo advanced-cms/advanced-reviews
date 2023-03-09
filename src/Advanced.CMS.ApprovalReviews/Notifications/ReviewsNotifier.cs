@@ -69,7 +69,7 @@ namespace Advanced.CMS.ApprovalReviews.Notifications
 
             // subscribe users to comment
             var subscriptionKey = new Uri($"advancedreviews://notification/{token}");
-
+            var userName = _principalAccessor.CurrentName();
             await _subscriptionService.SubscribeAsync(subscriptionKey, subscribers).ConfigureAwait(false);
 
             var recipients = (await _subscriptionService.ListSubscribersAsync(subscriptionKey).ConfigureAwait(false))
@@ -93,7 +93,8 @@ namespace Advanced.CMS.ApprovalReviews.Notifications
             var notificationMessage = new NotificationMessage
             {
                 ChannelName = ChannelName,
-                Sender = new NotificationUser(_principalAccessor.CurrentName()),
+                Sender = new NotificationUser(userName),
+                //Sender = new NotificationUser(_principalAccessor.CurrentName()),
                 Recipients = recipients,
                 Content = _objectSerializer.Serialize(model)
             };
