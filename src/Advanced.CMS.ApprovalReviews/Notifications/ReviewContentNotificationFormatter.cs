@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EPiServer;
 using EPiServer.Cms.Shell.UI.Notifications;
 using EPiServer.Core;
 using EPiServer.Framework.Serialization;
 using EPiServer.Notification;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 
 namespace Advanced.CMS.ApprovalReviews.Notifications
 {
@@ -13,10 +15,12 @@ namespace Advanced.CMS.ApprovalReviews.Notifications
     internal class ReviewContentNotificationFormatter : IUserNotificationFormatter
     {
         private readonly IObjectSerializer _objectSerializer;
+        private readonly EditUrlResolver _editUrlResolver;
 
-        public ReviewContentNotificationFormatter(IObjectSerializerFactory objectSerializerFactory)
+        public ReviewContentNotificationFormatter(IObjectSerializerFactory objectSerializerFactory, EditUrlResolver editUrlResolver)
         {
             _objectSerializer = objectSerializerFactory.GetSerializer(KnownContentTypes.Json);
+            _editUrlResolver = editUrlResolver;
         }
 
         public static string FeatureIconKey => "featureIcon";
@@ -60,7 +64,7 @@ namespace Advanced.CMS.ApprovalReviews.Notifications
             result.Subject = reviewContent.Title;
             if (!ContentReference.IsNullOrEmpty(reviewContent.ContentLink))
             {
-                result.Link = new Uri("epi.cms.contentdata:///" + reviewContent.ContentLink);
+                result.Link = GetEditUri(reviewContent.ContentLink);
             }
 
             var userNameContainer = "<span class='epi-username external-review'>{0}</span>";
@@ -70,6 +74,13 @@ namespace Advanced.CMS.ApprovalReviews.Notifications
             result.Content = $"{userName} added new comment: \"'{reviewContent.Text?.Ellipsis(50)}'\"";
 
             return Task.FromResult(result);
+        }
+
+        internal Uri GetEditUri(ContentReference contentLink, string contextKey = "epi.cms.contentdata")
+        {
+            var editUrlBuilder = new UrlBuilder(_editUrlResolver.GetEditViewUrl(contentLink, new EditUrlArguments()));
+            editUrlBuilder.Fragment = $"context={contextKey}:///{contentLink}";
+            return editUrlBuilder.Uri;
         }
     }
 }

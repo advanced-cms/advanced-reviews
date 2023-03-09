@@ -1,8 +1,8 @@
 <Project>
     <PropertyGroup>
-        <CmsCoreVersion>12.11.0</CmsCoreVersion>
-        <CmsUIVersion>12.15.0</CmsUIVersion>
-        <CmsUmbrellaVersion>12.15.1</CmsUmbrellaVersion>
+        <CmsCoreVersion>12.12.1</CmsCoreVersion>
+        <CmsUIVersion>12.17.1</CmsUIVersion>
+        <CmsUmbrellaVersion>12.17.1</CmsUmbrellaVersion>
         <CommerceVersion>14.8.0</CommerceVersion>
     </PropertyGroup>
     <ItemGroup>
