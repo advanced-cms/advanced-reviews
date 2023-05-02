@@ -34,7 +34,7 @@ namespace Advanced.CMS.ExternalReviews
                 if (cachedContent != null)
                 {
                     e.ContentLink = cachedContent.ContentLink;
-                    e.Content = cachedContent.AllowAccessToEveryone();
+                    e.Content = cachedContent;
                     e.CancelAction = true;
                 }
 

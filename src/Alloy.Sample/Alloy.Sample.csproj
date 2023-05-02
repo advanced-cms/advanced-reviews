@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="EPiServer.CMS.TinyMce" />
     <PackageReference Include="EPiServer.CMS.AspNetCore.HtmlHelpers" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore.Routing" />
     <PackageReference Include="EPiServer.CMS.UI" />
     <PackageReference Include="EPiServer.CMS.UI.AspNetIdentity" />
     <PackageReference Include="EPiServer.CMS.UI.VisitorGroups" />
