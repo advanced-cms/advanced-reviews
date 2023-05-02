@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
@@ -166,7 +167,22 @@ namespace Advanced.CMS.ExternalReviews
 
         public ContentRouteData Route(UrlBuilder urlBuilder, RouteArguments routeArguments)
         {
-            return _defaultUrlResolver.Route(urlBuilder, routeArguments);
+            var contentRouteData = _defaultUrlResolver.Route(urlBuilder, routeArguments);
+
+            if (contentRouteData.RemainingPath.StartsWith($"{_externalReviewOptions.Service.ContentPreviewUrl}/", StringComparison.CurrentCultureIgnoreCase))
+            {
+                // If we failed to route then it means that a start page in the same language does not exist and our partial routers will not be able to step in
+                // We need to fallback to master language
+                if (contentRouteData.Content == null)
+                {
+                    var masterLanguage = LanguageSelector.AutoDetect().LanguageBranch;
+                    urlBuilder.Path = urlBuilder.Path.Replace($"/{contentRouteData.RouteLanguage}", $"/{masterLanguage}");
+                    var masterRoutedData = _defaultUrlResolver.Route(urlBuilder, routeArguments);
+                    return masterRoutedData;
+                }
+            }
+
+            return contentRouteData;
         }
 
         private string AppendGeneratedPostfix(string url)
