@@ -1,10 +1,9 @@
 ﻿using Advanced.CMS.ExternalReviews.DraftContentAreaPreview;
-
+using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 
 namespace Advanced.CMS.ExternalReviews
@@ -29,8 +28,7 @@ namespace Advanced.CMS.ExternalReviews
 
             if (externalReviewState.CustomLoaded.Contains(e.ContentLink.ToString()))
             {
-                var preferredCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
-                var cachedContent = externalReviewState.GetCachedContent(preferredCulture, e.ContentLink);
+                var cachedContent = externalReviewState.GetCachedContent(e.ContentLink);
                 if (cachedContent != null)
                 {
                     e.ContentLink = cachedContent.ContentLink;
@@ -51,15 +49,21 @@ namespace Advanced.CMS.ExternalReviews
                 return;
             }
 
-            var unpublishedCulture = ServiceLocator.Current.GetInstance<LanguageResolver>().GetPreferredCulture();
-            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(unpublished);
-
-            if (!(content is IVersionable versionable) || reviewsContentLoader.HasExpired(versionable))
+            var externalReviewLinksRepository = ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>();
+            var externalReviewLink = externalReviewLinksRepository.GetContentByToken(externalReviewState.Token);
+            if (!externalReviewLink.IsPreviewableLink())
             {
                 return;
             }
 
-            externalReviewState.SetCachedLink(unpublishedCulture, content);
+            var content = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IContent>(unpublished);
+
+            if (content is not IVersionable versionable || reviewsContentLoader.HasExpired(versionable))
+            {
+                return;
+            }
+
+            externalReviewState.SetCachedLink(content);
 
             e.ContentLink = unpublished;
             e.Content = content.AllowAccessToEveryone();
