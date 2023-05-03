@@ -45,7 +45,7 @@ namespace Alloy.Sample.Business.Rendering
 
         private static string GetTypeSpecificCssClasses(ContentAreaItem contentAreaItem, IContentRepository contentRepository)
         {
-            var content = contentAreaItem.GetContent();
+            var content = contentAreaItem.LoadContent();
             var cssClass = content == null ? String.Empty : content.GetOriginalType().Name.ToLowerInvariant();
 
             var customClassContent = content as ICustomCssInContentArea;
