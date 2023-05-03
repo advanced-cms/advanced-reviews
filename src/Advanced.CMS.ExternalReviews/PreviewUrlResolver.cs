@@ -172,8 +172,8 @@ namespace Advanced.CMS.ExternalReviews
             if (contentRouteData.RemainingPath.StartsWith($"{_externalReviewOptions.Service.ContentPreviewUrl}/", StringComparison.CurrentCultureIgnoreCase))
             {
                 // If we failed to route then it means that a start page in the same language does not exist and our partial routers will not be able to step in
-                // We need to fallback to master language
-                if (contentRouteData.Content == null)
+                // We need to fallback to master language also if the translated start page is not published
+                if (contentRouteData.Content == null || !contentRouteData.Content.IsPublished())
                 {
                     var masterLanguage = LanguageSelector.AutoDetect().LanguageBranch;
                     urlBuilder.Path = urlBuilder.Path.Replace($"/{contentRouteData.RouteLanguage}", $"/{masterLanguage}");
