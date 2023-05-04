@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
@@ -46,7 +45,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             }
 
             var nextSegment = segmentContext.GetNextSegment(segmentContext.RemainingSegments);
-            if (nextSegment.Next.IsEmpty || nextSegment.Next.ToString().Equals(_externalReviewOptions.ContentIframeEditUrlSegment, StringComparison.CurrentCultureIgnoreCase))
+            if (nextSegment.Next.IsEmpty || !nextSegment.Next.ToString().Equals(_externalReviewOptions.ContentIframeEditUrlSegment, StringComparison.CurrentCultureIgnoreCase))
             {
                 return null;
             }
