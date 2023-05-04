@@ -8,7 +8,6 @@ using EPiServer.Core;
 using EPiServer.Core.Internal;
 using EPiServer.DataAbstraction;
 using EPiServer.Filters;
-using EPiServer.Globalization;
 using EPiServer.Logging;
 using EPiServer.ServiceLocation;
 
@@ -18,27 +17,22 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
     public class ReviewsContentLoader
     {
         private readonly IContentLoader _contentLoader;
-        private readonly IContentLanguageAccessor _languageAccessor;
         private readonly ProjectContentResolver _projectContentResolver;
         private readonly IContentVersionRepository _contentVersionRepository;
-        private readonly LanguageResolver _languageResolver;
         private readonly IContentProviderManager _contentProviderManager;
         private readonly IContentChildrenSorter _childrenSorter;
         private readonly ExternalReviewState _externalReviewState;
         private static readonly ILogger _log = LogManager.GetLogger(typeof(ReviewsContentLoader));
 
-        public ReviewsContentLoader(IContentLoader contentLoader, IContentLanguageAccessor languageAccessor,
+        public ReviewsContentLoader(IContentLoader contentLoader,
             ProjectContentResolver projectContentResolver,
             IContentVersionRepository contentVersionRepository,
-            LanguageResolver languageResolver,
             IContentProviderManager contentProviderManager,
             IContentChildrenSorter childrenSorter, ExternalReviewState externalReviewState)
         {
             _contentLoader = contentLoader;
-            _languageAccessor = languageAccessor;
             _projectContentResolver = projectContentResolver;
             _contentVersionRepository = contentVersionRepository;
-            _languageResolver = languageResolver;
             _contentProviderManager = contentProviderManager;
             _childrenSorter = childrenSorter;
             _externalReviewState = externalReviewState;
@@ -46,7 +40,8 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
 
         public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink) where T : IContentData
         {
-            return GetChildrenWithReviews<T>(contentLink, CreateDefaultListOption());
+            var loaderOptions = new LoaderOptions { LanguageLoaderOption.Fallback(new CultureInfo(_externalReviewState.PreferredLanguage)) };
+            return GetChildrenWithReviews<T>(contentLink, loaderOptions);
         }
 
         public IEnumerable<T> GetChildrenWithReviews<T>(ContentReference contentLink, CultureInfo language)
@@ -82,7 +77,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                 return _contentLoader.GetChildren<T>(contentLink);
             }
 
-            ContentReference referenceWithoutVersion = contentLink.ToReferenceWithoutVersion();
+            var referenceWithoutVersion = contentLink.ToReferenceWithoutVersion();
             if (referenceWithoutVersion == ContentReference.WasteBasket)
             {
                 return _contentLoader.GetChildren<T>(contentLink);
@@ -91,8 +86,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
             var provider = _contentProviderManager.ProviderMap.GetProvider(referenceWithoutVersion);
 
             var parentContent = _contentLoader.Get<IContent>(referenceWithoutVersion, loaderOptions);
-            var localizable = parentContent as ILocalizable;
-            var languageID = localizable != null ? localizable.Language.Name : (string)null;
+            var languageID = parentContent is ILocalizable localizable ? localizable.Language.Name : null;
             var childrenReferences =
                 provider.GetChildrenReferences<T>(referenceWithoutVersion, languageID, startIndex, maxRows);
 
@@ -129,7 +123,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                         continue;
                     }
 
-                    result.Add((content as IContent).ContentLink);
+                    result.Add((content as IContent)?.ContentLink);
                 }
             }
 
@@ -156,17 +150,14 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
             if (_externalReviewState.ProjectId.HasValue)
             {
                 // load version from project
-                return _projectContentResolver.GetProjectReference(baseReference,
-                    _externalReviewState.ProjectId.Value, _languageResolver.GetPreferredCulture().Name);
+                return _projectContentResolver.GetProjectReference(baseReference, _externalReviewState.ProjectId.Value, _externalReviewState.PreferredLanguage);
             }
 
             // load common draft instead of published version
             ContentVersion loadCommonDraft;
             try
             {
-                loadCommonDraft =
-                    _contentVersionRepository.LoadCommonDraft(baseReference,
-                        _languageResolver.GetPreferredCulture().Name);
+                loadCommonDraft = _contentVersionRepository.LoadCommonDraft(baseReference, _externalReviewState.PreferredLanguage);
             }
             catch (ContentNotFoundException)
             {
@@ -190,9 +181,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
 
         private LoaderOptions CreateDefaultListOption()
         {
-            LoaderOptions loaderOptions = new LoaderOptions();
-            loaderOptions.Add<LanguageLoaderOption>(LanguageLoaderOption.Fallback(_languageAccessor.Language));
-            return loaderOptions;
+            return new LoaderOptions { LanguageLoaderOption.Fallback(new CultureInfo(_externalReviewState.PreferredLanguage)) };
         }
     }
 }

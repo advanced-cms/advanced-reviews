@@ -1,10 +1,8 @@
-﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Core;
 using EPiServer.Core.Internal;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Globalization;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
@@ -16,7 +14,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
     /// <summary>
     /// Register ContentArea draft preview
     /// </summary>
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+    [ModuleDependency(typeof(InitializationModule))]
     public class DraftContentAreaPreviewInitializerInitializer : IConfigurableModule
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
@@ -47,8 +45,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
                 // Intercepted in order to return unpublished content items
                 context.Services.Intercept<IPublishedStateAssessor>(
                     (locator, defaultPublishedStateAssessor) =>
-                        new PublishedStateAssessorDecorator(defaultPublishedStateAssessor,
-                            locator.GetInstance<LanguageResolver>(), locator.GetInstance<ExternalReviewState>()));
+                        new PublishedStateAssessorDecorator(defaultPublishedStateAssessor, locator.GetInstance<ExternalReviewState>()));
 
                 // Intercepted in order to not filter out content without Everyone access
                 context.Services.Intercept<IContentAccessEvaluator>(

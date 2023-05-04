@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +22,12 @@ namespace Advanced.CMS.ExternalReviews
         {
             get => _httpContextAccessor.HttpContext?.Items["Token"] as string;
             set => _httpContextAccessor.HttpContext.Items["Token"] = value;
+        }
+
+        public string PreferredLanguage
+        {
+            get => _httpContextAccessor.HttpContext?.Items["PreferredLanguage"] as string;
+            set => _httpContextAccessor.HttpContext.Items["PreferredLanguage"] = value;
         }
 
         public bool IsEditLink
@@ -88,18 +93,18 @@ namespace Advanced.CMS.ExternalReviews
             return _httpContextAccessor.HttpContext?.Items[key] as ConcurrentDictionary<string, IContent>;
         }
 
-        public IContent GetCachedContent(CultureInfo preferredCulture, ContentReference contentLink)
+        public IContent GetCachedContent(ContentReference contentLink)
         {
-            if (GetCachedLinksDictionary().TryGetValue(preferredCulture.Name + "_" + contentLink.ToReferenceWithoutVersion(), out var result))
+            if (GetCachedLinksDictionary().TryGetValue(PreferredLanguage + "_" + contentLink.ToReferenceWithoutVersion(), out var result))
             {
                 return result;
             }
             return null;
         }
 
-        public void SetCachedLink(CultureInfo preferredCulture, IContent contentLink)
+        public void SetCachedLink(IContent contentLink)
         {
-            GetCachedLinksDictionary()[preferredCulture.Name + "_" + contentLink.ContentLink.ToReferenceWithoutVersion()] = contentLink;
+            GetCachedLinksDictionary()[PreferredLanguage + "_" + contentLink.ContentLink.ToReferenceWithoutVersion()] = contentLink;
         }
     }
 }

@@ -1,19 +1,15 @@
 ﻿using EPiServer.Core;
-using EPiServer.Globalization;
 
 namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
 {
     public class PublishedStateAssessorDecorator : IPublishedStateAssessor
     {
         private readonly IPublishedStateAssessor _defaultService;
-        private readonly LanguageResolver _languageResolver;
         private readonly ExternalReviewState _externalReviewState;
 
-        public PublishedStateAssessorDecorator(IPublishedStateAssessor defaultService,
-            LanguageResolver languageResolver, ExternalReviewState externalReviewState)
+        public PublishedStateAssessorDecorator(IPublishedStateAssessor defaultService, ExternalReviewState externalReviewState)
         {
             _defaultService = defaultService;
-            _languageResolver = languageResolver;
             _externalReviewState = externalReviewState;
         }
 
@@ -28,8 +24,7 @@ namespace Advanced.CMS.ExternalReviews.DraftContentAreaPreview
 
                 if (_externalReviewState.CustomLoaded.Contains(content.ContentLink.ToString()))
                 {
-                    var cachedContent =
-                        _externalReviewState.GetCachedContent(_languageResolver.GetPreferredCulture(), content.ContentLink);
+                    var cachedContent = _externalReviewState.GetCachedContent(content.ContentLink);
                     if (cachedContent != null)
                     {
                         return true;

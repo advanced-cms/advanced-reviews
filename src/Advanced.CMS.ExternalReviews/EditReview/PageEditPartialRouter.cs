@@ -18,17 +18,19 @@ namespace Advanced.CMS.ExternalReviews.EditReview
         private readonly ProjectContentResolver _projectContentResolver;
         private readonly IContentLanguageAccessor _contentLanguageAccessor;
         private readonly ExternalReviewState _externalReviewState;
+        private readonly IContentVersionRepository _contentVersionRepository;
 
         public PageEditPartialRouter(IExternalReviewLinksRepository externalReviewLinksRepository,
             ExternalReviewOptions externalReviewOptions,
             ProjectContentResolver projectContentResolver, IContentLanguageAccessor contentLanguageAccessor,
-            ExternalReviewState externalReviewState)
+            ExternalReviewState externalReviewState, IContentVersionRepository contentVersionRepository)
         {
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
             _projectContentResolver = projectContentResolver;
             _contentLanguageAccessor = contentLanguageAccessor;
             _externalReviewState = externalReviewState;
+            _contentVersionRepository = contentVersionRepository;
         }
 
         public PartialRouteData GetPartialVirtualPath(IContent content, UrlGeneratorContext urlGeneratorContext)
@@ -58,11 +60,13 @@ namespace Advanced.CMS.ExternalReviews.EditReview
                 return null;
             }
 
+            var version = _contentVersionRepository.Load(externalReviewLink.ContentLink);
+            _contentLanguageAccessor.Language = new CultureInfo(version.LanguageBranch);
+
             _externalReviewState.ProjectId = externalReviewLink.ProjectId;
             _externalReviewState.IsEditLink = true;
             _externalReviewState.Token = token;
-
-            _contentLanguageAccessor.Language = new CultureInfo(content.LanguageBranch());
+            _externalReviewState.PreferredLanguage = version.LanguageBranch;
 
             try
             {

@@ -23,12 +23,14 @@ namespace Advanced.CMS.ExternalReviews
         private readonly ExternalReviewOptions _externalReviewOptions;
         private readonly IContentLanguageAccessor _contentLanguageAccessor;
         private readonly ExternalReviewState _externalReviewState;
+        private readonly IContentVersionRepository _contentVersionRepository;
 
         public PagePreviewPartialRouter(IExternalReviewLinksRepository externalReviewLinksRepository,
             ExternalReviewOptions externalReviewOptions,
             ProjectContentResolver projectContentResolver,
             IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler,
-            IContentLanguageAccessor contentLanguageAccessor, ExternalReviewState externalReviewState)
+            IContentLanguageAccessor contentLanguageAccessor, ExternalReviewState externalReviewState,
+            IContentVersionRepository contentVersionRepository)
         {
             _externalReviewLinksRepository = externalReviewLinksRepository;
             _externalReviewOptions = externalReviewOptions;
@@ -36,6 +38,7 @@ namespace Advanced.CMS.ExternalReviews
             _externalLinkPinCodeSecurityHandler = externalLinkPinCodeSecurityHandler;
             _contentLanguageAccessor = contentLanguageAccessor;
             _externalReviewState = externalReviewState;
+            _contentVersionRepository = contentVersionRepository;
         }
 
         public PartialRouteData GetPartialVirtualPath(IContent content, UrlGeneratorContext segmentContext)
@@ -62,8 +65,6 @@ namespace Advanced.CMS.ExternalReviews
                 return null;
             }
 
-            _contentLanguageAccessor.Language = new CultureInfo(content.LanguageBranch());
-
             nextSegment = segmentContext.GetNextSegment(nextSegment.Remaining);
             var token = nextSegment.Next.ToString();
 
@@ -73,8 +74,11 @@ namespace Advanced.CMS.ExternalReviews
                 return null;
             }
 
+            var version = _contentVersionRepository.Load(externalReviewLink.ContentLink);
+            _contentLanguageAccessor.Language = new CultureInfo(version.LanguageBranch);
             _externalReviewState.Token = token;
             _externalReviewState.ProjectId = externalReviewLink.ProjectId;
+            _externalReviewState.PreferredLanguage = version.LanguageBranch;
 
             // PIN code security check, if user is not authenticated, then redirect to login page
             if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
