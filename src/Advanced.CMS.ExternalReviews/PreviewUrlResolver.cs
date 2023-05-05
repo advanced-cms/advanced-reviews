@@ -169,6 +169,11 @@ namespace Advanced.CMS.ExternalReviews
         {
             var contentRouteData = _defaultUrlResolver.Route(urlBuilder, routeArguments);
 
+            if (contentRouteData?.RemainingPath == null)
+            {
+                return contentRouteData;
+            }
+
             if (contentRouteData.RemainingPath.StartsWith($"{_externalReviewOptions.Service.ContentPreviewUrl}/", StringComparison.CurrentCultureIgnoreCase))
             {
                 // If we failed to route then it means that a start page in the same language does not exist and our partial routers will not be able to step in
