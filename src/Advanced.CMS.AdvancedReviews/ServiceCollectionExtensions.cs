@@ -21,7 +21,7 @@ namespace Advanced.CMS.AdvancedReviews
         {
             var options = endpointRouteBuilder.ServiceProvider.GetInstance<ExternalReviewOptions>();
 
-            endpointRouteBuilder.MapControllerRoute("ImageProxy", "/ImageProxy",
+            endpointRouteBuilder.MapControllerRoute("ImageProxy", "/ImageProxy/{token}/{contentLink}",
                 new { controller = "ImageProxy", action = "Index" });
 
             endpointRouteBuilder.MapControllerRoute("ExternalReviewLogin",

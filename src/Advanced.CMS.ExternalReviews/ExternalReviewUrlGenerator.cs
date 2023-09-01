@@ -20,7 +20,7 @@ namespace Advanced.CMS.ExternalReviews
 
         public string GetProxiedImageUrl(ContentReference contentLink)
         {
-            return $"/ImageProxy?token={_externalReviewState.Token}&contentLink={contentLink}";
+            return $"/ImageProxy/{_externalReviewState.Token}/{contentLink}";
         }
     }
 }
