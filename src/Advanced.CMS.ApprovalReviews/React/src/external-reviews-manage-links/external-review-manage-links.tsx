@@ -41,7 +41,7 @@ const ExternalReviewWidgetContent = observer(
         pinCodeSecurityEnabled,
         pinCodeSecurityRequired,
         pinCodeLength,
-        prolongDays
+        prolongDays,
     }: ExternalReviewWidgetContentProps) => {
         const [currentLinkToDelete, setLinkToDelete] = useState<ReviewLink>(null);
         const [currentLinkToShare, setLinkToShare] = useState<ReviewLink>(null);
@@ -83,7 +83,7 @@ const ExternalReviewWidgetContent = observer(
             store.edit(reviewLink, null, pinCode, displayName, visitorGroups);
         };
 
-        const addNewLink = isEditable => {
+        const addNewLink = (isEditable) => {
             if (isEditable || !isPinRequired) {
                 store.addLink(isEditable);
                 return;
@@ -97,13 +97,13 @@ const ExternalReviewWidgetContent = observer(
             {
                 name: resources.list.viewlink,
                 icon: "pageview",
-                onSelected: () => addNewLink(false)
+                onSelected: () => addNewLink(false),
             },
             {
                 name: resources.list.editlink,
                 icon: "rate_review",
-                onSelected: () => addNewLink(true)
-            }
+                onSelected: () => addNewLink(true),
+            },
         ];
 
         return (
@@ -144,6 +144,13 @@ const ExternalReviewWidgetContent = observer(
                                                 icon="lock"
                                                 className="link-secured"
                                                 title={resources.list.editdialog.linksecured}
+                                            />
+                                        )}
+                                        {item.visitorGroups && item.visitorGroups.length > 0 && (
+                                            <MaterialIcon
+                                                icon="groups"
+                                                className="link-secured"
+                                                title="Visitor groups applied"
                                             />
                                         )}
                                         {item.projectId > 0 && (
