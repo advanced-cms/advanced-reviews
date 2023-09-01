@@ -2,7 +2,6 @@
 using System.Globalization;
 using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
@@ -79,6 +78,7 @@ namespace Advanced.CMS.ExternalReviews
             _externalReviewState.Token = token;
             _externalReviewState.ProjectId = externalReviewLink.ProjectId;
             _externalReviewState.PreferredLanguage = version.LanguageBranch;
+            _externalReviewState.ImpersonatedVisitorGroupsById = externalReviewLink.VisitorGroups;
 
             // PIN code security check, if user is not authenticated, then redirect to login page
             if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))

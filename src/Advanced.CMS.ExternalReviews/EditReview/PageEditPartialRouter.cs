@@ -66,6 +66,7 @@ namespace Advanced.CMS.ExternalReviews.EditReview
             _externalReviewState.IsEditLink = true;
             _externalReviewState.Token = token;
             _externalReviewState.PreferredLanguage = version.LanguageBranch;
+            _externalReviewState.ImpersonatedVisitorGroupsById = externalReviewLink.VisitorGroups;
 
             try
             {

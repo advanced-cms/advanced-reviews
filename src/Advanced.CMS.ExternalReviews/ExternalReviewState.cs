@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using EPiServer.Core;
+using EPiServer.Personalization.VisitorGroups;
 using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Http;
 
@@ -34,6 +35,15 @@ namespace Advanced.CMS.ExternalReviews
         {
             get => (string) _httpContextAccessor.HttpContext?.Items["IsEditLink"] == bool.TrueString;
             set => _httpContextAccessor.HttpContext.Items["IsEditLink"] = value.ToString();
+        }
+
+        /// <summary>
+        /// VisitorGroupRole.ImpersonatedVisitorGroupByID is a special string from CMS Core which allows to impersonate as any VG
+        /// </summary>
+        public string[] ImpersonatedVisitorGroupsById
+        {
+            get => (string[]) _httpContextAccessor.HttpContext?.Items[VisitorGroupRole.ImpersonatedVisitorGroupByID];
+            set => _httpContextAccessor.HttpContext.Items[VisitorGroupRole.ImpersonatedVisitorGroupByID] = value;
         }
 
         public IList<string> CustomLoaded
