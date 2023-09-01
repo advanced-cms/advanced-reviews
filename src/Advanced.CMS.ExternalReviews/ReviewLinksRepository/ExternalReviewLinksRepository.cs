@@ -4,6 +4,7 @@ using System.Linq;
 using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using EPiServer.Core;
 using EPiServer.Data.Dynamic;
+using EPiServer.Framework.Cache;
 using EPiServer.ServiceLocation;
 
 namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
@@ -34,12 +35,14 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
     {
         private readonly ExternalReviewLinkBuilder _externalReviewLinkBuilder;
         private readonly DynamicDataStoreFactory _dataStoreFactory;
+        private readonly ISynchronizedObjectInstanceCache _cache;
 
         public ExternalReviewLinksRepository(ExternalReviewLinkBuilder externalReviewLinkBuilder,
-            DynamicDataStoreFactory dataStoreFactory)
+            DynamicDataStoreFactory dataStoreFactory, ISynchronizedObjectInstanceCache cache)
         {
             _externalReviewLinkBuilder = externalReviewLinkBuilder;
             _dataStoreFactory = dataStoreFactory;
+            _cache = cache;
         }
 
         public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId)
@@ -74,7 +77,15 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
             }
 
             token = token.ToLower();
-            return GetStore().Items<ExternalReviewLinkDds>().FirstOrDefault(x => x.Token == token);
+            if (_cache.Get(token) is ExternalReviewLinkDds item)
+            {
+                return item;
+            }
+
+            var externalReviewLinkDds = GetStore().Items<ExternalReviewLinkDds>().FirstOrDefault(x => x.Token == token);
+            _cache.Insert(token, externalReviewLinkDds, CacheEvictionPolicy.Empty);
+
+            return externalReviewLinkDds;
         }
 
         public bool HasPinCode(string token)
@@ -140,7 +151,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
             item.VisitorGroups = visitorGroups ?? new[] {"cc5fc022-4186-431e-b38a-e257d8cafd51"};
 
             store.Save(item);
-
+            _cache.Remove(token);
             return _externalReviewLinkBuilder.FromExternalReview(item);
         }
 
@@ -153,6 +164,7 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository
                 return;
             }
             GetStore().Delete(item.Id);
+            _cache.Remove(token);
         }
 
         private DynamicDataStore GetStore()
