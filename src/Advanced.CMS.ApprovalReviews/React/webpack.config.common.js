@@ -1,19 +1,30 @@
 const config = {
     resolve: {
-        extensions: [".ts", ".tsx", ".js"]
+        extensions: [".ts", ".tsx", ".js"],
     },
     module: {
         rules: [
-            { test: /\.tsx?$/, loader: "ts-loader" },
+            {
+                test: /\.tsx?$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: "ts-loader",
+                        options: {
+                            transpileOnly: true,
+                        },
+                    },
+                ],
+            },
             {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-react"]
-                    }
-                }
+                        presets: ["@babel/preset-react"],
+                    },
+                },
             },
             {
                 test: /\.(sc|c)ss$/,
@@ -23,13 +34,13 @@ const config = {
                     {
                         loader: "sass-loader",
                         options: {
-                            includePaths: ["node_modules"]
-                        }
-                    }
-                ]
-            }
-        ]
-    }
+                            includePaths: ["node_modules"],
+                        },
+                    },
+                ],
+            },
+        ],
+    },
 };
 
 module.exports = (env, argv) => {
