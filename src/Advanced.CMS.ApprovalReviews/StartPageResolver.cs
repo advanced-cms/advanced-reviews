@@ -3,29 +3,27 @@ using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
 
-namespace Advanced.CMS.ApprovalReviews
+namespace Advanced.CMS.ApprovalReviews;
+
+public interface IStartPageUrlResolver
 {
-    public interface IStartPageUrlResolver
+    string GetUrl(ContentReference contentReference, string languageBranch);
+}
+
+internal class StartPageUrlResolver: IStartPageUrlResolver
+{
+    private readonly IUrlResolver _urlResolver;
+    private readonly ISiteDefinitionResolver _siteDefinitionResolver;
+
+    public StartPageUrlResolver(IUrlResolver urlResolver, ISiteDefinitionResolver siteDefinitionResolver)
     {
-        string GetUrl(ContentReference contentReference, string languageBranch);
+        _urlResolver = urlResolver;
+        _siteDefinitionResolver = siteDefinitionResolver;
     }
 
-    [ServiceConfiguration(typeof(IStartPageUrlResolver))]
-    public class StartPageUrlResolver: IStartPageUrlResolver
+    public string GetUrl(ContentReference contentReference, string languageBranch)
     {
-        private readonly IUrlResolver _urlResolver;
-        private readonly ISiteDefinitionResolver _siteDefinitionResolver;
-
-        public StartPageUrlResolver(IUrlResolver urlResolver, ISiteDefinitionResolver siteDefinitionResolver)
-        {
-            _urlResolver = urlResolver;
-            _siteDefinitionResolver = siteDefinitionResolver;
-        }
-
-        public string GetUrl(ContentReference contentReference, string languageBranch)
-        {
-            var site = _siteDefinitionResolver.GetByContent(contentReference, true);
-            return _urlResolver.GetUrl(site?.StartPage ?? ContentReference.StartPage, languageBranch);
-        }
+        var site = _siteDefinitionResolver.GetByContent(contentReference, true);
+        return _urlResolver.GetUrl(site?.StartPage ?? ContentReference.StartPage, languageBranch);
     }
 }

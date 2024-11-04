@@ -3,6 +3,7 @@ using EPiServer.Cms.Shell.UI.Rest.Approvals.Internal;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Cms.Shell.UI.Rest.Projects.Internal;
 using EPiServer.Core;
+using EPiServer.Data;
 using EPiServer.DataAbstraction;
 using EPiServer.Framework.Localization;
 using EPiServer.ServiceLocation;
@@ -15,10 +16,11 @@ public class MockableProjectService : ProjectService
         IContentChangeManager contentChangeManager,
         LanguageSelectorFactory languageSelectorFactory,
         ISiteConfigurationRepository siteConfigurationRepository, ApprovalService approvalService,
-        LocalizationService localizationService, ProjectUIOptions projectUIOptions) : base(projectRepository,
+        LocalizationService localizationService, ProjectUIOptions projectUIOptions, IDatabaseMode databaseMode) : base(
+        projectRepository,
         projectPublisher, ServiceLocator.Current.GetInstance<MockableContentService>(), contentChangeManager,
         languageSelectorFactory, ServiceLocator.Current.GetInstance<MockableCurrentProject>(),
-        siteConfigurationRepository, approvalService, localizationService, projectUIOptions)
+        siteConfigurationRepository, approvalService, localizationService, projectUIOptions, databaseMode)
     {
     }
 }

@@ -1,15 +1,14 @@
-﻿namespace Advanced.CMS.ExternalReviews
+﻿namespace Advanced.CMS.ExternalReviews;
+
+/*[TemplateDescriptor(Inherited = true,
+    AvailableWithoutTag=false,
+    TagString="ExternalPagePreview",
+    Default=false,
+    TemplateTypeCategory = TemplateTypeCategories.MvcController)]
+internal class PreviewPageTemplateDescriptor : PageController<PageData>
 {
-    /*[TemplateDescriptor(Inherited = true,
-        AvailableWithoutTag=false,
-        TagString="ExternalPagePreview",
-        Default=false,
-        TemplateTypeCategory = TemplateTypeCategories.MvcController)]
-    public class PreviewPageTemplateDescriptor : PageController<PageData>
+    public ViewResult Index(PageData currentPage)
     {
-        public ViewResult Index(PageData currentPage)
-        {
-            return View("~/Views/PagePreview.cshtml", currentPage);
-        }
-    }*/
-}
+        return View("~/Views/PagePreview.cshtml", currentPage);
+    }
+}*/

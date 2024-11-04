@@ -1,6 +1,6 @@
 ﻿namespace Advanced.CMS.ExternalReviews.BlocksPreview
 {
-    public class BlocksTemplateCoordinator
+    internal class BlocksTemplateCoordinator
     {
         //TODO NETCORE
         // public static void OnTemplateResolved(object sender, TemplateResolverEventArgs args)

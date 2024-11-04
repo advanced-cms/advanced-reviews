@@ -31,5 +31,7 @@ namespace Alloy.Sample.Models.Pages
         [CultureSpecific]
         [AllowedTypes(new[] { typeof(IContentData) },new[] { typeof(JumbotronBlock) })]
         public virtual ContentArea RelatedContentArea { get; set; }
+
+        public virtual ContentReference LinkItem { get; set; }
     }
 }

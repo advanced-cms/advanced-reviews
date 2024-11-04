@@ -4,39 +4,38 @@ using Advanced.CMS.ApprovalReviews;
 using EPiServer.Authorization;
 using EPiServer.Shell.Navigation;
 
-namespace Advanced.CMS.ExternalReviews
+namespace Advanced.CMS.ExternalReviews;
+
+[MenuProvider]
+internal class AdvancedReviewsMenuProvider : IMenuProvider
 {
-    [MenuProvider]
-    public class AdvancedReviewsMenuProvider : IMenuProvider
+    private readonly ExternalReviewOptions _externalReviewOptions;
+    private readonly ReviewUrlGenerator _reviewUrlGenerator;
+
+    public AdvancedReviewsMenuProvider(ExternalReviewOptions externalReviewOptions, ReviewUrlGenerator reviewUrlGenerator)
     {
-        private readonly ExternalReviewOptions _externalReviewOptions;
-        private readonly ReviewUrlGenerator _reviewUrlGenerator;
+        _externalReviewOptions = externalReviewOptions;
+        _reviewUrlGenerator = reviewUrlGenerator;
+    }
 
-        public AdvancedReviewsMenuProvider(ExternalReviewOptions externalReviewOptions, ReviewUrlGenerator reviewUrlGenerator)
+    public IEnumerable<MenuItem> GetMenuItems()
+    {
+        if (!_externalReviewOptions.IsEnabled || !_externalReviewOptions.IsAdminModePinReviewerPluginEnabled)
         {
-            _externalReviewOptions = externalReviewOptions;
-            _reviewUrlGenerator = reviewUrlGenerator;
+            return Enumerable.Empty<MenuItem>();
         }
 
-        public IEnumerable<MenuItem> GetMenuItems()
+        var controllerPath = $"{_reviewUrlGenerator.ReviewLocationPluginUrl}/Index";
+
+        return new List<MenuItem>
         {
-            if (!_externalReviewOptions.IsEnabled || !_externalReviewOptions.IsAdminModePinReviewerPluginEnabled)
+            new UrlMenuItem("Advanced approval review", MenuPaths.Global + "/cms/admin/reviewsplugin",
+                controllerPath)
             {
-                return Enumerable.Empty<MenuItem>();
+                Alignment = MenuItemAlignment.Left,
+                SortIndex = SortIndex.Last,
+                AuthorizationPolicy = CmsPolicyNames.CmsAdmin
             }
-
-            var controllerPath = $"{_reviewUrlGenerator.ReviewLocationPluginUrl}/Index";
-
-            return new List<MenuItem>
-            {
-                new UrlMenuItem("Advanced approval review", MenuPaths.Global + "/cms/admin/reviewsplugin",
-                    controllerPath)
-                {
-                    Alignment = MenuItemAlignment.Left,
-                    SortIndex = SortIndex.Last,
-                    AuthorizationPolicy = CmsPolicyNames.CmsAdmin
-                }
-            };
-        }
+        };
     }
 }

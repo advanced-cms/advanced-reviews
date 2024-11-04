@@ -7,7 +7,7 @@
     //     Tags = new[] {"CustomNotUsedTag"},
     //     AvailableWithoutTag = false)]
     // [VisitorGroupImpersonation]
-    // public class BlockPreviewController : ActionControllerBase, IRenderTemplate<BlockData>
+    // internal class BlockPreviewController : ActionControllerBase, IRenderTemplate<BlockData>
     // {
     //     private readonly IContentLoader _contentLoader;
     //     private readonly TemplateResolver _templateResolver;

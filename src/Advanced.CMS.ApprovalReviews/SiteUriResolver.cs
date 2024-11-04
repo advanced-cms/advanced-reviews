@@ -1,21 +1,18 @@
 ﻿using System;
 using EPiServer.Core;
-using EPiServer.ServiceLocation;
 using EPiServer.Web;
 
-namespace Advanced.CMS.ApprovalReviews
-{
-    public interface ISiteUriResolver
-    {
-        Uri GetUri(ContentReference contentReference);
-    }
+namespace Advanced.CMS.ApprovalReviews;
 
-    [ServiceConfiguration(typeof(ISiteUriResolver))]
-    public class SiteUriResolver : ISiteUriResolver
+public interface ISiteUriResolver
+{
+    Uri GetUri(ContentReference contentReference);
+}
+
+internal class SiteUriResolver : ISiteUriResolver
+{
+    public Uri GetUri(ContentReference contentReference)
     {
-        public Uri GetUri(ContentReference contentReference)
-        {
-            return SiteDefinition.Current.SiteUrl;
-        }
+        return SiteDefinition.Current.SiteUrl;
     }
 }

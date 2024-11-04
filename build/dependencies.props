@@ -1,9 +1,9 @@
 <Project>
     <PropertyGroup>
-        <CmsCoreVersion>12.14.0</CmsCoreVersion>
-        <CmsUIVersion>12.19.0</CmsUIVersion>
-        <CmsUmbrellaVersion>12.19.0</CmsUmbrellaVersion>
-        <CommerceVersion>14.11.0</CommerceVersion>
+        <CmsCoreVersion>12.21.8</CmsCoreVersion>
+        <CmsUIVersion>12.31.2</CmsUIVersion>
+        <CmsUmbrellaVersion>12.31.2</CmsUmbrellaVersion>
+        <CommerceVersion>14.29.0</CommerceVersion>
     </PropertyGroup>
     <ItemGroup>
         <!-- CMS CORE -->
@@ -33,7 +33,7 @@
         <PackageReference Update="AngleSharp" Version="0.14.0" />
         <PackageReference Update="JObject" Version="1.0.0" />
 
-        <PackageReference Update="EPiServer.CMS.TinyMce" Version="4.2.0"/>
+        <PackageReference Update="EPiServer.CMS.TinyMce" Version="4.8.1"/>
     </ItemGroup>
 
     <ItemGroup>

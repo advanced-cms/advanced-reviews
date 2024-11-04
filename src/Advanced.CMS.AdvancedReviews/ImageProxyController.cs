@@ -8,75 +8,74 @@ using EPiServer.ImageLibrary;
 using EPiServer.Web;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Advanced.CMS.AdvancedReviews
- {
-     public class ImageProxyController: Controller
-     {
-         private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
-         private readonly IContentLoader _contentLoader;
-         private readonly ThumbnailManager _thumbnailManager;
-         private readonly IMimeTypeResolver _mimeTypeResolver;
+namespace Advanced.CMS.AdvancedReviews;
 
-         private string ThumbnailMimeType => _mimeTypeResolver.GetMimeMapping(ThumbnailHelper.ThumbnailExtension);
+internal class ImageProxyController: Controller
+{
+    private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
+    private readonly IContentLoader _contentLoader;
+    private readonly ThumbnailManager _thumbnailManager;
+    private readonly IMimeTypeResolver _mimeTypeResolver;
 
-         public ImageProxyController(IExternalReviewLinksRepository externalReviewLinksRepository,
-             IContentLoader contentLoader, ThumbnailManager thumbnailManager, IMimeTypeResolver mimeTypeResolver)
-         {
-             _externalReviewLinksRepository = externalReviewLinksRepository;
-             _contentLoader = contentLoader;
-             _thumbnailManager = thumbnailManager;
-             _mimeTypeResolver = mimeTypeResolver;
-         }
+    private string ThumbnailMimeType => _mimeTypeResolver.GetMimeMapping(ThumbnailHelper.ThumbnailExtension);
 
-         public IActionResult Index([FromRoute] string token, [FromRoute] string contentLink, [FromQuery] int? width, [FromQuery] int? height)
-         {
-             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(contentLink))
-             {
-                 return new NotFoundResult();
-             }
+    public ImageProxyController(IExternalReviewLinksRepository externalReviewLinksRepository,
+        IContentLoader contentLoader, ThumbnailManager thumbnailManager, IMimeTypeResolver mimeTypeResolver)
+    {
+        _externalReviewLinksRepository = externalReviewLinksRepository;
+        _contentLoader = contentLoader;
+        _thumbnailManager = thumbnailManager;
+        _mimeTypeResolver = mimeTypeResolver;
+    }
 
-             var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
-             if (externalReviewLink.IsExpired())
-             {
-                 return new NotFoundResult();
-             }
+    public IActionResult Index([FromRoute] string token, [FromRoute] string contentLink, [FromQuery] int? width, [FromQuery] int? height)
+    {
+        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(contentLink))
+        {
+            return new NotFoundResult();
+        }
 
-             if(!ContentReference.TryParse(contentLink.Trim('/'), out var contentReference))
-             {
-                 return new NotFoundResult();
-             }
+        var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+        if (externalReviewLink.IsExpired())
+        {
+            return new NotFoundResult();
+        }
 
-             var content = _contentLoader.Get<IContent>(contentReference);
-             if (content is not ImageData imageData)
-             {
-                 return new NotFoundResult();
-             }
+        if(!ContentReference.TryParse(contentLink.Trim('/'), out var contentReference))
+        {
+            return new NotFoundResult();
+        }
 
-             var returnThumbnail = width.HasValue && height.HasValue;
+        var content = _contentLoader.Get<IContent>(contentReference);
+        if (content is not ImageData imageData)
+        {
+            return new NotFoundResult();
+        }
 
-             var originalBlobBytes = imageData.BinaryData.ReadAllBytes();
-             var blobToReturn = returnThumbnail ? Generate(originalBlobBytes, width.Value, height.Value) : originalBlobBytes;
+        var returnThumbnail = width.HasValue && height.HasValue;
 
-             return File(blobToReturn, imageData.MimeType);
-         }
+        var originalBlobBytes = imageData.BinaryData.ReadAllBytes();
+        var blobToReturn = returnThumbnail ? Generate(originalBlobBytes, width.Value, height.Value) : originalBlobBytes;
 
-         private byte[] Generate(byte[] blobBytes, int width, int height)
-         {
-             var imgOperation = new ImageOperation(ImageEditorCommand.ResizeKeepScale, width, height)
-             {
-                 // use transparency color
-                 BackgroundColor = "#00000000"
-             };
+        return File(blobToReturn, imageData.MimeType);
+    }
 
-             try
-             {
-                 return _thumbnailManager.ImageService.RenderImage(blobBytes,
-                     new List<ImageOperation> { imgOperation }, ThumbnailMimeType, 1, 50);
-             }
-             catch
-             {
-                 return null;
-             }
-         }
-     }
- }
+    private byte[] Generate(byte[] blobBytes, int width, int height)
+    {
+        var imgOperation = new ImageOperation(ImageEditorCommand.ResizeKeepScale, width, height)
+        {
+            // use transparency color
+            BackgroundColor = "#00000000"
+        };
+
+        try
+        {
+            return _thumbnailManager.ImageService.RenderImage(blobBytes,
+                new List<ImageOperation> { imgOperation }, ThumbnailMimeType, 1, 50);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+}
