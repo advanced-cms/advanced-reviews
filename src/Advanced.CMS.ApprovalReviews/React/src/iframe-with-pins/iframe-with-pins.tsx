@@ -21,15 +21,13 @@ interface IframeWithPinsProps {
     external?: boolean;
 }
 
-@inject("reviewStore")
-@observer
-export default class IframeWithPins extends React.Component<IframeWithPinsProps, IframeState> {
+class IframeWithPins extends React.Component {
     constructor(props: IframeWithPinsProps) {
         super(props);
 
         this.state = {
             newLocation: null,
-            documentSize: this.getIframeDimensions()
+            documentSize: this.getIframeDimensions(),
         };
     }
 
@@ -66,23 +64,23 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
     onCloseDialog(action: string, state: NewPinDto): void {
         if (action !== "save") {
             this.setState({
-                newLocation: null
+                newLocation: null,
             });
             return;
         }
 
         this.props.reviewStore
             .save(state, this.state.newLocation)
-            .then(createdLocation => {
+            .then((createdLocation) => {
                 this.setState({
-                    newLocation: null
+                    newLocation: null,
                 });
                 // show the pin details only if there's a different pin open currently
                 if (this.props.reviewStore.editedPinLocation) {
                     this.props.reviewStore.editedPinLocation = createdLocation;
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 //TODO: handle server exceptions
                 alert(e.message);
             });
@@ -112,7 +110,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
                 {this.props.reviewStore.filter.reviewMode && (
                     <IframeOverlay
                         iframe={this.props.iframe}
-                        reviewLocationCreated={location => this.setState({ newLocation: location })}
+                        reviewLocationCreated={(location) => this.setState({ newLocation: location })}
                         external={this.props.external}
                     >
                         <PinCollection newLocation={this.state.newLocation} positionCalculator={positionCalculator} />
@@ -139,3 +137,5 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
         );
     }
 }
+
+export default inject("reviewStore")(observer(IframeWithPins));

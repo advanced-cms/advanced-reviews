@@ -1,25 +1,25 @@
-import { action, computed, observable } from "mobx";
+import { action, computed, observable, makeObservable } from "mobx";
 
 export class ReviewLink {
-    @observable token: string;
-    @observable displayName: string;
-    @observable linkUrl: string;
-    @observable validTo: Date;
-    @observable isEditable: boolean;
-    @observable pinCode: string;
-    @observable projectId: number;
+    token: string;
+    displayName: string;
+    linkUrl: string;
+    validTo: Date;
+    isEditable: boolean;
+    pinCode: string;
+    projectId: number;
     projectName: string;
-    @observable visitorGroups: string[];
+    visitorGroups: string[];
 
-    @computed get isActive(): boolean {
+    get isActive(): boolean {
         return this.validTo > new Date();
     }
 
-    @computed get isPersisted(): boolean {
+    get isPersisted(): boolean {
         return !!this.token;
     }
 
-    @action.bound setValidDateFromStr(validToStr: string): void {
+    setValidDateFromStr(validToStr: string): void {
         try {
             this.validTo = new Date(validToStr);
         } catch (error) {
@@ -38,6 +38,20 @@ export class ReviewLink {
         projectName?: string,
         visitorGroups?: string[]
     ) {
+        makeObservable(this, {
+            token: observable,
+            displayName: observable,
+            linkUrl: observable,
+            validTo: observable,
+            isEditable: observable,
+            pinCode: observable,
+            projectId: observable,
+            visitorGroups: observable,
+            isActive: computed,
+            isPersisted: computed,
+            setValidDateFromStr: action.bound,
+        });
+
         this.token = token;
         this.displayName = displayName;
         this.linkUrl = linkUrl;
@@ -77,14 +91,18 @@ export class ExternalReviewStore implements IExternalReviewStore {
 
     initialEditMailMessage: string;
 
-    @observable links: ReviewLink[] = [];
+    links: ReviewLink[] = [];
 
     constructor(externalReviewService: ExternalReviewService) {
+        makeObservable(this, {
+            links: observable,
+        });
+
         this._externalReviewService = externalReviewService;
     }
 
     addLink(isEditable: boolean): Promise<ReviewLink> {
-        return this._externalReviewService.add(isEditable).then(item => {
+        return this._externalReviewService.add(isEditable).then((item) => {
             const reviewLink = new ReviewLink(
                 item.token,
                 item.displayName,
@@ -102,9 +120,9 @@ export class ExternalReviewStore implements IExternalReviewStore {
 
     load() {
         this.links = [];
-        this._externalReviewService.load().then(items => {
+        this._externalReviewService.load().then((items) => {
             this.links = items.map(
-                x =>
+                (x) =>
                     new ReviewLink(
                         x.token,
                         x.displayName,
@@ -134,7 +152,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
     }
 
     edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]): void {
-        this._externalReviewService.edit(item.token, validTo, pinCode, displayName, visitorGroups).then(result => {
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName, visitorGroups).then((result) => {
             if (result) {
                 item.setValidDateFromStr(result.validTo);
                 item.pinCode = result.pinCode;

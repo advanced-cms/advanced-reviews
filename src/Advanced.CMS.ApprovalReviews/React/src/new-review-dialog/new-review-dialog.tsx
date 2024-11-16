@@ -18,17 +18,14 @@ interface NewReviewDialogProps {
     onCloseDialog(action: string, state: NewPinDto): void;
 }
 
-@inject("reviewStore")
-@inject("resources")
-@observer
-export default class NewReviewDialog extends React.Component<NewReviewDialogProps, NewPinDto> {
+class NewReviewDialog extends React.Component {
     constructor(props: NewReviewDialogProps) {
         super(props);
         this.state = {
             currentPriority: this.props.currentEditLocation.priority,
             currentScreenshot: null,
             screenshotMode: false,
-            currentCommentText: ""
+            currentCommentText: "",
         };
     }
 
@@ -40,13 +37,13 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
         const res = this.props.resources!;
         const reviewStore = this.props.reviewStore;
 
-        const options = Object.keys(Priority).map(priority => {
+        const options = Object.keys(Priority).map((priority) => {
             return {
                 name: res.priority[priority.toLowerCase()],
                 icon: priorityIconMappings[priority],
                 onSelected: () => {
                     this.setState({ currentPriority: Priority[priority] });
-                }
+                },
             };
         });
 
@@ -59,7 +56,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                     open={true}
                     scrimClickAction=""
                     escapeKeyAction=""
-                    onClose={action => this.props.onCloseDialog(action, this.state)}
+                    onClose={(action) => this.props.onCloseDialog(action, this.state)}
                 >
                     <DialogTitle>
                         <div className="header">
@@ -106,7 +103,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                         propertyName={this.props.currentEditLocation.propertyName}
                         documentRelativePosition={this.props.currentEditLocation.documentRelativePosition}
                         documentSize={this.props.currentEditLocation.documentSize}
-                        onImageSelected={output => {
+                        onImageSelected={(output) => {
                             this.setState({ currentScreenshot: output });
                         }}
                         toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
@@ -116,3 +113,5 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
         );
     }
 }
+
+export default inject("reviewStore")(inject("resources")(observer(NewReviewDialog)));

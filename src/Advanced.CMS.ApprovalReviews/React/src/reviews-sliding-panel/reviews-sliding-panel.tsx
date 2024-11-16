@@ -8,7 +8,7 @@ import { Checkbox, IconButton } from "@episerver/ui-framework";
 import { Chip } from "@material/react-chips";
 import Switch from "@material/react-switch";
 import { List, ListItem } from "@episerver/ui-framework";
-import { ReviewDetails } from "../details/review-details";
+import ReviewDetails from "../details/review-details";
 import { IReactionDisposer, reaction } from "mobx";
 import PinNavigator from "../pin-navigator/pin-navigator";
 import Comment from "../comment/comment";
@@ -109,17 +109,14 @@ const Filters = inject("resources")(
     })
 );
 
-@inject("resources")
-@inject("reviewStore")
-@observer
-export default class SlidingPanel extends React.Component<SlidingPanelProps, any> {
+class SlidingPanel extends React.Component {
     locationChangedReaction: IReactionDisposer;
 
     constructor(props: SlidingPanelProps) {
         super(props);
         this.state = {
             panelVisible: false,
-            currentPinToRemove: null
+            currentPinToRemove: null,
         };
 
         this.locationChangedReaction = reaction(
@@ -177,7 +174,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
 
         const chipPropertyNameSettings = {
             title:
-                editedPinLocation && this.props.reviewStore.resolvePropertyDisplayName(editedPinLocation.propertyName)
+                editedPinLocation && this.props.reviewStore.resolvePropertyDisplayName(editedPinLocation.propertyName),
         };
 
         return (
@@ -230,14 +227,14 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     <List
                                         singleSelection
                                         selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
-                                        handleSelect={activatedIndex => this.onSelected(activatedIndex)}
+                                        handleSelect={(activatedIndex) => this.onSelected(activatedIndex)}
                                         className="locations"
                                     >
-                                        {reviewLocations.map(location => (
+                                        {reviewLocations.map((location) => (
                                             <ListItem
                                                 title={res.panel.clicktoedit}
                                                 key={location.id}
-                                                onDoubleClick={e => this.onEditClick(e, location)}
+                                                onDoubleClick={(e) => this.onEditClick(e, location)}
                                             >
                                                 <div>
                                                     <Comment
@@ -261,7 +258,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                                 <IconButton
                                                     className="edit"
                                                     title={res.panel.opendetails}
-                                                    onClick={e => this.onEditClick(e, location)}
+                                                    onClick={(e) => this.onEditClick(e, location)}
                                                 >
                                                     <MaterialIcon icon="edit" />
                                                 </IconButton>
@@ -294,3 +291,5 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         );
     }
 }
+
+export default inject("resources")(inject("reviewStore")(observer(SlidingPanel)));
