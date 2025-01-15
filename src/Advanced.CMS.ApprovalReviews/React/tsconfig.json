@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "experimentalDecorators": true,
+        "useDefineForClassFields": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "jsx": "react",

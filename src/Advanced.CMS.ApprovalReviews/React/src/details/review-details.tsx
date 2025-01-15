@@ -18,10 +18,7 @@ interface ReviewDetailsProps {
     onCancel: () => void;
 }
 
-@inject("reviewStore")
-@inject("resources")
-@observer
-export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto> {
+class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto> {
     commentsChangedReaction: IReactionDisposer;
     private scrollable: any;
 
@@ -35,7 +32,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
             currentPriority: this.props.currentEditLocation.priority,
             currentScreenshot: null,
             screenshotMode: false,
-            currentCommentText: ""
+            currentCommentText: "",
         };
 
         this.commentsChangedReaction = reaction(
@@ -84,7 +81,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                     speed={0.8}
                     className="comments-list"
                     horizontal={false}
-                    ref={ref => (this.scrollable = ref)}
+                    ref={(ref) => (this.scrollable = ref)}
                 >
                     {this.props.currentEditLocation.comments.map((comment, idx) => (
                         <Comment key={idx} comment={comment} />
@@ -109,7 +106,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                                 propertyName={this.props.currentEditLocation.propertyName}
                                 documentRelativePosition={this.props.currentEditLocation.documentRelativePosition}
                                 documentSize={this.props.currentEditLocation.documentSize}
-                                onImageSelected={output => {
+                                onImageSelected={(output) => {
                                     this.setState({ currentScreenshot: output });
                                 }}
                                 toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}
@@ -127,3 +124,5 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
         );
     }
 }
+
+export default inject("reviewStore")(inject("resources")(observer(ReviewDetails)));

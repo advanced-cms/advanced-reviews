@@ -19,9 +19,7 @@ const getClosest = (element, selector): HTMLElement => {
     return null;
 };
 
-@inject("reviewStore")
-@observer
-export default class IframeOverlay extends React.Component<IframeOverlayProps, any> {
+class IframeOverlay extends React.Component {
     calculatePositionInterval: number;
     private overlayRef: React.RefObject<HTMLDivElement>;
     private overlayDocumentRef: React.RefObject<HTMLDivElement>;
@@ -31,14 +29,14 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         this.overlayRef = React.createRef<HTMLDivElement>();
         this.overlayDocumentRef = React.createRef<HTMLDivElement>();
         this.state = {
-            offsetHeight: 0
+            offsetHeight: 0,
         };
     }
 
     componentDidMount() {
         const checkTime = 1000;
         this.calculatePositionInterval = window.setInterval(
-            function() {
+            function () {
                 //TODO: when changing context very fast, sometimes we get into here before the component is unmounted, maybe can be solved differently?
                 if (!this.props.iframe.contentDocument || !this.props.iframe.contentDocument.body) {
                     return;
@@ -50,7 +48,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
                 }
 
                 this.setState({
-                    offsetHeight: offsetHeight
+                    offsetHeight: offsetHeight,
                 });
             }.bind(this),
             checkTime
@@ -87,7 +85,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         this.overlayRef.current.style.display = show ? "block" : "none";
         const propertyOverlays = document.getElementsByClassName("epi-overlay-container");
 
-        [].forEach.call(propertyOverlays, overlay => {
+        [].forEach.call(propertyOverlays, (overlay) => {
             overlay.style.display = show ? "block" : "none";
         });
     }
@@ -115,22 +113,22 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         let reviewLocation = new PinLocation(this.props.reviewStore, {
             documentRelativePosition: {
                 x: e.offsetX,
-                y: e.offsetY
+                y: e.offsetY,
             },
             documentSize: {
                 x: this.overlayDocumentRef.current.offsetWidth,
-                y: this.overlayDocumentRef.current.offsetHeight
+                y: this.overlayDocumentRef.current.offsetHeight,
             },
             isDone: false,
             clickedDomNodeSelector: selector,
             clickedDomNodeSize: {
                 x: clickedElement.offsetWidth,
-                y: clickedElement.offsetHeight
+                y: clickedElement.offsetHeight,
             },
             clickedDomNodePosition: {
                 x: nodeOffset.left,
-                y: nodeOffset.top
-            }
+                y: nodeOffset.top,
+            },
         });
 
         const propertyElement =
@@ -163,11 +161,11 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             height: height,
             maxHeight: height,
             width: width,
-            cursor: "crosshair"
+            cursor: "crosshair",
         };
 
         let documentStyles: CSSProperties = {
-            height: this.state.offsetHeight
+            height: this.state.offsetHeight,
         };
 
         return (
@@ -179,3 +177,5 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         );
     }
 }
+
+export default inject("reviewStore")(observer(IframeOverlay));

@@ -1,5 +1,5 @@
 import React from "react";
-import { computed } from "mobx";
+import { computed, makeObservable } from "mobx";
 import { TextButton } from "@episerver/ui-framework";
 import html2canvas from "html2canvas";
 import DrawablePreview from "../drawable-preview/drawable-preview";
@@ -32,7 +32,7 @@ interface ScreenshotPickerState {
 enum Mode {
     Default,
     Crop,
-    Highlight
+    Highlight,
 }
 
 interface ResizeResult {
@@ -42,10 +42,10 @@ interface ResizeResult {
 }
 
 function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise<ResizeResult> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         var img = new Image();
         img.src = base64Str;
-        img.onload = function() {
+        img.onload = function () {
             var canvas = document.createElement("canvas");
             var width = img.width;
             var height = img.height;
@@ -68,33 +68,36 @@ function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise
             resolve({
                 image: canvas.toDataURL(),
                 width: width,
-                height: height
+                height: height,
             });
         };
     });
 }
 
-@inject("resources")
-@observer
-export default class ScreenshotDialog extends React.Component<ScreenshotPickerProps, ScreenshotPickerState> {
+class ScreenshotDialog extends React.Component {
     defaultCrop = {
         width: 50,
         height: 50,
         x: 10,
-        y: 10
+        y: 10,
     };
     private imageRef: any;
 
     constructor(props) {
         super(props);
+
+        makeObservable(this, {
+            mode: computed,
+        });
+
         this.state = {
             crop: this.getDefaultCrop(),
             input: null,
-            drawerInput: null
+            drawerInput: null,
         };
     }
 
-    @computed get mode() {
+    get mode() {
         if (this.state.input) {
             return Mode.Crop;
         }
@@ -105,15 +108,15 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         return Mode.Default;
     }
 
-    onCropChange = crop => {
+    onCropChange = (crop) => {
         this.setState({ crop });
     };
 
     componentDidMount(): void {
         html2canvas(this.props.iframe.contentDocument.body, {
             allowTaint: true,
-            useCORS: true
-        }).then(canvas => {
+            useCORS: true,
+        }).then((canvas) => {
             this.setState({ input: canvas.toDataURL() });
         });
     }
@@ -157,11 +160,11 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         return canvas.toDataURL();
     }
 
-    onImageLoaded = image => {
+    onImageLoaded = (image) => {
         this.imageRef = image;
     };
 
-    onCropComplete = crop => {
+    onCropComplete = (crop) => {
         this.setState({ crop });
     };
 
@@ -175,7 +178,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         this.props.toggle();
     };
 
-    onApplyDrawing = img => {
+    onApplyDrawing = (img) => {
         this.props.onImageSelected(img);
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null });
         this.props.toggle();
@@ -258,7 +261,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
             width: percentageWidth,
             height: percentageHeight,
             x: percentX,
-            y: percentY
+            y: percentY,
         };
     };
 
@@ -308,3 +311,5 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         );
     }
 }
+
+export default inject("resources")(observer(ScreenshotDialog));

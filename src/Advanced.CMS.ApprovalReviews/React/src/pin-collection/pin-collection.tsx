@@ -11,9 +11,7 @@ interface PinCollectionProps {
     positionCalculator?: PositionCalculator;
 }
 
-@inject("reviewStore")
-@observer
-export default class PinCollection extends React.Component<PinCollectionProps> {
+class PinCollection extends React.Component {
     onLocationClick = (e, location: PinLocation) => {
         e.stopPropagation();
         this.props.reviewStore.selectedPinLocation = this.props.reviewStore.editedPinLocation = location;
@@ -23,18 +21,18 @@ export default class PinCollection extends React.Component<PinCollectionProps> {
         const { selectedPinLocation, filteredReviewLocations } = this.props.reviewStore!;
         const locations = [...filteredReviewLocations];
 
-        if (this.props.newLocation && !locations.some(location => location === this.props.newLocation)) {
+        if (this.props.newLocation && !locations.some((location) => location === this.props.newLocation)) {
             locations.push(this.props.newLocation);
         }
 
         return (
             <div>
-                {locations.map(location => (
+                {locations.map((location) => (
                     <Pin
                         key={location.id || "unsaved"}
                         location={location}
                         position={this.props.positionCalculator.calculate(location)}
-                        showDialog={e => this.onLocationClick(e, location)}
+                        showDialog={(e) => this.onLocationClick(e, location)}
                         highlighted={location === selectedPinLocation}
                     />
                 ))}
@@ -42,3 +40,5 @@ export default class PinCollection extends React.Component<PinCollectionProps> {
         );
     }
 }
+
+export default inject("reviewStore")(observer(PinCollection));

@@ -20,7 +20,7 @@ function drawImageOnCanvas(base64Image, canvas) {
 
     const img = new Image();
     img.src = base64Image;
-    img.onload = function() {
+    img.onload = function () {
         const ctx = canvas.getContext("2d");
         ctx.beginPath();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -28,8 +28,7 @@ function drawImageOnCanvas(base64Image, canvas) {
     };
 }
 
-@inject("resources")
-export default class DrawablePreview extends React.Component<DrawablePreviewProps, any> {
+class DrawablePreview extends React.Component<DrawablePreviewProps, any> {
     canvasRef: React.RefObject<HTMLCanvasElement>;
 
     constructor(props: any) {
@@ -38,21 +37,21 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
         this.state = {
             isDown: false,
             previousPointX: 0,
-            previousPointY: 0
+            previousPointY: 0,
         };
     }
 
-    handleMouseDown = event => {
+    handleMouseDown = (event) => {
         this.setState({
             isDown: true,
             previousPointX: event.offsetX,
-            previousPointY: event.offsetY
+            previousPointY: event.offsetY,
         });
 
         const ctx = this.canvasRef.current.getContext("2d");
         ctx.moveTo(event.offsetX, event.offsetY);
     };
-    handleMouseMove = event => {
+    handleMouseMove = (event) => {
         if (!this.state.isDown) {
             return;
         }
@@ -67,12 +66,12 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
 
         this.setState({
             previousPointX: event.offsetX,
-            previousPointY: event.offsetY
+            previousPointY: event.offsetY,
         });
     };
     handleMouseUp = () => {
         this.setState({
-            isDown: false
+            isDown: false,
         });
     };
 
@@ -97,7 +96,7 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
         const { height, resources, width } = this.props;
 
         const canvasStyle = {
-            cursor: "crosshair"
+            cursor: "crosshair",
         };
 
         return (
@@ -107,10 +106,10 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
                     style={canvasStyle}
                     width={width}
                     height={height}
-                    onMouseDown={e => {
+                    onMouseDown={(e) => {
                         this.handleMouseDown(e.nativeEvent);
                     }}
-                    onMouseMove={e => {
+                    onMouseMove={(e) => {
                         this.handleMouseMove(e.nativeEvent);
                     }}
                     onMouseUp={this.handleMouseUp}
@@ -124,3 +123,5 @@ export default class DrawablePreview extends React.Component<DrawablePreviewProp
         );
     }
 }
+
+export default inject("resources")(DrawablePreview);
