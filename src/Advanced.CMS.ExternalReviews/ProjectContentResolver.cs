@@ -20,12 +20,10 @@ internal class ProjectContentResolver
 
     public ContentReference GetProjectReference(ContentReference contentLink, int projectId, string language)
     {
-        var items = _projectRepository.ListItems(projectId);
-
-        var item = items.FirstOrDefault(
-            x => x.ContentLink.ToReferenceWithoutVersion() == contentLink.ToReferenceWithoutVersion()
-                 && (x.Language?.Name == language)
-        );
+        var item = _projectRepository
+            .GetItems(new[] { contentLink.ToReferenceWithoutVersion() })
+            .Where(x => x.ProjectID == projectId && x.Language.Name == language)
+            .FirstOrDefault();
         return item?.ContentLink;
     }
 
