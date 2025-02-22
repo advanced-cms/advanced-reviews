@@ -16,7 +16,10 @@
     <EmbeddedResource Remove="React\node_modules\**" />
     <None Remove="React\node_modules\**" />
     <None Remove="ClientResources/adminPlugin.js" />
+    <None Remove="ClientResources/adminPlugin.js.map" />
     <None Remove="ClientResources/external-review-manage-links-component.js" />
+    <None Remove="ClientResources/external-review-manage-links-component.js.map" />
     <None Remove="ClientResources/ReviewWidget.js" />
+    <None Remove="ClientResources/ReviewWidget.js.map" />
   </ItemGroup>
 </Project>
