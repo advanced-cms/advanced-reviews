@@ -53,7 +53,7 @@ internal class CustomContentLoaderInitialization : IInitializableModule
 
         var externalReviewLinksRepository = ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>();
         var externalReviewLink = externalReviewLinksRepository.GetContentByToken(externalReviewState.Token);
-        if (!externalReviewLink.IsPreviewableLink())
+        if (externalReviewLink!= null && externalReviewLink.IsExpired())
         {
             return;
         }
