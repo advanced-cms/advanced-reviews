@@ -9,7 +9,7 @@
 
 * .NET Core 6
 * CMS 12+
-* If you want to build locally you will need node16 (tested on nodejs 16.14.0)
+* If you want to build locally you will need node20 (tested on nodejs 20.9.0)
 
 ## Introduction
 

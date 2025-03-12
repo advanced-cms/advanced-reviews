@@ -15,7 +15,7 @@ XCOPY /y/i/k build\database\Alloy.mdf %AlloyMVC%\App_Data\ || Exit /B 1
 XCOPY /y/i/k build\database\commerce.Commerce.mdf %AlloyMVC%\App_Data\ || Exit /B 1
 
 CD src\Advanced.CMS.ApprovalReviews\React
-CALL npm install
+CALL yarn install
 CD ..\..\..\
 
 EXIT /B %ERRORLEVEL%
