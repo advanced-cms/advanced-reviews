@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 
 import { Corner, MenuSurface } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
@@ -8,51 +8,34 @@ import "./drop-down-menu.scss";
 interface DropDownMenuProps {
     title?: string;
     icon: string;
+    open: boolean;
+    children: React.ReactNode;
 }
 
-export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
-    constructor(props: DropDownMenuProps) {
-        super(props);
-        this.state = {
-            isMenuOpen: false,
-            anchorElement: null
-        };
-    }
+export function DropDownMenu(props: DropDownMenuProps) {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const anchorElementRef = useRef();
 
-    openMenu = () => {
-        this.setState({ isMenuOpen: true });
+    const openMenu = () => {
+        setIsMenuOpen(true);
     };
 
-    closeMenu = () => {
-        this.setState({ isMenuOpen: false });
+    const closeMenu = () => {
+        setIsMenuOpen(false);
     };
 
-    setAnchorElement = element => {
-        if (this.state.anchorElement) {
-            return;
-        }
-        this.setState({ anchorElement: element });
-    };
-
-    render() {
-        return (
-            <div className="mdc-menu-surface--anchor" ref={this.setAnchorElement}>
-                <MaterialIcon
-                    className="menu-button"
-                    icon={this.props.icon}
-                    onClick={this.openMenu}
-                    title={this.props.title}
-                />
-                <MenuSurface
-                    className="epi-context-menu"
-                    open={this.state.isMenuOpen}
-                    anchorCorner={Corner.BOTTOM_LEFT}
-                    onClose={this.closeMenu}
-                    anchorElement={this.state.anchorElement}
-                >
-                    {this.props.children}
-                </MenuSurface>
-            </div>
-        );
-    }
+    return (
+        <div className="mdc-menu-surface--anchor" ref={anchorElementRef}>
+            <MaterialIcon className="menu-button" icon={props.icon} onClick={openMenu} title={props.title} />
+            <MenuSurface
+                className="epi-context-menu"
+                open={isMenuOpen}
+                anchorCorner={Corner.BOTTOM_LEFT}
+                onClose={closeMenu}
+                anchorElement={anchorElementRef.current}
+            >
+                {props.children}
+            </MenuSurface>
+        </div>
+    );
 }

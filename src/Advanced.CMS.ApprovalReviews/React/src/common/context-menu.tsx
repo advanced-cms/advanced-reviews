@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { DropDownMenu } from "./drop-down-menu";
 
 import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
@@ -16,45 +16,31 @@ interface ContextMenuProps {
     menuItems?: MenuItem[];
 }
 
-export class ContextMenu extends React.Component<ContextMenuProps, any> {
-    dropDownMenu: DropDownMenu;
+export function ContextMenu(props: ContextMenuProps) {
+    const [title, setTitle] = useState();
+    const [open, setOpen] = useState();
 
-    constructor(props: ContextMenuProps) {
-        super(props);
-        this.state = {
-            title: this.props.title
-        };
-    }
-
-    onSelected = (index: number) => {
-        const menuItem = this.props.menuItems[index];
+    const onSelected = (index: number) => {
+        const menuItem = props.menuItems[index];
         menuItem.onSelected();
-        this.setState({ title: menuItem.name });
-        this.dropDownMenu.closeMenu();
+        setTitle(menuItem.name);
+        setOpen(false);
     };
 
-    render() {
-        const list = (
-            <List singleSelection handleSelect={this.onSelected}>
-                {this.props.menuItems.map(item => (
-                    <ListItem key={item.name}>
-                        {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon} />} /> : null}
-                        <ListItemText primaryText={item.name} />
-                    </ListItem>
-                ))}
-            </List>
-        );
+    const list = (
+        <List singleSelection handleSelect={onSelected}>
+            {props.menuItems.map((item) => (
+                <ListItem key={item.name}>
+                    {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon} />} /> : null}
+                    <ListItemText primaryText={item.name} />
+                </ListItem>
+            ))}
+        </List>
+    );
 
-        return (
-            <DropDownMenu
-                ref={instance => {
-                    this.dropDownMenu = instance;
-                }}
-                icon={this.props.icon}
-                title={this.state.title}
-            >
-                {list}
-            </DropDownMenu>
-        );
-    }
+    return (
+        <DropDownMenu icon={props.icon} title={title} open={open}>
+            {list}
+        </DropDownMenu>
+    );
 }
