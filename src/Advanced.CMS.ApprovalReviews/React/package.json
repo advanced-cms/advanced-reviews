@@ -15,8 +15,7 @@
         "build:external-review-manage-links-widget:debug": "webpack --config webpack.external-review-manage-links.widget.config --mode development",
         "storybook": "start-storybook -s ./ -p 6006",
         "build-storybook": "build-storybook",
-        "test": "jest --watchAll",
-        "prepare": "cd ../../../ && husky install ./src/Advanced.CMS.ApprovalReviews/React/.husky"
+        "test": "jest --watchAll"
     },
     "author": "advanced-cms",
     "license": "MIT",
@@ -35,10 +34,8 @@
         "@types/react-dom": "^16.9.2",
         "babel-loader": "^8.0.5",
         "css-loader": "^2.1.0",
-        "husky": "^7.0.4",
         "jest": "^24.9.0",
         "jsdom": "^26.0.0",
-        "lint-staged": "^12.4.1",
         "prettier": "^3.3.3",
         "sass": "^1.51.0",
         "sass-loader": "^7.1.0",
