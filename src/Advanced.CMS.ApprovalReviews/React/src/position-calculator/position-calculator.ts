@@ -16,7 +16,7 @@ export default class PositionCalculator {
         node: HTMLElement,
         documentRelativeOffset: Dimensions,
         nodePosition: Dimensions,
-        nodeSize: Dimensions
+        nodeSize: Dimensions,
     ) {
         const nodeOffset = offset(node, this._external);
 
@@ -31,7 +31,7 @@ export default class PositionCalculator {
 
         return {
             x: currentOffsetFromLeft + originalOffsetFromLeft * xPropertyFactor,
-            y: currentOffsetFromTop + originalOffsetFromTop * yPropertyFactor
+            y: currentOffsetFromTop + originalOffsetFromTop * yPropertyFactor,
         };
     }
 
@@ -41,7 +41,7 @@ export default class PositionCalculator {
 
         return {
             x: xFactor * this._documentSize.x,
-            y: yFactor * this._documentSize.y
+            y: yFactor * this._documentSize.y,
         };
     }
 
@@ -57,11 +57,11 @@ export default class PositionCalculator {
                     node,
                     location.documentRelativePosition,
                     location.clickedDomNodePosition,
-                    location.clickedDomNodeSize
+                    location.clickedDomNodeSize,
                 );
             } else if (location.propertyName && location.propertyPosition && location.propertySize) {
                 const node: HTMLElement = this._document.querySelector(
-                    `[data-epi-property-name='${location.propertyName}']`
+                    `[data-epi-property-name='${location.propertyName}']`,
                 );
                 if (!node) {
                     return this.resize(location);
@@ -70,7 +70,7 @@ export default class PositionCalculator {
                     node,
                     location.documentRelativePosition,
                     location.propertyPosition,
-                    location.propertySize
+                    location.propertySize,
                 );
             }
         }

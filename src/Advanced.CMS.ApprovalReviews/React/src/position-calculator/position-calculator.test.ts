@@ -1,5 +1,7 @@
-import PositionCalculator from "./position-calculator";
+import { beforeEach, describe, test } from "vitest";
+
 import { Dimensions, PinPositioningDetails } from "../store/review-store";
+import PositionCalculator from "./position-calculator";
 
 const originalPinLocation: Dimensions = { x: 100, y: 200 };
 const originalDocumentLocation: Dimensions = { x: 800, y: 800 };
@@ -7,7 +9,7 @@ const originalDocumentLocation: Dimensions = { x: 800, y: 800 };
 const getPin = (extraProps?): PinPositioningDetails => {
     const pin = {
         documentRelativePosition: originalPinLocation,
-        documentSize: originalDocumentLocation
+        documentSize: originalDocumentLocation,
     };
     Object.assign(pin, extraProps || {});
     return pin;

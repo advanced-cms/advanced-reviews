@@ -1,4 +1,4 @@
-export default function(node: HTMLElement, external: boolean) {
+export default function (node: HTMLElement, external: boolean) {
     const rect = node.getBoundingClientRect();
 
     // In external edit scenario we need to add scrolling positions as the bounding rect is viewport-specific
@@ -11,6 +11,6 @@ export default function(node: HTMLElement, external: boolean) {
 
     return {
         top: rect.top + domOffset.y,
-        left: rect.left + domOffset.x
+        left: rect.left + domOffset.x,
     };
 }
