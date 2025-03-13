@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { inject } from "mobx-react";
-import { Input, TextField } from "@episerver/ui-framework";
-import { IconButton } from "@episerver/ui-framework";
-import MaterialIcon from "@material/react-material-icon";
-import { DropDownMenu } from "../common/drop-down-menu";
-
 import "./location-comment.scss";
+
+import { IconButton, Input, TextField } from "@episerver/ui-framework";
+import MaterialIcon from "@material/react-material-icon";
+import { inject } from "mobx-react";
+import React, { useEffect, useState } from "react";
+
+import { DropDownMenu } from "../common/drop-down-menu";
 
 interface LocationCommentProps {
     currentScreenshot: string;
@@ -28,7 +28,7 @@ const LocationComment = inject("resources")((props: LocationCommentProps) => {
     const resources = props.resources!;
 
     const textAreaProps = {
-        textarea: true
+        textarea: true,
     };
 
     return (

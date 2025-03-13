@@ -1,7 +1,7 @@
-import React from "react";
-
-import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
 import "@material/react-dialog/index.scss";
+
+import Dialog, { DialogButton, DialogContent, DialogFooter, DialogTitle } from "@material/react-dialog";
+import React from "react";
 
 interface ConfirmationDialogProps {
     title: string;
@@ -18,10 +18,15 @@ const ConfirmationDialog = ({
     okName,
     cancelName,
     open,
-    onCloseDialog
+    onCloseDialog,
 }: ConfirmationDialogProps) => {
     return (
-        <Dialog open={open} scrimClickAction="" escapeKeyAction="" onClose={action => onCloseDialog(action === "save")}>
+        <Dialog
+            open={open}
+            scrimClickAction=""
+            escapeKeyAction=""
+            onClose={(action) => onCloseDialog(action === "save")}
+        >
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>{description}</DialogContent>
             <DialogFooter>

@@ -1,13 +1,14 @@
-import React from "react";
-import { observer, inject } from "mobx-react";
-import { Priority, PinLocation, NewPinDto, IReviewComponentStore } from "../store/review-store";
-import priorityIconMappings from "../store/priority-icon-mappings";
-import { ContextMenu } from "../common/context-menu";
-import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
-import LocationComment from "../location-comment/location-comment";
-
 import "./new-review-dialog.scss";
+
+import Dialog, { DialogButton, DialogContent, DialogFooter, DialogTitle } from "@material/react-dialog";
+import { inject, observer } from "mobx-react";
+import React from "react";
+
+import { ContextMenu } from "../common/context-menu";
+import LocationComment from "../location-comment/location-comment";
+import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
+import priorityIconMappings from "../store/priority-icon-mappings";
+import { IReviewComponentStore, NewPinDto, PinLocation, Priority } from "../store/review-store";
 
 interface NewReviewDialogProps {
     iframe?: HTMLIFrameElement;
@@ -28,7 +29,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
             currentPriority: this.props.currentEditLocation.priority,
             currentScreenshot: null,
             screenshotMode: false,
-            currentCommentText: ""
+            currentCommentText: "",
         };
     }
 
@@ -40,13 +41,13 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
         const res = this.props.resources!;
         const reviewStore = this.props.reviewStore;
 
-        const options = Object.keys(Priority).map(priority => {
+        const options = Object.keys(Priority).map((priority) => {
             return {
                 name: res.priority[priority.toLowerCase()],
                 icon: priorityIconMappings[priority],
                 onSelected: () => {
                     this.setState({ currentPriority: Priority[priority] });
-                }
+                },
             };
         });
 
@@ -59,7 +60,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                     open={true}
                     scrimClickAction=""
                     escapeKeyAction=""
-                    onClose={action => this.props.onCloseDialog(action, this.state)}
+                    onClose={(action) => this.props.onCloseDialog(action, this.state)}
                 >
                     <DialogTitle>
                         <div className="header">
@@ -106,7 +107,7 @@ export default class NewReviewDialog extends React.Component<NewReviewDialogProp
                         propertyName={this.props.currentEditLocation.propertyName}
                         documentRelativePosition={this.props.currentEditLocation.documentRelativePosition}
                         documentSize={this.props.currentEditLocation.documentSize}
-                        onImageSelected={output => {
+                        onImageSelected={(output) => {
                             this.setState({ currentScreenshot: output });
                         }}
                         toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}

@@ -1,19 +1,19 @@
-import React from "react";
-import classNames from "classnames";
-import { inject, observer } from "mobx-react";
-import { IReviewComponentStore, PinLocation, Priority } from "../store/review-store";
-import MaterialIcon from "@material/react-material-icon";
-import Confirmation from "../confirmation/confirmation";
-import { Checkbox, IconButton } from "@episerver/ui-framework";
-import { Chip } from "@material/react-chips";
-import Switch from "@material/react-switch";
-import { List, ListItem } from "@episerver/ui-framework";
-import { ReviewDetails } from "../details/review-details";
-import { IReactionDisposer, reaction } from "mobx";
-import PinNavigator from "../pin-navigator/pin-navigator";
-import Comment from "../comment/comment";
-
 import "./reviews-sliding-panel.scss";
+
+import { Checkbox, IconButton, List, ListItem } from "@episerver/ui-framework";
+import { Chip } from "@material/react-chips";
+import MaterialIcon from "@material/react-material-icon";
+import Switch from "@material/react-switch";
+import classNames from "classnames";
+import { IReactionDisposer, reaction } from "mobx";
+import { inject, observer } from "mobx-react";
+import React from "react";
+
+import Comment from "../comment/comment";
+import Confirmation from "../confirmation/confirmation";
+import { ReviewDetails } from "../details/review-details";
+import PinNavigator from "../pin-navigator/pin-navigator";
+import { IReviewComponentStore, PinLocation, Priority } from "../store/review-store";
 
 interface SlidingPanelProps {
     iframe?: HTMLIFrameElement;
@@ -52,7 +52,7 @@ const Legend = inject("resources")(
                 )}
             </div>
         );
-    })
+    }),
 );
 
 const PinTypeFilters = inject("resources")(
@@ -88,7 +88,7 @@ const PinTypeFilters = inject("resources")(
                 </div>
             </>
         );
-    })
+    }),
 );
 
 const Filters = inject("resources")(
@@ -106,7 +106,7 @@ const Filters = inject("resources")(
                 {filter.reviewMode && <PinTypeFilters filter={filter} />}
             </div>
         );
-    })
+    }),
 );
 
 @inject("resources")
@@ -119,7 +119,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
         super(props);
         this.state = {
             panelVisible: false,
-            currentPinToRemove: null
+            currentPinToRemove: null,
         };
 
         this.locationChangedReaction = reaction(
@@ -131,7 +131,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                 if (this.props.reviewStore.editedPinLocation) {
                     this.props.reviewStore.editedPinLocation.updateCurrentUserLastRead();
                 }
-            }
+            },
         );
     }
 
@@ -177,7 +177,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
 
         const chipPropertyNameSettings = {
             title:
-                editedPinLocation && this.props.reviewStore.resolvePropertyDisplayName(editedPinLocation.propertyName)
+                editedPinLocation && this.props.reviewStore.resolvePropertyDisplayName(editedPinLocation.propertyName),
         };
 
         return (
@@ -214,7 +214,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                         <Chip
                                             className="property-name-label"
                                             label={this.props.reviewStore.resolvePropertyDisplayName(
-                                                editedPinLocation.propertyName
+                                                editedPinLocation.propertyName,
                                             )}
                                             leadingIcon={<MaterialIcon icon="bookmark" />}
                                             {...chipPropertyNameSettings}
@@ -230,14 +230,14 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     <List
                                         singleSelection
                                         selectedIndex={this.props.reviewStore.selectedPinLocationIndex}
-                                        handleSelect={activatedIndex => this.onSelected(activatedIndex)}
+                                        handleSelect={(activatedIndex) => this.onSelected(activatedIndex)}
                                         className="locations"
                                     >
-                                        {reviewLocations.map(location => (
+                                        {reviewLocations.map((location) => (
                                             <ListItem
                                                 title={res.panel.clicktoedit}
                                                 key={location.id}
-                                                onDoubleClick={e => this.onEditClick(e, location)}
+                                                onDoubleClick={(e) => this.onEditClick(e, location)}
                                             >
                                                 <div>
                                                     <Comment
@@ -261,7 +261,7 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                                 <IconButton
                                                     className="edit"
                                                     title={res.panel.opendetails}
-                                                    onClick={e => this.onEditClick(e, location)}
+                                                    onClick={(e) => this.onEditClick(e, location)}
                                                 >
                                                     <MaterialIcon icon="edit" />
                                                 </IconButton>

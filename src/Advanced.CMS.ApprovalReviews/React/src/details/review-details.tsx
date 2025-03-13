@@ -1,14 +1,15 @@
-import React from "react";
-import { IReviewComponentStore, NewPinDto, PinLocation } from "../store/review-store";
-import { inject, observer } from "mobx-react";
+import "./review-details.scss";
+
 import { TextButton } from "@episerver/ui-framework";
 import { IReactionDisposer, reaction } from "mobx";
-import Comment from "../comment/comment";
-import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
-import LocationComment from "../location-comment/location-comment";
+import { inject, observer } from "mobx-react";
+import React from "react";
 import ScrollArea from "react-scrollbar";
 
-import "./review-details.scss";
+import Comment from "../comment/comment";
+import LocationComment from "../location-comment/location-comment";
+import ScreenshotDialog from "../screenshot-dialog/screenshot-dialog";
+import { IReviewComponentStore, NewPinDto, PinLocation } from "../store/review-store";
 
 interface ReviewDetailsProps {
     iframe?: HTMLIFrameElement;
@@ -35,7 +36,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
             currentPriority: this.props.currentEditLocation.priority,
             currentScreenshot: null,
             screenshotMode: false,
-            currentCommentText: ""
+            currentCommentText: "",
         };
 
         this.commentsChangedReaction = reaction(
@@ -46,7 +47,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
             },
             () => {
                 this.scrollToBottom();
-            }
+            },
         );
     }
 
@@ -84,7 +85,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                     speed={0.8}
                     className="comments-list"
                     horizontal={false}
-                    ref={ref => (this.scrollable = ref)}
+                    ref={(ref) => (this.scrollable = ref)}
                 >
                     {this.props.currentEditLocation.comments.map((comment, idx) => (
                         <Comment key={idx} comment={comment} />
@@ -109,7 +110,7 @@ export class ReviewDetails extends React.Component<ReviewDetailsProps, NewPinDto
                                 propertyName={this.props.currentEditLocation.propertyName}
                                 documentRelativePosition={this.props.currentEditLocation.documentRelativePosition}
                                 documentSize={this.props.currentEditLocation.documentSize}
-                                onImageSelected={output => {
+                                onImageSelected={(output) => {
                                     this.setState({ currentScreenshot: output });
                                 }}
                                 toggle={() => this.setState({ screenshotMode: !this.state.screenshotMode })}

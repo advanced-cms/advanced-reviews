@@ -1,18 +1,19 @@
+import ExternalReviewService from "advanced-cms-external-reviews/external-review-service";
+import WidgetBase from "dijit/_WidgetBase";
+import declare from "dojo/_base/declare";
+import res from "epi/i18n!epi/cms/nls/externalreviews";
+import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import React from "react";
 import ReactDOM from "react-dom";
-import declare from "dojo/_base/declare";
-import WidgetBase from "dijit/_WidgetBase";
-import _ContentContextMixin from "epi-cms/_ContentContextMixin";
-import ExternalReviewService from "advanced-cms-external-reviews/external-review-service";
+
 import { ExternalReviewStore } from "./external-review-links-store";
 import ManageLinks from "./external-review-manage-links";
-import res from "epi/i18n!epi/cms/nls/externalreviews";
 
 /**
  * Edit Mode component used to list external links
  */
 export default declare([WidgetBase, _ContentContextMixin], {
-    postCreate: function() {
+    postCreate: function () {
         if (!this.params.isEnabled) {
             return;
         }
@@ -39,10 +40,10 @@ export default declare([WidgetBase, _ContentContextMixin], {
                 resources={res}
                 availableVisitorGroups={this.params.availableVisitorGroups}
             />,
-            this.domNode
+            this.domNode,
         );
     },
-    contextChanged: function() {
+    contextChanged: function () {
         if (!this.params.isEnabled) {
             return;
         }
@@ -56,11 +57,11 @@ export default declare([WidgetBase, _ContentContextMixin], {
 
         this.store.load();
     },
-    destroy: function() {
+    destroy: function () {
         if (!this.params.isEnabled) {
             return;
         }
 
         ReactDOM.unmountComponentAtNode(this.domNode);
-    }
+    },
 });

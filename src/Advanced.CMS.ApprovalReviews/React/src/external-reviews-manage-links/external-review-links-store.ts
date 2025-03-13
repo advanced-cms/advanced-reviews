@@ -36,7 +36,7 @@ export class ReviewLink {
         projectId?: number,
         pinCode?: string,
         projectName?: string,
-        visitorGroups?: string[]
+        visitorGroups?: string[],
     ) {
         this.token = token;
         this.displayName = displayName;
@@ -84,7 +84,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
     }
 
     addLink(isEditable: boolean): Promise<ReviewLink> {
-        return this._externalReviewService.add(isEditable).then(item => {
+        return this._externalReviewService.add(isEditable).then((item) => {
             const reviewLink = new ReviewLink(
                 item.token,
                 item.displayName,
@@ -93,7 +93,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
                 item.isEditable,
                 item.projectId,
                 null,
-                item.projectName
+                item.projectName,
             );
             this.links.push(reviewLink);
             return reviewLink;
@@ -102,9 +102,9 @@ export class ExternalReviewStore implements IExternalReviewStore {
 
     load() {
         this.links = [];
-        this._externalReviewService.load().then(items => {
+        this._externalReviewService.load().then((items) => {
             this.links = items.map(
-                x =>
+                (x) =>
                     new ReviewLink(
                         x.token,
                         x.displayName,
@@ -114,14 +114,14 @@ export class ExternalReviewStore implements IExternalReviewStore {
                         x.projectId,
                         x.pinCode,
                         x.projectName,
-                        x.visitorGroups
-                    )
+                        x.visitorGroups,
+                    ),
             );
         });
     }
 
     delete(item: ReviewLink): void {
-        var itemIndex = this.links.indexOf(item);
+        const itemIndex = this.links.indexOf(item);
         if (itemIndex === -1) {
             return;
         }
@@ -134,7 +134,7 @@ export class ExternalReviewStore implements IExternalReviewStore {
     }
 
     edit(item: ReviewLink, validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]): void {
-        this._externalReviewService.edit(item.token, validTo, pinCode, displayName, visitorGroups).then(result => {
+        this._externalReviewService.edit(item.token, validTo, pinCode, displayName, visitorGroups).then((result) => {
             if (result) {
                 item.setValidDateFromStr(result.validTo);
                 item.pinCode = result.pinCode;

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
 import { Input, TextField } from "@episerver/ui-framework";
 import { storiesOf } from "@storybook/react";
 import { Provider } from "mobx-react";
-import { createStores } from "../store/review-store";
-import resources from "../../.storybook/resources.json";
-import IframeWithPins from "./iframe-with-pins";
+import React, { useEffect, useState } from "react";
+
 import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
+import resources from "../../.storybook/resources.json";
+import { createStores } from "../store/review-store";
+import IframeWithPins from "./iframe-with-pins";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
 
@@ -33,7 +34,7 @@ function Component({ initialLocale = "en" }) {
                     position: "absolute",
                     top: "0",
                     overflowY: "scroll",
-                    overflowX: "auto"
+                    overflowX: "auto",
                 }}
             >
                 <iframe

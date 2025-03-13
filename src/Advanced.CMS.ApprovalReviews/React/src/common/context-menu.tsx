@@ -1,8 +1,8 @@
-import React from "react";
-import { DropDownMenu } from "./drop-down-menu";
-
 import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
+import React from "react";
+
+import { DropDownMenu } from "./drop-down-menu";
 
 interface MenuItem {
     name: string;
@@ -22,7 +22,7 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
     constructor(props: ContextMenuProps) {
         super(props);
         this.state = {
-            title: this.props.title
+            title: this.props.title,
         };
     }
 
@@ -36,7 +36,7 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
     render() {
         const list = (
             <List singleSelection handleSelect={this.onSelected}>
-                {this.props.menuItems.map(item => (
+                {this.props.menuItems.map((item) => (
                     <ListItem key={item.name}>
                         {item.icon ? <ListItemGraphic graphic={<MaterialIcon icon={item.icon} />} /> : null}
                         <ListItemText primaryText={item.name} />
@@ -47,7 +47,7 @@ export class ContextMenu extends React.Component<ContextMenuProps, any> {
 
         return (
             <DropDownMenu
-                ref={instance => {
+                ref={(instance) => {
                     this.dropDownMenu = instance;
                 }}
                 icon={this.props.icon}

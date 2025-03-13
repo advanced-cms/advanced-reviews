@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-
-import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import { Input, TextField } from "@episerver/ui-framework";
-import MaterialIcon from "@material/react-material-icon";
-
 import "./external-review-share-dialog.scss";
+
+import { Input, TextField } from "@episerver/ui-framework";
+import Dialog, { DialogButton, DialogContent, DialogFooter, DialogTitle } from "@material/react-dialog";
+import MaterialIcon from "@material/react-material-icon";
+import React, { useEffect, useState } from "react";
 
 export interface LinkShareResult {
     email: string;
@@ -40,7 +39,7 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
         onClose({
             email,
             subject,
-            message
+            message,
         });
     };
 
@@ -56,11 +55,11 @@ const ShareDialog = ({ open, onClose, initialSubject, initialMessage, resources 
     };
 
     const textAreaProps = {
-        textarea: true
+        textarea: true,
     };
 
     const isValidProps = {
-        isValid: isValidEmail
+        isValid: isValidEmail,
     };
 
     return (

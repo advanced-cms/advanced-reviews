@@ -1,19 +1,31 @@
-import { action, computed, observable } from "mobx";
 import { distanceInWordsToNow, format } from "date-fns";
+import da from "date-fns/locale/da";
+import de from "date-fns/locale/de";
+import en from "date-fns/locale/en";
+import es from "date-fns/locale/es";
+import fi from "date-fns/locale/fi";
+import fr from "date-fns/locale/fr";
+import it from "date-fns/locale/it";
+import ja from "date-fns/locale/ja";
+import no from "date-fns/locale/nb"; // date-fns uses bokmål as the default norwegian culture, not nynorsk as in epi
+import nl from "date-fns/locale/nl";
+import sv from "date-fns/locale/sv";
+import zh_cn from "date-fns/locale/zh_cn";
+import { action, computed, observable } from "mobx";
 
 const locales = {
-    da: require("date-fns/locale/da"),
-    de: require("date-fns/locale/de"),
-    en: require("date-fns/locale/en"),
-    es: require("date-fns/locale/es"),
-    fi: require("date-fns/locale/fi"),
-    fr: require("date-fns/locale/fr"),
-    it: require("date-fns/locale/it"),
-    ja: require("date-fns/locale/ja"),
-    no: require("date-fns/locale/nb"), // date-fns uses bokmål as the default norwegian culture, not nynorsk as in epi
-    nl: require("date-fns/locale/nl"),
-    sv: require("date-fns/locale/sv"),
-    zh_cn: require("date-fns/locale/zh_cn")
+    da,
+    de,
+    en,
+    es,
+    fi,
+    fr,
+    it,
+    ja,
+    nl,
+    no,
+    sv,
+    zh_cn,
 };
 
 /**
@@ -56,7 +68,7 @@ export class Comment {
         text: string,
         store: IReviewComponentStore,
         date?: Date,
-        screenshot?: string
+        screenshot?: string,
     ): Comment {
         const instance = new Comment(store);
         instance.author = author;
@@ -150,7 +162,7 @@ export class PinLocation implements PinPositioningDetails {
     constructor(rootStore: IReviewComponentStore, point: any) {
         this._rootStore = rootStore;
         this.firstComment = new Comment(this._rootStore);
-        Object.keys(point).forEach(key => (this[key] = point[key]));
+        Object.keys(point).forEach((key) => (this[key] = point[key]));
     }
 
     @action updateCurrentUserLastRead(): void {
@@ -164,7 +176,7 @@ export class PinLocation implements PinPositioningDetails {
         this.usersLastRead = {};
     }
 
-    private ensureDateTimeObject = obj => {
+    private ensureDateTimeObject = (obj) => {
         return typeof obj === "string" ? new Date(obj) : obj;
     };
 
@@ -175,7 +187,7 @@ export class PinLocation implements PinPositioningDetails {
 
         const currentUser = this._rootStore.currentUser;
 
-        let allComments = this.comments.slice();
+        const allComments = this.comments.slice();
         if (this.firstComment.date) {
             allComments.push(this.firstComment);
         }
@@ -183,9 +195,9 @@ export class PinLocation implements PinPositioningDetails {
             return false;
         }
 
-        let otherUserComments = allComments
-            .filter(x => x.author !== currentUser)
-            .map(x => x.date)
+        const otherUserComments = allComments
+            .filter((x) => x.author !== currentUser)
+            .map((x) => x.date)
             .sort();
         const lastOtherUserComment = otherUserComments.length > 0 ? otherUserComments.pop() : null;
         if (!lastOtherUserComment) {
@@ -193,9 +205,9 @@ export class PinLocation implements PinPositioningDetails {
             return false;
         }
 
-        let currentUserComments = allComments
-            .filter(x => x.author === currentUser)
-            .map(x => x.date)
+        const currentUserComments = allComments
+            .filter((x) => x.author === currentUser)
+            .map((x) => x.date)
             .sort();
         const lastCurrentUserComment = currentUserComments.length > 0 ? currentUserComments.pop() : null;
         if (
@@ -226,7 +238,7 @@ export interface ExternalReviewOptions {
 export enum Priority {
     Important = "Important",
     Normal = "Normal",
-    Trivial = "Trivial"
+    Trivial = "Trivial",
 }
 
 export interface IReviewComponentStore {
@@ -319,7 +331,7 @@ class ReviewComponentStore implements IReviewComponentStore {
 
     @action.bound
     load(): void {
-        this._advancedReviewService.load().then(reviewLocations => {
+        this._advancedReviewService.load().then((reviewLocations) => {
             this.reviewLocations = reviewLocations.map((x: any) => {
                 return new PinLocation(this, {
                     id: x.id,
@@ -334,7 +346,7 @@ class ReviewComponentStore implements IReviewComponentStore {
                     priority: x.data.priority,
                     isDone: x.data.isDone,
                     firstComment: this.parseComment(x.data.firstComment),
-                    comments: (x.data.comments || []).map((x: any) => this.parseComment(x))
+                    comments: (x.data.comments || []).map((x: any) => this.parseComment(x)),
                 });
             });
         });
@@ -349,7 +361,7 @@ class ReviewComponentStore implements IReviewComponentStore {
     }
 
     @computed get filteredReviewLocations(): PinLocation[] {
-        return this.reviewLocations.filter(location => {
+        return this.reviewLocations.filter((location) => {
             return (
                 (this.filter.showResolved && location.isDone) ||
                 (this.filter.showActive && !location.isDone && !location.isUpdatedReview) ||
@@ -400,7 +412,7 @@ class ReviewComponentStore implements IReviewComponentStore {
             item.currentCommentText,
             this,
             null,
-            item.currentScreenshot
+            item.currentScreenshot,
         );
         return this.saveLocation(editedReview);
     }
@@ -443,26 +455,26 @@ class ReviewComponentStore implements IReviewComponentStore {
                         author: x.author,
                         date: x.date,
                         screenshot: x.screenshot,
-                        text: x.text
+                        text: x.text,
                     };
                 }),
                 firstComment: {
                     author: reviewLocation.firstComment.author,
                     date: reviewLocation.firstComment.date,
                     screenshot: reviewLocation.firstComment.screenshot,
-                    text: reviewLocation.firstComment.text
-                }
+                    text: reviewLocation.firstComment.text,
+                },
             };
             this._advancedReviewService
                 .add(reviewLocation.id, data)
-                .then(result => {
+                .then((result) => {
                     if (reviewLocation.id !== result.id) {
                         reviewLocation.id = result.id;
                         this.reviewLocations.push(reviewLocation);
                     }
                     resolve(reviewLocation);
                 })
-                .otherwise(e => {
+                .otherwise((e) => {
                     reject(e);
                 });
         });
@@ -472,6 +484,6 @@ class ReviewComponentStore implements IReviewComponentStore {
 export const createStores = (advancedReviewService: AdvancedReviewService, res: ReviewResources): any => {
     return {
         reviewStore: new ReviewComponentStore(advancedReviewService),
-        resources: res
+        resources: res,
     };
 };

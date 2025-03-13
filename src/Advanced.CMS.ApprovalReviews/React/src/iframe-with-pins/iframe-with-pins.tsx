@@ -1,14 +1,15 @@
-import React from "react";
-import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, PinLocation, NewPinDto, Dimensions } from "../store/review-store";
-import NewReviewDialog from "../new-review-dialog/new-review-dialog";
-import IframeOverlay from "../iframe-overlay/iframe-overlay";
-import PinCollection from "../pin-collection/pin-collection";
-import ReviewsSlidingPanel from "../reviews-sliding-panel/reviews-sliding-panel";
-import PositionCalculator from "../position-calculator/position-calculator";
+import "@material/react-snackbar/index.scss";
 
 import { Snackbar } from "@material/react-snackbar";
-import "@material/react-snackbar/index.scss";
+import { inject, observer } from "mobx-react";
+import React from "react";
+
+import IframeOverlay from "../iframe-overlay/iframe-overlay";
+import NewReviewDialog from "../new-review-dialog/new-review-dialog";
+import PinCollection from "../pin-collection/pin-collection";
+import PositionCalculator from "../position-calculator/position-calculator";
+import ReviewsSlidingPanel from "../reviews-sliding-panel/reviews-sliding-panel";
+import { Dimensions, IReviewComponentStore, NewPinDto, PinLocation } from "../store/review-store";
 
 interface IframeState {
     newLocation: PinLocation;
@@ -29,7 +30,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
 
         this.state = {
             newLocation: null,
-            documentSize: this.getIframeDimensions()
+            documentSize: this.getIframeDimensions(),
         };
     }
 
@@ -66,23 +67,23 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
     onCloseDialog(action: string, state: NewPinDto): void {
         if (action !== "save") {
             this.setState({
-                newLocation: null
+                newLocation: null,
             });
             return;
         }
 
         this.props.reviewStore
             .save(state, this.state.newLocation)
-            .then(createdLocation => {
+            .then((createdLocation) => {
                 this.setState({
-                    newLocation: null
+                    newLocation: null,
                 });
                 // show the pin details only if there's a different pin open currently
                 if (this.props.reviewStore.editedPinLocation) {
                     this.props.reviewStore.editedPinLocation = createdLocation;
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 //TODO: handle server exceptions
                 alert(e.message);
             });
@@ -104,7 +105,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
         const positionCalculator = new PositionCalculator(
             this.state.documentSize,
             this.props.external,
-            this.props.iframe.contentDocument
+            this.props.iframe.contentDocument,
         );
 
         return (
@@ -112,7 +113,7 @@ export default class IframeWithPins extends React.Component<IframeWithPinsProps,
                 {this.props.reviewStore.filter.reviewMode && (
                     <IframeOverlay
                         iframe={this.props.iframe}
-                        reviewLocationCreated={location => this.setState({ newLocation: location })}
+                        reviewLocationCreated={(location) => this.setState({ newLocation: location })}
                         external={this.props.external}
                     >
                         <PinCollection newLocation={this.state.newLocation} positionCalculator={positionCalculator} />

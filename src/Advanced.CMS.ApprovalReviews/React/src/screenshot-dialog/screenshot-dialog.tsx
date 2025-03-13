@@ -1,15 +1,15 @@
-import React from "react";
-import { computed } from "mobx";
-import { TextButton } from "@episerver/ui-framework";
-import html2canvas from "html2canvas";
-import DrawablePreview from "../drawable-preview/drawable-preview";
-import { Dimensions } from "../store/review-store";
-
-import ReactCrop, { Crop } from "react-image-crop";
 import "./screenshot-dialog.scss";
 
+import { TextButton } from "@episerver/ui-framework";
 import Dialog, { DialogContent, DialogTitle } from "@material/react-dialog";
+import html2canvas from "html2canvas";
+import { computed } from "mobx";
 import { inject, observer } from "mobx-react";
+import React from "react";
+import ReactCrop, { Crop } from "react-image-crop";
+
+import DrawablePreview from "../drawable-preview/drawable-preview";
+import { Dimensions } from "../store/review-store";
 
 interface ScreenshotPickerProps {
     iframe: HTMLIFrameElement;
@@ -32,7 +32,7 @@ interface ScreenshotPickerState {
 enum Mode {
     Default,
     Crop,
-    Highlight
+    Highlight,
 }
 
 interface ResizeResult {
@@ -42,13 +42,13 @@ interface ResizeResult {
 }
 
 function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise<ResizeResult> {
-    return new Promise(resolve => {
-        var img = new Image();
+    return new Promise((resolve) => {
+        const img = new Image();
         img.src = base64Str;
-        img.onload = function() {
-            var canvas = document.createElement("canvas");
-            var width = img.width;
-            var height = img.height;
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            let width = img.width;
+            let height = img.height;
 
             if (width > height) {
                 if (width > maxWidth) {
@@ -63,12 +63,12 @@ function resize(base64Str: string, maxWidth: number, maxHeight: number): Promise
             }
             canvas.width = width;
             canvas.height = height;
-            var ctx = canvas.getContext("2d");
+            const ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, width, height);
             resolve({
                 image: canvas.toDataURL(),
                 width: width,
-                height: height
+                height: height,
             });
         };
     });
@@ -81,7 +81,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         width: 50,
         height: 50,
         x: 10,
-        y: 10
+        y: 10,
     };
     private imageRef: any;
 
@@ -90,7 +90,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         this.state = {
             crop: this.getDefaultCrop(),
             input: null,
-            drawerInput: null
+            drawerInput: null,
         };
     }
 
@@ -105,15 +105,15 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         return Mode.Default;
     }
 
-    onCropChange = crop => {
+    onCropChange = (crop) => {
         this.setState({ crop });
     };
 
     componentDidMount(): void {
         html2canvas(this.props.iframe.contentDocument.body, {
             allowTaint: true,
-            useCORS: true
-        }).then(canvas => {
+            useCORS: true,
+        }).then((canvas) => {
             this.setState({ input: canvas.toDataURL() });
         });
     }
@@ -151,17 +151,17 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
             0,
             0,
             crop.width,
-            crop.height
+            crop.height,
         );
 
         return canvas.toDataURL();
     }
 
-    onImageLoaded = image => {
+    onImageLoaded = (image) => {
         this.imageRef = image;
     };
 
-    onCropComplete = crop => {
+    onCropComplete = (crop) => {
         this.setState({ crop });
     };
 
@@ -175,7 +175,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
         this.props.toggle();
     };
 
-    onApplyDrawing = img => {
+    onApplyDrawing = (img) => {
         this.props.onImageSelected(img);
         this.setState({ crop: this.defaultCrop, input: null, drawerInput: null });
         this.props.toggle();
@@ -183,7 +183,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
 
     getDefaultCrop = () => {
         function offset(el: HTMLElement) {
-            var rect = el.getBoundingClientRect(),
+            const rect = el.getBoundingClientRect(),
                 scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
                 scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
@@ -201,7 +201,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
                 return null;
             }
 
-            let defaultDocumentCrop: any = {};
+            const defaultDocumentCrop: any = {};
             defaultDocumentCrop.width = rectangleSize;
             defaultDocumentCrop.height = rectangleSize;
 
@@ -222,7 +222,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
             return defaultDocumentCrop;
         }
 
-        let defaultDocumentCrop =
+        const defaultDocumentCrop =
             getDefaultDocumentCrop(this.props.documentRelativePosition, this.props.documentSize) ||
             Object.assign(this.defaultCrop);
 
@@ -230,8 +230,8 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
             return defaultDocumentCrop;
         }
 
-        var propertyEl: HTMLElement = this.props.iframe.contentDocument.querySelector(
-            `[data-epi-property-name='${this.props.propertyName}']`
+        const propertyEl: HTMLElement = this.props.iframe.contentDocument.querySelector(
+            `[data-epi-property-name='${this.props.propertyName}']`,
         );
         if (!propertyEl) {
             return defaultDocumentCrop;
@@ -258,7 +258,7 @@ export default class ScreenshotDialog extends React.Component<ScreenshotPickerPr
             width: percentageWidth,
             height: percentageHeight,
             x: percentX,
-            y: percentY
+            y: percentY,
         };
     };
 

@@ -1,9 +1,11 @@
-import React from "react";
-import { observer, inject } from "mobx-react";
 import "./pin-collection.scss";
-import { IReviewComponentStore, PinLocation } from "../store/review-store";
-import PositionCalculator from "../position-calculator/position-calculator";
+
+import { inject, observer } from "mobx-react";
+import React from "react";
+
 import Pin from "../pin/pin";
+import PositionCalculator from "../position-calculator/position-calculator";
+import { IReviewComponentStore, PinLocation } from "../store/review-store";
 
 interface PinCollectionProps {
     reviewStore?: IReviewComponentStore;
@@ -23,18 +25,18 @@ export default class PinCollection extends React.Component<PinCollectionProps> {
         const { selectedPinLocation, filteredReviewLocations } = this.props.reviewStore!;
         const locations = [...filteredReviewLocations];
 
-        if (this.props.newLocation && !locations.some(location => location === this.props.newLocation)) {
+        if (this.props.newLocation && !locations.some((location) => location === this.props.newLocation)) {
             locations.push(this.props.newLocation);
         }
 
         return (
             <div>
-                {locations.map(location => (
+                {locations.map((location) => (
                     <Pin
                         key={location.id || "unsaved"}
                         location={location}
                         position={this.props.positionCalculator.calculate(location)}
-                        showDialog={e => this.onLocationClick(e, location)}
+                        showDialog={(e) => this.onLocationClick(e, location)}
                         highlighted={location === selectedPinLocation}
                     />
                 ))}

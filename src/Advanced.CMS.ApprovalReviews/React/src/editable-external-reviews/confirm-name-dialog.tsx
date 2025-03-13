@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-
-import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import { Input, TextField } from "@episerver/ui-framework";
-
 import "@material/react-dialog/index.scss";
+
+import { Input, TextField } from "@episerver/ui-framework";
+import Dialog, { DialogButton, DialogContent, DialogFooter, DialogTitle } from "@material/react-dialog";
+import React, { useState } from "react";
 
 interface ConfirmDialogProps {
     open: boolean;
@@ -24,7 +23,7 @@ const ConfirmDialog = ({ open, onClose, initialUserName }: ConfirmDialogProps) =
     };
 
     const inputProps = {
-        isValid: !!userName
+        isValid: !!userName,
     };
 
     return (

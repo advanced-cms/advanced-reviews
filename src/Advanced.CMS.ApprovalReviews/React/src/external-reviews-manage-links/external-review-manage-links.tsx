@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { observer } from "mobx-react-lite";
-import { format } from "date-fns";
-import { ContextMenu } from "../common/context-menu";
-import Confirmation from "../confirmation/confirmation";
-import { IconButton } from "@episerver/ui-framework";
-import MaterialIcon from "@material/react-material-icon";
-import { List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
-import { IExternalReviewStore, ReviewLink } from "./external-review-links-store";
-import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
-import LinkEditDialog from "./external-review-manage-links-edit";
-
 import "./external-review-manage-links.scss";
 import "@episerver/ui-framework/dist/main.css";
+
+import { IconButton, List, ListItem, ListItemGraphic, ListItemText } from "@episerver/ui-framework";
+import MaterialIcon from "@material/react-material-icon";
+import { format } from "date-fns";
+import { observer } from "mobx-react-lite";
+import React, { useState } from "react";
+
+import { ContextMenu } from "../common/context-menu";
+import Confirmation from "../confirmation/confirmation";
+import { IExternalReviewStore, ReviewLink } from "./external-review-links-store";
+import LinkEditDialog from "./external-review-manage-links-edit";
+import ShareDialog, { LinkShareResult } from "./external-review-share-dialog";
 
 export interface VisitorGroup {
     id: string;
@@ -67,7 +67,7 @@ const ExternalReviewWidgetContent = observer(
 
         const onEditClose = async (validTo: Date, pinCode: string, displayName: string, visitorGroups: string[]) => {
             setLinkToEdit(null);
-            if (validTo == null) {
+            if (!validTo) {
                 return;
             }
             if (currentLinkToEdit.isPersisted) {
@@ -235,7 +235,7 @@ const ExternalReviewWidgetContent = observer(
                 )}
             </>
         );
-    }
+    },
 );
 
 export default ExternalReviewWidgetContent;

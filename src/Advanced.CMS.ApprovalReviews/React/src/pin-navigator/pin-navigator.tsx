@@ -1,11 +1,11 @@
-import React from "react";
-import { observer, inject } from "mobx-react";
-import { IReviewComponentStore } from "../store/review-store";
+import "./pin-navigator.scss";
 
 import { IconButton, TextButton } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
+import { inject, observer } from "mobx-react";
+import React from "react";
 
-import "./pin-navigator.scss";
+import { IReviewComponentStore } from "../store/review-store";
 
 interface PinNavigatorProps {
     resources?: ReviewResources;

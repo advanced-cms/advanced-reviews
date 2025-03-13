@@ -1,9 +1,8 @@
-import React from "react";
+import "./drop-down-menu.scss";
 
 import { Corner, MenuSurface } from "@episerver/ui-framework";
 import MaterialIcon from "@material/react-material-icon";
-
-import "./drop-down-menu.scss";
+import React from "react";
 
 interface DropDownMenuProps {
     title?: string;
@@ -15,7 +14,7 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
         super(props);
         this.state = {
             isMenuOpen: false,
-            anchorElement: null
+            anchorElement: null,
         };
     }
 
@@ -27,7 +26,7 @@ export class DropDownMenu extends React.Component<DropDownMenuProps, any> {
         this.setState({ isMenuOpen: false });
     };
 
-    setAnchorElement = element => {
+    setAnchorElement = (element) => {
         if (this.state.anchorElement) {
             return;
         }

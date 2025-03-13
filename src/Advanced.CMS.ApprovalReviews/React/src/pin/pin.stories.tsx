@@ -1,11 +1,12 @@
-import React from "react";
-import { storiesOf } from "@storybook/react";
-import { withKnobs, boolean, select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import resources from "../../.storybook/resources.json";
-import Pin from "./pin";
-import { Comment, Priority, PinLocation, createStores } from "../store/review-store";
+import { boolean, select, withKnobs } from "@storybook/addon-knobs";
+import { storiesOf } from "@storybook/react";
+import React from "react";
+
 import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
+import resources from "../../.storybook/resources.json";
+import { Comment, createStores, PinLocation, Priority } from "../store/review-store";
+import Pin from "./pin";
 
 const stories = storiesOf("Pin", module);
 stories.addDecorator(withKnobs);
@@ -21,7 +22,7 @@ priorityOptions[Priority.Trivial] = "Trivial";
 const getReviewLocation = (
     isDone: boolean = false,
     priority: Priority = Priority.Normal,
-    lastCommentFromOtherUser: boolean = false
+    lastCommentFromOtherUser: boolean = false,
 ) => {
     const user = lastCommentFromOtherUser ? stores.reviewStore.currentUser + "1" : stores.reviewStore.currentUser;
     const reviewLocation = new PinLocation(stores.reviewStore, {
@@ -31,7 +32,7 @@ const getReviewLocation = (
         documentRelativePosition: { x: 100, y: 100 },
         priority: priority,
         firstComment: Comment.create(user, "aaaaa aaaaa", stores.reviewStore, new Date("2019-02-03")),
-        comments: []
+        comments: [],
     });
     return reviewLocation;
 };
@@ -41,7 +42,7 @@ stories
         const location = getReviewLocation(
             boolean("Is done", false),
             select("Priority", priorityOptions, Priority.Normal),
-            boolean("Is new", false)
+            boolean("Is new", false),
         );
         return (
             <Pin

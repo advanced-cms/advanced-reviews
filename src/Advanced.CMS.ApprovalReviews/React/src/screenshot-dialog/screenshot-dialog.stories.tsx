@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { storiesOf } from "@storybook/react";
-import ScreenshotDialog from "./screenshot-dialog";
 import { action } from "@storybook/addon-actions";
-import { createStores } from "../store/review-store";
+import { storiesOf } from "@storybook/react";
+import { Provider } from "mobx-react";
+import React, { useState } from "react";
+
 import FakeAdvancedReviewService from "../../.storybook/fake-advanced-review-service";
 import resources from "../../.storybook/resources.json";
-import { Provider } from "mobx-react";
-import { StringLiteral } from "@babel/types";
+import { createStores } from "../store/review-store";
+import ScreenshotDialog from "./screenshot-dialog";
 
 const stores = createStores(new FakeAdvancedReviewService(), resources);
 
@@ -32,7 +32,7 @@ const Component = ({ propertyName }: ComponentProps) => {
                     position: "absolute",
                     top: "0",
                     overflowY: "scroll",
-                    overflowX: "auto"
+                    overflowX: "auto",
                 }}
             >
                 <iframe

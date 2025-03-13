@@ -1,9 +1,11 @@
-import React, { CSSProperties, FunctionComponent, useEffect, useRef } from "react";
-import { Dimensions, PinLocation, Priority } from "../store/review-store";
-import classNames from "classnames";
-import MaterialIcon from "@material/react-material-icon";
-import priorityIconMappings from "../store/priority-icon-mappings";
 import "./pin.scss";
+
+import MaterialIcon from "@material/react-material-icon";
+import classNames from "classnames";
+import React, { CSSProperties, FunctionComponent, useEffect, useRef } from "react";
+
+import priorityIconMappings from "../store/priority-icon-mappings";
+import { Dimensions, PinLocation, Priority } from "../store/review-store";
 
 interface PinProps {
     location: PinLocation;
@@ -21,7 +23,7 @@ const Pin: FunctionComponent<PinProps> = (props: PinProps) => {
         if (highlighted) {
             div.current.scrollIntoView({
                 block: "center",
-                inline: "center"
+                inline: "center",
             });
         }
     });
@@ -31,7 +33,7 @@ const Pin: FunctionComponent<PinProps> = (props: PinProps) => {
     const style: CSSProperties = {
         zIndex: 700,
         left: props.position.x - circleSize + "px",
-        top: props.position.y - circleSize + "px"
+        top: props.position.y - circleSize + "px",
     };
 
     return (
@@ -42,7 +44,7 @@ const Pin: FunctionComponent<PinProps> = (props: PinProps) => {
             className={classNames("review-location", {
                 done: location.isDone,
                 new: location.isUpdatedReview,
-                highlighted: highlighted
+                highlighted: highlighted,
             })}
         >
             <svg height="28" width="28">

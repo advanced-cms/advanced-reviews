@@ -1,15 +1,14 @@
+import "@episerver/ui-framework/dist/main.css";
+
+import axios from "axios";
+import { Provider } from "mobx-react";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "mobx-react";
-import axios from "axios";
 
 import res from "../../.storybook/resources.json";
-import { createStores } from "../store/review-store";
-
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
+import { createStores } from "../store/review-store";
 import ConfirmNameDialog from "./confirm-name-dialog";
-
-import "@episerver/ui-framework/dist/main.css";
 
 interface EditableExternalReviewProps {
     iframe: HTMLIFrameElement;
@@ -17,33 +16,33 @@ interface EditableExternalReviewProps {
 
 class ExternalReviewService implements AdvancedReviewService {
     add(id: string, data: any): Promise<any> {
-        let result = new Promise((resolve, reject) => {
+        const result = new Promise((resolve, reject) => {
             axios
                 .post(addUrl, {
                     token: token,
                     id: id,
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(data),
                 })
-                .then(function(response) {
+                .then(function (response) {
                     resolve(response.data);
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     reject(error);
                 });
         });
 
         // make Promise compatibile with dojo
-        let r = result as any;
+        const r = result as any;
         r.__proto__.otherwise = r.__proto__.catch;
 
         return result;
     }
 
     load(): Promise<any[]> {
-        const parseResponse = reviewLocations => {
+        const parseResponse = (reviewLocations) => {
             return reviewLocations
-                .map(x => {
-                    var reviewLocation;
+                .map((x) => {
+                    let reviewLocation;
                     try {
                         reviewLocation = JSON.parse(x.data);
                     } catch (exception) {
@@ -51,10 +50,10 @@ class ExternalReviewService implements AdvancedReviewService {
                     }
                     return {
                         id: x.id,
-                        data: reviewLocation
+                        data: reviewLocation,
                     };
                 })
-                .filter(x => !!x.data);
+                .filter((x) => !!x.data);
         };
 
         let pins = [];
@@ -64,10 +63,10 @@ class ExternalReviewService implements AdvancedReviewService {
             console.warn("Couldn't load pins", ex);
         }
 
-        let result = new Promise<any[]>(resolve => {
+        const result = new Promise<any[]>((resolve) => {
             resolve(pins);
         });
-        let r = result as any;
+        const r = result as any;
         r.otherwise = result.catch;
         return result;
     }
@@ -77,12 +76,12 @@ class ExternalReviewService implements AdvancedReviewService {
             axios
                 .post(removeUrl, {
                     token: token,
-                    id: id
+                    id: id,
                 })
-                .then(function() {
+                .then(function () {
                     resolve();
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     reject(error);
                 });
         });
@@ -113,7 +112,7 @@ function EditableExternalReviewComponent({ iframe }: EditableExternalReviewProps
         try {
             const properties = {};
             const meta = JSON.parse(metadata);
-            Object.keys(meta).forEach(key => {
+            Object.keys(meta).forEach((key) => {
                 const newKey = key[0].toUpperCase() + key.substring(1);
                 properties[newKey] = meta[key];
             });
@@ -152,5 +151,5 @@ stores.reviewStore.avatarUrl = avatarUrl;
 
 ReactDOM.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
-    reviewEl
+    reviewEl,
 );

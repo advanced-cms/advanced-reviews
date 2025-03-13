@@ -14,7 +14,9 @@
         "build:external-review-manage-links-widget:debug": "webpack --config webpack.external-review-manage-links.widget.config --mode development",
         "storybook": "start-storybook -s ./ -p 6006",
         "build-storybook": "build-storybook",
-        "test": "vitest"
+        "test": "vitest",
+        "lint": "run -T prettier --check \"src/**/*.{ts,tsx}\" && run -T eslint \"src/**/*.{ts,tsx}\"",
+        "lint:fix": "run -T prettier --write \"src/**/*.{ts,tsx}\" && run -T eslint --fix \"src/**/*.{ts,tsx}\""
     },
     "author": "advanced-cms",
     "license": "MIT",
@@ -66,7 +68,7 @@
         "mobx": "^4.15.3",
         "mobx-react": "^6.1.4",
         "mobx-react-lite": "^1.5.0",
-        "prettier": "^3.3.3",
+        "prettier": "^3.5.3",
         "react": "^16.10.2",
         "react-dom": "^16.10.2",
         "react-image-crop": "^8.6.4",

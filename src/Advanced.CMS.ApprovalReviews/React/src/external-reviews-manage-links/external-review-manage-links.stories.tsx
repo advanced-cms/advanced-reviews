@@ -1,10 +1,14 @@
-import React from "react";
 import { storiesOf } from "@storybook/react";
+import React from "react";
+
+import res from "../../.storybook/externalResources.json";
 import ExternalReviewWidgetContent, { ExternalReviewWidgetContentProps } from "./external-review-manage-links";
 import FakeReviewLinksStore from "./fake-review-links-store";
-import res from "../../.storybook/externalResources.json";
 
-const visitorGroups = [{ name: "Visitor group 1", id: "1" }, { name: "Visitor group 2", id: "2" }];
+const visitorGroups = [
+    { name: "Visitor group 1", id: "1" },
+    { name: "Visitor group 2", id: "2" },
+];
 
 const getDefaultProps = (store: FakeReviewLinksStore): ExternalReviewWidgetContentProps => ({
     store: store,
@@ -13,7 +17,7 @@ const getDefaultProps = (store: FakeReviewLinksStore): ExternalReviewWidgetConte
     availableVisitorGroups: visitorGroups,
     pinCodeSecurityEnabled: false,
     pinCodeLength: 4,
-    prolongDays: 5
+    prolongDays: 5,
 });
 
 storiesOf("External reviews/Review component", module)

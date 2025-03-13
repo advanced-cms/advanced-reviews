@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { observer } from "mobx-react-lite";
-import { format, parse } from "date-fns";
-import Dialog, { DialogTitle, DialogContent, DialogFooter, DialogButton } from "@material/react-dialog";
-import { Checkbox, Input, TextButton, TextField } from "@episerver/ui-framework";
-import { ReviewLink } from "./external-review-links-store";
 import "@material/react-dialog/index.scss";
+
+import { Checkbox, Input, TextButton, TextField } from "@episerver/ui-framework";
+import Dialog, { DialogButton, DialogContent, DialogFooter, DialogTitle } from "@material/react-dialog";
+import { format, parse } from "date-fns";
+import { observer } from "mobx-react-lite";
+import React, { useState } from "react";
+
+import { ReviewLink } from "./external-review-links-store";
 import { VisitorGroup } from "./external-review-manage-links";
 
 interface LinkEditDialogProps {
@@ -32,7 +34,7 @@ const LinkEditDialog = observer(
         pinCodeSecurityEnabled,
         pinCodeSecurityRequired,
         pinCodeLength,
-        prolongDays
+        prolongDays,
     }: LinkEditDialogProps) => {
         const [displayName, setDisplayName] = useState<string>(reviewLink.displayName || "");
         const [visitorGroups, setVisitorGroups] = useState<string[]>(reviewLink.visitorGroups || []);
@@ -63,7 +65,7 @@ const LinkEditDialog = observer(
             setPinCode(newValue);
             const doesPinMatchRequirements = newValue.length === pinCodeLength;
             setCanSave(
-                pinCodeSecurityRequired ? doesPinMatchRequirements : newValue.length === 0 || doesPinMatchRequirements
+                pinCodeSecurityRequired ? doesPinMatchRequirements : newValue.length === 0 || doesPinMatchRequirements,
             );
         };
 
@@ -81,7 +83,7 @@ const LinkEditDialog = observer(
 
         const prolongTitle = (resources.list.editdialog.prolongbydays || "").replace(
             "[#days#]",
-            prolongDays.toString()
+            prolongDays.toString(),
         );
 
         return (
@@ -161,12 +163,12 @@ const LinkEditDialog = observer(
                             {resources.list.editdialog.visitorgroups} ({visitorGroups.length})
                         </span>
                         <div className="visitor-groups-list">
-                            {availableVisitorGroups.map(v => (
+                            {availableVisitorGroups.map((v) => (
                                 <div key={v.id}>
                                     <Checkbox
                                         nativeControlId={v.id}
                                         checked={visitorGroups.indexOf(v.id) !== -1}
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             const selectedGroups = [...visitorGroups];
                                             if (e.target.checked) {
                                                 setVisitorGroups([...selectedGroups, v.id]);
@@ -199,7 +201,7 @@ const LinkEditDialog = observer(
                 </DialogFooter>
             </Dialog>
         );
-    }
+    },
 );
 
 export default LinkEditDialog;

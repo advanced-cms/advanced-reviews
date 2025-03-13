@@ -1,17 +1,18 @@
-import React from "react";
-import classNames from "classnames";
-import { observer, inject } from "mobx-react";
-import { IReviewComponentStore, Comment as CommentItem, Priority } from "../store/review-store";
-import { DropDownMenu } from "../common/drop-down-menu";
-import MaterialIcon from "@material/react-material-icon";
-
 import "./comment.scss";
+
+import MaterialIcon from "@material/react-material-icon";
+import classNames from "classnames";
+import { inject, observer } from "mobx-react";
+import React from "react";
+
+import { DropDownMenu } from "../common/drop-down-menu";
+import { Comment as CommentItem, IReviewComponentStore } from "../store/review-store";
 
 interface CommentProps {
     reviewStore?: IReviewComponentStore;
     resources?: ReviewResources;
     comment: CommentItem;
-    amplify?: Boolean;
+    amplify?: boolean;
     isImportant?: boolean;
     isDone?: boolean;
 }

@@ -1,8 +1,9 @@
-import React, { CSSProperties } from "react";
-import { inject, observer } from "mobx-react";
-import { IReviewComponentStore, PinLocation } from "../store/review-store";
 import CssSelectorGenerator from "css-selector-generator";
+import { inject, observer } from "mobx-react";
+import React, { CSSProperties } from "react";
+
 import offset from "../position-calculator/offset";
+import { IReviewComponentStore, PinLocation } from "../store/review-store";
 
 interface IframeOverlayProps {
     iframe: HTMLIFrameElement;
@@ -31,14 +32,14 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         this.overlayRef = React.createRef<HTMLDivElement>();
         this.overlayDocumentRef = React.createRef<HTMLDivElement>();
         this.state = {
-            offsetHeight: 0
+            offsetHeight: 0,
         };
     }
 
     componentDidMount() {
         const checkTime = 1000;
         this.calculatePositionInterval = window.setInterval(
-            function() {
+            function () {
                 //TODO: when changing context very fast, sometimes we get into here before the component is unmounted, maybe can be solved differently?
                 if (!this.props.iframe.contentDocument || !this.props.iframe.contentDocument.body) {
                     return;
@@ -50,10 +51,10 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
                 }
 
                 this.setState({
-                    offsetHeight: offsetHeight
+                    offsetHeight: offsetHeight,
                 });
             }.bind(this),
-            checkTime
+            checkTime,
         );
         this.overlayRef.current.addEventListener("scroll", this.scroll.bind(this), true);
         this.overlayRef.current.addEventListener("click", this.addReviewLocation.bind(this));
@@ -87,7 +88,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         this.overlayRef.current.style.display = show ? "block" : "none";
         const propertyOverlays = document.getElementsByClassName("epi-overlay-container");
 
-        [].forEach.call(propertyOverlays, overlay => {
+        [].forEach.call(propertyOverlays, (overlay) => {
             overlay.style.display = show ? "block" : "none";
         });
     }
@@ -112,25 +113,25 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         this.toggleOverlays(true);
         const nodeOffset = offset(clickedElement, this.props.external);
 
-        let reviewLocation = new PinLocation(this.props.reviewStore, {
+        const reviewLocation = new PinLocation(this.props.reviewStore, {
             documentRelativePosition: {
                 x: e.offsetX,
-                y: e.offsetY
+                y: e.offsetY,
             },
             documentSize: {
                 x: this.overlayDocumentRef.current.offsetWidth,
-                y: this.overlayDocumentRef.current.offsetHeight
+                y: this.overlayDocumentRef.current.offsetHeight,
             },
             isDone: false,
             clickedDomNodeSelector: selector,
             clickedDomNodeSize: {
                 x: clickedElement.offsetWidth,
-                y: clickedElement.offsetHeight
+                y: clickedElement.offsetHeight,
             },
             clickedDomNodePosition: {
                 x: nodeOffset.left,
-                y: nodeOffset.top
-            }
+                y: nodeOffset.top,
+            },
         });
 
         const propertyElement =
@@ -155,7 +156,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
     render() {
         const { height, top, width } = this.props.iframe.parentElement.style;
 
-        let styles: CSSProperties = {
+        const styles: CSSProperties = {
             position: "absolute",
             zIndex: 600,
             overflowY: "auto",
@@ -163,11 +164,11 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             height: height,
             maxHeight: height,
             width: width,
-            cursor: "crosshair"
+            cursor: "crosshair",
         };
 
-        let documentStyles: CSSProperties = {
-            height: this.state.offsetHeight
+        const documentStyles: CSSProperties = {
+            height: this.state.offsetHeight,
         };
 
         return (
