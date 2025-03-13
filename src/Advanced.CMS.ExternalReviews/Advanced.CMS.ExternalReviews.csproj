@@ -15,7 +15,7 @@
     <Folder Include="advanced-cms-external-reviews.Views\Views" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ClientResources/external-review-component.js" />
+    <None Remove="ClientResources/dist/**" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="advanced-cms-external-reviews.Views\Views\ExternalReviewLogin\Index.cshtml" />

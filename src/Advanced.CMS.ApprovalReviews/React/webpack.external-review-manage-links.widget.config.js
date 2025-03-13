@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
         filename: "external-review-manage-links-component.js",
         libraryTarget: "amd",
         libraryExport: "default",
-        path: path.resolve(__dirname, "../ClientResources"),
+        path: path.resolve(__dirname, "../ClientResources/dist"),
     };
 
     webpackCommon.externals = [

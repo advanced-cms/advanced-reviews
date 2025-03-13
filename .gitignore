@@ -33,14 +33,3 @@ advanced-cms-external-reviews.zip
 dist/
 out/
 
-src/Advanced.CMS.ApprovalReviews/ClientResources/ReviewWidget.js
-src/Advanced.CMS.ApprovalReviews/ClientResources/ReviewWidget.js.map
-src/Advanced.CMS.ApprovalReviews/ClientResources/report.html
-src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.js
-src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.css
-src/Advanced.CMS.ApprovalReviews/ClientResources/adminPlugin.js.map
-src/Advanced.CMS.ApprovalReviews/ClientResources/external-review-manage-links-component.js
-src/Advanced.CMS.ApprovalReviews/ClientResources/external-review-manage-links-component.js.map
-src/Advanced.CMS.ExternalReviews/ClientResources/external-review-component.js
-src/Advanced.CMS.ExternalReviews/ClientResources/external-review-component.js.map
-

@@ -74,8 +74,8 @@ internal class PageEditController : Controller
             AddPinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewUrlGenerator.AddPinUrl)}",
             RemovePinUrl = $"{UrlPath.EnsureStartsWithSlash(_externalReviewUrlGenerator.RemovePinUrl)}",
             AvatarUrl = $"{UrlPath.EnsureStartsWithSlash(_reviewUrlGenerator.AvatarUrl)}",
-            ReviewJsScriptPath = GetJsScriptPath(),
-            ResetCssPath = GetResetCssPath(),
+            ReviewJsScriptPath = GetPath("ClientResources/dist/editable-external-review-component.js"),
+            ReviewCssPath = GetPath("ClientResources/dist/editable-external-review-component.css"),
             ReviewPins = serializer.Serialize(_approvalReviewsRepository.Load(externalReviewLink.ContentLink)),
             Metadata = serializer.Serialize(_propertyResolver.Resolve(content as ContentData)),
             Options = serializer.Serialize(_externalReviewOptions)
@@ -105,7 +105,7 @@ internal class PageEditController : Controller
 
         //TODO: security issue - we post whole item and external reviewer can modify this
 
-        _reviewsNotifier.NotifyCmsEditor(reviewLink.ContentLink, token, reviewLocation.Data, false);
+        _ = _reviewsNotifier.NotifyCmsEditor(reviewLink.ContentLink, token, reviewLocation.Data, false);
 
         var location = _approvalReviewsRepository.Update(reviewLink.ContentLink, reviewLocation);
         if (location == null)
@@ -173,28 +173,12 @@ internal class PageEditController : Controller
         return true;
     }
 
-    private static string GetJsScriptPath()
+    private static string GetPath(string url)
     {
-        const string url = "ClientResources/external-review-component.js";
-        if (ModuleResourceResolver.Instance.TryResolveClientPath(typeof(PageEditController).Assembly, url,
-                out var jsScriptPath))
-        {
-            return jsScriptPath;
-        }
-
-        return "";
-    }
-
-    private static string GetResetCssPath()
-    {
-        const string url = "ClientResources/reset.css";
-        if (ModuleResourceResolver.Instance.TryResolveClientPath(typeof(PageEditController).Assembly, url,
-                out var resetCssPath))
-        {
-            return resetCssPath;
-        }
-
-        return "";
+        return ModuleResourceResolver.Instance.TryResolveClientPath(typeof(PageEditController).Assembly, url,
+            out var path)
+            ? path
+            : "";
     }
 
     private void ApprovalReviewsRepository_OnBeforeUpdate(object sender, BeforeUpdateEventArgs e)
@@ -228,7 +212,7 @@ internal class DeleteReviewLocation
     public string Id { get; set; }
 }
 
-internal class ContentPreviewModel
+public class ContentPreviewModel
 {
     public string Token { get; set; }
     public string Name { get; set; }
@@ -246,7 +230,7 @@ internal class ContentPreviewModel
     public string AvatarUrl { get; set; }
 
     public string ReviewJsScriptPath { get; set; }
-    public string ResetCssPath { get; set; }
+    public string ReviewCssPath { get; set; }
     public string ReviewPins { get; set; }
     public string Metadata { get; set; }
     public string Options { get; set; }
