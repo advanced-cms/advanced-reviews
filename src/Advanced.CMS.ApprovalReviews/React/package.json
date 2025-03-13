@@ -3,8 +3,8 @@
     "version": "",
     "description": "",
     "scripts": {
-        "build": "npm run build:widget && npm run build:admin && npm run build:external-review-manage-links-widget && npm run build:editable-external-component",
-        "build:debug": "npm run build:widget:debug && npm run build:admin:debug && npm run build:external-review-manage-links-widget:debug && npm run build:editable-external-component:debug",
+        "build": "yarn build:widget && yarn build:admin && yarn build:external-review-manage-links-widget && yarn build:editable-external-component",
+        "build:debug": "yarn build:widget:debug && yarn build:admin:debug && yarn build:external-review-manage-links-widget:debug && yarn build:editable-external-component:debug",
         "build:widget": "webpack --config webpack.widget.config.js --mode production",
         "build:widget:debug": "webpack --config webpack.widget.config.js --mode development",
         "build:admin": "webpack --config src/admin/webpack.admin.config.js --mode production",
