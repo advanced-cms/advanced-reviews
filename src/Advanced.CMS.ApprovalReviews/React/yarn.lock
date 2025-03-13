@@ -4130,13 +4130,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-walk@npm:^7.1.1":
-  version: 7.2.0
-  resolution: "acorn-walk@npm:7.2.0"
-  checksum: 4d3e186f729474aed3bc3d0df44692f2010c726582655b20a23347bef650867655521c48ada444cb4fda241ee713dcb792da363ec74c6282fa884fb7144171bb
-  languageName: node
-  linkType: hard
-
 "acorn@npm:^5.5.3":
   version: 5.7.4
   resolution: "acorn@npm:5.7.4"
@@ -4152,15 +4145,6 @@ __metadata:
   bin:
     acorn: bin/acorn
   checksum: b430c346813289daf1b4e673333d10c54a7c452a776f097597c7b0bd71c7ff58f0e8f850f334963eac806a52928985ff20c0fa39c67cd5276d10e0ed4370f9c8
-  languageName: node
-  linkType: hard
-
-"acorn@npm:^7.1.1":
-  version: 7.4.1
-  resolution: "acorn@npm:7.4.1"
-  bin:
-    acorn: bin/acorn
-  checksum: 8be2a40714756d713dfb62544128adce3b7102c6eb94bc312af196c2cc4af76e5b93079bd66b05e9ca31b35a9b0ce12171d16bc55f366cafdb794fdab9d753ec
   languageName: node
   linkType: hard
 
@@ -4236,7 +4220,6 @@ __metadata:
     ts-loader: "npm:^6.2.0"
     typescript: "npm:^3.6.4"
     webpack: "npm:^4.41.2"
-    webpack-bundle-analyzer: "npm:^3.6.0"
     webpack-cli: "npm:^3.3.9"
   languageName: unknown
   linkType: soft
@@ -5283,18 +5266,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bfj@npm:^6.1.1":
-  version: 6.1.2
-  resolution: "bfj@npm:6.1.2"
-  dependencies:
-    bluebird: "npm:^3.5.5"
-    check-types: "npm:^8.0.3"
-    hoopy: "npm:^0.1.4"
-    tryer: "npm:^1.0.1"
-  checksum: 1b941fccaf471c41c7b817a1fbc44f7d8bbabe1ed1543a8d7a28c42477c8b1cd8f0f6e7e06d06973be86c27b1c9b7ad3e094b7b80fb089e0c3488f112597acc8
-  languageName: node
-  linkType: hard
-
 "big.js@npm:^5.2.2":
   version: 5.2.2
   resolution: "big.js@npm:5.2.2"
@@ -5929,13 +5900,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"check-types@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "check-types@npm:8.0.3"
-  checksum: 1d95196e55af15819ed1ffa225cbf774167702b335c2a6aecf15114666f574306b219749574410de7940aaabfc978c44baa355abb5635b630739487e671d1206
-  languageName: node
-  linkType: hard
-
 "chokidar@npm:^2.0.4, chokidar@npm:^2.1.8":
   version: 2.1.8
   resolution: "chokidar@npm:2.1.8"
@@ -6294,7 +6258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^2.18.0, commander@npm:^2.19.0, commander@npm:^2.20.0":
+"commander@npm:^2.19.0, commander@npm:^2.20.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: 90c5b6898610cd075984c58c4f88418a4fb44af08c1b1415e9854c03171bec31b336b7f3e4cefe33de994b3f12b03c5e2d638da4316df83593b9e82554e7e95b
@@ -7351,7 +7315,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ejs@npm:^2.6.1, ejs@npm:^2.7.4":
+"ejs@npm:^2.7.4":
   version: 2.7.4
   resolution: "ejs@npm:2.7.4"
   checksum: 39f5753d18cfc84c7351341f8d8df0f4abd07fd64be79dea6b32e54686de0e428ad35802893ba9cb7b199baaf3db310d304ef7bcaade5a6a4404d5a855a806fb
@@ -7912,7 +7876,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.16.3, express@npm:^4.17.0":
+"express@npm:^4.17.0":
   version: 4.21.2
   resolution: "express@npm:4.21.2"
   dependencies:
@@ -8141,7 +8105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"filesize@npm:3.6.1, filesize@npm:^3.6.1":
+"filesize@npm:3.6.1":
   version: 3.6.1
   resolution: "filesize@npm:3.6.1"
   checksum: ae01224294c8b0dcfb20b03236e7e88b5956c50f1a76859bac3f8e3e9af77506d25b1cfa91a9c762058062d13b78e818f3376cb3996093de1f65b4d916e46edf
@@ -8883,7 +8847,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gzip-size@npm:5.1.1, gzip-size@npm:^5.0.0":
+"gzip-size@npm:5.1.1":
   version: 5.1.1
   resolution: "gzip-size@npm:5.1.1"
   dependencies:
@@ -9128,13 +9092,6 @@ __metadata:
   dependencies:
     parse-passwd: "npm:^1.0.0"
   checksum: 18dd4db87052c6a2179d1813adea0c4bfcfa4f9996f0e226fefb29eb3d548e564350fa28ec46b0bf1fbc0a1d2d6922ceceb80093115ea45ff8842a4990139250
-  languageName: node
-  linkType: hard
-
-"hoopy@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "hoopy@npm:0.1.4"
-  checksum: 7a73f1839a7fd6b953356770dff2c3cff813d97d899cddd75b348926c4df36059d987c06bedb57b1b7711504dba83d3b7b986f979a08b1e415da73a51fefa767
   languageName: node
   linkType: hard
 
@@ -12444,15 +12401,6 @@ __metadata:
     is-docker: "npm:^2.0.0"
     is-wsl: "npm:^2.1.1"
   checksum: 4fc02ed3368dcd5d7247ad3566433ea2695b0713b041ebc0eeb2f0f9e5d4e29fc2068f5cdd500976b3464e77fe8b61662b1b059c73233ccc601fe8b16d6c1cd6
-  languageName: node
-  linkType: hard
-
-"opener@npm:^1.5.1":
-  version: 1.5.2
-  resolution: "opener@npm:1.5.2"
-  bin:
-    opener: bin/opener-bin.js
-  checksum: 0504efcd6546e14c016a261f58a68acf9f2e5c23d84865d7d5470d5169788327ceaa5386253682f533b3fba4821748aa37ecb395f3dae7acb3261b9b22e36814
   languageName: node
   linkType: hard
 
@@ -16044,13 +15992,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tryer@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "tryer@npm:1.0.1"
-  checksum: 4d869d187bd715136903b349f39d1cc3e5c19f742689a348190aff92408ee8dd3d7d9adc26dc9265c35d722731184c979ed316109b6c1239249a8707bb92cc49
-  languageName: node
-  linkType: hard
-
 "ts-dedent@npm:^1.1.0":
   version: 1.2.0
   resolution: "ts-dedent@npm:1.2.0"
@@ -16754,29 +16695,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^3.6.0":
-  version: 3.9.0
-  resolution: "webpack-bundle-analyzer@npm:3.9.0"
-  dependencies:
-    acorn: "npm:^7.1.1"
-    acorn-walk: "npm:^7.1.1"
-    bfj: "npm:^6.1.1"
-    chalk: "npm:^2.4.1"
-    commander: "npm:^2.18.0"
-    ejs: "npm:^2.6.1"
-    express: "npm:^4.16.3"
-    filesize: "npm:^3.6.1"
-    gzip-size: "npm:^5.0.0"
-    lodash: "npm:^4.17.19"
-    mkdirp: "npm:^0.5.1"
-    opener: "npm:^1.5.1"
-    ws: "npm:^6.0.0"
-  bin:
-    webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 18d5f04bb2e319750c0e8c661cdc927dc017387447886d1a222a51c281893d569cf25f88f97d8e097748ce684eefa89d9cb53c0361cc1521ad8f260483fe258a
-  languageName: node
-  linkType: hard
-
 "webpack-cli@npm:^3.3.9":
   version: 3.3.12
   resolution: "webpack-cli@npm:3.3.12"
@@ -17174,7 +17092,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^6.0.0, ws@npm:^6.1.2":
+"ws@npm:^6.1.2":
   version: 6.2.3
   resolution: "ws@npm:6.2.3"
   dependencies:
