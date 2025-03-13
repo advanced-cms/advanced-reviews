@@ -45,12 +45,6 @@ export default tseslint.config(
             "import/newline-after-import": "error",
             "import/no-duplicates": "error",
             eqeqeq: "error",
-            "jsx-a11y/anchor-is-valid": "off",
-            "jsx-a11y/anchor-has-content": "off",
-            "prefer-rest-params": "off",
-            "react-hooks/exhaustive-deps": "off",
-            "react/style-prop-object": "off",
-            "prefer-ts-expect-error": "off",
         },
     },
     {
