@@ -1,5 +1,6 @@
 storybook_static/
 dist/
+stats.html
 
 .yarn/*
 !.yarn/patches

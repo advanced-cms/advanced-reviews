@@ -51,7 +51,7 @@ public class ExternalReviewOptions
     /// <summary>
     /// Enable Admin Mode pin reviewer plugin which allows admins to view and delete saved comments
     /// </summary>
-    public bool IsAdminModePinReviewerPluginEnabled { get; set; } = false;
+    public bool IsAdminModePinReviewerPluginEnabled { get; set; } = true;
 
     /// <summary>
     /// Allow to take screenshots of the page to highlight spotted issues

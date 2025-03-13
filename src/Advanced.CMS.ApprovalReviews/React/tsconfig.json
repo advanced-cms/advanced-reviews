@@ -8,5 +8,10 @@
         "sourceMap": true,
         "lib": ["dom", "es5", "es2017", "scripthost", "es2015.promise"]
     },
-    "exclude": ["**/*.test.ts"]
+    "exclude": ["**/*.test.ts"],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }

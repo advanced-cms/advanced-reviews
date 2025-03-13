@@ -12,10 +12,7 @@
     <PackageReference Include="EPiServer.CMS.UI.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="React\node_modules\**" />
-    <EmbeddedResource Remove="React\node_modules\**" />
-    <None Remove="React\node_modules\**" />
-    <None Remove="ClientResources/adminPlugin.js" />
+    <None Remove="ClientResources/adminPlugin*" />
     <None Remove="ClientResources/external-review-manage-links-component.js" />
     <None Remove="ClientResources/ReviewWidget.js" />
   </ItemGroup>

@@ -32,7 +32,9 @@ body {
     border-bottom: 1px solid #c0c0c0;
 }
 
-.reviews-list .list > li { margin-bottom: 15px; }
+.reviews-list .list > li {
+    margin-bottom: 15px;
+}
 
 .reviews-list .delete {
     display: none;

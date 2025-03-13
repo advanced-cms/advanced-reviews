@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from "react";
-import ReactDOM from "react-dom";
+import "./admin-plugin.scss";
+
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 
 interface ReviewLocation {
     contentLink: string;
@@ -23,7 +25,7 @@ function AdminPluginComponent(props: AdminPluginProps) {
     const [data, setData] = useState<ReviewGroup[]>([]);
 
     const refreshList = () => {
-        axios.get(`${props.controllerUrl}/GetAll`).then(data => {
+        axios.get(`${props.controllerUrl}/GetAll`).then((data) => {
             setData(data.data);
         });
     };
@@ -39,7 +41,7 @@ function AdminPluginComponent(props: AdminPluginProps) {
 
         axios
             .post(`${props.controllerUrl}/DeleteReviewLocation`, {
-                contentLink: contentLink
+                contentLink: contentLink,
             })
             .then(refreshList);
     };
@@ -47,12 +49,11 @@ function AdminPluginComponent(props: AdminPluginProps) {
     const changeReviewLocation = (reviewLocation: ReviewLocation): string => {
         setCurrentContentLink(reviewLocation.contentLink);
         try {
-            var parsed = JSON.parse(reviewLocation.serializedReview);
-            parsed.forEach(reviewLocation => {
+            let parsed = JSON.parse(reviewLocation.serializedReview);
+            parsed.forEach((reviewLocation) => {
                 try {
                     reviewLocation.data = JSON.parse(reviewLocation.data);
-                } catch (ex) {
-                }
+                } catch (ex) {}
             });
             parsed = JSON.stringify(parsed, null, 2);
             setCurrentJSON(parsed);
@@ -70,14 +71,17 @@ function AdminPluginComponent(props: AdminPluginProps) {
             <h6>Click on version numbers to see all saved user comments</h6>
             <div className="reviews-list">
                 <ul className="list">
-                    {data.map(x => (
+                    {data.map((x) => (
                         <li key={x.id || "[no ContentLink]"}>
                             <span className="main-link">{x.id || "[no ContentLink]"}</span>
                             <ul>
-                                {x.contentLinks.map(c => (
+                                {x.contentLinks.map((c) => (
                                     <li className="row" key={c.contentLink || "[empty]"}>
-                                        <a title={`View saved JSON for ${c.contentLink} ID`} href="#"
-                                           onClick={() => changeReviewLocation(c)}>
+                                        <a
+                                            title={`View saved JSON for ${c.contentLink} ID`}
+                                            href="#"
+                                            onClick={() => changeReviewLocation(c)}
+                                        >
                                             {c.contentLink || "[empty]"}
                                         </a>
                                         <a className="delete" href="#" onClick={() => onDeleteClick(c.contentLink)}>
@@ -105,4 +109,4 @@ function AdminPluginComponent(props: AdminPluginProps) {
 
 const root = document.getElementById("admin-plugin-container");
 
-ReactDOM.render(<AdminPluginComponent controllerUrl={root.dataset.controllerUrl}/>, root);
+ReactDOM.render(<AdminPluginComponent controllerUrl={root.dataset.controllerUrl} />, root);
