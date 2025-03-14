@@ -1,4 +1,4 @@
-import CssSelectorGenerator from "css-selector-generator";
+import { getCssSelector } from "css-selector-generator";
 import { inject, observer } from "mobx-react";
 import React, { CSSProperties } from "react";
 
@@ -99,8 +99,6 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
             return;
         }
 
-        const generator = new CssSelectorGenerator();
-
         let point: { x: number; y: number };
         if (this.props.external) {
             point = { x: e.pageX, y: e.pageY };
@@ -109,7 +107,7 @@ export default class IframeOverlay extends React.Component<IframeOverlayProps, a
         }
         this.toggleOverlays(false);
         const clickedElement = this.props.iframe.contentDocument.elementFromPoint(point.x, point.y) as HTMLElement;
-        const selector = generator.getSelector(clickedElement);
+        const selector = getCssSelector(clickedElement);
         this.toggleOverlays(true);
         const nodeOffset = offset(clickedElement, this.props.external);
 

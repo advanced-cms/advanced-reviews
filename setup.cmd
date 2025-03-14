@@ -16,6 +16,7 @@ XCOPY /y/i/k build\database\commerce.Commerce.mdf %AlloyMVC%\App_Data\ || Exit /
 
 CD src\Advanced.CMS.ApprovalReviews\React
 CALL yarn install
+IF %errorlevel% NEQ 0 EXIT /B %errorlevel%
 CD ..\..\..\
 
 EXIT /B %ERRORLEVEL%

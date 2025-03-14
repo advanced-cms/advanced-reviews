@@ -13,7 +13,7 @@ internal class ExternalReviewLinksManageComponent : ComponentDefinitionBase
     private readonly IVisitorGroupRepository _visitorGroupRepository;
 
     public ExternalReviewLinksManageComponent(ExternalReviewOptions options, IVisitorGroupRepository visitorGroupRepository)
-        : base("advanced-cms-approval-reviews/dist/external-review-manage-links-component")
+        : base("advanced-cms-approval-reviews/dist/external-review-manage-links-widget")
     {
         _options = options;
         _visitorGroupRepository = visitorGroupRepository;
