@@ -1,7 +1,7 @@
-import { distanceInWordsToNow, format } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import da from "date-fns/locale/da";
 import de from "date-fns/locale/de";
-import en from "date-fns/locale/en";
+import en from "date-fns/locale/en-US";
 import es from "date-fns/locale/es";
 import fi from "date-fns/locale/fi";
 import fr from "date-fns/locale/fr";
@@ -10,7 +10,7 @@ import ja from "date-fns/locale/ja";
 import no from "date-fns/locale/nb"; // date-fns uses bokmål as the default norwegian culture, not nynorsk as in epi
 import nl from "date-fns/locale/nl";
 import sv from "date-fns/locale/sv";
-import zh_cn from "date-fns/locale/zh_cn";
+import zh_cn from "date-fns/locale/zh-CN";
 import { action, computed, observable } from "mobx";
 
 const locales = {
@@ -47,7 +47,7 @@ export class Comment {
         if (!this.date) {
             return "";
         }
-        return format(this.date, "MMM Do YYYY");
+        return format(this.date, "MMM do yyyy");
     }
 
     @computed get userFriendlyDate() {
@@ -60,7 +60,7 @@ export class Comment {
             options.locale = locales[this.store.currentLocale.toLowerCase()];
         }
 
-        return distanceInWordsToNow(this.date, options);
+        return formatDistance(this.date, new Date(), options);
     }
 
     static create(

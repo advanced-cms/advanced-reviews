@@ -135,7 +135,7 @@ const ExternalReviewWidgetContent = observer(
                                         secondaryText={
                                             resources.list.itemvalidto +
                                             ": " +
-                                            format(item.validTo, "MMM Do YYYY HH:mm")
+                                            format(item.validTo, "MMM do yyyy HH:mm")
                                         }
                                     />
                                     <div className="info-icons">

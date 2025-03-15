@@ -38,7 +38,7 @@ const LinkEditDialog = observer(
     }: LinkEditDialogProps) => {
         const [displayName, setDisplayName] = useState<string>(reviewLink.displayName || "");
         const [visitorGroups, setVisitorGroups] = useState<string[]>(reviewLink.visitorGroups || []);
-        const [validDate, setValidDate] = useState<string>(format(reviewLink.validTo, "YYYY-MM-DD hh:mm"));
+        const [validDate, setValidDate] = useState<string>(format(reviewLink.validTo, "yyyy-MM-dd hh:mm"));
         const [prolongVisible, setProlongVisible] = useState<boolean>(true);
         const [pinCode, setPinCode] = useState<string>(reviewLink.pinCode || "");
         const [shouldUpdatePinCode, setShouldUpdatePinCode] = useState<boolean>(!reviewLink.pinCode);
@@ -78,7 +78,7 @@ const LinkEditDialog = observer(
             }
             dateCopy.setDate(dateCopy.getDate() + prolongDays);
 
-            setValidDate(format(dateCopy, "YYYY-MM-DD hh:mm"));
+            setValidDate(format(dateCopy, "yyyy-MM-dd hh:mm"));
         };
 
         const prolongTitle = (resources.list.editdialog.prolongbydays || "").replace(

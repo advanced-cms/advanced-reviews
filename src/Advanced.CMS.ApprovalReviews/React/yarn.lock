@@ -2303,7 +2303,7 @@ __metadata:
     axios: "npm:^0.27.2"
     classnames: "npm:^2.3.1"
     css-selector-generator: "npm:^3.6.9"
-    date-fns: "npm:^1.30.1"
+    date-fns: "npm:^4.1.0"
     eslint: "npm:^9.0.0"
     eslint-plugin-import: "npm:^2.31.0"
     eslint-plugin-prettier: "npm:^5.2.1"
@@ -2873,10 +2873,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^1.30.1":
-  version: 1.30.1
-  resolution: "date-fns@npm:1.30.1"
-  checksum: 24c0937f4e5704f25627c9d1e92e1fe03cd6165d9f32334b7f923a737a57ef992c287cad0694356071e617fbbfa6bd10dec9192ea9035a3e6d0745b9d1594883
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: d5f6e9de5bbc52310f786099e18609289ed5e30af60a71e0646784c8185ddd1d0eebcf7c96b7faaaefc4a8366f3a3a4244d099b6d0866ee2bec80d1361e64342
   languageName: node
   linkType: hard
 
