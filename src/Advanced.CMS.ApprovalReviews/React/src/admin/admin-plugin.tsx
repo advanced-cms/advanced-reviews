@@ -2,7 +2,7 @@ import "./admin-plugin.scss";
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 interface ReviewLocation {
     contentLink: string;
@@ -107,6 +107,6 @@ function AdminPluginComponent(props: AdminPluginProps) {
     );
 }
 
-const root = document.getElementById("admin-plugin-container");
-
-ReactDOM.render(<AdminPluginComponent controllerUrl={root.dataset.controllerUrl} />, root);
+const domNode = document.getElementById("admin-plugin-container");
+const root = createRoot(domNode);
+root.render(<AdminPluginComponent controllerUrl={domNode.dataset.controllerUrl} />);

@@ -4,7 +4,7 @@ import declare from "dojo/_base/declare";
 import res from "epi/i18n!epi/cms/nls/externalreviews";
 import _ContentContextMixin from "epi-cms/_ContentContextMixin";
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import { ExternalReviewStore } from "./external-review-links-store";
 import ManageLinks from "./external-review-manage-links";
@@ -29,7 +29,9 @@ export default declare([WidgetBase, _ContentContextMixin], {
         this.store.initialViewMailMessage = this.params.initialViewMailMessage;
         this.store.initialEditMailMessage = this.params.initialEditMailMessage;
 
-        ReactDOM.render(
+        this.root = createRoot(this.domNode);
+
+        this.root.render(
             <ManageLinks
                 store={this.store}
                 editableLinksEnabled={this.params.editableLinksEnabled}
@@ -40,7 +42,6 @@ export default declare([WidgetBase, _ContentContextMixin], {
                 resources={res}
                 availableVisitorGroups={this.params.availableVisitorGroups}
             />,
-            this.domNode,
         );
     },
     contextChanged: function () {
@@ -62,6 +63,6 @@ export default declare([WidgetBase, _ContentContextMixin], {
             return;
         }
 
-        ReactDOM.unmountComponentAtNode(this.domNode);
+        this.root.unmount();
     },
 });

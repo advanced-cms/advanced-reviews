@@ -3,7 +3,7 @@ import "@episerver/ui-framework/dist/main.css";
 import axios from "axios";
 import { Provider } from "mobx-react";
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import res from "../../.storybook/resources.json";
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
@@ -149,7 +149,8 @@ const avatarUrl: string = reviewEl.dataset.avatarUrl;
 
 stores.reviewStore.avatarUrl = avatarUrl;
 
-ReactDOM.render(
+const root = createRoot(reviewEl);
+
+root.render(
     <EditableExternalReviewComponent iframe={document.getElementById("editableIframe") as HTMLIFrameElement} />,
-    reviewEl,
 );

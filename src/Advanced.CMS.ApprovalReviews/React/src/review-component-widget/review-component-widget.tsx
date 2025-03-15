@@ -5,7 +5,7 @@ import res from "epi/i18n!epi/cms/nls/reviewcomponent";
 import ApplicationSettings from "epi-cms/ApplicationSettings";
 import { Provider } from "mobx-react";
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import IframeWithPins from "../iframe-with-pins/iframe-with-pins";
 import { createStores } from "../store/review-store";
@@ -23,11 +23,11 @@ export default declare([WidgetBase], {
         this.stores.reviewStore.options = this.options;
         this.stores.reviewStore.avatarUrl = this.avatarUrl;
 
-        ReactDOM.render(
+        this.root = createRoot(this.domNode);
+        this.root.render(
             <Provider {...this.stores}>
                 <IframeWithPins iframe={this.iframe} />
             </Provider>,
-            this.domNode,
         );
     },
 
@@ -42,6 +42,6 @@ export default declare([WidgetBase], {
         this.stores.reviewStore.load();
     },
     destroy: function () {
-        ReactDOM.unmountComponentAtNode(this.domNode);
+        this.root.unmount();
     },
 });

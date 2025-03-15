@@ -2018,37 +2018,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*":
-  version: 15.7.14
-  resolution: "@types/prop-types@npm:15.7.14"
-  checksum: d0c5407b9ccc3dd5fae0ccf9b1007e7622ba5e6f1c18399b4f24dff33619d469da4b9fa918a374f19dc0d9fe6a013362aab0b844b606cfc10676efba3f5f736d
-  languageName: node
-  linkType: hard
-
-"@types/react-dom@npm:^16.9.2":
-  version: 16.9.25
-  resolution: "@types/react-dom@npm:16.9.25"
+"@types/react-dom@npm:^19.0.4":
+  version: 19.0.4
+  resolution: "@types/react-dom@npm:19.0.4"
   peerDependencies:
-    "@types/react": ^16.0.0
-  checksum: bbb1371daa3a3697ebafe6478c579f43a67016db73210fed66fbf8032d68c2a49dd35fda7d2e060d1d869c2e85f183414899120eb9b10da831309748f42dcaeb
+    "@types/react": ^19.0.0
+  checksum: f15d470242f0b7cca57dd7e991a2852525ac93b2cb92f7e6c104d7bd6a978c3b1d0ba9b8698f23bc19c16b5cd98a6d160007be52c61196952f57cf019f204254
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16.9.9":
-  version: 16.14.62
-  resolution: "@types/react@npm:16.14.62"
+"@types/react@npm:^19.0.10":
+  version: 19.0.10
+  resolution: "@types/react@npm:19.0.10"
   dependencies:
-    "@types/prop-types": "npm:*"
-    "@types/scheduler": "npm:^0.16"
     csstype: "npm:^3.0.2"
-  checksum: 58f58ef594b1d919063a8456c3eb1b73f50eb3a44261a4468ad76930ebbc7dc66cdb2d4a099e4311a0e4ca131a8b2110da4ef057fe85443cdc894db7329ac137
-  languageName: node
-  linkType: hard
-
-"@types/scheduler@npm:^0.16":
-  version: 0.16.8
-  resolution: "@types/scheduler@npm:0.16.8"
-  checksum: 6c091b096daa490093bf30dd7947cd28e5b2cd612ec93448432b33f724b162587fed9309a0acc104d97b69b1d49a0f3fc755a62282054d62975d53d7fd13472d
+  checksum: 10b592d212ebe4b4e0bd42a95c58af3d8dfcb8b3fa4b412d686c2ff8810d5dd3e3a30ebedb31d7b738e33a39c43503e24fe4e6ca8a21d842870043793f4eda98
   languageName: node
   linkType: hard
 
@@ -2296,8 +2280,8 @@ __metadata:
     "@material/react-material-icon": "npm:^0.15.0"
     "@material/react-snackbar": "npm:^0.15.0"
     "@material/react-switch": "npm:^0.15.0"
-    "@types/react": "npm:^16.9.9"
-    "@types/react-dom": "npm:^16.9.2"
+    "@types/react": "npm:^19.0.10"
+    "@types/react-dom": "npm:^19.0.4"
     "@typescript-eslint/eslint-plugin": "npm:^8.18.1"
     "@vitejs/plugin-react": "npm:^4.3.4"
     axios: "npm:^1.8.3"
@@ -2315,8 +2299,8 @@ __metadata:
     mobx-react: "npm:^6.1.4"
     mobx-react-lite: "npm:^1.5.0"
     prettier: "npm:^3.5.3"
-    react: "npm:^16.10.2"
-    react-dom: "npm:^16.10.2"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
     react-image-crop: "npm:^8.6.4"
     react-scrollbar: "npm:^0.5.6"
     rollup-plugin-visualizer: "npm:^5.14.0"
@@ -5228,7 +5212,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.10.2, react-dom@npm:^16.4.2":
+"react-dom@npm:^16.4.2":
   version: 16.14.0
   resolution: "react-dom@npm:16.14.0"
   dependencies:
@@ -5239,6 +5223,17 @@ __metadata:
   peerDependencies:
     react: ^16.14.0
   checksum: d59f3376ab41ee874fbb9bd738160f6d70f619b4cba40531d5c60dfa289c216cff4d5e6552babdf59843a1a8e7f08faf4a746bf4df6c68d2b406a6c13bdbd92b
+  languageName: node
+  linkType: hard
+
+"react-dom@npm:^19.0.0":
+  version: 19.0.0
+  resolution: "react-dom@npm:19.0.0"
+  dependencies:
+    scheduler: "npm:^0.25.0"
+  peerDependencies:
+    react: ^19.0.0
+  checksum: aa64a2f1991042f516260e8b0eca0ae777b6c8f1aa2b5ae096e80bbb6ac9b005aef2bca697969841d34f7e1819556263476bdfea36c35092e8d9aefde3de2d9a
   languageName: node
   linkType: hard
 
@@ -5295,7 +5290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^16.10.2, react@npm:^16.3.2, react@npm:^16.4.2":
+"react@npm:^16.3.2, react@npm:^16.4.2":
   version: 16.14.0
   resolution: "react@npm:16.14.0"
   dependencies:
@@ -5303,6 +5298,13 @@ __metadata:
     object-assign: "npm:^4.1.1"
     prop-types: "npm:^15.6.2"
   checksum: ee04c82f5ecb70fe15a48d8cfc3fb20ce2f7e65277d4adcb56a0ac2b82c54550d4c65eabce0d5dc0cc90d053831b9586d72ee515b11cdf0c5436c7f95aafdcda
+  languageName: node
+  linkType: hard
+
+"react@npm:^19.0.0":
+  version: 19.0.0
+  resolution: "react@npm:19.0.0"
+  checksum: 2490969c503f644703c88990d20e4011fa6119ddeca451e9de48f6d7ab058d670d2852a5fcd3aa3cd90a923ab2815d532637bd4a814add402ae5c0d4f129ee71
   languageName: node
   linkType: hard
 
@@ -5632,6 +5634,13 @@ __metadata:
     loose-envify: "npm:^1.1.0"
     object-assign: "npm:^4.1.1"
   checksum: 2bf42cd56994dd8a97bad0ecb6fbd720674f640c4a95957f9ab453dda28133d5f56755d842e6a0b203efef89a49c52354d151946f50e5c0b633d97d718285c8d
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.25.0":
+  version: 0.25.0
+  resolution: "scheduler@npm:0.25.0"
+  checksum: e661e38503ab29a153429a99203fefa764f28b35c079719eb5efdd2c1c1086522f6653d8ffce388209682c23891a6d1d32fa6badf53c35fb5b9cd0c55ace42de
   languageName: node
   linkType: hard
 
