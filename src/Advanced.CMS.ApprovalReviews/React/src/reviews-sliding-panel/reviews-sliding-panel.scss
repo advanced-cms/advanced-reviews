@@ -1,7 +1,6 @@
 @import "../_variables";
 @import "@material/switch/mixins";
 @import "@material/react-switch/index";
-@import "@material/react-chips/index";
 
 $border: 1px solid $surface500;
 
@@ -175,22 +174,6 @@ $border: 1px solid $surface500;
 
         label {
             line-height: 40px;
-        }
-    }
-
-    .property-name-label {
-        background-color: $secondary700;
-        color: $surface50;
-        margin-left: 8px;
-
-        .mdc-chip__icon--leading {
-            color: $surface50;
-        }
-
-        .mdc-chip__text {
-            max-width: 100px;
-            text-overflow: ellipsis;
-            overflow: hidden;
         }
     }
 }

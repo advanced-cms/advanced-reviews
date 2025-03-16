@@ -1,9 +1,9 @@
 import "./reviews-sliding-panel.scss";
 
 import { Checkbox, IconButton, List, ListItem } from "@episerver/ui-framework";
-import { Chip } from "@material/react-chips";
 import MaterialIcon from "@material/react-material-icon";
 import Switch from "@material/react-switch";
+import Chip from "@mui/material/Chip";
 import classNames from "classnames";
 import { IReactionDisposer, reaction } from "mobx";
 import { inject, observer } from "mobx-react";
@@ -212,11 +212,23 @@ export default class SlidingPanel extends React.Component<SlidingPanelProps, any
                                     <label htmlFor="resolved">{res.panel.resolved}</label>
                                     {editedPinLocation.propertyName && (
                                         <Chip
-                                            className="property-name-label"
+                                            sx={{
+                                                backgroundColor: "#673ab7", // $secondary700 from your SCSS
+                                                color: "#fafafa", // $surface50 from your SCSS
+                                                marginLeft: "8px",
+                                                "& .MuiChip-icon": {
+                                                    color: "#fafafa", // Match the text color
+                                                },
+                                                "& .MuiChip-label": {
+                                                    maxWidth: "100px",
+                                                    textOverflow: "ellipsis",
+                                                    overflow: "hidden",
+                                                },
+                                            }}
                                             label={this.props.reviewStore.resolvePropertyDisplayName(
                                                 editedPinLocation.propertyName,
                                             )}
-                                            leadingIcon={<MaterialIcon icon="bookmark" />}
+                                            icon={<MaterialIcon icon="bookmark" />}
                                             {...chipPropertyNameSettings}
                                         />
                                     )}
