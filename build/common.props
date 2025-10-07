@@ -1,17 +1,29 @@
 <Project>
-    <Import Project="version.props" />
+    <Import Project="version.props"/>
     <PropertyGroup>
         <Product Condition=" '$(Product)' == '' ">Advanced.CMS.AdvancedReviews</Product>
         <Company>advanced-cms</Company>
         <Authors>advanced-cms</Authors>
-        <Copyright>© 2019-2022 advanced-cms</Copyright>
+        <Copyright>© 2019-2025 advanced-cms</Copyright>
         <PackageProjectUrl>github.com/advanced-cms</PackageProjectUrl>
         <PackageLicenseUrl>github.com/advanced-cms/LICENSE</PackageLicenseUrl>
         <PackageTags>review preview content approval external</PackageTags>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>12</LangVersion>
+        <IsPackable>false</IsPackable>
+        <Nullable>disable</Nullable>
+        <SignAssembly>False</SignAssembly>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
+    <ItemGroup>
+        <Using Include="EPiServer"/>
+        <Using Include="EPiServer.Core"/>
+        <Using Include="EPiServer.DataAbstraction"/>
+        <Using Include="EPiServer.DataAnnotations"/>
+    </ItemGroup>
 </Project>

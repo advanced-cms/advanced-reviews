@@ -1,14 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-  <ItemGroup>
-    <Using Include="EPiServer" />
-    <Using Include="EPiServer.Core" />
-    <Using Include="EPiServer.DataAbstraction" />
-    <Using Include="EPiServer.DataAnnotations" />
-  </ItemGroup>
+  <Import Project="..\..\build\common.props" />
 
   <ItemGroup>
     <PackageReference Include="EPiServer.CMS.TinyMce" />
