@@ -1,9 +1,9 @@
 <Project>
     <PropertyGroup>
-        <CmsCoreVersion>12.21.8</CmsCoreVersion>
+        <CmsCoreVersion>12.21.4</CmsCoreVersion>
         <CmsUIVersion>12.31.2</CmsUIVersion>
         <CmsUmbrellaVersion>12.31.2</CmsUmbrellaVersion>
-        <CommerceVersion>14.29.0</CommerceVersion>
+        <CommerceVersion>14.30.0</CommerceVersion>
     </PropertyGroup>
     <ItemGroup>
         <!-- CMS CORE -->
