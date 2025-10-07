@@ -39,5 +39,3 @@ Set-Location $workingDirectory
 
 # Packaging public packages
 dotnet pack -c $configuration /p:PackageVersion=$version /p:CmsUIVersion=$cmsUIVersion /p:CmsUINextMajorVersion=$cmsUINextMajorVersion Advanced.CMS.AdvancedReviews.sln
-
-Pop-Location
