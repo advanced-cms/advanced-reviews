@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity;
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
 
 public static class ObjectExtensions
 {

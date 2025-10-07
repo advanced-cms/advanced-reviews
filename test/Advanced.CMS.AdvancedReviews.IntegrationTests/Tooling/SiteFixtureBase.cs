@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestSite;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
 
 public class SiteFixtureBase : IDisposable
 {
-    private UIServiceFixture<Startup> _serviceFixture;
+    private readonly UIServiceFixture<Startup> _serviceFixture;
     private CmsDatabaseFixture _databaseFixture;
 
     public SiteFixtureBase(Action<ExternalReviewOptions> optionsCallback = null)
@@ -41,7 +41,7 @@ public class SiteFixtureBase : IDisposable
     private string EnsureDatabase()
     {
         var dbFile = Path.GetFullPath(@"..\..\..\sites\TestSite\App_Data\cms.mdf", Environment.CurrentDirectory);
-        var databaseMdfTemplateFile = Path.GetFullPath(@"..\..\..\Advanced.CMS.AdvancedReviews.IntegrationTests\Assets\db_template.mdf", Environment.CurrentDirectory);
+        var databaseMdfTemplateFile = Path.GetFullPath(@"..\..\..\Advanced.CMS.IntegrationTests\Assets\db_template.mdf", Environment.CurrentDirectory);
         _databaseFixture = new CmsDatabaseFixture(databaseMdfTemplateFile, dbFile);
         var connectionString =
             $"Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={_databaseFixture.DatabaseName};Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";

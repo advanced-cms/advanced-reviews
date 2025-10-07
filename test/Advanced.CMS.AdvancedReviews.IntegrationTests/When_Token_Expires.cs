@@ -1,5 +1,6 @@
 using System.Net;
 using System.Security.Principal;
+using Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer.Authorization;
 using EPiServer.Security;
@@ -7,11 +8,11 @@ using EPiServer.ServiceLocation;
 using TestSite.Models;
 using Xunit;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
 
 [Collection(IntegrationTestCollection.Name)]
-public class When_Creating_Token_For_Page_Without_Everyone_Access(When_Creating_Token_For_Page_Without_Everyone_Access.TestFixture fixture)
-    : IClassFixture<CommonFixture>, IClassFixture<When_Creating_Token_For_Page_Without_Everyone_Access.TestFixture>
+public class When_Token_Expires(When_Token_Expires.TestFixture fixture)
+    : IClassFixture<CommonFixture>, IClassFixture<When_Token_Expires.TestFixture>
 {
     public class TestFixture(SiteFixture siteFixture) : IAsyncLifetime
     {
@@ -33,7 +34,7 @@ public class When_Creating_Token_For_Page_Without_Everyone_Access(When_Creating_
 
             TargetFolder = ContentRepository.CreateTargetFolder();
             Page = ContentRepository.CreatePage().WithoutEveryoneAccess();
-            GeneratedReviewLink = Page.GenerateExternalReviewLink();
+            GeneratedReviewLink = Page.GenerateExternalReviewLink().ExpireReviewLink();
 
             await Task.CompletedTask;
         }
@@ -45,9 +46,9 @@ public class When_Creating_Token_For_Page_Without_Everyone_Access(When_Creating_
     public async Task It_Returns_200()
     {
         var message = new HttpRequestMessage(HttpMethod.Get, fixture.GeneratedReviewLink.LinkUrl);
-        var response = await fixture.Client.SendAsync(message);
-        await response.Content.ReadAsStringAsync();
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var responseAfterTokenExpiration = await fixture.Client.SendAsync(message);
+        await responseAfterTokenExpiration.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.NotFound, responseAfterTokenExpiration.StatusCode);
     }
 }
 

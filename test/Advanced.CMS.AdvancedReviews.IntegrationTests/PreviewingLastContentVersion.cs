@@ -1,4 +1,4 @@
-﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+﻿namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
 /*
  GIVEN:
    - draft page

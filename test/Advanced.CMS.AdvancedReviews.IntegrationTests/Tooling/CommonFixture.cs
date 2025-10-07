@@ -4,7 +4,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using TestSite.Models;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
 
 public class CommonFixture : IDisposable
 {

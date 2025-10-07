@@ -1,7 +1,8 @@
 ﻿using System.Net;
+using Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
 using Xunit;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
 
 public class Given_Block_With_CommonDraft_And_ProjectDraft : IntegrationTestCollectionBaseClassFixture
 {
