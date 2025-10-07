@@ -38,4 +38,4 @@ Start-Process -NoNewWindow -Wait -FilePath $zip -ArgumentList "a", "advanced-cms
 Set-Location $workingDirectory
 
 # Packaging public packages
-dotnet pack -c $configuration /p:PackageVersion=$version /p:CmsUIVersion=$cmsUIVersion /p:CmsUINextMajorVersion=$cmsUINextMajorVersion Advanced.CMS.AdvancedReviews.sln
+dotnet pack -c $configuration /p:CheckEolTargetFramework=false /p:PackageVersion=$version /p:CmsUIVersion=$cmsUIVersion /p:CmsUINextMajorVersion=$cmsUINextMajorVersion Advanced.CMS.AdvancedReviews.sln
