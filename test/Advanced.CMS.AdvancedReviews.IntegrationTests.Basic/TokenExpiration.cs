@@ -1,16 +1,10 @@
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Basic;
 
-public class TokenExpiration : IntegrationTestCollectionBaseClassFixture
+public class TokenExpiration(SiteFixture siteFixture) : IntegrationTestCollectionBaseClassFixture(siteFixture)
 {
-    public TokenExpiration(SiteFixture siteFixture) : base(siteFixture)
-    {
-    }
-
     [Fact]
     public async Task When_DraftPage_Created_Link_Is_Expired_It_Returns_404()
     {

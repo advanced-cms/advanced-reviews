@@ -1,5 +1,4 @@
-﻿using System;
-using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer.Security;
 using Microsoft.AspNetCore.Http;
 

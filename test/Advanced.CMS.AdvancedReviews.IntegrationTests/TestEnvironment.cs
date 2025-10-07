@@ -3,15 +3,9 @@ using TestSite.Models;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
 
-public class TestEnvironment
+public class TestEnvironment(StandardPage page, ExternalReviewLink externalReviewLink)
 {
-    public TestEnvironment(StandardPage page, ExternalReviewLink externalReviewLink)
-    {
-        Page = page;
-        ExternalReviewLink = externalReviewLink;
-    }
+    public StandardPage Page { get; set; } = page;
 
-    public StandardPage Page { get; set; }
-
-    public ExternalReviewLink ExternalReviewLink { get; set; }
+    public ExternalReviewLink ExternalReviewLink { get; set; } = externalReviewLink;
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Advanced.CMS.ExternalReviews.Properties;
+﻿using Advanced.CMS.ExternalReviews.Properties;
 using EPiServer.ServiceLocation;
 
 namespace Advanced.CMS.ExternalReviews;

@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Advanced.CMS.ApprovalReviews;
+﻿using Advanced.CMS.ApprovalReviews;
 using Advanced.CMS.ApprovalReviews.Notifications;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer;
 using EPiServer.Cms.Shell;
-using EPiServer.Core;
 using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;

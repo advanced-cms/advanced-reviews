@@ -21,6 +21,12 @@ internal class CustomContentLoaderInitialization : IInitializableModule
         events.LoadingContent += Events_LoadingContent;
     }
 
+    public void Uninitialize(InitializationEngine context)
+    {
+        var events = ServiceLocator.Current.GetInstance<IContentEvents>();
+        events.LoadingContent -= Events_LoadingContent;
+    }
+
     private void Events_LoadingContent(object sender, ContentEventArgs e)
     {
         var externalReviewState = ServiceLocator.Current.GetInstance<ExternalReviewState>();
@@ -80,15 +86,5 @@ internal class CustomContentLoaderInitialization : IInitializableModule
         }
 
         e.CancelAction = true;
-    }
-
-    public void Uninitialize(InitializationEngine context)
-    {
-        var events = ServiceLocator.Current.GetInstance<IContentEvents>();
-        events.LoadingContent -= Events_LoadingContent;
-    }
-
-    public void Preload(string[] parameters)
-    {
     }
 }

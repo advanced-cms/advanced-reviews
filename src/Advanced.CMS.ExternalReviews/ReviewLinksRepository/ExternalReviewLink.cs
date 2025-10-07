@@ -1,7 +1,4 @@
-﻿using System;
-using EPiServer.Core;
-
-namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+﻿namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 
 public class ExternalReviewLink
 {

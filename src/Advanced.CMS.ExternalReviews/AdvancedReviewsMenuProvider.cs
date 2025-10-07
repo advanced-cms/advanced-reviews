@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Advanced.CMS.ApprovalReviews;
 using EPiServer.Authorization;
 using EPiServer.Shell.Navigation;
@@ -7,25 +5,19 @@ using EPiServer.Shell.Navigation;
 namespace Advanced.CMS.ExternalReviews;
 
 [MenuProvider]
-internal class AdvancedReviewsMenuProvider : IMenuProvider
+internal class AdvancedReviewsMenuProvider(
+    ExternalReviewOptions externalReviewOptions,
+    ReviewUrlGenerator reviewUrlGenerator)
+    : IMenuProvider
 {
-    private readonly ExternalReviewOptions _externalReviewOptions;
-    private readonly ReviewUrlGenerator _reviewUrlGenerator;
-
-    public AdvancedReviewsMenuProvider(ExternalReviewOptions externalReviewOptions, ReviewUrlGenerator reviewUrlGenerator)
-    {
-        _externalReviewOptions = externalReviewOptions;
-        _reviewUrlGenerator = reviewUrlGenerator;
-    }
-
     public IEnumerable<MenuItem> GetMenuItems()
     {
-        if (!_externalReviewOptions.IsEnabled || !_externalReviewOptions.IsAdminModePinReviewerPluginEnabled)
+        if (!externalReviewOptions.IsEnabled || !externalReviewOptions.IsAdminModePinReviewerPluginEnabled)
         {
             return Enumerable.Empty<MenuItem>();
         }
 
-        var controllerPath = $"{_reviewUrlGenerator.ReviewLocationPluginUrl}/Index";
+        var controllerPath = $"{reviewUrlGenerator.ReviewLocationPluginUrl}/Index";
 
         return new List<MenuItem>
         {

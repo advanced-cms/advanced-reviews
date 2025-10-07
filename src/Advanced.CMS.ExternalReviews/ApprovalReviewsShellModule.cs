@@ -7,13 +7,9 @@ using EPiServer.Shell.Profile.Internal;
 
 namespace Advanced.CMS.ExternalReviews;
 
-public class ApprovalReviewsShellModule : ShellModule
+public class ApprovalReviewsShellModule(string name, string routeBasePath, string resourceBasePath)
+    : ShellModule(name, routeBasePath, resourceBasePath)
 {
-    public ApprovalReviewsShellModule(string name, string routeBasePath, string resourceBasePath)
-        : base(name, routeBasePath, resourceBasePath)
-    {
-    }
-
     /// <inheritdoc />
     public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
     {

@@ -1,26 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
-using EPiServer.Core;
 using EPiServer.Shell.ObjectEditing;
 using EPiServer.Shell.UI.Rest;
 
 namespace Advanced.CMS.ExternalReviews.EditReview;
 
-internal class PropertyResolver
+internal class PropertyResolver(ExtensibleMetadataProvider metadataProvider, IMetadataStoreModelCreator modelCreator)
 {
-    private readonly ExtensibleMetadataProvider _metadataProvider;
-    private readonly IMetadataStoreModelCreator _modelCreator;
-
-    public PropertyResolver(ExtensibleMetadataProvider metadataProvider, IMetadataStoreModelCreator modelCreator)
-    {
-        _metadataProvider = metadataProvider;
-        _modelCreator = modelCreator;
-    }
-
     public IDictionary<string, string> Resolve(ContentData content)
     {
-        var metadata = _metadataProvider.GetExtendedMetadataForType(typeof(ContentData), () => content);
-        var storeModel = _modelCreator.Create(metadata);
+        var metadata = metadataProvider.GetExtendedMetadataForType(typeof(ContentData), () => content);
+        var storeModel = modelCreator.Create(metadata);
         var properties = new Dictionary<string, string>();
         foreach (var metadataStoreModel in storeModel.Properties)
         {

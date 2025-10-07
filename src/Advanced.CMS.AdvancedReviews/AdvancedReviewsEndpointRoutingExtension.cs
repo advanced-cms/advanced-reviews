@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.AdvancedReviews;
 
@@ -12,17 +13,17 @@ internal class AdvancedReviewsEndpointRoutingExtension : IEndpointRoutingExtensi
 {
     public void MapEndpoints(IEndpointRouteBuilder endpointRouteBuilder)
     {
-        var options = endpointRouteBuilder.ServiceProvider.GetInstance<ExternalReviewOptions>();
+        var options = endpointRouteBuilder.ServiceProvider.GetInstance<IOptions<ExternalReviewOptions>>();
 
         endpointRouteBuilder.MapControllerRoute("ImageProxy", "/ImageProxy/{token}/{contentLink}",
             new { controller = "ImageProxy", action = "Index" });
 
         endpointRouteBuilder.MapControllerRoute("ExternalReviewLogin",
-            $"/{options.PinCodeSecurity.ExternalReviewLoginUrl}",
+            $"/{options.Value.PinCodeSecurity.ExternalReviewLoginUrl}",
             new { controller = "ExternalReviewLogin", action = "Index" });
 
         endpointRouteBuilder.MapControllerRoute("ExternalReviewLoginSubmit",
-            $"/{options.PinCodeSecurity.ExternalReviewLoginUrl}",
+            $"/{options.Value.PinCodeSecurity.ExternalReviewLoginUrl}",
             new { controller = "ExternalReviewLogin", action = "Submit" },
             new { httpMethod = new HttpMethodRouteConstraint(HttpMethods.Post) });
     }

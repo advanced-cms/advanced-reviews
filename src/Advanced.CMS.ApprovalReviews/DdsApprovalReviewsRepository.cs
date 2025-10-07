@@ -1,32 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EPiServer.Core;
-using EPiServer.Data.Dynamic;
+﻿using EPiServer.Data.Dynamic;
 using EPiServer.Framework.Serialization;
 using EPiServer.Logging;
 
 namespace Advanced.CMS.ApprovalReviews;
 
-internal class DdsApprovalReviewsRepository: IApprovalReviewsRepository
+internal class DdsApprovalReviewsRepository(
+    DynamicDataStoreFactory dataStoreFactory,
+    IObjectSerializerFactory serializerFactory)
+    : IApprovalReviewsRepository
 {
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
     private static readonly ILogger _log = LogManager.GetLogger(typeof(DdsApprovalReviewsRepository));
-
-    private readonly DynamicDataStoreFactory _dataStoreFactory;
-    private readonly IObjectSerializerFactory _serializerFactory;
 
     public event EventHandler<BeforeUpdateEventArgs> OnBeforeUpdate;
 
-    public DdsApprovalReviewsRepository(DynamicDataStoreFactory dataStoreFactory, IObjectSerializerFactory serializerFactory)
-    {
-        _dataStoreFactory = dataStoreFactory;
-        _serializerFactory = serializerFactory;
-    }
-
     public void Save(ContentReference contentLink, IEnumerable<ReviewLocation> reviewLocations)
     {
-        var objectSerializer = _serializerFactory.GetSerializer(KnownContentTypes.Json);
+        var objectSerializer = serializerFactory.GetSerializer(KnownContentTypes.Json);
         lock (_lock)
         {
             var approvalReview = LoadApprovalReview(contentLink) ?? new ApprovalReview
@@ -67,7 +57,7 @@ internal class DdsApprovalReviewsRepository: IApprovalReviewsRepository
 
         try
         {
-            var reviewLocations = _serializerFactory.GetSerializer(KnownContentTypes.Json).Deserialize<IEnumerable<ReviewLocation>>(data);
+            var reviewLocations = serializerFactory.GetSerializer(KnownContentTypes.Json).Deserialize<IEnumerable<ReviewLocation>>(data);
             return reviewLocations;
         }
         catch (Exception ex)
@@ -146,7 +136,7 @@ internal class DdsApprovalReviewsRepository: IApprovalReviewsRepository
 
     private DynamicDataStore GetStore()
     {
-        return _dataStoreFactory.GetStore(typeof(ApprovalReview)) ?? _dataStoreFactory.CreateStore(typeof(ApprovalReview));
+        return dataStoreFactory.GetStore(typeof(ApprovalReview)) ?? dataStoreFactory.CreateStore(typeof(ApprovalReview));
     }
 }
 

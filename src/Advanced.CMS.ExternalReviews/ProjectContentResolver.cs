@@ -1,29 +1,17 @@
 using System.Collections.Specialized;
-using System.Linq;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer;
 using EPiServer.Cms.Shell;
-using EPiServer.Core;
-using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 
 namespace Advanced.CMS.ExternalReviews;
 
-internal class ProjectContentResolver
+internal class ProjectContentResolver(ProjectRepository projectRepository)
 {
-    private readonly ProjectRepository _projectRepository;
-
-    public ProjectContentResolver(ProjectRepository projectRepository)
-    {
-        _projectRepository = projectRepository;
-    }
-
     public ContentReference GetProjectReference(ContentReference contentLink, int projectId, string language)
     {
-        var item = _projectRepository
-            .GetItems(new[] { contentLink.ToReferenceWithoutVersion() })
-            .Where(x => x.ProjectID == projectId && x.Language.Name == language)
-            .FirstOrDefault();
+        var item = projectRepository
+            .GetItems([contentLink.ToReferenceWithoutVersion()])
+            .FirstOrDefault(x => x.ProjectID == projectId && x.Language.Name == language);
         return item?.ContentLink;
     }
 

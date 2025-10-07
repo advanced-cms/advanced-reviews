@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer;
-using EPiServer.Core;
+﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer.Core.Internal;
 using EPiServer.Framework.Blobs;
 using EPiServer.ImageLibrary;
@@ -10,23 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Advanced.CMS.AdvancedReviews;
 
-internal class ImageProxyController: Controller
+internal class ImageProxyController(
+    IExternalReviewLinksRepository externalReviewLinksRepository,
+    IContentLoader contentLoader,
+    ThumbnailManager thumbnailManager,
+    IMimeTypeResolver mimeTypeResolver)
+    : Controller
 {
-    private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
-    private readonly IContentLoader _contentLoader;
-    private readonly ThumbnailManager _thumbnailManager;
-    private readonly IMimeTypeResolver _mimeTypeResolver;
-
-    private string ThumbnailMimeType => _mimeTypeResolver.GetMimeMapping(ThumbnailHelper.ThumbnailExtension);
-
-    public ImageProxyController(IExternalReviewLinksRepository externalReviewLinksRepository,
-        IContentLoader contentLoader, ThumbnailManager thumbnailManager, IMimeTypeResolver mimeTypeResolver)
-    {
-        _externalReviewLinksRepository = externalReviewLinksRepository;
-        _contentLoader = contentLoader;
-        _thumbnailManager = thumbnailManager;
-        _mimeTypeResolver = mimeTypeResolver;
-    }
+    private string ThumbnailMimeType => mimeTypeResolver.GetMimeMapping(ThumbnailHelper.ThumbnailExtension);
 
     public IActionResult Index([FromRoute] string token, [FromRoute] string contentLink, [FromQuery] int? width, [FromQuery] int? height)
     {
@@ -35,7 +23,7 @@ internal class ImageProxyController: Controller
             return new NotFoundResult();
         }
 
-        var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+        var externalReviewLink = externalReviewLinksRepository.GetContentByToken(token);
         if (externalReviewLink.IsExpired())
         {
             return new NotFoundResult();
@@ -46,7 +34,7 @@ internal class ImageProxyController: Controller
             return new NotFoundResult();
         }
 
-        var content = _contentLoader.Get<IContent>(contentReference);
+        var content = contentLoader.Get<IContent>(contentReference);
         if (content is not ImageData imageData)
         {
             return new NotFoundResult();
@@ -70,7 +58,7 @@ internal class ImageProxyController: Controller
 
         try
         {
-            return _thumbnailManager.ImageService.RenderImage(blobBytes,
+            return thumbnailManager.ImageService.RenderImage(blobBytes,
                 new List<ImageOperation> { imgOperation }, ThumbnailMimeType, 1, 50);
         }
         catch

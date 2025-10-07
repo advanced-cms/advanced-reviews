@@ -2,9 +2,6 @@
 // Licensed under the Apache License, Version 2.0.
 // Derived from Microsoft.AspNetCore.Mvc.TestCommon.SolutionPathUtility
 
-using System;
-using System.IO;
-
 namespace Advanced.CMS.IntegrationTests
 {
     public static class SolutionPathUtility

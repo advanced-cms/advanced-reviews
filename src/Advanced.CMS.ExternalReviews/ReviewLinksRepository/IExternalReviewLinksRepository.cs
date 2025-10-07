@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using EPiServer.Core;
-
-namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+﻿namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 
 public interface IExternalReviewLinksRepository
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using EPiServer;
-using EPiServer.Cms.Shell.Service.Internal;
+﻿using EPiServer.Cms.Shell.Service.Internal;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Cms.Shell.UI.Rest.Projects.Internal;
 using EPiServer.Core.Internal;
@@ -58,19 +55,15 @@ public static class MockServiceCollectionExtensions
 }
 
 [ServiceConfiguration]
-public class AdminUnitOfWork : IDisposable
+public class AdminUnitOfWork(
+    MockableContentLoaderService mockableContentLoaderService,
+    MockableContentService mockableContentService,
+    MockableContentAccessChecker mockableContentAccessChecker)
+    : IDisposable
 {
-    private readonly MockableContentLoaderService _mockableContentLoaderService;
-    private readonly MockableContentService _mockableContentService;
-    private readonly MockableContentAccessChecker _mockableContentAccessChecker;
-
-    public AdminUnitOfWork(MockableContentLoaderService mockableContentLoaderService,
-        MockableContentService mockableContentService, MockableContentAccessChecker mockableContentAccessChecker)
-    {
-        _mockableContentLoaderService = mockableContentLoaderService;
-        _mockableContentService = mockableContentService;
-        _mockableContentAccessChecker = mockableContentAccessChecker;
-    }
+    private readonly MockableContentLoaderService _mockableContentLoaderService = mockableContentLoaderService;
+    private readonly MockableContentService _mockableContentService = mockableContentService;
+    private readonly MockableContentAccessChecker _mockableContentAccessChecker = mockableContentAccessChecker;
 
     public static AdminUnitOfWork Begin()
     {

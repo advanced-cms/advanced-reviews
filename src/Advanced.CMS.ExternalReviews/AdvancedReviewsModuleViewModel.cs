@@ -3,15 +3,13 @@ using EPiServer.Shell.Modules;
 
 namespace Advanced.CMS.ExternalReviews;
 
-internal class AdvancedReviewsModuleViewModel : ModuleViewModel
+internal class AdvancedReviewsModuleViewModel(
+    ShellModule shellModule,
+    IClientResourceService clientResourceService,
+    ExternalReviewOptions options)
+    : ModuleViewModel(shellModule, clientResourceService)
 {
-    public AdvancedReviewsModuleViewModel(ShellModule shellModule, IClientResourceService clientResourceService, ExternalReviewOptions options) :
-        base(shellModule, clientResourceService)
-    {
-        Options = options;
-    }
-
     public string Language { get; set; }
     public string AvatarUrl { get; set; }
-    public ExternalReviewOptions Options { get; }
+    public ExternalReviewOptions Options { get; } = options;
 }

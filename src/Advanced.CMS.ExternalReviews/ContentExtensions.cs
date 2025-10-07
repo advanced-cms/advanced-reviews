@@ -1,7 +1,4 @@
-﻿using System;
-using EPiServer.Core;
-using EPiServer.DataAbstraction;
-using EPiServer.Logging;
+﻿using EPiServer.Logging;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 

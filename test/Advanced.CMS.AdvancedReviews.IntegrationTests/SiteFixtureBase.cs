@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using Advanced.CMS.ExternalReviews;
+﻿using Advanced.CMS.ExternalReviews;
 using Advanced.CMS.IntegrationTests;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.ServiceLocation;
@@ -45,8 +40,8 @@ public class SiteFixtureBase : IDisposable
 
     private string EnsureDatabase()
     {
-        var dbFile = Path.GetFullPath(@"..\..\..\..\sites\TestSite\App_Data\cms.mdf", Environment.CurrentDirectory);
-        var databaseMdfTemplateFile = Path.GetFullPath(@"..\..\..\..\Advanced.CMS.AdvancedReviews.IntegrationTests\Assets\db_template.mdf", Environment.CurrentDirectory);
+        var dbFile = Path.GetFullPath(@"..\..\..\sites\TestSite\App_Data\cms.mdf", Environment.CurrentDirectory);
+        var databaseMdfTemplateFile = Path.GetFullPath(@"..\..\..\Advanced.CMS.AdvancedReviews.IntegrationTests\Assets\db_template.mdf", Environment.CurrentDirectory);
         _databaseFixture = new CmsDatabaseFixture(databaseMdfTemplateFile, dbFile);
         var connectionString =
             $"Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={_databaseFixture.DatabaseName};Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";

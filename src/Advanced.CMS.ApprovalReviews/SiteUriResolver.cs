@@ -1,6 +1,4 @@
-﻿using System;
-using EPiServer.Core;
-using EPiServer.Web;
+﻿using EPiServer.Web;
 
 namespace Advanced.CMS.ApprovalReviews;
 

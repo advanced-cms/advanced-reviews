@@ -1,7 +1,4 @@
-﻿using System;
-using EPiServer;
-using EPiServer.Core;
-using EPiServer.DataAccess;
+﻿using EPiServer.DataAccess;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;

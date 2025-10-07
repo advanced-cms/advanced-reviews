@@ -1,38 +1,29 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using EPiServer.Core;
 using EPiServer.Personalization.VisitorGroups;
 using Microsoft.AspNetCore.Http;
 
 namespace Advanced.CMS.ExternalReviews;
 
-internal class ExternalReviewState
+internal class ExternalReviewState(IHttpContextAccessor httpContextAccessor)
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public ExternalReviewState(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public static object locker = new();
 
     public string Token
     {
-        get => _httpContextAccessor.HttpContext?.Items["Token"] as string;
-        set => _httpContextAccessor.HttpContext.Items["Token"] = value;
+        get => httpContextAccessor.HttpContext?.Items["Token"] as string;
+        set => httpContextAccessor.HttpContext.Items["Token"] = value;
     }
 
     public string PreferredLanguage
     {
-        get => _httpContextAccessor.HttpContext?.Items["PreferredLanguage"] as string;
-        set => _httpContextAccessor.HttpContext.Items["PreferredLanguage"] = value;
+        get => httpContextAccessor.HttpContext?.Items["PreferredLanguage"] as string;
+        set => httpContextAccessor.HttpContext.Items["PreferredLanguage"] = value;
     }
 
     public bool IsEditLink
     {
-        get => (string) _httpContextAccessor.HttpContext?.Items["IsEditLink"] == bool.TrueString;
-        set => _httpContextAccessor.HttpContext.Items["IsEditLink"] = value.ToString();
+        get => (string) httpContextAccessor.HttpContext?.Items["IsEditLink"] == bool.TrueString;
+        set => httpContextAccessor.HttpContext.Items["IsEditLink"] = value.ToString();
     }
 
     /// <summary>
@@ -40,38 +31,38 @@ internal class ExternalReviewState
     /// </summary>
     public string[] ImpersonatedVisitorGroupsById
     {
-        get => (string[]) _httpContextAccessor.HttpContext?.Items[VisitorGroupRole.ImpersonatedVisitorGroupByID];
-        set => _httpContextAccessor.HttpContext.Items[VisitorGroupRole.ImpersonatedVisitorGroupByID] = value;
+        get => (string[]) httpContextAccessor.HttpContext?.Items[VisitorGroupRole.ImpersonatedVisitorGroupByID];
+        set => httpContextAccessor.HttpContext.Items[VisitorGroupRole.ImpersonatedVisitorGroupByID] = value;
     }
 
     public IList<string> CustomLoaded
     {
         get
         {
-            if (_httpContextAccessor.HttpContext == null)
+            if (httpContextAccessor.HttpContext == null)
             {
                 return new List<string>();
             }
 
-            if (_httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string> == null)
+            if (httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string> == null)
             {
                 lock (locker)
                 {
-                    if (_httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string> == null)
+                    if (httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string> == null)
                     {
-                        _httpContextAccessor.HttpContext.Items["CustomLoaded"] = new List<string>();
+                        httpContextAccessor.HttpContext.Items["CustomLoaded"] = new List<string>();
                     }
                 }
             }
 
-            return _httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string>;
+            return httpContextAccessor.HttpContext.Items["CustomLoaded"] as IList<string>;
         }
     }
 
     public int? ProjectId
     {
-        get => (int?) _httpContextAccessor.HttpContext?.Items["ProjectId"];
-        set => _httpContextAccessor.HttpContext.Items["ProjectId"] = value;
+        get => (int?) httpContextAccessor.HttpContext?.Items["ProjectId"];
+        set => httpContextAccessor.HttpContext.Items["ProjectId"] = value;
     }
 
     public bool IsInExternalReviewContext => !string.IsNullOrWhiteSpace(Token);
@@ -81,24 +72,24 @@ internal class ExternalReviewState
 
     private ConcurrentDictionary<string, IContent>  GetCachedLinksDictionary()
     {
-        if (_httpContextAccessor.HttpContext == null)
+        if (httpContextAccessor.HttpContext == null)
         {
             return null;
         }
 
         var key = "_cachedReviewLinks";
-        if (_httpContextAccessor.HttpContext.Items[key] as ConcurrentDictionary<string, IContent> == null)
+        if (httpContextAccessor.HttpContext.Items[key] as ConcurrentDictionary<string, IContent> == null)
         {
             lock (_linkLock)
             {
-                if (_httpContextAccessor.HttpContext.Items[key] as ConcurrentDictionary<string, IContent> == null)
+                if (httpContextAccessor.HttpContext.Items[key] as ConcurrentDictionary<string, IContent> == null)
                 {
-                    _httpContextAccessor.HttpContext.Items[key] = new ConcurrentDictionary<string, IContent>();
+                    httpContextAccessor.HttpContext.Items[key] = new ConcurrentDictionary<string, IContent>();
                 }
             }
         }
 
-        return _httpContextAccessor.HttpContext?.Items[key] as ConcurrentDictionary<string, IContent>;
+        return httpContextAccessor.HttpContext?.Items[key] as ConcurrentDictionary<string, IContent>;
     }
 
     public IContent GetCachedContent(ContentReference contentLink)

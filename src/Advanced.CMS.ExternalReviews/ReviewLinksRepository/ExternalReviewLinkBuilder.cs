@@ -1,30 +1,15 @@
 ﻿using Advanced.CMS.ApprovalReviews;
-using EPiServer;
 using EPiServer.Cms.Shell;
-using EPiServer.Core;
-using EPiServer.DataAbstraction;
 
 namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 
-internal class ExternalReviewLinkBuilder
+internal class ExternalReviewLinkBuilder(
+    ExternalReviewOptions options,
+    IStartPageUrlResolver startPageUrlResolver,
+    ProjectRepository projectRepository,
+    ExternalReviewUrlGenerator externalReviewUrlGenerator,
+    IContentLoader contentLoader)
 {
-    private readonly ProjectRepository _projectRepository;
-    private readonly ExternalReviewOptions _options;
-    private readonly IStartPageUrlResolver _startPageUrlResolver;
-    private readonly ExternalReviewUrlGenerator _externalReviewUrlGenerator;
-    private readonly IContentLoader _contentLoader;
-
-    public ExternalReviewLinkBuilder(ExternalReviewOptions options,
-        IStartPageUrlResolver startPageUrlResolver, ProjectRepository projectRepository,
-        ExternalReviewUrlGenerator externalReviewUrlGenerator, IContentLoader contentLoader)
-    {
-        _options = options;
-        _startPageUrlResolver = startPageUrlResolver;
-        _projectRepository = projectRepository;
-        _externalReviewUrlGenerator = externalReviewUrlGenerator;
-        _contentLoader = contentLoader;
-    }
-
     public ExternalReviewLink FromExternalReview(ExternalReviewLinkDds externalReviewLinkDds)
     {
         var projectName = "";
@@ -33,7 +18,7 @@ internal class ExternalReviewLinkBuilder
         {
             try
             {
-                var project = _projectRepository.Get(externalReviewLinkDds.ProjectId.Value);
+                var project = projectRepository.Get(externalReviewLinkDds.ProjectId.Value);
                 projectName = project.Name;
             }
             catch
@@ -46,15 +31,15 @@ internal class ExternalReviewLinkBuilder
         string externalUrlPrefix;
         if (externalReviewLinkDds.IsEditable)
         {
-            externalUrlPrefix = UrlPath.EnsureStartsWithSlash(_externalReviewUrlGenerator.ReviewsUrl);
+            externalUrlPrefix = UrlPath.EnsureStartsWithSlash(externalReviewUrlGenerator.ReviewsUrl);
         }
         else
         {
-            var content = _contentLoader.Get<IContent>(externalReviewLinkDds.ContentLink);
-            var url = _startPageUrlResolver.GetUrl(externalReviewLinkDds.ContentLink, content.LanguageBranch());
+            var content = contentLoader.Get<IContent>(externalReviewLinkDds.ContentLink);
+            var url = startPageUrlResolver.GetUrl(externalReviewLinkDds.ContentLink, content.LanguageBranch());
             // the preview url has to be language specific as it's handled entirely by the EPiServer partial router
             // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
-            externalUrlPrefix = UrlPath.Combine(url, _options.ContentPreviewUrl);
+            externalUrlPrefix = UrlPath.Combine(url, options.ContentPreviewUrl);
         }
 
         return new ExternalReviewLink

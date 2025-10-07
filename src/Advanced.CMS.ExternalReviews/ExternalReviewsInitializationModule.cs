@@ -1,6 +1,4 @@
 ﻿using Advanced.CMS.ExternalReviews.DraftContentAreaPreview;
-using EPiServer;
-using EPiServer.Core;
 using EPiServer.Core.Internal;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -9,6 +7,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews;
 
@@ -29,6 +28,7 @@ internal class ExternalReviewsInitializationModule : IConfigurableModule
                         locator.GetInstance<IPermanentLinkMapper>(), locator.GetInstance<IContentProviderManager>(),
                         locator.GetInstance<ExternalReviewState>(),
                         locator.GetInstance<ExternalReviewUrlGenerator>(),
+                        locator.GetInstance<IOptions<ExternalReviewOptions>>(),
                         locator.GetInstance<ISiteDefinitionResolver>()));
 
             // Intercepted in order to return unpublished children in external review context

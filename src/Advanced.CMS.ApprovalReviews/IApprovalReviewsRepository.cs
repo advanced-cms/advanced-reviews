@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using EPiServer.Core;
-
-namespace Advanced.CMS.ApprovalReviews;
+﻿namespace Advanced.CMS.ApprovalReviews;
 
 public interface IApprovalReviewsRepository
 {

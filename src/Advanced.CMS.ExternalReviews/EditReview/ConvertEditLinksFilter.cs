@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using System.Text;
 
 namespace Advanced.CMS.ExternalReviews.EditReview;
 
@@ -136,18 +134,11 @@ namespace Advanced.CMS.ExternalReviews.EditReview;
 //     }
 // }
 //
-internal class BufferedTextWriter: TextWriter
+internal class BufferedTextWriter(TextWriter innerTextWriter, Func<string, string> textRewriteFunction)
+    : TextWriter
 {
     private readonly StringBuilder stringBuilder = new StringBuilder();
-    public readonly TextWriter InnerTextWriter;
-
-    private readonly Func<string, string> textRewriteFunction;
-
-    public BufferedTextWriter(TextWriter innerTextWriter, Func<string, string> textRewriteFunction)
-    {
-        InnerTextWriter = innerTextWriter ?? throw new ArgumentNullException(nameof(innerTextWriter));
-        this.textRewriteFunction = textRewriteFunction;
-    }
+    public readonly TextWriter InnerTextWriter = innerTextWriter ?? throw new ArgumentNullException(nameof(innerTextWriter));
 
     public override Encoding Encoding => InnerTextWriter.Encoding;
 

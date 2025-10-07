@@ -1,11 +1,6 @@
-using System;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Advanced.CMS.ExternalReviews;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer;
-using EPiServer.Core;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
@@ -16,20 +11,11 @@ using Xunit;
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity;
 
 [Collection(IntegrationTestCollectionWithPinSecurity.Name)]
-public class SinglePageWithPinSecurityTests : IClassFixture<CommonFixture>
+public class SinglePageWithPinSecurityTests(SiteFixtureWithPinSecurity siteFixture) : IClassFixture<CommonFixture>
 {
-    private readonly SiteFixtureWithPinSecurity _siteFixture;
-    private readonly IContentRepository _contentRepository;
-    private readonly ExternalReviewOptions _externalReviewOptions;
-    private readonly ServiceAccessor<SiteDefinition> _currentSiteDefinition;
-
-    public SinglePageWithPinSecurityTests(SiteFixtureWithPinSecurity siteFixture)
-    {
-        _siteFixture = siteFixture;
-        _currentSiteDefinition = siteFixture.Services.GetService<ServiceAccessor<SiteDefinition>>();
-        _externalReviewOptions = siteFixture.Services.GetService<ExternalReviewOptions>();
-        _contentRepository = siteFixture.Services.GetService<IContentRepository>();
-    }
+    private readonly IContentRepository _contentRepository = siteFixture.Services.GetService<IContentRepository>();
+    private readonly ExternalReviewOptions _externalReviewOptions = siteFixture.Services.GetService<ExternalReviewOptions>();
+    private readonly ServiceAccessor<SiteDefinition> _currentSiteDefinition = siteFixture.Services.GetService<ServiceAccessor<SiteDefinition>>();
 
     [Fact]
     public async Task When_PinSecurity_Enabled_Login_Screen_Is_Shown()
@@ -41,13 +27,13 @@ public class SinglePageWithPinSecurityTests : IClassFixture<CommonFixture>
         page.PageName = reviewedPageContent;
         var contentLink = _contentRepository.Save(page, AccessLevel.NoAccess);
         var reviewLinksRepository =
-            _siteFixture.Services.GetRequiredService<IExternalReviewLinksRepository>();
+            siteFixture.Services.GetRequiredService<IExternalReviewLinksRepository>();
         reviewLinksRepository.GetLinksForContent(contentLink, null);
         var link = reviewLinksRepository.AddLink(contentLink, false, TimeSpan.FromDays(1), null);
         const string pinCode = "123";
         reviewLinksRepository.UpdateLink(link.Token, DateTime.Now.AddDays(1), pinCode, null, null);
         var message = new HttpRequestMessage(HttpMethod.Get, link.LinkUrl);
-        var response = await _siteFixture.Client.SendAsync(message);
+        var response = await siteFixture.Client.SendAsync(message);
         var text = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("Go", text);
@@ -59,7 +45,7 @@ public class SinglePageWithPinSecurityTests : IClassFixture<CommonFixture>
         {
             Code = "111111111111111", Token = link.Token
         }.AsDictionary<string>());
-        var failedLoginResponse = await _siteFixture.Client.SendAsync(failedLoginMessage);
+        var failedLoginResponse = await siteFixture.Client.SendAsync(failedLoginMessage);
         Assert.Equal(HttpStatusCode.NotFound, failedLoginResponse.StatusCode);
 
         var loginMessage = new HttpRequestMessage(HttpMethod.Post,
@@ -68,7 +54,7 @@ public class SinglePageWithPinSecurityTests : IClassFixture<CommonFixture>
         {
             Code = pinCode, Token = link.Token
         }.AsDictionary<string>());
-        var loginResponse = await _siteFixture.Client.SendAsync(loginMessage);
+        var loginResponse = await siteFixture.Client.SendAsync(loginMessage);
         var loginText = await loginResponse.Content.ReadAsStringAsync();
 
         Assert.Equal(HttpStatusCode.OK, loginResponse.StatusCode);

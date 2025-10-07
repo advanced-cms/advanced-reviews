@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using EPiServer.Core;
-using EPiServer.Framework.Localization;
+﻿using EPiServer.Framework.Localization;
 using EPiServer.ServiceLocation;
 
 namespace Advanced.CMS.ExternalReviews.BlocksPreview;

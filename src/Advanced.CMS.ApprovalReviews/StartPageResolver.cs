@@ -1,6 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
-using EPiServer.Web;
+﻿using EPiServer.Web;
 using EPiServer.Web.Routing;
 
 namespace Advanced.CMS.ApprovalReviews;

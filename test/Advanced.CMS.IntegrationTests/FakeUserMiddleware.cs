@@ -1,7 +1,5 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,17 +10,10 @@ namespace Advanced.CMS.IntegrationTests
     /// Enables faking a user in the HttpContext by passing request params "username" and "roles" (comma separated)
     /// Example: http://somesite/endpoint?username=Bob&roles=WebAdmins,WebEditors
     /// </summary>
-    public class FakeUserMiddleware
+    public class FakeUserMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
         private const string UsernameKey = "username";
         private const string RolesKey = "roles";
-
-        public FakeUserMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
 
         public async Task Invoke(HttpContext httpContext)
         {
@@ -36,7 +27,7 @@ namespace Advanced.CMS.IntegrationTests
                 }
             }
 
-            await _next(httpContext);
+            await next(httpContext);
         }
 
         private static string[] ParseRolesFromQuery(IQueryCollection query)

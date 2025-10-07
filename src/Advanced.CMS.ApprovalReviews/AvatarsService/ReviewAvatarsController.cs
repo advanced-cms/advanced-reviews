@@ -1,6 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 using System.Runtime.Versioning;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
@@ -11,15 +9,9 @@ namespace Advanced.CMS.ApprovalReviews.AvatarsService;
 /// Handler used to get user avatar based on username
 /// </summary>
 [SupportedOSPlatform("windows")]
-internal class ReviewAvatarsController: Controller
+internal class ReviewAvatarsController(ICustomAvatarResolver customAvatarResolver) : Controller
 {
-    private readonly ICustomAvatarResolver _customAvatarResolver;
     private readonly IdenticonGenerator _identiconGenerator = new();
-
-    public ReviewAvatarsController(ICustomAvatarResolver customAvatarResolver)
-    {
-        _customAvatarResolver = customAvatarResolver;
-    }
 
     //TODO: try to use EPiServer.Web.MediaHandlerBase to turn on caching
     [HttpGet]
@@ -34,7 +26,7 @@ internal class ReviewAvatarsController: Controller
         userName = HttpUtility.UrlDecode(userName);
         using (var memoryStream = new MemoryStream())
         {
-            var customAvatar = _customAvatarResolver.GetImage(userName);
+            var customAvatar = customAvatarResolver.GetImage(userName);
             if (customAvatar != null)
             {
                 memoryStream.Write(customAvatar, 0, customAvatar.Length);

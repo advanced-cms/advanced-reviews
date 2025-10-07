@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Advanced.CMS.ApprovalReviews;
-using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.Projects;
-using EPiServer.Core;
 using EPiServer.Notification;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Mvc;
@@ -17,31 +11,16 @@ namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 /// Manage external review links
 /// </summary>
 [RestStore("externalreviewstore")]
-internal class ExternalReviewStore : RestControllerBase
+internal class ExternalReviewStore(
+    IContentLoader contentLoader,
+    NotificationOptions notificationOptions,
+    IExternalReviewLinksRepository externalReviewLinksRepository,
+    INotificationProvider emailNotificationProvider,
+    ExternalReviewOptions externalReviewOptions,
+    CurrentProject currentProject,
+    ISiteUriResolver siteUriResolver)
+    : RestControllerBase
 {
-    private readonly IContentLoader _contentLoader;
-    private readonly NotificationOptions _notificationOptions;
-    private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
-    private readonly INotificationProvider _emailNotificationProvider;
-    private readonly ExternalReviewOptions _externalReviewOptions;
-    private readonly CurrentProject _currentProject;
-    private readonly ISiteUriResolver _siteUriResolver;
-
-    public ExternalReviewStore(IContentLoader contentLoader, NotificationOptions notificationOptions,
-        IExternalReviewLinksRepository externalReviewLinksRepository,
-        INotificationProvider emailNotificationProvider,
-        ExternalReviewOptions externalReviewOptions, CurrentProject currentProject,
-        ISiteUriResolver siteUriResolver)
-    {
-        _contentLoader = contentLoader;
-        _notificationOptions = notificationOptions;
-        _externalReviewLinksRepository = externalReviewLinksRepository;
-        _emailNotificationProvider = emailNotificationProvider;
-        _externalReviewOptions = externalReviewOptions;
-        _currentProject = currentProject;
-        _siteUriResolver = siteUriResolver;
-    }
-
     private void HidePinCode(ExternalReviewLink externalReviewLink)
     {
         if (!string.IsNullOrWhiteSpace(externalReviewLink.PinCode))
@@ -53,7 +32,7 @@ internal class ExternalReviewStore : RestControllerBase
     [HttpGet]
     public ActionResult Get(ContentReference id, int? projectId)
     {
-        var externalReviewLinks = _externalReviewLinksRepository.GetLinksForContent(id, projectId).ToList();
+        var externalReviewLinks = externalReviewLinksRepository.GetLinksForContent(id, projectId).ToList();
         foreach (var externalReviewLink in externalReviewLinks)
         {
             HidePinCode(externalReviewLink);
@@ -70,13 +49,13 @@ internal class ExternalReviewStore : RestControllerBase
         }
 
         // should not be possible to add editable link when option is not available
-        if (externalLink.IsEditable && !_externalReviewOptions.EditableLinksEnabled)
+        if (externalLink.IsEditable && !externalReviewOptions.EditableLinksEnabled)
         {
             return new RestStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
-        var validTo = externalLink.IsEditable ? _externalReviewOptions.EditLinkValidTo: _externalReviewOptions.ViewLinkValidTo;
-        var result = _externalReviewLinksRepository.AddLink(contentLink, externalLink.IsEditable, validTo, _currentProject.ProjectId);
+        var validTo = externalLink.IsEditable ? externalReviewOptions.EditLinkValidTo: externalReviewOptions.ViewLinkValidTo;
+        var result = externalReviewLinksRepository.AddLink(contentLink, externalLink.IsEditable, validTo, currentProject.ProjectId);
         HidePinCode(result);
         return Rest(result);
     }
@@ -89,7 +68,7 @@ internal class ExternalReviewStore : RestControllerBase
             return new BadRequestResult();
         }
 
-        var result = _externalReviewLinksRepository.UpdateLink(id, pinDto.ValidTo, pinDto.PinCode, pinDto.DisplayName, pinDto.VisitorGroups);
+        var result = externalReviewLinksRepository.UpdateLink(id, pinDto.ValidTo, pinDto.PinCode, pinDto.DisplayName, pinDto.VisitorGroups);
         HidePinCode(result);
 
         return Rest(result);
@@ -103,18 +82,18 @@ internal class ExternalReviewStore : RestControllerBase
             return new BadRequestResult();
         }
 
-        if (string.IsNullOrWhiteSpace(_notificationOptions.NotificationEmailAddress))
+        if (string.IsNullOrWhiteSpace(notificationOptions.NotificationEmailAddress))
         {
             return new BadRequestObjectResult("Sender email address is not configured. Contact with system administrator");
         }
 
-        var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(id);
+        var externalReviewLink = externalReviewLinksRepository.GetContentByToken(id);
         if (externalReviewLink == null)
         {
             return new NotFoundObjectResult("Token not found");
         }
 
-        if (!_contentLoader.TryGet(externalReviewLink.ContentLink, out IContent _))
+        if (!contentLoader.TryGet(externalReviewLink.ContentLink, out IContent _))
         {
             return new NotFoundObjectResult("Content not found");
         }
@@ -127,7 +106,7 @@ internal class ExternalReviewStore : RestControllerBase
     private async Task<bool> SendMail(ExternalReviewLink externalReviewLink, string email, string subject,
         string message)
     {
-        var linkUrl = new Uri(_siteUriResolver.GetUri(externalReviewLink.ContentLink), externalReviewLink.LinkUrl);
+        var linkUrl = new Uri(siteUriResolver.GetUri(externalReviewLink.ContentLink), externalReviewLink.LinkUrl);
 
         message = message.Replace("[#link#]", linkUrl.ToString());
 
@@ -137,14 +116,14 @@ internal class ExternalReviewStore : RestControllerBase
             {
                 Content = message,
                 RecipientAddresses = new[] {email},
-                SenderAddress = _notificationOptions.NotificationEmailAddress,
+                SenderAddress = notificationOptions.NotificationEmailAddress,
                 Subject = subject,
-                SenderDisplayName = _notificationOptions.NotificationEmailDisplayName
+                SenderDisplayName = notificationOptions.NotificationEmailDisplayName
             }
         };
         var result = true;
 #pragma warning disable 618
-        await _emailNotificationProvider.SendAsync(providerNotificationMessages, msg => { result = true; },
+        await emailNotificationProvider.SendAsync(providerNotificationMessages, msg => { result = true; },
 #pragma warning restore 618
             (_, _) => { result = false; }).ConfigureAwait(true);
         return result;
@@ -153,7 +132,7 @@ internal class ExternalReviewStore : RestControllerBase
     [HttpDelete]
     public ActionResult Delete(string id)
     {
-        _externalReviewLinksRepository.DeleteLink(id);
+        externalReviewLinksRepository.DeleteLink(id);
         return Rest(true);
     }
 }

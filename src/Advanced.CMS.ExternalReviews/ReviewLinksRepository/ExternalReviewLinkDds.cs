@@ -1,6 +1,4 @@
-﻿using System;
-using EPiServer.Core;
-using EPiServer.Data;
+﻿using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 
 namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;

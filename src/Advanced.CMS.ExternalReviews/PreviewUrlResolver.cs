@@ -1,42 +1,26 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Linq;
+﻿using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer;
 using EPiServer.Cms.Shell;
-using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews;
 
-internal class PreviewUrlResolver : IUrlResolver
+internal class PreviewUrlResolver(
+    IUrlResolver defaultUrlResolver,
+    IContentLoader contentLoader,
+    IPermanentLinkMapper permanentLinkMapper,
+    IContentProviderManager providerManager,
+    ExternalReviewState externalReviewState,
+    ExternalReviewUrlGenerator externalReviewUrlGenerator,
+    IOptions<ExternalReviewOptions> externalReviewOptions,
+    ISiteDefinitionResolver siteDefinitionResolver)
+    : IUrlResolver
 {
     private const string PreviewGenerated = "preview_generated";
-    private readonly IUrlResolver _defaultUrlResolver;
-    private readonly IContentLoader _contentLoader;
-    private readonly Injected<ExternalReviewOptions> _externalReviewOptions;
-    private readonly IPermanentLinkMapper _permanentLinkMapper;
-    private readonly IContentProviderManager _providerManager;
-    private readonly ExternalReviewState _externalReviewState;
-    private readonly ExternalReviewUrlGenerator _externalReviewUrlGenerator;
-    private readonly ISiteDefinitionResolver _siteDefinitionResolver;
-
-    public PreviewUrlResolver(IUrlResolver defaultUrlResolver, IContentLoader contentLoader,
-        IPermanentLinkMapper permanentLinkMapper, IContentProviderManager providerManager,
-        ExternalReviewState externalReviewState, ExternalReviewUrlGenerator externalReviewUrlGenerator,
-        ISiteDefinitionResolver siteDefinitionResolver)
-    {
-        _defaultUrlResolver = defaultUrlResolver;
-        _contentLoader = contentLoader;
-        _permanentLinkMapper = permanentLinkMapper;
-        _providerManager = providerManager;
-        _externalReviewState = externalReviewState;
-        _externalReviewUrlGenerator = externalReviewUrlGenerator;
-        _siteDefinitionResolver = siteDefinitionResolver;
-    }
 
     public static bool IsGeneratedForProjectPreview(NameValueCollection queryString)
     {
@@ -46,13 +30,13 @@ internal class PreviewUrlResolver : IUrlResolver
     public string GetVirtualPath(ContentReference contentLink, string language,
         UrlResolverArguments virtualPathArguments)
     {
-        var virtualPathData = _defaultUrlResolver.GetUrl(contentLink, language, virtualPathArguments);
-        if (!_externalReviewState.IsInExternalReviewContext || virtualPathData == null)
+        var virtualPathData = defaultUrlResolver.GetUrl(contentLink, language, virtualPathArguments);
+        if (!externalReviewState.IsInExternalReviewContext || virtualPathData == null)
         {
             return virtualPathData;
         }
 
-        var content = _contentLoader.Get<IContent>(contentLink);
+        var content = contentLoader.Get<IContent>(contentLink);
         if (ShouldGenerateProjectModeUrlPostfix(content))
         {
             var virtualPath = GetAccessibleVirtualPath(virtualPathData, content as PageData, language);
@@ -61,7 +45,7 @@ internal class PreviewUrlResolver : IUrlResolver
 
         if (content is ImageData imageData)
         {
-            virtualPathData = _externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
+            virtualPathData = externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
 
         }
 
@@ -70,7 +54,7 @@ internal class PreviewUrlResolver : IUrlResolver
 
     private bool ShouldGenerateProjectModeUrlPostfix(IContent content)
     {
-        if (!_externalReviewState.IsInProjectReviewContext)
+        if (!externalReviewState.IsInProjectReviewContext)
         {
             return false;
         }
@@ -81,8 +65,8 @@ internal class PreviewUrlResolver : IUrlResolver
         }
 
         var externalReviewLinksRepository = ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>();
-        var hasPinCode = externalReviewLinksRepository.HasPinCode(_externalReviewState.Token);
-        var pageParentSite = _siteDefinitionResolver.GetByContent(content.ContentLink, false);
+        var hasPinCode = externalReviewLinksRepository.HasPinCode(externalReviewState.Token);
+        var pageParentSite = siteDefinitionResolver.GetByContent(content.ContentLink, false);
         return !hasPinCode || pageParentSite == SiteDefinition.Current;
     }
 
@@ -93,7 +77,7 @@ internal class PreviewUrlResolver : IUrlResolver
     private string GetAccessibleVirtualPath(string url, PageData data, string language)
     {
         var virtualPath = url;
-        var provider = this._providerManager.ProviderMap.GetProvider(data.ContentLink.ProviderName);
+        var provider = providerManager.ProviderMap.GetProvider(data.ContentLink.ProviderName);
         var masterContent = (PageData)provider.GetScatteredContents(
             new[] { data.ContentLink.ToReferenceWithoutVersion() },
             new LanguageSelector(language ?? data.LanguageBranch())).FirstOrDefault();
@@ -117,8 +101,8 @@ internal class PreviewUrlResolver : IUrlResolver
 
     public string GetUrl(ContentReference contentLink, string language, UrlResolverArguments urlResolverArguments)
     {
-        var url = _defaultUrlResolver.GetUrl(contentLink, language, urlResolverArguments);
-        if (!_externalReviewState.IsInExternalReviewContext || url == null)
+        var url = defaultUrlResolver.GetUrl(contentLink, language, urlResolverArguments);
+        if (!externalReviewState.IsInExternalReviewContext || url == null)
         {
             return url;
         }
@@ -128,13 +112,13 @@ internal class PreviewUrlResolver : IUrlResolver
 
     public string GetUrl(UrlBuilder urlBuilderWithInternalUrl, UrlResolverArguments arguments)
     {
-        var url = _defaultUrlResolver.GetUrl(urlBuilderWithInternalUrl, arguments);
-        if (!_externalReviewState.IsInExternalReviewContext || url == null)
+        var url = defaultUrlResolver.GetUrl(urlBuilderWithInternalUrl, arguments);
+        if (!externalReviewState.IsInExternalReviewContext || url == null)
         {
             return url;
         }
 
-        var linkMap = _permanentLinkMapper.Find(urlBuilderWithInternalUrl);
+        var linkMap = permanentLinkMapper.Find(urlBuilderWithInternalUrl);
         return linkMap != null ? GetInternalUrl(linkMap.ContentReference, url) : url;
     }
 
@@ -146,7 +130,7 @@ internal class PreviewUrlResolver : IUrlResolver
     /// <returns></returns>
     private string GetInternalUrl(ContentReference contentLink, string url)
     {
-        var content = _contentLoader.Get<IContent>(contentLink);
+        var content = contentLoader.Get<IContent>(contentLink);
         if (ShouldGenerateProjectModeUrlPostfix(content))
         {
             return AppendGeneratedPostfix(url);
@@ -154,7 +138,7 @@ internal class PreviewUrlResolver : IUrlResolver
 
         if (content is ImageData imageData)
         {
-            return _externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
+            return externalReviewUrlGenerator.GetProxiedImageUrl(imageData.ContentLink);
         }
 
         return url;
@@ -162,19 +146,19 @@ internal class PreviewUrlResolver : IUrlResolver
 
     public bool TryToPermanent(string url, out string permanentUrl)
     {
-        return _defaultUrlResolver.TryToPermanent(url, out permanentUrl);
+        return defaultUrlResolver.TryToPermanent(url, out permanentUrl);
     }
 
     public ContentRouteData Route(UrlBuilder urlBuilder, RouteArguments routeArguments)
     {
-        var contentRouteData = _defaultUrlResolver.Route(urlBuilder, routeArguments);
+        var contentRouteData = defaultUrlResolver.Route(urlBuilder, routeArguments);
 
         if (contentRouteData?.RemainingPath == null)
         {
             return contentRouteData;
         }
 
-        if (contentRouteData.RemainingPath.StartsWith($"{_externalReviewOptions.Service.ContentPreviewUrl}/", StringComparison.CurrentCultureIgnoreCase))
+        if (contentRouteData.RemainingPath.StartsWith($"{externalReviewOptions.Value.ContentPreviewUrl}/", StringComparison.CurrentCultureIgnoreCase))
         {
             // If we failed to route then it means that a start page in the same language does not exist and our partial routers will not be able to step in
             // We need to fallback to master language also if the translated start page is not published
@@ -182,7 +166,7 @@ internal class PreviewUrlResolver : IUrlResolver
             {
                 var masterLanguage = LanguageSelector.AutoDetect().LanguageBranch;
                 urlBuilder.Path = urlBuilder.Path.Replace($"/{contentRouteData.RouteLanguage}", $"/{masterLanguage}");
-                var masterRoutedData = _defaultUrlResolver.Route(urlBuilder, routeArguments);
+                var masterRoutedData = defaultUrlResolver.Route(urlBuilder, routeArguments);
                 return masterRoutedData;
             }
         }
@@ -192,8 +176,8 @@ internal class PreviewUrlResolver : IUrlResolver
 
     private string AppendGeneratedPostfix(string url)
     {
-        var urlBuilder = new UrlBuilder(UrlPath.Combine(url, _externalReviewOptions.Service.ContentPreviewUrl,
-            _externalReviewState.Token));
+        var urlBuilder = new UrlBuilder(UrlPath.Combine(url, externalReviewOptions.Value.ContentPreviewUrl,
+            externalReviewState.Token));
         urlBuilder.QueryCollection.Add(PreviewGenerated, bool.TrueString);
         return urlBuilder.ToString();
     }

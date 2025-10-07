@@ -1,8 +1,6 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using EPiServer.Core;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
 using EPiServer.Web.Routing;
@@ -12,32 +10,16 @@ namespace Advanced.CMS.ExternalReviews;
 /// <summary>
 /// Partial router used to display readonly version of the page
 /// </summary>
-internal class PagePreviewPartialRouter : IPartialRouter<IContent, IContent>
+internal class PagePreviewPartialRouter(
+    IExternalReviewLinksRepository externalReviewLinksRepository,
+    ExternalReviewOptions externalReviewOptions,
+    ProjectContentResolver projectContentResolver,
+    IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler,
+    IContentLanguageAccessor contentLanguageAccessor,
+    ExternalReviewState externalReviewState,
+    IContentVersionRepository contentVersionRepository)
+    : IPartialRouter<IContent, IContent>
 {
-    private readonly ProjectContentResolver _projectContentResolver;
-    private readonly IExternalLinkPinCodeSecurityHandler _externalLinkPinCodeSecurityHandler;
-    private readonly IExternalReviewLinksRepository _externalReviewLinksRepository;
-    private readonly ExternalReviewOptions _externalReviewOptions;
-    private readonly IContentLanguageAccessor _contentLanguageAccessor;
-    private readonly ExternalReviewState _externalReviewState;
-    private readonly IContentVersionRepository _contentVersionRepository;
-
-    public PagePreviewPartialRouter(IExternalReviewLinksRepository externalReviewLinksRepository,
-        ExternalReviewOptions externalReviewOptions,
-        ProjectContentResolver projectContentResolver,
-        IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler,
-        IContentLanguageAccessor contentLanguageAccessor, ExternalReviewState externalReviewState,
-        IContentVersionRepository contentVersionRepository)
-    {
-        _externalReviewLinksRepository = externalReviewLinksRepository;
-        _externalReviewOptions = externalReviewOptions;
-        _projectContentResolver = projectContentResolver;
-        _externalLinkPinCodeSecurityHandler = externalLinkPinCodeSecurityHandler;
-        _contentLanguageAccessor = contentLanguageAccessor;
-        _externalReviewState = externalReviewState;
-        _contentVersionRepository = contentVersionRepository;
-    }
-
     public PartialRouteData GetPartialVirtualPath(IContent content, UrlGeneratorContext segmentContext)
     {
         return new PartialRouteData();
@@ -45,7 +27,7 @@ internal class PagePreviewPartialRouter : IPartialRouter<IContent, IContent>
 
     public object RoutePartial(IContent content, UrlResolverContext segmentContext)
     {
-        if (!_externalReviewOptions.IsEnabled)
+        if (!externalReviewOptions.IsEnabled)
         {
             return null;
         }
@@ -56,7 +38,7 @@ internal class PagePreviewPartialRouter : IPartialRouter<IContent, IContent>
             return null;
         }
 
-        if (!string.Equals(nextSegment.Next.ToString(), _externalReviewOptions.ContentPreviewUrl,
+        if (!string.Equals(nextSegment.Next.ToString(), externalReviewOptions.ContentPreviewUrl,
                 StringComparison.CurrentCultureIgnoreCase))
         {
             return null;
@@ -65,29 +47,29 @@ internal class PagePreviewPartialRouter : IPartialRouter<IContent, IContent>
         nextSegment = segmentContext.GetNextSegment(nextSegment.Remaining);
         var token = nextSegment.Next.ToString();
 
-        var externalReviewLink = _externalReviewLinksRepository.GetContentByToken(token);
+        var externalReviewLink = externalReviewLinksRepository.GetContentByToken(token);
         if (!externalReviewLink.IsPreviewableLink())
         {
             return null;
         }
 
-        var version = _contentVersionRepository.Load(externalReviewLink.ContentLink);
-        _contentLanguageAccessor.Language = new CultureInfo(version.LanguageBranch);
-        _externalReviewState.Token = token;
-        _externalReviewState.ProjectId = externalReviewLink.ProjectId;
-        _externalReviewState.PreferredLanguage = version.LanguageBranch;
-        _externalReviewState.ImpersonatedVisitorGroupsById = externalReviewLink.VisitorGroups;
+        var version = contentVersionRepository.Load(externalReviewLink.ContentLink);
+        contentLanguageAccessor.Language = new CultureInfo(version.LanguageBranch);
+        externalReviewState.Token = token;
+        externalReviewState.ProjectId = externalReviewLink.ProjectId;
+        externalReviewState.PreferredLanguage = version.LanguageBranch;
+        externalReviewState.ImpersonatedVisitorGroupsById = externalReviewLink.VisitorGroups;
 
         // PIN code security check, if user is not authenticated, then redirect to login page
-        if (!_externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
+        if (!externalLinkPinCodeSecurityHandler.UserHasAccessToLink(externalReviewLink))
         {
-            _externalLinkPinCodeSecurityHandler.RedirectToLoginPage(externalReviewLink);
+            externalLinkPinCodeSecurityHandler.RedirectToLoginPage(externalReviewLink);
             return null;
         }
 
         try
         {
-            var versionedContent = _projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
+            var versionedContent = projectContentResolver.TryGetProjectPageVersion(externalReviewLink, content,
                 segmentContext.Url.QueryCollection);
 
             segmentContext.RemainingSegments = nextSegment.Remaining;

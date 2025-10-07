@@ -1,4 +1,4 @@
-﻿namespace Advanced.CMS.ExternalReviews;
+﻿// namespace Advanced.CMS.ExternalReviews;
 
 /*[TemplateDescriptor(Inherited = true,
     AvailableWithoutTag=false,

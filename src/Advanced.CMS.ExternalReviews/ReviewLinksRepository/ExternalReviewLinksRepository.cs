@@ -1,27 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Advanced.CMS.ExternalReviews.PinCodeSecurity;
-using EPiServer.Core;
+﻿using Advanced.CMS.ExternalReviews.PinCodeSecurity;
 using EPiServer.Data.Dynamic;
 using EPiServer.Framework.Cache;
 
 namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 
-internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
+internal class ExternalReviewLinksRepository(
+    ExternalReviewLinkBuilder externalReviewLinkBuilder,
+    DynamicDataStoreFactory dataStoreFactory,
+    ISynchronizedObjectInstanceCache cache)
+    : IExternalReviewLinksRepository
 {
-    private readonly ExternalReviewLinkBuilder _externalReviewLinkBuilder;
-    private readonly DynamicDataStoreFactory _dataStoreFactory;
-    private readonly ISynchronizedObjectInstanceCache _cache;
-
-    public ExternalReviewLinksRepository(ExternalReviewLinkBuilder externalReviewLinkBuilder,
-        DynamicDataStoreFactory dataStoreFactory, ISynchronizedObjectInstanceCache cache)
-    {
-        _externalReviewLinkBuilder = externalReviewLinkBuilder;
-        _dataStoreFactory = dataStoreFactory;
-        _cache = cache;
-    }
-
     public IEnumerable<ExternalReviewLink> GetLinksForContent(ContentReference contentLink, int? projectId)
     {
         if (!projectId.HasValue)
@@ -31,7 +19,7 @@ internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
             projectId = -1;
         }
         return GetStore().Items<ExternalReviewLinkDds>().Where(x => x.ContentLink == contentLink || x.ProjectId == projectId).ToList().Select(
-            _externalReviewLinkBuilder.FromExternalReview);
+            externalReviewLinkBuilder.FromExternalReview);
     }
 
     public int RemoveExpiredLinks()
@@ -54,13 +42,13 @@ internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
         }
 
         token = token.ToLower();
-        if (_cache.Get(token) is ExternalReviewLinkDds item)
+        if (cache.Get(token) is ExternalReviewLinkDds item)
         {
             return item;
         }
 
         var externalReviewLinkDds = GetStore().Items<ExternalReviewLinkDds>().FirstOrDefault(x => x.Token == token);
-        _cache.Insert(token, externalReviewLinkDds, CacheEvictionPolicy.Empty);
+        cache.Insert(token, externalReviewLinkDds, CacheEvictionPolicy.Empty);
 
         return externalReviewLinkDds;
     }
@@ -81,7 +69,7 @@ internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
         var externalReviewLinkDds = GetReviewLinkDds(token);
         return externalReviewLinkDds == null
             ? null
-            : _externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
+            : externalReviewLinkBuilder.FromExternalReview(externalReviewLinkDds);
     }
 
     public ExternalReviewLink AddLink(ContentReference contentLink, bool isEditable, TimeSpan validTo,
@@ -101,7 +89,7 @@ internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
             ValidTo = DateTime.Now.Add(validTo)
         };
         GetStore().Save(externalReviewLink);
-        return _externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
+        return externalReviewLinkBuilder.FromExternalReview(externalReviewLink);
     }
 
     public ExternalReviewLink UpdateLink(string token, DateTime? validTo, string pinCode, string displayName, string[] visitorGroups)
@@ -128,8 +116,8 @@ internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
         item.VisitorGroups = visitorGroups ?? new[] {"cc5fc022-4186-431e-b38a-e257d8cafd51"};
 
         store.Save(item);
-        _cache.Remove(token);
-        return _externalReviewLinkBuilder.FromExternalReview(item);
+        cache.Remove(token);
+        return externalReviewLinkBuilder.FromExternalReview(item);
     }
 
     public void DeleteLink(string token)
@@ -141,12 +129,12 @@ internal class ExternalReviewLinksRepository: IExternalReviewLinksRepository
             return;
         }
         GetStore().Delete(item.Id);
-        _cache.Remove(token);
+        cache.Remove(token);
     }
 
     private DynamicDataStore GetStore()
     {
-        return _dataStoreFactory.GetStore(typeof(ExternalReviewLinkDds)) ?? _dataStoreFactory.CreateStore(typeof(ExternalReviewLinkDds));
+        return dataStoreFactory.GetStore(typeof(ExternalReviewLinkDds)) ?? dataStoreFactory.CreateStore(typeof(ExternalReviewLinkDds));
     }
 
 }

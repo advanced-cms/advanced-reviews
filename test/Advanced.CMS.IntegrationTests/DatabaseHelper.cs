@@ -1,23 +1,16 @@
-﻿using System.Data.Common;
-using System.IO;
+﻿using System.Data;
+using System.Data.Common;
 using System.Text;
 using Microsoft.Data.SqlClient;
 
 namespace Advanced.CMS.IntegrationTests
 {
-    public class DatabaseHelper
+    public class DatabaseHelper(string connectionString)
     {
         private DbProviderFactory _dbFactory;
-        private readonly string _connectionString;
 
         public DatabaseHelper()
           : this(null) { }
-
-
-        public DatabaseHelper(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
 
 
         /// <summary>
@@ -35,7 +28,7 @@ namespace Advanced.CMS.IntegrationTests
         public DbConnection GetConnection()
         {
             var conn = DbFactory.CreateConnection();
-            conn.ConnectionString = _connectionString;
+            conn.ConnectionString = connectionString;
             return conn;
         }
 
@@ -75,7 +68,7 @@ namespace Advanced.CMS.IntegrationTests
                 using (var cmd = DbFactory.CreateCommand())
                 {
                     cmd.CommandText = command;
-                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandType = CommandType.Text;
                     cmd.Connection = c;
                     return cmd.ExecuteScalar();
                 }

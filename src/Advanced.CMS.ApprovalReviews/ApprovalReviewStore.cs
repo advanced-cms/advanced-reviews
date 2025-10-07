@@ -1,7 +1,5 @@
 ﻿using System.Net;
 using Advanced.CMS.ApprovalReviews.Notifications;
-using EPiServer;
-using EPiServer.Core;
 using EPiServer.Security;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Mvc;

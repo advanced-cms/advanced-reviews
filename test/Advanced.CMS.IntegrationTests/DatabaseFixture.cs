@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Threading;
 using Microsoft.Data.SqlClient;
 
 namespace Advanced.CMS.IntegrationTests
@@ -16,12 +11,7 @@ namespace Advanced.CMS.IntegrationTests
         protected abstract string DESTINATION_MDF_PATH { get; }
         protected abstract string CONNECTION_STRING_TEMPLATE { get; }
 
-        public string DatabaseName { get; set; }
-
-        protected DatabaseFixture()
-        {
-            DatabaseName = $"NC_Test_{DateTime.Now.Ticks}";
-        }
+        public string DatabaseName { get; set; } = $"NC_Test_{DateTime.Now.Ticks}";
 
         protected void SetFolderAccess()
         {

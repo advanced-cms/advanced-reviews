@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Advanced.CMS.ApprovalReviews;
 using Advanced.CMS.ExternalReviews;
 using EPiServer.Shell.Modules;
