@@ -4,6 +4,7 @@ using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.Notification;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 
@@ -16,7 +17,7 @@ internal class ExternalReviewStore(
     NotificationOptions notificationOptions,
     IExternalReviewLinksRepository externalReviewLinksRepository,
     INotificationProvider emailNotificationProvider,
-    ExternalReviewOptions externalReviewOptions,
+    IOptions<ExternalReviewOptions> externalReviewOptions,
     CurrentProject currentProject,
     ISiteUriResolver siteUriResolver)
     : RestControllerBase
@@ -49,12 +50,12 @@ internal class ExternalReviewStore(
         }
 
         // should not be possible to add editable link when option is not available
-        if (externalLink.IsEditable && !externalReviewOptions.EditableLinksEnabled)
+        if (externalLink.IsEditable && !externalReviewOptions.Value.EditableLinksEnabled)
         {
             return new RestStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
-        var validTo = externalLink.IsEditable ? externalReviewOptions.EditLinkValidTo: externalReviewOptions.ViewLinkValidTo;
+        var validTo = externalLink.IsEditable ? externalReviewOptions.Value.EditLinkValidTo: externalReviewOptions.Value.ViewLinkValidTo;
         var result = externalReviewLinksRepository.AddLink(contentLink, externalLink.IsEditable, validTo, currentProject.ProjectId);
         HidePinCode(result);
         return Rest(result);

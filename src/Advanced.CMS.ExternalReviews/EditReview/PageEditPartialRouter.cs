@@ -3,12 +3,13 @@ using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
 using EPiServer.Web.Routing;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.EditReview;
 
 internal class PageEditPartialRouter(
     IExternalReviewLinksRepository externalReviewLinksRepository,
-    ExternalReviewOptions externalReviewOptions,
+    IOptions<ExternalReviewOptions> externalReviewOptions,
     ProjectContentResolver projectContentResolver,
     IContentLanguageAccessor contentLanguageAccessor,
     ExternalReviewState externalReviewState,
@@ -22,13 +23,13 @@ internal class PageEditPartialRouter(
 
     public object RoutePartial(IContent content, UrlResolverContext segmentContext)
     {
-        if (!externalReviewOptions.IsEnabled || !externalReviewOptions.EditableLinksEnabled)
+        if (!externalReviewOptions.Value.IsEnabled || !externalReviewOptions.Value.EditableLinksEnabled)
         {
             return null;
         }
 
         var nextSegment = segmentContext.GetNextSegment(segmentContext.RemainingSegments);
-        if (nextSegment.Next.IsEmpty || !nextSegment.Next.ToString().Equals(externalReviewOptions.ContentIframeEditUrlSegment, StringComparison.CurrentCultureIgnoreCase))
+        if (nextSegment.Next.IsEmpty || !nextSegment.Next.ToString().Equals(externalReviewOptions.Value.ContentIframeEditUrlSegment, StringComparison.CurrentCultureIgnoreCase))
         {
             return null;
         }

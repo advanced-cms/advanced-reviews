@@ -1,6 +1,7 @@
 ﻿using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer.Security;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.PinCodeSecurity;
 
@@ -39,10 +40,10 @@ internal class DefaultExternalLinkPinCodeSecurityHandler : IExternalLinkPinCodeS
 
     public static string ExternalReviewTokens = "ExternalReviewTokens";
 
-    public DefaultExternalLinkPinCodeSecurityHandler(ExternalReviewOptions externalReviewOptions,
+    public DefaultExternalLinkPinCodeSecurityHandler(IOptions<ExternalReviewOptions> externalReviewOptions,
         IHttpContextAccessor httpContextAccessor, IPrincipalAccessor principalAccessor)
     {
-        _externalReviewOptions = externalReviewOptions;
+        _externalReviewOptions = externalReviewOptions.Value;
         _httpContextAccessor = httpContextAccessor;
         _principalAccessor = principalAccessor;
     }

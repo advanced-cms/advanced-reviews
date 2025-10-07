@@ -1,12 +1,13 @@
 ﻿using EPiServer.Personalization.VisitorGroups;
 using EPiServer.Shell.Modules;
 using EPiServer.Shell.ViewComposition;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.ManageLinks;
 
 [ComponentProvider]
 internal class AdvancedReviewsComponentProvider(
-    ExternalReviewOptions options,
+    IOptions<ExternalReviewOptions> options,
     IVisitorGroupRepository visitorGroupRepository,
     ModuleTable moduleTable)
     : IComponentProvider
@@ -22,7 +23,7 @@ internal class AdvancedReviewsComponentProvider(
         }
 
         var isAdvancedReviewsModuleAdded = moduleTable.TryGetModule(this.GetType().Assembly, out _);
-        var isComponentReady = isAdvancedReviewsModuleAdded && options.IsEnabled;
+        var isComponentReady = isAdvancedReviewsModuleAdded && options.Value.IsEnabled;
 
         if (!isComponentReady)
         {

@@ -4,6 +4,7 @@ using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 using EPiServer.Core.Routing;
 using EPiServer.Core.Routing.Pipeline;
 using EPiServer.Web.Routing;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews;
 
@@ -12,7 +13,7 @@ namespace Advanced.CMS.ExternalReviews;
 /// </summary>
 internal class PagePreviewPartialRouter(
     IExternalReviewLinksRepository externalReviewLinksRepository,
-    ExternalReviewOptions externalReviewOptions,
+    IOptions<ExternalReviewOptions> externalReviewOptions,
     ProjectContentResolver projectContentResolver,
     IExternalLinkPinCodeSecurityHandler externalLinkPinCodeSecurityHandler,
     IContentLanguageAccessor contentLanguageAccessor,
@@ -27,7 +28,7 @@ internal class PagePreviewPartialRouter(
 
     public object RoutePartial(IContent content, UrlResolverContext segmentContext)
     {
-        if (!externalReviewOptions.IsEnabled)
+        if (!externalReviewOptions.Value.IsEnabled)
         {
             return null;
         }
@@ -38,7 +39,7 @@ internal class PagePreviewPartialRouter(
             return null;
         }
 
-        if (!string.Equals(nextSegment.Next.ToString(), externalReviewOptions.ContentPreviewUrl,
+        if (!string.Equals(nextSegment.Next.ToString(), externalReviewOptions.Value.ContentPreviewUrl,
                 StringComparison.CurrentCultureIgnoreCase))
         {
             return null;

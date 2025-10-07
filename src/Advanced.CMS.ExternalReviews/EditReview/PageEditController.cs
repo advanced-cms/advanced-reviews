@@ -6,6 +6,7 @@ using EPiServer.Framework.Modules.Internal;
 using EPiServer.Framework.Serialization;
 using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.EditReview;
 
@@ -28,7 +29,7 @@ internal class PageEditController : Controller
     public PageEditController(IContentLoader contentLoader,
         IExternalReviewLinksRepository externalReviewLinksRepository,
         IApprovalReviewsRepository approvalReviewsRepository,
-        ExternalReviewOptions externalReviewOptions, IObjectSerializerFactory serializerFactory,
+        IOptions<ExternalReviewOptions> externalReviewOptions, IObjectSerializerFactory serializerFactory,
         IStartPageUrlResolver startPageUrlResolver,
         PropertyResolver propertyResolver,
         ReviewsNotifier reviewsNotifier, ExternalReviewUrlGenerator externalReviewUrlGenerator,
@@ -37,7 +38,7 @@ internal class PageEditController : Controller
         _contentLoader = contentLoader;
         _externalReviewLinksRepository = externalReviewLinksRepository;
         _approvalReviewsRepository = approvalReviewsRepository;
-        _externalReviewOptions = externalReviewOptions;
+        _externalReviewOptions = externalReviewOptions.Value;
         _serializerFactory = serializerFactory;
         _startPageUrlResolver = startPageUrlResolver;
         _propertyResolver = propertyResolver;

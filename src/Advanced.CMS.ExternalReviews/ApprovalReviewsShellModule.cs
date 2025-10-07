@@ -4,6 +4,7 @@ using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Modules;
 using EPiServer.Shell.Profile.Internal;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews;
 
@@ -13,7 +14,7 @@ public class ApprovalReviewsShellModule(string name, string routeBasePath, strin
     /// <inheritdoc />
     public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
     {
-        var options = ServiceLocator.Current.GetInstance<ExternalReviewOptions>();
+        var options = ServiceLocator.Current.GetInstance<IOptions<ExternalReviewOptions>>().Value;
         var reviewUrlGenerator = ServiceLocator.Current.GetInstance<ReviewUrlGenerator>();
         var principal = ServiceLocator.Current.GetInstance<IPrincipalAccessor>();
         var currentUiCulture = ServiceLocator.Current.GetInstance<ICurrentUiCulture>();

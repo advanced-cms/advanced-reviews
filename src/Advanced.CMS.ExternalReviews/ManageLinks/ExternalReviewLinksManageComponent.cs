@@ -1,6 +1,7 @@
 ﻿using EPiServer.Personalization.VisitorGroups;
 using EPiServer.Shell;
 using EPiServer.Shell.ViewComposition;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.ManageLinks;
 
@@ -12,12 +13,12 @@ internal class ExternalReviewLinksManageComponent : ComponentDefinitionBase
     private readonly ExternalReviewOptions _options;
     private readonly IVisitorGroupRepository _visitorGroupRepository;
 
-    public ExternalReviewLinksManageComponent(ExternalReviewOptions options, IVisitorGroupRepository visitorGroupRepository)
+    public ExternalReviewLinksManageComponent(IOptions<ExternalReviewOptions> options, IVisitorGroupRepository visitorGroupRepository)
         : base("advanced-cms-approval-reviews/dist/external-review-manage-links-widget")
     {
-        _options = options;
+        _options = options.Value;
         _visitorGroupRepository = visitorGroupRepository;
-        IsAvailableForUserSelection = options.IsEnabled;
+        IsAvailableForUserSelection = _options.IsEnabled;
         LanguagePath = "/externalreviews/component";
         Categories = new[] {"content"};
         SortOrder = 1000;

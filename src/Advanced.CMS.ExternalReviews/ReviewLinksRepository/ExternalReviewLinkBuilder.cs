@@ -1,10 +1,11 @@
 ﻿using Advanced.CMS.ApprovalReviews;
 using EPiServer.Cms.Shell;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews.ReviewLinksRepository;
 
 internal class ExternalReviewLinkBuilder(
-    ExternalReviewOptions options,
+    IOptions<ExternalReviewOptions> options,
     IStartPageUrlResolver startPageUrlResolver,
     ProjectRepository projectRepository,
     ExternalReviewUrlGenerator externalReviewUrlGenerator,
@@ -39,7 +40,7 @@ internal class ExternalReviewLinkBuilder(
             var url = startPageUrlResolver.GetUrl(externalReviewLinkDds.ContentLink, content.LanguageBranch());
             // the preview url has to be language specific as it's handled entirely by the EPiServer partial router
             // the edit url is just a pure aspnet.mvc controller, handled outside EPiServer
-            externalUrlPrefix = UrlPath.Combine(url, options.ContentPreviewUrl);
+            externalUrlPrefix = UrlPath.Combine(url, options.Value.ContentPreviewUrl);
         }
 
         return new ExternalReviewLink

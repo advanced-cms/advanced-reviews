@@ -1,18 +1,19 @@
 using Advanced.CMS.ApprovalReviews;
 using EPiServer.Authorization;
 using EPiServer.Shell.Navigation;
+using Microsoft.Extensions.Options;
 
 namespace Advanced.CMS.ExternalReviews;
 
 [MenuProvider]
 internal class AdvancedReviewsMenuProvider(
-    ExternalReviewOptions externalReviewOptions,
+    IOptions<ExternalReviewOptions> options,
     ReviewUrlGenerator reviewUrlGenerator)
     : IMenuProvider
 {
     public IEnumerable<MenuItem> GetMenuItems()
     {
-        if (!externalReviewOptions.IsEnabled || !externalReviewOptions.IsAdminModePinReviewerPluginEnabled)
+        if (!options.Value.IsEnabled || !options.Value.IsAdminModePinReviewerPluginEnabled)
         {
             return Enumerable.Empty<MenuItem>();
         }
