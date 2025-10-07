@@ -45,6 +45,12 @@ public static class ContentRepositoryTestExtensions
         return ExternalReviewLinksRepository.AddLink(page.ContentLink, false, TimeSpan.FromDays(1), project?.ID);
     }
 
+    public static ExternalReviewLink ExpireReviewLink(this ExternalReviewLink externalReviewLink)
+    {
+        return ExternalReviewLinksRepository.UpdateLink(externalReviewLink.Token,
+            DateTime.Now.Subtract(TimeSpan.FromSeconds(1)), null, null, null);
+    }
+
     public static StandardPage PublishPage(this StandardPage page)
     {
         ContentRepository.Publish(page, AccessLevel.NoAccess);
