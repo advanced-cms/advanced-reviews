@@ -1,31 +1,29 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace TestSite.Business.Rendering
+namespace TestSite;
+
+public class SiteViewEngineLocationExpander : IViewLocationExpander
 {
-    public class SiteViewEngineLocationExpander : IViewLocationExpander
+    public const string BlockFolder = "~/Views/Shared/Blocks/";
+    public const string PagePartialsFolder = "~/Views/Shared/PagePartials/";
+
+    private static readonly string[] AdditionalPartialViewFormats = new[]
     {
-        public const string BlockFolder = "~/Views/Shared/Blocks/";
-        public const string PagePartialsFolder = "~/Views/Shared/PagePartials/";
+        BlockFolder + "{0}.cshtml",
+        PagePartialsFolder + "{0}.cshtml"
+    };
 
-        private static readonly string[] AdditionalPartialViewFormats = new[]
-            {
-                BlockFolder + "{0}.cshtml",
-                PagePartialsFolder + "{0}.cshtml"
-            };
-
-        public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
+    public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
+    {
+        foreach (var location in viewLocations)
         {
-            foreach (var location in viewLocations)
-            {
-                yield return location;
-            }
-
-            for (int i = 0; i < AdditionalPartialViewFormats.Length; i++)
-            {
-                yield return AdditionalPartialViewFormats[i];
-            }
+            yield return location;
         }
-        public void PopulateValues(ViewLocationExpanderContext context) { }
+
+        for (int i = 0; i < AdditionalPartialViewFormats.Length; i++)
+        {
+            yield return AdditionalPartialViewFormats[i];
+        }
     }
+    public void PopulateValues(ViewLocationExpanderContext context) { }
 }

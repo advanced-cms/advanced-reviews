@@ -2,13 +2,12 @@ using EPiServer.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using TestSite.Models;
 
-namespace TestSite.Controllers
+namespace TestSite.Controllers;
+
+public class StandardPageController : PageController<StandardPage>
 {
-    public class StandardPageController : PageController<StandardPage>
+    public IActionResult Index(StandardPage currentPage)
     {
-        public IActionResult Index(StandardPage currentPage)
-        {
-            return View(currentPage);
-        }
+        return View(currentPage);
     }
 }

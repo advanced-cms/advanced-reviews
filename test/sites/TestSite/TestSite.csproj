@@ -14,4 +14,8 @@
     <Folder Include="modules\_protected\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\StartPage\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
