@@ -13,7 +13,7 @@
     <tags>review preview content approval external</tags>
     <license type="expression">MIT</license>
     <icon>logo.png</icon>
-    <projectUrl>https://github.com/advanced-cms/advanced-reviews</projectUrl>
+    <projectUrl>https://github.com/barteksekula/advanced-reviews</projectUrl>
     <dependencies>
       <group targetFramework="net6.0">
         <dependency id="EPiServer.CMS.UI.Core" version="[$CmsUIVersion$, $CmsUINextMajorVersion$)" />
