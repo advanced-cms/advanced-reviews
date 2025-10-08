@@ -9,11 +9,13 @@ using Microsoft.Extensions.Options;
 using TestSite.Models;
 using Xunit;
 
-namespace Advanced.CMS.AdvancedReviews.IntegrationTests;
+namespace Advanced.CMS.AdvancedReviews.IntegrationTests.PinSecurity;
 
 [Collection(IntegrationTestCollection.Name)]
-public class SinglePageWithPinSecurityTests(SinglePageWithPinSecurityTests.TestFixture fixture)
-    : IClassFixture<CommonFixture>, IClassFixture<SinglePageWithPinSecurityTests.TestFixture>
+public class When_Pin_Security_Enabled(When_Pin_Security_Enabled.TestFixture fixture)
+    : IClassFixture<CommonFixture>,
+      IClassFixture<When_Pin_Security_Enabled.TestFixture>,
+      IClassFixture<ExternalReviewOptionsPinEnabledFixture>
 {
     public class TestFixture(SiteFixture siteFixture) : IAsyncLifetime
     {
@@ -29,7 +31,6 @@ public class SinglePageWithPinSecurityTests(SinglePageWithPinSecurityTests.TestF
 
         public async Task InitializeAsync()
         {
-            ExternalReviewOptions.Value.PinCodeSecurity.Enabled = true;
             Page = contentRepository.CreatePage(ReviewedPageContent).WithoutEveryoneAccess();
 
             var reviewLinksRepository =
@@ -44,20 +45,23 @@ public class SinglePageWithPinSecurityTests(SinglePageWithPinSecurityTests.TestF
         public async Task DisposeAsync()
         {
             await contentRepository.CleanupAsync(Page);
-            ExternalReviewOptions.Value.PinCodeSecurity.Enabled = false;
         }
     }
 
     [Fact]
-    public async Task When_PinSecurity_Enabled_Login_Screen_Is_Shown()
+    public async Task Login_Screen_Is_Shown()
     {
-        var siteDefinition = fixture.CurrentSiteDefinition();
-
         var message = new HttpRequestMessage(HttpMethod.Get, fixture.GeneratedReviewLink.LinkUrl);
         var response = await fixture.Client.SendAsync(message);
         var text = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("Go", text);
+    }
+
+    [Fact]
+    public async Task User_Sees_404_After_Submitting_Wrong_PIN()
+    {
+        var siteDefinition = fixture.CurrentSiteDefinition();
 
         var externalLoginUrl = new Uri(siteDefinition.SiteUrl,
             fixture.ExternalReviewOptions.Value.PinCodeSecurity.ExternalReviewLoginUrl);
@@ -69,6 +73,15 @@ public class SinglePageWithPinSecurityTests(SinglePageWithPinSecurityTests.TestF
         }.AsDictionary<string>());
         var failedLoginResponse = await fixture.Client.SendAsync(failedLoginMessage);
         Assert.Equal(HttpStatusCode.NotFound, failedLoginResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task User_Sees_Content_Review_After_Submitting_Correct_PIN()
+    {
+        var siteDefinition = fixture.CurrentSiteDefinition();
+
+        var externalLoginUrl = new Uri(siteDefinition.SiteUrl,
+            fixture.ExternalReviewOptions.Value.PinCodeSecurity.ExternalReviewLoginUrl);
 
         var loginMessage = new HttpRequestMessage(HttpMethod.Post,
             externalLoginUrl);

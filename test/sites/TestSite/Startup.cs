@@ -1,30 +1,20 @@
+using System.Security.Claims;
+using Advanced.CMS.AdvancedReviews;
+using Advanced.CMS.IntegrationTests;
 using EPiServer.Cms.Shell;
 using EPiServer.Cms.UI.Admin;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Cms.UI.VisitorGroups;
 using EPiServer.Data;
+using EPiServer.Framework.Hosting;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Scheduler;
+using EPiServer.Web.Hosting;
 using EPiServer.Web.Mvc.Html;
 using EPiServer.Web.Routing;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Advanced.CMS.AdvancedReviews;
-using Advanced.CMS.IntegrationTests;
-using Advanced.CMS.IntegrationTests.ServiceMocks;
-using EPiServer.Framework.Hosting;
-using EPiServer.Web.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using TestSite.Business.Rendering;
 using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
 
@@ -85,7 +75,6 @@ namespace TestSite
                .AddCmsAspNetIdentity<ApplicationUser>();
 
             services.AddAdvancedReviews();
-            services.MockServices();
 
             services.Configure<StaticFileOptions>("foo", o => o.OnPrepareResponse = c => c.Context.Response.Headers.Add("X-From-Custom-Option", "Something"));
         }

@@ -4,6 +4,7 @@ using EPiServer.Cms.Shell.UI.Rest.Projects;
 using EPiServer.ServiceLocation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
 using TestSite;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
@@ -27,6 +28,9 @@ public class SiteFixtureBase : IDisposable
             {
                 collection.Configure(optionsCallback);
             }
+
+            // Register mock HttpContextAccessor for integration tests
+            // collection.AddSingleton<IHttpContextAccessor, MockHttpContextAccessor>();
         });
         try
         {
