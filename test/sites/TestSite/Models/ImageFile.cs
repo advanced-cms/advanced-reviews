@@ -6,4 +6,5 @@ namespace TestSite.Models;
 [MediaDescriptor(ExtensionString = "jpg,jpeg,jpe,ico,gif,bmp,png")]
 public class ImageFile : ImageData
 {
+    public virtual string Copyright { get; set; }
 }

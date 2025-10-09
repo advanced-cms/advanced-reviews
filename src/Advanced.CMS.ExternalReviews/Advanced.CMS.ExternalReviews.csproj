@@ -15,7 +15,4 @@
   <ItemGroup>
     <None Remove="ClientResources/dist/**" />
   </ItemGroup>
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="advanced-cms-external-reviews.Views\Views\ExternalReviewLogin\Index.cshtml" />
-  </ItemGroup>
 </Project>

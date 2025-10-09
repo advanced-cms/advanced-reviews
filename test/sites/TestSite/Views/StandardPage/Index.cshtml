@@ -3,10 +3,6 @@
 
 <!DOCTYPE html>
 <html lang="@(Model.Language)">
-<head>
-    <meta charset="utf-8"/>
-    <title>@Model.Name</title>
-</head>
 <body>
 <h1>@Html.PropertyFor(x => x.Name)</h1>
 @if (Model.ContentArea != null)
@@ -14,5 +10,11 @@
     <h2>Fragments count = @Model.ContentArea.Count</h2>
     @Html.PropertyFor(x => x.ContentArea)
 }
+<div id="html">
+    @Html.PropertyFor(x => x.Html)
+</div>
+<div id="image">
+    @Html.PropertyFor(x => x.Image)
+</div>
 </body>
 </html>

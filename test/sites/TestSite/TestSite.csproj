@@ -8,14 +8,4 @@
     <ProjectReference Include="..\..\..\src\Advanced.CMS.AdvancedReviews\Advanced.CMS.AdvancedReviews.csproj" />
     <ProjectReference Include="..\..\Advanced.CMS.IntegrationTests\Advanced.CMS.IntegrationTests.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="modules\_protected\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\StartPage\Index.cshtml" />
-  </ItemGroup>
-
 </Project>

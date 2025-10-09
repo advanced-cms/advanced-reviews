@@ -28,9 +28,6 @@ public class SiteFixtureBase : IDisposable
             {
                 collection.Configure(optionsCallback);
             }
-
-            // Register mock HttpContextAccessor for integration tests
-            // collection.AddSingleton<IHttpContextAccessor, MockHttpContextAccessor>();
         });
         try
         {

@@ -4,4 +4,6 @@
 public class EditorialBlock : BlockData
 {
     public virtual string MainBody { get; set; }
+
+    public virtual ContentArea NestedContentArea { get; set; }
 }

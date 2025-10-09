@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageReference Include="xunit.assert" />
     <PackageReference Include="xunit.core" />
     <PackageReference Include="xunit.runner.console" />
@@ -14,5 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\sites\TestSite\TestSite.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tooling\FakeImages\1.gif" />
+    <EmbeddedResource Include="Tooling\FakeImages\idylla.jpg" />
   </ItemGroup>
 </Project>

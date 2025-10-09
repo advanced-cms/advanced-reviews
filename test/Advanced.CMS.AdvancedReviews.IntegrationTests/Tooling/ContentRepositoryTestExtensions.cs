@@ -1,8 +1,12 @@
 ﻿using System.Globalization;
 using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
+using EPiServer.Authorization;
+using EPiServer.Core.Internal;
 using EPiServer.DataAccess;
+using EPiServer.Framework.Blobs;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
+using EPiServer.Web;
 using TestSite.Models;
 
 namespace Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
@@ -11,27 +15,65 @@ public static class ContentRepositoryTestExtensions
 {
     private static IContentRepository ContentRepository => ServiceLocator.Current.GetInstance<IContentRepository>();
 
-    private static IContentVersionRepository ContentVersionRepository => ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-
-    private static ProjectRepository ProjectRepository => ServiceLocator.Current.GetInstance<ProjectRepository>();
-
-    private static IPropertyDefinitionRepository PropertyDefinitionRepository =>
-        ServiceLocator.Current.GetInstance<IPropertyDefinitionRepository>();
-
-    private static IContentTypeRepository ContentTypeRepository =>
-        ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-
-    private static IContentSecurityRepository ContentSecurityRepository =>
-        ServiceLocator.Current.GetInstance<IContentSecurityRepository>();
-
-    private static IExternalReviewLinksRepository ExternalReviewLinksRepository =>
-        ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>();
-
     public static StandardPage CreatePage(this IContentRepository repo, string name = null)
     {
         var page = repo.GetDefault<StandardPage>(ContentReference.StartPage);
         page.PageName = name ?? Guid.NewGuid().ToString();
         repo.Save(page, AccessLevel.NoAccess);
+        return page;
+    }
+
+    public static StandardPage UpdatePage(this StandardPage page)
+    {
+        page.PageName += StaticTexts.UpdatedString;
+        ContentRepository.Save(page, AccessLevel.NoAccess);
+        return page;
+    }
+
+    public static ImageFile CreateDraftImage(this IContentRepository repo, Media fakeImage)
+    {
+        var image = ContentRepository.GetDefault<ImageFile>(ContentReference.GlobalBlockFolder);
+        image.Name = fakeImage.Name;
+        image.Copyright = StaticTexts.FakeImageCopyright;
+        var blobFactory = ServiceLocator.Current.GetInstance<IBlobFactory>();
+        var blob = blobFactory.CreateBlob(image.BinaryDataContainer, ".jpg");
+        blob.Write(new MemoryStream(fakeImage.Bytes));
+        image.BinaryData = blob;
+
+        var urlSegmentCreator = ServiceLocator.Current.GetInstance<IUrlSegmentCreator>();
+        image.RouteSegment = urlSegmentCreator.Create(image, null);
+        ContentRepository.Save(image, AccessLevel.NoAccess);
+        return image;
+    }
+
+    public static StandardPage ReferenceUnpublishedImageInContentReference(this StandardPage page, ContentReference draftImageContentLink)
+    {
+        page.Image = draftImageContentLink;
+        ContentRepository.Save(page, AccessLevel.NoAccess);
+        return page;
+    }
+
+    public static StandardPage ReferenceUnpublishedImageInContentArea(this StandardPage page, ContentReference draftImageContentLink)
+    {
+        var contentArea = new ContentArea();
+        contentArea.Items.Add(new ContentAreaItem
+        {
+            ContentLink = draftImageContentLink
+        });
+
+        page.ContentArea = contentArea;
+        ContentRepository.Save(page, AccessLevel.NoAccess);
+        return page;
+    }
+
+    public static StandardPage ReferenceUnpublishedImageInXhtml(this StandardPage page, ContentReference draftImageContentLink)
+    {
+        var contentFragmentFactory = ServiceLocator.Current.GetInstance<ContentFragmentFactory>();
+
+        var html = new XhtmlString();
+        var fragment = contentFragmentFactory.CreateContentFragment(draftImageContentLink, Guid.Empty, null);
+        html.Fragments.Add(fragment);
+        ContentRepository.Save(page, AccessLevel.NoAccess);
         return page;
     }
 
@@ -42,7 +84,7 @@ public static class ContentRepositoryTestExtensions
         var blockContent = block as IContent;
         blockContent.Name = Guid.NewGuid().ToString();
         block.MainBody = StaticTexts.OriginalBlockContent;
-        ContentRepository.Save(blockContent, AccessLevel.NoAccess).ToReferenceWithoutVersion();
+        ContentRepository.Save(blockContent, AccessLevel.NoAccess);
         var contentAreaItem = new ContentAreaItem
         {
             ContentLink = blockContent.ContentLink,
@@ -56,6 +98,7 @@ public static class ContentRepositoryTestExtensions
 
     public static StandardPage UpdateBlock(this StandardPage page, Project project = null)
     {
+        var projectRepository = ServiceLocator.Current.GetInstance<ProjectRepository>();
         var _blockReference = page.ContentArea.Items.FirstOrDefault().ContentLink;
 
         var block = ContentRepository.Get<EditorialBlock>(_blockReference).CreateWritableClone() as EditorialBlock;
@@ -75,13 +118,13 @@ public static class ContentRepositoryTestExtensions
                 Category = "default"
             };
 
-            ProjectRepository.SaveItems([projectItem]);
+            projectRepository.SaveItems([projectItem]);
         }
         else
         {
             block.MainBody = block.MainBody.Replace(StaticTexts.OriginalBlockContent, StaticTexts.UpdatedString)
                 .Replace(StaticTexts.ProjectUpdatedString, StaticTexts.UpdatedString);
-            var draft = ContentVersionRepository.LoadCommonDraft(_blockReference,
+            var draft = ServiceLocator.Current.GetInstance<IContentVersionRepository>().LoadCommonDraft(_blockReference,
                 LanguageSelector.AutoDetect().LanguageBranch);
             if (draft.IsCommonDraft)
             {
@@ -101,21 +144,21 @@ public static class ContentRepositoryTestExtensions
     {
         var accessControlList = new AccessControlList
         {
-            new AccessControlEntry(EPiServer.Authorization.Roles.CmsAdmins, AccessLevel.Administer)
+            new AccessControlEntry(Roles.CmsAdmins, AccessLevel.Administer)
         };
         accessControlList.IsInherited = false;
-        page.SaveSecurityInfo(ContentSecurityRepository, accessControlList, SecuritySaveType.Replace);
+        page.SaveSecurityInfo(ServiceLocator.Current.GetInstance<IContentSecurityRepository>(), accessControlList, SecuritySaveType.Replace);
         return page;
     }
 
     public static ExternalReviewLink GenerateExternalReviewLink(this StandardPage page, Project project = null)
     {
-        return ExternalReviewLinksRepository.AddLink(page.ContentLink, false, TimeSpan.FromDays(1), project?.ID);
+        return ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>().AddLink(page.ContentLink, false, TimeSpan.FromDays(1), project?.ID);
     }
 
     public static ExternalReviewLink ExpireReviewLink(this ExternalReviewLink externalReviewLink)
     {
-        return ExternalReviewLinksRepository.UpdateLink(externalReviewLink.Token,
+        return ServiceLocator.Current.GetInstance<IExternalReviewLinksRepository>().UpdateLink(externalReviewLink.Token,
             DateTime.Now.Subtract(TimeSpan.FromSeconds(1)), null, null, null);
     }
 
@@ -135,17 +178,18 @@ public static class ContentRepositoryTestExtensions
 
     public static Task CleanupAsync(this IContentRepository repo, IContent page)
     {
+        var projectRepository = ServiceLocator.Current.GetInstance<ProjectRepository>();
         repo.Delete(page.ContentLink, true, AccessLevel.NoAccess);
-        foreach (var contentType in ContentTypeRepository.List())
+        foreach (var contentType in ServiceLocator.Current.GetInstance<IContentTypeRepository>().List())
         {
             ResetContentType(contentType);
         }
 
-        var projects = ProjectRepository.List().ToList();
+        var projects = projectRepository.List().ToList();
 
         foreach (var project in projects)
         {
-            ProjectRepository.Delete(project.ID);
+            projectRepository.Delete(project.ID);
         }
 
         return Task.CompletedTask;
@@ -153,6 +197,7 @@ public static class ContentRepositoryTestExtensions
 
     private static void ResetContentType(ContentType contentType)
     {
+        var propertyDefinitionRepository = ServiceLocator.Current.GetInstance<IPropertyDefinitionRepository>();
         var writableContentType = contentType.CreateWritableClone() as ContentType;
         foreach (var property in writableContentType.PropertyDefinitions)
         {
@@ -161,10 +206,10 @@ public static class ContentRepositoryTestExtensions
                 continue;
             }
 
-            PropertyDefinitionRepository.Delete(property);
+            propertyDefinitionRepository.Delete(property);
         }
 
         writableContentType.ResetContentType();
-        ContentTypeRepository.Save(writableContentType);
+        ServiceLocator.Current.GetInstance<IContentTypeRepository>().Save(writableContentType);
     }
 }

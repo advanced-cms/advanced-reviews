@@ -23,7 +23,7 @@ public class When_Token_Expires(When_Token_Expires.TestFixture fixture)
         public async Task InitializeAsync()
         {
             Page = ContentRepository.CreatePage().WithoutEveryoneAccess();
-            GeneratedReviewLink = Page.GenerateExternalReviewLink().ExpireReviewLink();
+            GeneratedReviewLink = Page.GenerateExternalReviewLink();
 
             await Task.CompletedTask;
         }
@@ -32,9 +32,20 @@ public class When_Token_Expires(When_Token_Expires.TestFixture fixture)
     }
 
     [Fact]
-    public async Task It_Returns_200()
+    public async Task Active_Token_Returns_200()
     {
         var message = new HttpRequestMessage(HttpMethod.Get, fixture.GeneratedReviewLink.LinkUrl);
+        var responseAfterTokenExpiration = await fixture.Client.SendAsync(message);
+        var responseText = await responseAfterTokenExpiration.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, responseAfterTokenExpiration.StatusCode);
+        Assert.Contains(fixture.Page.PageName, responseText);
+    }
+
+    [Fact]
+    public async Task When_Expired_It_Returns_404()
+    {
+        var reviewLink = fixture.GeneratedReviewLink.ExpireReviewLink();
+        var message = new HttpRequestMessage(HttpMethod.Get, reviewLink.LinkUrl);
         var responseAfterTokenExpiration = await fixture.Client.SendAsync(message);
         await responseAfterTokenExpiration.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.NotFound, responseAfterTokenExpiration.StatusCode);
