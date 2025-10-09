@@ -1,7 +1,5 @@
 using System.Net;
 using Advanced.CMS.AdvancedReviews.IntegrationTests.Tooling;
-using Advanced.CMS.ExternalReviews.ReviewLinksRepository;
-using Azure;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using TestSite.Models;
@@ -24,7 +22,7 @@ public class When_Page_Has_Nested_Unpublished_Blocks(When_Page_Has_Nested_Unpubl
 
         public async Task InitializeAsync()
         {
-            Page = ContentRepository.CreatePage().PublishPage();
+            Page = ContentRepository.CreatePage().AddNestedBlock();
             await Task.CompletedTask;
         }
 
@@ -32,35 +30,32 @@ public class When_Page_Has_Nested_Unpublished_Blocks(When_Page_Has_Nested_Unpubl
     }
 
     [Fact]
-    public async Task After_Updating_Page_Public_URL_Still_Shows_Published_Content_And_Token_Shows_Draft()
+    public async Task Unpublished_Page_Is_Not_Accessible()
     {
+        var url = fixture.UrlResolver.GetUrl(fixture.Page);
+        var originalMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        var originalResponse = await fixture.Client.SendAsync(originalMessage);
+        Assert.Equal(HttpStatusCode.NotFound, originalResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task After_Publishing_Page_Regular_Preview_Does_Not_Show_Unpublished_Blocks_But_Review_Link_Does()
+    {
+        fixture.Page.PublishPage();
+
         var url = fixture.UrlResolver.GetUrl(fixture.Page);
         var originalMessage = new HttpRequestMessage(HttpMethod.Get, url);
         var originalResponse = await fixture.Client.SendAsync(originalMessage);
         Assert.Equal(HttpStatusCode.OK, originalResponse.StatusCode);
         var originalResponseText = await originalResponse.Content.ReadAsStringAsync();
-        Assert.Contains(fixture.Page.PageName, originalResponseText);
-
-        fixture.Page.UpdatePage();
-
-        var message = new HttpRequestMessage(HttpMethod.Get, url);
-        var response = await fixture.Client.SendAsync(message);
-        var responseText = await response.Content.ReadAsStringAsync();
-        Assert.DoesNotContain(StaticTexts.UpdatedString, responseText);
+        Assert.DoesNotContain(StaticTexts.OriginalNestedBlockContent, originalResponseText);
 
         var reviewLink = fixture.Page.GenerateExternalReviewLink();
-
-        var messageReviewLink = new HttpRequestMessage(HttpMethod.Get, reviewLink.LinkUrl);
-        var responseReviewLink = await fixture.Client.SendAsync(messageReviewLink);
-        var responseTextReviewLink = await responseReviewLink.Content.ReadAsStringAsync();
-        Assert.Contains(StaticTexts.UpdatedString, responseTextReviewLink);
-
-        fixture.Page.PublishPage();
-
-        var publishedMessage = new HttpRequestMessage(HttpMethod.Get, url);
-        var publishedResponse = await fixture.Client.SendAsync(publishedMessage);
-        var publishedResponseText = await publishedResponse.Content.ReadAsStringAsync();
-        Assert.Contains(StaticTexts.UpdatedString, publishedResponseText);
+        var message = new HttpRequestMessage(HttpMethod.Get, reviewLink.LinkUrl);
+        var response = await fixture.Client.SendAsync(message);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var responseText = await response.Content.ReadAsStringAsync();
+        Assert.Contains(StaticTexts.OriginalNestedBlockContent, responseText);
     }
 }
 

@@ -80,7 +80,6 @@ public static class ContentRepositoryTestExtensions
     public static StandardPage AddBlock(this StandardPage page)
     {
         var block = ContentRepository.GetDefault<EditorialBlock>(ContentReference.GlobalBlockFolder);
-        block.MainBody = Guid.NewGuid().ToString();
         var blockContent = block as IContent;
         blockContent.Name = Guid.NewGuid().ToString();
         block.MainBody = StaticTexts.OriginalBlockContent;
@@ -92,6 +91,39 @@ public static class ContentRepositoryTestExtensions
         var contentArea = new ContentArea();
         contentArea.Items.Add(contentAreaItem);
         page.ContentArea = contentArea;
+        ContentRepository.Save(page, AccessLevel.NoAccess);
+        return page;
+    }
+
+    public static StandardPage AddNestedBlock(this StandardPage page, bool useForThisPage = false)
+    {
+        //TODO: utilize `useForThisPage` to save also outside of the global asset folder
+
+        var nestedBlock = ContentRepository.GetDefault<EditorialBlock>(ContentReference.GlobalBlockFolder);
+        var nestedBlockContent = nestedBlock as IContent;
+        nestedBlockContent.Name = Guid.NewGuid().ToString();
+        nestedBlock.MainBody = StaticTexts.OriginalNestedBlockContent;
+        ContentRepository.Save(nestedBlockContent, AccessLevel.NoAccess);
+
+        var blockContentArea = new ContentArea();
+        blockContentArea.Items.Add(new ContentAreaItem
+        {
+            ContentLink = nestedBlockContent.ContentLink,
+        });
+        page.ContentArea = blockContentArea;
+
+        var block = ContentRepository.GetDefault<EditorialBlock>(ContentReference.GlobalBlockFolder);
+        block.NestedContentArea = blockContentArea;
+        var blockContent = block as IContent;
+        blockContent.Name = Guid.NewGuid().ToString();
+        ContentRepository.Save(blockContent, AccessLevel.NoAccess);
+
+        var pageContentArea = new ContentArea();
+        pageContentArea.Items.Add(new ContentAreaItem
+        {
+            ContentLink = blockContent.ContentLink,
+        });
+        page.ContentArea = pageContentArea;
         ContentRepository.Save(page, AccessLevel.NoAccess);
         return page;
     }

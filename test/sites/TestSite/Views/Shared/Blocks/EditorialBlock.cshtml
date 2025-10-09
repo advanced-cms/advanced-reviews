@@ -1,9 +1,10 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @model TestSite.Models.EditorialBlock
 
-<h3>AAAAAAAAAAAAAA</h3>
-
 <div class="clearfix" @Html.EditAttributes(x => x.MainBody)>
-    EEEEE
     @Html.DisplayFor(x => Model.MainBody)
+</div>
+
+<div id="nested">
+    @Html.PropertyFor(x => x.NestedContentArea)
 </div>
