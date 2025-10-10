@@ -1,13 +1,17 @@
 ﻿@using EPiServer.Web.Mvc.Html
+@using TestSite.Models
 @model TestSite.Models.StandardPage
 
 <!DOCTYPE html>
 <html lang="@(Model.Language)">
 <body>
 <h1>@Html.PropertyFor(x => x.Name)</h1>
+@if (Model.ShowBreadcrumbs)
+{
+    <span id="@StandardPage.PageNameFromGetChildrenCallNodeName">@Html.ValueFor(x => x.PageNameFromGetChildrenCall)</span>
+}
 @if (Model.ContentArea != null)
 {
-    <h2>Fragments count = @Model.ContentArea.Count</h2>
     @Html.PropertyFor(x => x.ContentArea)
 }
 <div id="html">

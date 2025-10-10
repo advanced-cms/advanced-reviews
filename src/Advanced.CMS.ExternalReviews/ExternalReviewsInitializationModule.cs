@@ -31,17 +31,12 @@ internal class ExternalReviewsInitializationModule : IConfigurableModule
                         locator.GetInstance<IOptions<ExternalReviewOptions>>(),
                         locator.GetInstance<ISiteDefinitionResolver>()));
 
-            // Intercepted in order to return unpublished children in external review context
-            context.Services.Intercept<IContentLoader>(
-                (locator, defaultContentLoader) => new DraftContentLoader(defaultContentLoader, locator.GetInstance<ExternalReviewState>(),
-                    locator.GetInstance<IContentProviderManager>(), locator.GetInstance<IContentChildrenSorter>()));
-
             // Intercepted in order to return unpublished content items
             context.Services.Intercept<IPublishedStateAssessor>(
                 (locator, defaultPublishedStateAssessor) =>
                     new PublishedStateAssessorDecorator(defaultPublishedStateAssessor, locator.GetInstance<ExternalReviewState>()));
 
-            // Intercepted in order to not filter out content without Everyone access
+            // Intercepted in order to not filter out content without Everyone access, used in project mode
             context.Services.Intercept<IContentAccessEvaluator>(
                 (locator, defaultContentAccessEvaluator) =>
                     new ContentAccessEvaluatorDecorator(defaultContentAccessEvaluator,

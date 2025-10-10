@@ -80,6 +80,12 @@ public class ExternalReviewOptions
     /// PIN Code security options
     /// </summary>
     public PinCodeSecurityOptions PinCodeSecurity { get; } = new PinCodeSecurityOptions();
+
+    /// <summary>
+    /// Intercept all calls to ContentLoader.GetChildren.
+    /// This settings may greatly affect the performance, and is very intrusive into the regular episerver page lifecycle
+    /// </summary>
+    public bool InterceptGetChildren { get; set; } = false;
 }
 
 public class ExternalReviewRestrictionOptions

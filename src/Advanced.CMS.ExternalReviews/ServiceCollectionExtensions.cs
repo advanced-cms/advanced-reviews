@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IPartialRouter, PageEditPartialRouter>();
         services.AddTransient<IPartialRouter, PagePreviewPartialRouter>();
         services.AddSingleton<ExternalReviewState>();
+        services.AddTransient<DraftChildrenLoader>();
 
         var builder = services.AddControllers();
         builder.ConfigureApplicationPartManager(manager =>

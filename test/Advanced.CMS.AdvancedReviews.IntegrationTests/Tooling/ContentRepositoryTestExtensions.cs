@@ -23,6 +23,13 @@ public static class ContentRepositoryTestExtensions
         return page;
     }
 
+    public static StandardPage ShowBreadcrumbs(this StandardPage page)
+    {
+        page.ShowBreadcrumbs = true;
+        ContentRepository.Save(page, AccessLevel.NoAccess);
+        return page;
+    }
+
     public static StandardPage UpdatePage(this StandardPage page)
     {
         page.PageName += StaticTexts.UpdatedString;
